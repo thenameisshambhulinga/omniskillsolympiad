@@ -27,7 +27,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Omni Olympiad",
+  title: "Omni Skills Olympiad",
   description: "Advanced Engineering Competition Platform",
 };
 
