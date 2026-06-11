@@ -19,7 +19,7 @@ import {
   X,
 } from "lucide-react";
 
-import ProfileDropdown from "@/components/platform/ProfileDropdown";
+import ProfileDropdown from "@/components/profile/platform/ProfileDropdown";
 
 const navItems = [
   {

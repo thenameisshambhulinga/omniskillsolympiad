@@ -1,49 +1,46 @@
-const achievements = [
-  {
-    title: "Challenge Warrior",
-    description: "Completed 10 daily challenges",
-  },
+"use client";
 
-  {
-    title: "Firmware Explorer",
-    description: "Participated in embedded systems track",
-  },
+import AchievementBadge from "@/components/profile/AchievementBadge";
+import type { ProfileAchievement } from "@/types/profile";
 
-  {
-    title: "PCB Architect",
-    description: "Completed PCB design assessments",
-  },
-
-  {
-    title: "Consistency Master",
-    description: "Maintained 7 day streak",
-  },
-];
-
-export default function AchievementGrid() {
+export default function AchievementGrid({
+  achievements,
+}: {
+  achievements: ProfileAchievement[];
+}) {
   return (
-    <section className="grid gap-8 lg:grid-cols-2">
-      {achievements.map((achievement) => (
-        <div
-          key={achievement.title}
-          className="group relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.03] p-8 transition duration-500 hover:-translate-y-2 hover:border-cyan-400/30"
-        >
-          {/* GLOW */}
-          <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-purple-500/10 opacity-0 transition duration-500 group-hover:opacity-100" />
+    <section className="relative overflow-hidden rounded-[2.75rem] border border-white/10 bg-white/[0.04] p-6 shadow-[0_28px_120px_rgba(0,0,0,0.45)] backdrop-blur-2xl">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(251,191,36,0.12),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(34,211,238,0.12),transparent_34%)]"
+      />
 
-          <div className="relative z-10">
-            <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-400 to-purple-500 text-3xl">
-              🏆
-            </div>
+      <div className="relative z-10">
+        <p className="section-label text-amber-300">Achievement Engine</p>
 
-            <h2 className="text-3xl font-bold">{achievement.title}</h2>
+        <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <h2 className="text-3xl font-black text-white">
+              Engineering Badges
+            </h2>
 
-            <p className="mt-4 text-lg leading-8 text-white/60">
-              {achievement.description}
+            <p className="mt-3 max-w-2xl text-sm leading-7 text-white/55">
+              Badges are calculated from real platform activity, skills,
+              streaks, and Silicon Points.
             </p>
           </div>
+
+          <div className="rounded-full border border-amber-400/20 bg-amber-400/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-amber-200">
+            {achievements.length} Badges
+          </div>
         </div>
-      ))}
+
+        <div className="mt-7 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          {achievements.map((achievement) => (
+            <AchievementBadge key={achievement.id} achievement={achievement} />
+          ))}
+        </div>
+      </div>
     </section>
   );
 }

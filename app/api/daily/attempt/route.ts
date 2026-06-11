@@ -358,7 +358,7 @@ export async function POST(req: Request) {
 
             totalPoints: score * 10,
 
-            protectedStreak: protectedStreakData.protectedStreak > 0,
+            // protectedStreak: protectedStreakData.protectedStreak > 0,
           },
         });
       } else {
@@ -384,7 +384,7 @@ export async function POST(req: Request) {
               increment: score * 10,
             },
 
-            protectedStreak: protectedStreakData.protectedStreak > 0,
+            // protectedStreak: protectedStreakData.protectedStreak > 0,
           },
         });
       }

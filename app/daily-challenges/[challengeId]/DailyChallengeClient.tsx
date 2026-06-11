@@ -1,9 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import ChallengeSecurityOverlay from "@/components/daily-challenges/ChallengeSecurityOverlay";
+import HoverScale from "@/components/motion/HoverScale";
+import MotionWrapper from "@/components/motion/MotionWrapper";
 
 type Question = {
   id: string;
@@ -292,195 +295,417 @@ export default function DailyChallengeClient({
     }
   };
 
+  const isLowTime = timeLeft !== null && timeLeft <= 60 && !challengeEnded;
+  const timerProgress =
+    timeLeft === null
+      ? 100
+      : Math.max(0, Math.min(100, (timeLeft / 900) * 100));
+
   return (
-    <main className="min-h-screen bg-black px-6 pb-24 pt-0 text-white">
-      <div className="mx-auto max-w-5xl">
-        {/* HEADER */}
-        <div className="mb-6 rounded-[32px] border border-white/10 bg-white/3 p-8">
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-            <div>
-              <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">
-                Day {initialChallenge.dayNumber}
-              </p>
+    <main className="relative min-h-screen overflow-hidden bg-slate-950 px-4 pb-28 pt-6 text-white sm:px-6 lg:px-8">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+        <motion.div
+          animate={{ opacity: [0.45, 0.85, 0.45], scale: [1, 1.06, 1] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute -left-32 top-0 h-[34rem] w-[34rem] rounded-full bg-cyan-400/14 blur-3xl"
+        />
+        <motion.div
+          animate={{ opacity: [0.35, 0.75, 0.35], scale: [1.04, 1, 1.04] }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute -right-36 top-24 h-[38rem] w-[38rem] rounded-full bg-purple-500/14 blur-3xl"
+        />
+        <motion.div
+          animate={{ opacity: [0.3, 0.65, 0.3], x: [0, 22, 0] }}
+          transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute bottom-0 left-1/3 h-[32rem] w-[32rem] rounded-full bg-blue-500/12 blur-3xl"
+        />
 
-              <h1 className="mt-4 text-5xl font-black">
-                {initialChallenge.title}
-              </h1>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_10%,rgba(34,211,238,0.16),transparent_32%),radial-gradient(circle_at_85%_18%,rgba(168,85,247,0.14),transparent_30%),radial-gradient(circle_at_50%_95%,rgba(59,130,246,0.12),transparent_35%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.022)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.022)_1px,transparent_1px)] bg-[size:72px_72px] opacity-40 [mask-image:radial-gradient(circle_at_center,black,transparent_75%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.035),transparent_35%,rgba(34,211,238,0.022))]" />
 
-              <p className="mt-5 text-white/60">
-                {initialChallenge.description}
-              </p>
+        {[
+          "left-[8%] top-[18%]",
+          "left-[78%] top-[28%]",
+          "left-[52%] top-[12%]",
+          "left-[18%] top-[72%]",
+          "left-[88%] top-[76%]",
+          "left-[42%] top-[86%]",
+        ].map((position, index) => (
+          <motion.span
+            key={position}
+            animate={{ opacity: [0.18, 0.75, 0.18], y: [0, -12, 0] }}
+            transition={{
+              duration: 3.6 + index,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            className={cn(
+              "absolute h-1.5 w-1.5 rounded-full bg-cyan-200/60 shadow-[0_0_18px_rgba(103,232,249,0.8)]",
+              position,
+            )}
+          />
+        ))}
+      </div>
+
+      <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col gap-6">
+        <MotionWrapper>
+          <section className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.035] p-5 shadow-[0_28px_120px_rgba(0,0,0,0.42)] backdrop-blur-2xl sm:p-6 md:rounded-[2.5rem] md:p-8">
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.2),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(168,85,247,0.18),transparent_34%)]" />
+            <div className="pointer-events-none absolute inset-px rounded-[calc(2rem-1px)] border border-white/5 md:rounded-[calc(2.5rem-1px)]" />
+            <motion.div
+              aria-hidden="true"
+              animate={{ x: ["-35%", "135%"] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+              className="absolute left-0 top-0 h-px w-1/2 bg-linear-to-r from-transparent via-cyan-300/80 to-transparent"
+            />
+            <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-cyan-400/15 blur-3xl transition duration-700 group-hover:bg-cyan-400/20" />
+            <div className="pointer-events-none absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-purple-500/15 blur-3xl transition duration-700 group-hover:bg-purple-500/20" />
+
+            <div className="relative z-10 flex flex-col gap-7 lg:flex-row lg:items-center lg:justify-between">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.32em] text-cyan-300 sm:text-sm">
+                  Daily Engineering Challenge
+                </p>
+
+                <h1 className="mt-3 text-3xl font-black leading-tight tracking-tight text-white sm:text-4xl md:text-5xl">
+                  {initialChallenge.title}
+                </h1>
+
+                {initialChallenge.description && (
+                  <p className="mt-4 max-w-3xl text-sm leading-7 text-white/60 sm:text-base">
+                    {initialChallenge.description}
+                  </p>
+                )}
+
+                <div className="mt-5 flex flex-wrap gap-3">
+                  <span className="rounded-full border border-cyan-400/25 bg-cyan-400/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-cyan-200 shadow-[0_0_24px_rgba(34,211,238,0.12)]">
+                    Day {initialChallenge.dayNumber}
+                  </span>
+
+                  <span className="rounded-full border border-purple-400/25 bg-purple-400/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-purple-200 shadow-[0_0_24px_rgba(168,85,247,0.12)]">
+                    {initialChallenge.questions.length} Questions
+                  </span>
+                </div>
+              </div>
+
+              <motion.div
+                animate={
+                  isLowTime
+                    ? { scale: [1, 1.035, 1], opacity: [1, 0.92, 1] }
+                    : { scale: 1, opacity: 1 }
+                }
+                transition={{
+                  duration: 1,
+                  repeat: isLowTime ? Infinity : 0,
+                }}
+                className={cn(
+                  "relative mx-auto flex h-44 w-44 shrink-0 items-center justify-center rounded-full border bg-white/[0.035] backdrop-blur-2xl sm:h-52 sm:w-52 lg:mx-0",
+                  isLowTime
+                    ? "border-red-300/45 shadow-[0_0_90px_rgba(248,113,113,0.3)]"
+                    : "border-cyan-300/30 shadow-[0_0_90px_rgba(34,211,238,0.24)]",
+                )}
+                aria-live="polite"
+              >
+                <motion.div
+                  aria-hidden="true"
+                  animate={{ rotate: 360 }}
+                  transition={{
+                    duration: 16,
+                    repeat: Infinity,
+                    ease: "linear",
+                  }}
+                  className={cn(
+                    "absolute inset-0 rounded-full border-t-2 border-r border-transparent",
+                    isLowTime ? "border-t-red-300/70" : "border-t-cyan-300/70",
+                  )}
+                />
+
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-4 rounded-full border border-white/10"
+                />
+
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0 rounded-full"
+                  style={{
+                    background: `conic-gradient(${
+                      isLowTime
+                        ? "rgba(248,113,113,0.78)"
+                        : "rgba(34,211,238,0.78)"
+                    } ${timerProgress}%, rgba(255,255,255,0.08) 0)`,
+                    mask: "radial-gradient(farthest-side, transparent calc(100% - 10px), black calc(100% - 9px))",
+                    WebkitMask:
+                      "radial-gradient(farthest-side, transparent calc(100% - 10px), black calc(100% - 9px))",
+                  }}
+                />
+
+                <div className="relative z-10 text-center">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-white/45">
+                    Time Remaining
+                  </p>
+
+                  <p
+                    className={cn(
+                      "mt-2 text-4xl font-black tabular-nums tracking-tight sm:text-5xl",
+                      isLowTime ? "text-red-200" : "text-cyan-200",
+                    )}
+                  >
+                    {formattedTime}
+                  </p>
+                </div>
+              </motion.div>
             </div>
+          </section>
+        </MotionWrapper>
 
-            <div className="rounded-3xl border border-cyan-500/20 bg-cyan-500/10 px-8 py-6 text-center">
-              <p className="text-sm uppercase tracking-[0.3em] text-cyan-300">
-                Time Remaining
-              </p>
-
-              <h2 className="mt-3 text-5xl font-black text-cyan-300">
-                {formattedTime}
-              </h2>
-            </div>
-          </div>
-        </div>
-
-        {/* VIOLATION BAR */}
-        <div className="mb-6 rounded-2xl border border-yellow-500/20 bg-yellow-500/10 px-6 py-4">
-          <div className="flex items-center justify-between gap-4">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="rounded-[1.5rem] border border-amber-400/25 bg-amber-400/10 p-4 shadow-[0_0_44px_rgba(251,191,36,0.1)] backdrop-blur-2xl"
+          role="status"
+        >
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <p className="font-semibold text-yellow-300">
+              <p className="font-semibold text-amber-200">
                 Anti Violation Protection
               </p>
 
               <p className="mt-1 text-sm text-white/60">
-                Tab switching is monitored.
+                Fullscreen, focus, and tab activity are being monitored.
               </p>
             </div>
 
-            <div className="text-2xl font-black text-yellow-300">
-              {violations}/5
+            <div className="flex items-center gap-2">
+              {Array.from({ length: MAX_VIOLATIONS }).map((_, index) => (
+                <span
+                  key={index}
+                  className={cn(
+                    "h-2.5 w-8 rounded-full transition",
+                    index < violations
+                      ? "bg-amber-300 shadow-[0_0_18px_rgba(251,191,36,0.65)]"
+                      : "bg-white/10",
+                  )}
+                />
+              ))}
+
+              <div className="ml-2 text-2xl font-black text-amber-200">
+                {violations}/{MAX_VIOLATIONS}
+              </div>
             </div>
           </div>
-        </div>
+        </motion.div>
 
-        {challengeCompleted && (
-          <div className="mb-4 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">
-            Challenge Completed Successfully
-          </div>
-        )}
+        <AnimatePresence>
+          {challengeCompleted && (
+            <motion.div
+              initial={{ opacity: 0, y: -12, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -12, scale: 0.98 }}
+              className="rounded-[1.5rem] border border-emerald-400/30 bg-emerald-400/10 px-5 py-4 text-sm font-semibold text-emerald-100 shadow-[0_0_44px_rgba(52,211,153,0.14)] backdrop-blur-2xl"
+              role="status"
+              aria-live="polite"
+            >
+              Challenge Completed Successfully
+            </motion.div>
+          )}
 
-        {!challengeCompleted && attemptStarted && (
-          <div className="mb-4 rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-4 py-3 text-sm text-cyan-200">
-            Protected Assessment Mode Enabled
-          </div>
-        )}
+          {!challengeCompleted && attemptStarted && (
+            <motion.div
+              initial={{ opacity: 0, y: -12, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -12, scale: 0.98 }}
+              className="rounded-[1.5rem] border border-cyan-400/30 bg-cyan-400/10 px-5 py-4 text-sm font-semibold text-cyan-100 shadow-[0_0_44px_rgba(34,211,238,0.12)] backdrop-blur-2xl"
+              role="status"
+            >
+              Protected Assessment Mode Enabled
+            </motion.div>
+          )}
 
-        {violations > 0 && violations < MAX_VIOLATIONS && (
-          <div className="mb-4 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
-            Warning: Leaving fullscreen or switching tabs may trigger automatic
-            submission.
-          </div>
-        )}
+          {violations > 0 && violations < MAX_VIOLATIONS && (
+            <motion.div
+              initial={{ opacity: 0, y: -12, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -12, scale: 0.98 }}
+              className="rounded-[1.5rem] border border-red-400/30 bg-red-400/10 px-5 py-4 text-sm font-semibold text-red-100 shadow-[0_0_44px_rgba(248,113,113,0.14)] backdrop-blur-2xl"
+              role="alert"
+            >
+              Warning: Leaving fullscreen or switching tabs may trigger
+              automatic submission.
+            </motion.div>
+          )}
 
-        {autoSubmitting && (
-          <div className="mb-4 rounded-lg border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
-            Maximum violations reached. Auto submitting challenge...
-          </div>
-        )}
+          {autoSubmitting && (
+            <motion.div
+              initial={{ opacity: 0, y: -12, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: [1, 1.02, 1] }}
+              exit={{ opacity: 0, y: -12, scale: 0.98 }}
+              transition={{ duration: 0.85, repeat: Infinity }}
+              className="rounded-[1.5rem] border border-amber-400/30 bg-amber-400/10 px-5 py-4 text-sm font-bold text-amber-100 shadow-[0_0_44px_rgba(251,191,36,0.16)] backdrop-blur-2xl"
+              role="alert"
+            >
+              Maximum violations reached. Auto submitting challenge...
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <ChallengeSecurityOverlay violations={violations} />
-        {/* EXPIRED BANNER (render only when attempt ended but not completed) */}
-        {challengeEnded && !challengeCompleted && (
-          <>
-            <div className="mb-4 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
-              Challenge session expired. Please return to the challenges page.
-            </div>
 
-            <Link
-              href="/daily-challenges"
-              className="inline-flex items-center justify-center rounded-xl bg-zinc-800 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-zinc-700"
-            >
-              Return To Challenges
-            </Link>
-          </>
-        )}
+        {challengeEnded && !challengeCompleted ? (
+          <MotionWrapper>
+            <section className="rounded-[2rem] border border-red-400/25 bg-red-400/10 p-6 text-center shadow-[0_0_70px_rgba(248,113,113,0.14)] backdrop-blur-2xl sm:p-8">
+              <h2 className="text-2xl font-black text-white sm:text-3xl">
+                Challenge Session Ended
+              </h2>
 
-        {/* QUESTIONS */}
-        {initialChallenge.questions.length === 0 ? (
-          <div className="mb-6 rounded-lg border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
-            Questions could not be loaded properly.
-          </div>
-        ) : attemptStarted || challengeCompleted ? (
-          <div className="space-y-6">
-            {initialChallenge.questions.map((question, index) => (
-              <div
-                key={question.id}
-                className="rounded-[32px] border border-white/10 bg-white/3 p-8"
-              >
-                <div className="mb-8 flex items-center gap-4">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-cyan-500/10 font-black text-cyan-300">
-                    {index + 1}
-                  </div>
+              <p className="mx-auto mt-3 max-w-md text-sm leading-7 text-white/60">
+                Your challenge session has ended. Return to the challenge hub to
+                continue.
+              </p>
 
-                  <h2 className="text-2xl font-bold">{question.question}</h2>
-                </div>
-
-                <div className="grid gap-5">
-                  {[
-                    question.optionA,
-                    question.optionB,
-                    question.optionC,
-                    question.optionD,
-                  ].map((option) => {
-                    const active = selected[question.id] === option;
-
-                    return (
-                      <button
-                        key={option}
-                        onClick={() => handleSelect(question.id, option)}
-                        disabled={challengeEnded}
-                        className={`rounded-2xl border p-5 text-left transition ${
-                          active
-                            ? "border-cyan-400 bg-cyan-500/10"
-                            : "border-white/10 bg-black/40 hover:border-cyan-400/30"
-                        }`}
-                      >
-                        {option}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="mb-6 rounded-2xl border border-white/6 bg-white/2 px-6 py-12 text-center text-sm text-white/60">
-            Loading challenge...
-          </div>
-        )}
-
-        {/* FOOTER - only show when attempt is active or challenge already completed */}
-        {(attemptStarted || challengeCompleted) && (
-          <div className="mt-8 flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-            <button
-              onClick={() => handleSubmit()}
-              disabled={
-                submitting ||
-                challengeCompleted ||
-                autoSubmittedRef.current ||
-                submitLockRef.current
-              }
-              className={cn(
-                "rounded-2xl bg-cyan-400 px-8 py-5 text-lg font-black text-black transition hover:scale-[1.02]",
-                (submitting ||
-                  challengeCompleted ||
-                  autoSubmittedRef.current ||
-                  submitLockRef.current) &&
-                  "cursor-not-allowed opacity-60 hover:scale-100",
-              )}
-            >
-              {challengeCompleted
-                ? "Challenge Completed"
-                : submitting
-                  ? "Submitting..."
-                  : "Submit Challenge"}
-            </button>
-
-            {result && !challengeCompleted && (
-              <div className="rounded-2xl border border-white/10 bg-white/3 px-6 py-4 text-lg">
-                {result}
-              </div>
-            )}
-
-            {challengeCompleted && (
               <Link
                 href="/daily-challenges"
-                className="inline-flex items-center justify-center rounded-xl bg-zinc-800 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-zinc-700"
+                className="mt-6 inline-flex rounded-full border border-cyan-400/30 bg-cyan-400/10 px-5 py-3 text-sm font-bold uppercase tracking-[0.18em] text-cyan-200 transition hover:bg-cyan-400/20 focus:outline-none focus:ring-2 focus:ring-cyan-400/50"
               >
-                Back To Challenges
+                Back to Challenges
               </Link>
+            </section>
+          </MotionWrapper>
+        ) : (
+          <>
+            {!challengeCompleted && attemptStarted && (
+              <section className="space-y-5">
+                {initialChallenge.questions.map((question, questionIndex) => (
+                  <motion.article
+                    key={question.id}
+                    initial={{ opacity: 0, y: 18 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    whileHover={{ y: -3 }}
+                    transition={{
+                      duration: 0.45,
+                      delay: questionIndex * 0.06,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                    className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.035] p-5 shadow-[0_28px_100px_rgba(0,0,0,0.36)] backdrop-blur-2xl transition duration-300 hover:border-cyan-400/25 sm:p-6 md:p-8"
+                  >
+                    <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.12),transparent_32%),linear-gradient(135deg,rgba(255,255,255,0.045),transparent_38%)] opacity-80 transition duration-500 group-hover:opacity-100" />
+                    <div className="pointer-events-none absolute -right-20 -top-20 h-60 w-60 rounded-full bg-cyan-400/10 blur-3xl transition duration-500 group-hover:bg-cyan-400/15" />
+
+                    <div className="relative z-10">
+                      <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+                        <span className="rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-cyan-200">
+                          Question {questionIndex + 1}
+                        </span>
+
+                        <span className="text-xs font-bold uppercase tracking-[0.22em] text-white/35">
+                          {questionIndex + 1}/
+                          {initialChallenge.questions.length}
+                        </span>
+                      </div>
+
+                      <h2 className="text-lg font-bold leading-8 text-white sm:text-xl md:text-2xl">
+                        {question.question}
+                      </h2>
+
+                      <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                        {[
+                          { label: "A", value: question.optionA },
+                          { label: "B", value: question.optionB },
+                          { label: "C", value: question.optionC },
+                          { label: "D", value: question.optionD },
+                        ].map((option) => {
+                          const isSelected =
+                            selected[question.id] === option.value;
+
+                          return (
+                            <HoverScale key={option.label}>
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  handleSelect(question.id, option.value)
+                                }
+                                disabled={challengeEnded}
+                                aria-pressed={isSelected}
+                                className={cn(
+                                  "group/answer relative flex min-h-16 w-full items-center gap-4 overflow-hidden rounded-[1.35rem] border p-4 text-left transition duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/50 disabled:cursor-not-allowed disabled:opacity-60",
+                                  isSelected
+                                    ? "border-cyan-300/60 bg-cyan-400/15 shadow-[0_0_44px_rgba(34,211,238,0.2)]"
+                                    : "border-white/10 bg-black/25 shadow-[0_16px_60px_rgba(0,0,0,0.22)] hover:border-cyan-400/35 hover:bg-cyan-400/[0.06]",
+                                )}
+                              >
+                                <div
+                                  aria-hidden="true"
+                                  className={cn(
+                                    "pointer-events-none absolute inset-0 opacity-0 transition duration-300 group-hover/answer:opacity-100",
+                                    isSelected
+                                      ? "bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.22),transparent_45%)] opacity-100"
+                                      : "bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.12),transparent_45%)]",
+                                  )}
+                                />
+
+                                <span
+                                  className={cn(
+                                    "relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border text-sm font-black transition",
+                                    isSelected
+                                      ? "border-cyan-300/70 bg-cyan-400/25 text-cyan-100"
+                                      : "border-white/10 bg-white/[0.04] text-white/50 group-hover/answer:text-cyan-200",
+                                  )}
+                                >
+                                  {option.label}
+                                </span>
+
+                                <span className="relative z-10 text-sm font-semibold leading-6 text-white/80 sm:text-base">
+                                  {option.value}
+                                </span>
+                              </button>
+                            </HoverScale>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </motion.article>
+                ))}
+              </section>
             )}
-          </div>
+
+            <MotionWrapper>
+              <footer className="sticky bottom-4 z-20 rounded-[2rem] border border-white/10 bg-slate-950/80 p-4 shadow-[0_24px_100px_rgba(0,0,0,0.45)] backdrop-blur-2xl sm:p-5">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-[0.24em] text-white/40">
+                      Submission Control
+                    </p>
+
+                    {result && (
+                      <p className="mt-2 text-sm font-semibold text-cyan-200">
+                        {result}
+                      </p>
+                    )}
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => handleSubmit()}
+                    disabled={
+                      submitting ||
+                      challengeCompleted ||
+                      autoSubmittedRef.current ||
+                      submitLockRef.current
+                    }
+                    className={cn(
+                      "inline-flex min-h-12 items-center justify-center rounded-full border px-6 py-3 text-sm font-black uppercase tracking-[0.18em] transition focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/50 disabled:cursor-not-allowed disabled:opacity-50",
+                      submitting || challengeCompleted
+                        ? "border-white/10 bg-white/[0.04] text-white/40"
+                        : "border-cyan-400/30 bg-cyan-400/15 text-cyan-100 shadow-[0_0_44px_rgba(34,211,238,0.18)] hover:bg-cyan-400/25",
+                    )}
+                  >
+                    {submitting ? "Submitting..." : "Submit Challenge"}
+                  </button>
+                </div>
+              </footer>
+            </MotionWrapper>
+          </>
         )}
       </div>
     </main>

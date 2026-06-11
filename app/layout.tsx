@@ -4,9 +4,8 @@ import { Geist, Geist_Mono, Inter, Manrope } from "next/font/google";
 
 import "./globals.css";
 
-import CompetitionNavbar from "@/components/platform/CompetitionNavbar";
-import CompetitionBackground from "@/components/platform/CompetitionBackground";
-
+import CompetitionNavbar from "@/components/profile/platform/CompetitionNavbar";
+import CompetitionBackground from "@/components/profile/platform/CompetitionBackground";
 const manrope = Manrope({
   subsets: ["latin"],
   variable: "--font-heading",

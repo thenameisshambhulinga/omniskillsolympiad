@@ -7,7 +7,13 @@ import { authOptions } from "@/lib/auth";
 import LoginClient from "./LoginClient";
 
 export default async function LoginPage() {
-  const session = await getServerSession(authOptions);
+  let session = null;
+
+  try {
+    session = await getServerSession(authOptions);
+  } catch (error) {
+    console.warn("Ignoring invalid auth session on login page:", error);
+  }
 
   if (session) {
     redirect("/dashboard");

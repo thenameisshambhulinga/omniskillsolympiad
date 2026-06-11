@@ -5,15 +5,14 @@ import DashboardHero from "@/components/dashboard/DashboardHero";
 import PerformanceCards from "@/components/dashboard/PerformanceCards";
 import PerformanceAnalytics from "@/components/dashboard/PerformanceAnalytics";
 import ActivityTimeline from "@/components/dashboard/ActivityTimeline";
+import LearningCoach from "@/components/dashboard/intelligence/LearningCoach";
+import MetricFlow from "@/components/dashboard/intelligence/MetricFlow";
 
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
-import {
-  calculateOmniScore,
-  determineEngineeringTier,
-  calculateProtectedStreak,
-} from "@/lib/engineering-system";
+import OfflineState from "@/components/system/OfflineState";
+import { calculateOmniScore } from "@/lib/engineering-system";
 
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions);
@@ -22,26 +21,36 @@ export default async function DashboardPage() {
     redirect("/login");
   }
 
-  const user = await prisma.user.findUnique({
-    where: {
-      email: session.user.email,
-    },
+  let user = null;
 
-    include: {
-      dailyAttempts: true,
-
-      activities: {
-        orderBy: {
-          createdAt: "desc",
-        },
-
-        take: 8,
+  try {
+    user = await prisma.user.findUnique({
+      where: {
+        email: session.user.email,
       },
-    },
-  });
+
+      include: {
+        dailyAttempts: true,
+
+        activities: {
+          orderBy: {
+            createdAt: "desc",
+          },
+
+          take: 8,
+        },
+      },
+    });
+  } catch (error) {
+    console.error("Database unavailable", error);
+  }
 
   if (!user) {
-    redirect("/login");
+    return (
+      <main className="min-h-screen bg-black px-4 pt-28 text-white sm:px-6 lg:px-8">
+        <OfflineState />
+      </main>
+    );
   }
 
   // CHALLENGE METRICS
@@ -49,7 +58,22 @@ export default async function DashboardPage() {
     (attempt) => attempt.completed,
   ).length;
 
-  const totalChallenges = await prisma.dailyChallenge.count();
+  let totalChallenges = 0;
+  let usersAbove = 0;
+
+  try {
+    totalChallenges = await prisma.dailyChallenge.count();
+
+    usersAbove = await prisma.user.count({
+      where: {
+        siliconPoints: {
+          gt: user.siliconPoints,
+        },
+      },
+    });
+  } catch (error) {
+    console.error("Database unavailable", error);
+  }
 
   const totalCorrectAnswers = user.dailyAttempts.reduce(
     (acc, curr) => acc + curr.score,
@@ -71,15 +95,6 @@ export default async function DashboardPage() {
       ? Math.round((totalCorrectAnswers / totalQuestionsAttempted) * 100)
       : 0;
 
-  // NATIONAL RANK
-  const usersAbove = await prisma.user.count({
-    where: {
-      siliconPoints: {
-        gt: user.siliconPoints,
-      },
-    },
-  });
-
   const nationalRank = usersAbove + 1;
 
   // ENGINEERING SYSTEM
@@ -90,15 +105,8 @@ export default async function DashboardPage() {
     totalPoints: Number(user?.siliconPoints || 0),
   });
 
-  const engineeringTier = determineEngineeringTier(omniScore);
-
-  const streakData = calculateProtectedStreak({
-    currentStreak: user.streak,
-    completedDays: completedChallenges,
-  });
-
   return (
-    <main className="relative z-10 min-h-screen px-6 pb-12 pt-8 text-white">
+    <main className="relative min-h-screen overflow-visible bg-black px-4 pt-28 text-white sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl space-y-6">
         {/* HERO */}
         <DashboardHero
@@ -110,7 +118,7 @@ export default async function DashboardPage() {
 
         {/* RANKING CARDS */}
         <div className="grid gap-6 lg:grid-cols-3">
-          <div className="rounded-[28px] border border-white/10 bg-white/[0.03] p-6 backdrop-blur-xl">
+          <div className="rounded-[28px] border border-white/10 bg-white/3 p-6 backdrop-blur-xl">
             <p className="text-xs uppercase tracking-[0.3em] text-white/40">
               National Rank
             </p>
@@ -151,11 +159,15 @@ export default async function DashboardPage() {
           successRate={successRate}
         />
 
+        <MetricFlow />
+
         {/* ANALYTICS */}
         <PerformanceAnalytics data={[]} />
 
         {/* ACTIVITY */}
         <ActivityTimeline activities={user.activities} />
+
+        <LearningCoach />
       </div>
     </main>
   );

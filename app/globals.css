@@ -339,3 +339,29 @@ body {
   font-size: 1.28rem !important;
   line-height: 2.15rem !important;
 }
+.field-label,
+.metric-label,
+.section-label {
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+
+.field-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  color: rgba(165, 243, 252, 0.82);
+}
+
+.metric-label {
+  font-size: 0.76rem;
+  letter-spacing: 0.22em;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.section-label {
+  font-size: 0.78rem;
+  letter-spacing: 0.28em;
+  color: rgba(103, 232, 249, 0.95);
+}
