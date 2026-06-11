@@ -6,17 +6,12 @@ import { authOptions } from "@/lib/auth";
 import LoginClient from "./LoginClient";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export default async function LoginPage() {
-  let session = null;
+  const session = await getServerSession(authOptions);
 
-  try {
-    session = await getServerSession(authOptions);
-  } catch (error) {
-    console.warn("Ignoring invalid auth session on login page:", error);
-  }
-
-  if (session) {
+  if (session?.user) {
     redirect("/dashboard");
   }
 
