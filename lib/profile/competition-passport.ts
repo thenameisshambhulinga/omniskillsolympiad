@@ -37,7 +37,7 @@ export type CompetitionPassportInput = {
   createdAt: Date | string;
   vibgyorSnapshot: VibgyorJourneySnapshot;
   readiness: EngineeringReadinessResult;
-  latestAssessment: OfflineAssessment;
+  latestAssessment: OfflineAssessment | null;
   assessmentTrend: AssessmentTrend;
 };
 
@@ -98,7 +98,7 @@ export function getCompetitionStatus(input: CompetitionPassportInput) {
     currentStage: input.vibgyorSnapshot.currentStage.name,
     currentStep: `${input.vibgyorSnapshot.currentStep.code} — ${input.vibgyorSnapshot.currentStep.meaning}`,
     currentTier: input.vibgyorSnapshot.currentTier,
-    latestAssessmentScore: input.latestAssessment.score,
+    latestAssessmentScore: input.latestAssessment?.score ?? 0,
     readinessLevel: input.readiness.level,
   };
 }
@@ -149,7 +149,7 @@ export function getCompetitionMilestones(
   const latestAssessment = input.latestAssessment;
   const readiness = input.readiness;
 
-  return [
+  const milestones: CompetitionPassportMilestone[] = [
     {
       id: "identity-activated",
       title: "Engineering Identity Activated",
@@ -172,19 +172,6 @@ export function getCompetitionMilestones(
       description: journey.currentStage.purpose,
     },
     {
-      id: "assessment-performance",
-      title: latestAssessment.title,
-      status:
-        latestAssessment.status === "Completed"
-          ? "COMPLETED"
-          : latestAssessment.status === "In Review"
-            ? "IN_PROGRESS"
-            : "LOCKED",
-      completionPercent: latestAssessment.score,
-      reward: `+${latestAssessment.readinessImpact} Readiness`,
-      description: latestAssessment.notes,
-    },
-    {
       id: "readiness-target",
       title: `${readiness.level} Readiness`,
       status:
@@ -198,6 +185,24 @@ export function getCompetitionMilestones(
       description: readiness.improvementGuidance,
     },
   ];
+
+  if (latestAssessment) {
+    milestones.splice(2, 0, {
+      id: "assessment-performance",
+      title: latestAssessment.title,
+      status:
+        latestAssessment.status === "Completed"
+          ? "COMPLETED"
+          : latestAssessment.status === "In Review"
+            ? "IN_PROGRESS"
+            : "LOCKED",
+      completionPercent: latestAssessment.score,
+      reward: `+${latestAssessment.readinessImpact} Readiness`,
+      description: latestAssessment.notes,
+    });
+  }
+
+  return milestones;
 }
 
 export function getCompetitionTimeline(
@@ -215,7 +220,7 @@ export function getCompetitionTimeline(
       status: "COMPLETED",
     }));
 
-  return [
+  const timeline: CompetitionPassportTimelineItem[] = [
     {
       id: "engineering-identity-activated",
       title: "Engineering Identity Activated",
@@ -226,19 +231,8 @@ export function getCompetitionTimeline(
     },
     ...stageItems,
     {
-      id: "assessment-completed",
-      title: "Assessment Completed",
-      description: `${input.latestAssessment.title} scored ${input.latestAssessment.score}%.`,
-      type: "assessment",
-      date: input.latestAssessment.date,
-      status:
-        input.latestAssessment.status === "Completed"
-          ? "COMPLETED"
-          : "IN_PROGRESS",
-    },
-    {
       id: "tier-upgraded",
-      title: "Tier Upgraded",
+      title: "Tier Updated",
       description: `${input.vibgyorSnapshot.currentTier} tier currently active.`,
       type: "tier",
       date,
@@ -246,23 +240,15 @@ export function getCompetitionTimeline(
     },
     {
       id: "stage-unlocked",
-      title: "Stage Unlocked",
+      title: "Stage Active",
       description: `${input.vibgyorSnapshot.currentStage.name} is the active VIBGYOR stage.`,
       type: "stage",
       date,
       status: "IN_PROGRESS",
     },
     {
-      id: "assessment-improved",
-      title: "Assessment Improved",
-      description: `${input.assessmentTrend.trend} assessment trend recorded.`,
-      type: "readiness",
-      date: input.latestAssessment.date,
-      status: "IN_PROGRESS",
-    },
-    {
-      id: "leaderboard-improved",
-      title: "Leaderboard Improved",
+      id: "leaderboard-updated",
+      title: "Leaderboard Updated",
       description:
         input.rankChange > 0
           ? `Rank improved by ${input.rankChange} positions this week.`
@@ -272,6 +258,34 @@ export function getCompetitionTimeline(
       status: "IN_PROGRESS",
     },
   ];
+
+  if (input.latestAssessment) {
+    timeline.splice(
+      1 + stageItems.length,
+      0,
+      {
+        id: "assessment-completed",
+        title: "Assessment Completed",
+        description: `${input.latestAssessment.title} scored ${input.latestAssessment.score}%.`,
+        type: "assessment",
+        date: input.latestAssessment.date,
+        status:
+          input.latestAssessment.status === "Completed"
+            ? "COMPLETED"
+            : "IN_PROGRESS",
+      },
+      {
+        id: "assessment-improved",
+        title: "Assessment Trend Updated",
+        description: `${input.assessmentTrend.trend} assessment trend recorded.`,
+        type: "readiness",
+        date: input.latestAssessment.date,
+        status: "IN_PROGRESS",
+      },
+    );
+  }
+
+  return timeline;
 }
 
 export function getCompetitionPassport(
