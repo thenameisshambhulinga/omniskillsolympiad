@@ -267,7 +267,7 @@ export default function EngineeringCommandCenter() {
               </div>
 
               <p className="mb-4 text-sm font-bold uppercase tracking-[0.34em] text-purple-300">
-                How Silicon Skillathon Works
+                How Omni Skills Olympiad Works
               </p>
 
               <h2 className="max-w-5xl text-4xl font-black leading-tight tracking-tight md:text-6xl lg:text-7xl">

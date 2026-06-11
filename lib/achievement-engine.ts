@@ -25,7 +25,7 @@ export function generateAchievements(input: AchievementInput): Achievement[] {
     {
       id: "first-challenge",
       title: "First Challenge Completed",
-      description: "Completed the first Silicon Skillathon challenge.",
+      description: "Completed the first Omni Skills Olympiad challenge.",
       rarity: "common",
       icon: "award",
       earnedAt: challengesSolved >= 1 ? earnedNow : null,
@@ -47,7 +47,9 @@ export function generateAchievements(input: AchievementInput): Achievement[] {
       rarity: "epic",
       icon: "trophy",
       earnedAt:
-        typeof nationalRank === "number" && nationalRank > 0 && nationalRank <= 100
+        typeof nationalRank === "number" &&
+        nationalRank > 0 &&
+        nationalRank <= 100
           ? earnedNow
           : null,
       progress:
@@ -85,7 +87,7 @@ export function generateAchievements(input: AchievementInput): Achievement[] {
     {
       id: "engineering-identity",
       title: "Engineering Identity",
-      description: "Activated a shareable Silicon Skillathon identity.",
+      description: "Activated a shareable Omni Skills Olympiad identity.",
       rarity: "legendary",
       icon: "shield",
       earnedAt: earnedNow,

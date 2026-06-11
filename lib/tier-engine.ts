@@ -9,7 +9,7 @@ export const ENGINEERING_TIERS: EngineeringTier[] = [
     name: "Explorer",
     minPoints: 0,
     maxPoints: 99,
-    description: "Started the Silicon Skillathon engineering journey.",
+    description: "Started the Omni Skills Olympiad engineering journey.",
     accent: "cyan",
   },
   {
@@ -58,7 +58,7 @@ export const ENGINEERING_TIERS: EngineeringTier[] = [
     name: "Legend",
     minPoints: 5000,
     maxPoints: null,
-    description: "Legendary Silicon Skillathon engineering identity.",
+    description: "Legendary Omni Skills Olympiad engineering identity.",
     accent: "violet",
   },
 ];

@@ -132,7 +132,8 @@ export function generateCompetitionActivityEvents({
       id: `submission-${attempt.id}`,
       type: "submission",
       title: `Challenge ${attempt.challengeDay} Submitted`,
-      description: "Submission recorded inside the Silicon Skillathon engine.",
+      description:
+        "Submission recorded inside the Omni Skills Olympiad engine.",
       createdAt: toIso(attempt.submittedAt),
       priority: 70,
     }));
@@ -147,7 +148,7 @@ export function generateCompetitionActivityEvents({
       id: `identity-${user.id}`,
       type: "identity",
       title: "OMNI Identity Activated",
-      description: `${user.omniId} became a verified Silicon Skillathon engineering identity.`,
+      description: `${user.omniId} became a verified Omni Skills Olympiad engineering identity.`,
       createdAt: user.createdAt.toISOString(),
       priority: 100,
     });

@@ -63,7 +63,7 @@ export default async function AdminPage() {
             <div className="relative z-10 grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
               <div>
                 <p className="text-xs font-bold uppercase tracking-[0.36em] text-cyan-300 sm:text-sm">
-                  Silicon Skillathon Admin
+                  Omni Skills Olympiad Admin
                 </p>
 
                 <h1 className="mt-5 text-4xl font-black leading-tight tracking-tight sm:text-5xl md:text-6xl">

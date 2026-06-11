@@ -5,7 +5,7 @@ export default function NotFoundPage() {
     <main className="flex min-h-screen items-center justify-center bg-black px-6 text-white">
       <div className="max-w-2xl text-center">
         <p className="text-sm uppercase tracking-[0.4em] text-cyan-400">
-          Silicon Skillathon
+          Omni Skills Olympiad
         </p>
 
         <h1 className="mt-6 text-8xl font-black text-white">404</h1>

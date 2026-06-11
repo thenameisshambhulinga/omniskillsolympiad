@@ -21,7 +21,7 @@ export default function AboutSection() {
           {/* RIGHT */}
           <div>
             <p className="text-lg leading-[2] text-white/70">
-              Silicon Skillathon is a next-generation electronics engineering
+              Omni Skills Olympiad is a next-generation electronics engineering
               acceleration ecosystem focused on embedded systems, PCB design,
               ARM programming, hardware debugging, semiconductor workflows and
               competition-driven practical learning.

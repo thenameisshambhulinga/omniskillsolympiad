@@ -27,7 +27,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Silicon Skillathon",
+  title: "Omni Olympiad",
   description: "Advanced Engineering Competition Platform",
 };
 

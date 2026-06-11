@@ -31,7 +31,7 @@ type EventShowcaseItem = {
 
 const featuredEvents: EventShowcaseItem[] = [
   {
-    title: "Silicon Skillathon Season",
+    title: "Omni Skills Olympiad Season 1",
     category: "Flagship Competition",
     status: "Live Arena",
     description:

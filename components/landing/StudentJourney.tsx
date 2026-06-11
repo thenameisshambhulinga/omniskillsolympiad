@@ -71,7 +71,7 @@ export default function StudentJourney() {
               </h2>
 
               <p className="mt-7 max-w-2xl text-base leading-8 text-zinc-300 md:text-lg">
-                Silicon Skillathon gives students a visible growth path. Every
+                Omni Skills Olympiad gives students a visible growth path. Every
                 challenge becomes part of a larger transformation.
               </p>
             </div>

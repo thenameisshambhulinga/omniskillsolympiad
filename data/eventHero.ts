@@ -32,7 +32,7 @@ export type EventHeroItem = {
 export const eventHeroItems: EventHeroItem[] = [
   {
     id: "skillathon-season",
-    title: "Silicon Skillathon",
+    title: "Omni Skills Olympiad Season 1",
     subtitle: "India's Premier Engineering Acceleration Ecosystem",
     description:
       "Compete through daily engineering challenges, earn Silicon Points, climb leaderboards, unlock engineering tiers, and build industry-ready technical confidence.",

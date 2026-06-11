@@ -13,7 +13,7 @@ export const posterAnnouncements: PosterAnnouncement[] = [
   {
     id: "poster-1",
     image: "/posters/poster1.jpg",
-    title: "Silicon Skillathon",
+    title: "Omni Skills Olympiad Season 1",
     ctaText: "Register Now",
     ctaLink: "/login",
     badge: "REGISTRATION OPEN",

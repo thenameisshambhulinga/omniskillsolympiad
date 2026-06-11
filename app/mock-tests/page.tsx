@@ -138,7 +138,7 @@ export default function MockTestsPage() {
 
               <p className="mt-4 leading-8 text-gray-300">
                 Track strengths, identify weaknesses and improve readiness for
-                Silicon Skillathon rounds.
+                Omni Skills Olympiad rounds.
               </p>
             </div>
           </div>

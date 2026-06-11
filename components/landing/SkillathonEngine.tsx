@@ -146,7 +146,7 @@ export default function SkillathonEngine() {
         <MotionWrapper>
           <div className="max-w-4xl">
             <p className="mb-4 text-sm font-bold uppercase tracking-[0.34em] text-cyan-300">
-              Silicon Skillathon Engine
+              Omni Skills Olympiad Engine
             </p>
 
             <h2 className="text-4xl font-black leading-tight tracking-tight md:text-6xl lg:text-7xl">

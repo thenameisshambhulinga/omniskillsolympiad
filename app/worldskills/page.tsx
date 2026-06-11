@@ -32,7 +32,7 @@ export default function WorldSkillsPage() {
           </h1>
 
           <p className="mt-10 max-w-4xl text-lg leading-[2] text-white/85 md:text-xl">
-            Silicon Skillathon is designed as a long-term electronics
+            Omni Skills Olympiad is designed as a long-term electronics
             engineering acceleration ecosystem focused on identifying
             high-potential students and preparing them through finishing school
             programs, technical mentorship, practical competitions and
@@ -228,7 +228,7 @@ export default function WorldSkillsPage() {
           </h2>
 
           <p className="mx-auto mt-10 max-w-3xl text-lg leading-[2] text-white/85">
-            Join Silicon Skillathon and become part of a next-generation
+            Join Omni Skills Olympiad and become part of a next-generation
             technical ecosystem focused on practical engineering, competitions,
             mentorship, innovation and WorldSkills preparation.
           </p>

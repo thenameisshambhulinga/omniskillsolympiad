@@ -182,7 +182,7 @@ export default function RegistrationWizard() {
   return (
     <RegistrationShell
       title="Complete Your Engineering Identity"
-      subtitle="Create your Silicon Skillathon profile foundation before entering the competition ecosystem."
+      subtitle="Create your Omni Skills Olympiad profile foundation before entering the competition ecosystem."
       studentId={formData.studentId}
       completionPercent={completionPercent}
     >

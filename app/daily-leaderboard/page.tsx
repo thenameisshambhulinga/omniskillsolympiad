@@ -55,7 +55,7 @@ export default async function DailyLeaderboardPage() {
         <div className="mb-14 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">
-              Silicon Skillathon Rankings
+              Omni Skills Olympiad Rankings
             </p>
 
             <h1 className="mt-4 text-6xl font-bold">Engineering Leaderboard</h1>
