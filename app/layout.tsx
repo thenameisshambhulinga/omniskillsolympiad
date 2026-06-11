@@ -6,6 +6,7 @@ import "./globals.css";
 
 import CompetitionNavbar from "@/components/profile/platform/CompetitionNavbar";
 import CompetitionBackground from "@/components/profile/platform/CompetitionBackground";
+
 const manrope = Manrope({
   subsets: ["latin"],
   variable: "--font-heading",
@@ -28,7 +29,20 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Omni Skills Olympiad",
-  description: "Advanced Engineering Competition Platform",
+  description: "National Engineering Excellence Ecosystem",
+
+  openGraph: {
+    title: "Omni Skills Olympiad",
+    description: "National Engineering Excellence Ecosystem",
+    images: ["/og-image.png"],
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "Omni Skills Olympiad",
+    description: "National Engineering Excellence Ecosystem",
+    images: ["/og-image.png"],
+  },
 };
 
 export default function RootLayout({
