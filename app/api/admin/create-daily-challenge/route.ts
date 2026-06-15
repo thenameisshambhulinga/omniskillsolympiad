@@ -1,48 +1,120 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
+
 import { authOptions } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 
-export async function POST(req: Request) {
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
+function cleanText(value: unknown) {
+  return String(value ?? "").trim();
+}
+
+function cleanNumber(value: unknown) {
+  const numberValue = Number(value);
+  return Number.isFinite(numberValue) ? numberValue : null;
+}
+
+async function getAdminUser() {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user?.email) {
+    return {
+      user: null,
+      response: NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 },
+      ),
+    };
+  }
+
+  const user = await prisma.user.findUnique({
+    where: {
+      email: session.user.email,
+    },
+    select: {
+      id: true,
+      email: true,
+      role: true,
+    },
+  });
+
+  if (!user || user.role !== "ADMIN") {
+    return {
+      user: null,
+      response: NextResponse.json(
+        { error: "Forbidden. Admin access required." },
+        { status: 403 },
+      ),
+    };
+  }
+
+  return {
+    user,
+    response: null,
+  };
+}
+
+export async function POST(request: Request) {
   try {
-    const session = await getServerSession(authOptions);
+    const { response } = await getAdminUser();
 
-    if (!session?.user?.email) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (response) {
+      return response;
     }
 
-    const user = await prisma.user.findUnique({
-      where: {
-        email: session.user.email,
-      },
-    });
+    const body = await request.json();
 
-    if (!user || user.role !== "ADMIN") {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    const dayNumber = cleanNumber(body.dayNumber);
+    const title = cleanText(body.title);
+    const description = cleanText(body.description);
+
+    if (!dayNumber || dayNumber < 1 || !title || !description) {
+      return NextResponse.json(
+        {
+          error: "Day number, title and description are required.",
+        },
+        {
+          status: 400,
+        },
+      );
     }
-
-    const body = await req.json();
 
     const challenge = await prisma.dailyChallenge.create({
       data: {
-        dayNumber: Number(body.dayNumber),
-        title: body.title,
-        description: body.description,
+        dayNumber,
+        title,
+        description,
+        isPublished: Boolean(body.isPublished),
+      },
+      select: {
+        id: true,
+        dayNumber: true,
+        title: true,
+        description: true,
+        isPublished: true,
+        createdAt: true,
       },
     });
 
-    console.log("CREATED CHALLENGE:", challenge);
-
     return NextResponse.json({
       success: true,
-      id: challenge.id,
+      challenge: {
+        ...challenge,
+        createdAt: challenge.createdAt.toISOString(),
+      },
     });
   } catch (error) {
-    console.error(error);
+    console.error("CREATE DAILY CHALLENGE ERROR:", error);
 
     return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 },
+      {
+        error: "Failed to create daily challenge.",
+      },
+      {
+        status: 500,
+      },
     );
   }
 }
