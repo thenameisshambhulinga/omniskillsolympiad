@@ -12,6 +12,7 @@ import {
   Menu,
   Search,
   Trophy,
+  UserRound,
   X,
 } from "lucide-react";
 
@@ -46,41 +47,46 @@ export default function CompetitionNavbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/92 backdrop-blur-xl">
-        <div className="mx-auto flex h-20 w-full max-w-[1600px] items-center justify-between gap-6 px-4 sm:px-6 lg:px-8">
+      <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 shadow-[0_10px_35px_rgba(15,23,42,0.04)] backdrop-blur-xl">
+        <div className="mx-auto flex h-[96px] w-full max-w-[1600px] items-center justify-between gap-6 px-4 sm:px-6 lg:px-8">
           <Link
             href="/"
             aria-label="Go to Omni Skills Olympiad home"
-            className="group inline-flex shrink-0 items-center rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
+            className="group inline-flex shrink-0 items-center rounded-2xl outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
           >
-            <div className="relative h-[58px] w-[222px] overflow-hidden">
+            <div className="relative flex h-[76px] w-[315px] items-center overflow-visible">
               <Image
                 src="/brand/omni-logo-h.png"
                 alt="Omni Skills Olympiad"
                 width={1191}
                 height={843}
                 priority
-                className="absolute left-1/2 top-1/2 w-[240px] max-w-none -translate-x-1/2 -translate-y-1/2 object-contain brightness-0 transition duration-200 group-hover:scale-[1.02]"
+                className="h-auto w-[286px] object-contain brightness-0 transition duration-200 group-hover:scale-[1.02]"
               />
             </div>
           </Link>
 
-          <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
+          <nav
+            className="hidden items-center gap-2 lg:flex"
+            aria-label="Primary navigation"
+          >
             {navItems.map((item) => {
-              const active = pathname === item.href;
+              const active =
+                pathname === item.href ||
+                (item.href !== "/" && pathname.startsWith(item.href));
               const Icon = item.icon;
 
               return (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-bold outline-none transition focus-visible:ring-2 focus-visible:ring-blue-600 ${
+                  className={`group inline-flex min-h-12 items-center gap-2.5 rounded-full px-5 py-3 text-[15px] font-black outline-none transition duration-200 focus-visible:ring-2 focus-visible:ring-blue-600 ${
                     active
-                      ? "bg-blue-600 text-white"
-                      : "text-slate-700 hover:bg-slate-100 hover:text-slate-950"
+                      ? "bg-blue-600 text-white shadow-[0_12px_24px_rgba(37,99,235,0.18)]"
+                      : "text-slate-700 hover:-translate-y-0.5 hover:bg-slate-100 hover:text-slate-950"
                   }`}
                 >
-                  <Icon className="h-4 w-4" />
+                  <Icon className="h-5 w-5" />
                   {item.label}
                 </Link>
               );
@@ -88,21 +94,36 @@ export default function CompetitionNavbar() {
           </nav>
 
           <div className="flex items-center gap-3">
-            <div className="hidden h-11 items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-4 xl:flex">
-              <Search className="h-4 w-4 text-slate-400" />
+            <div className="hidden h-14 items-center gap-3 rounded-full border border-slate-200 bg-slate-50 px-5 shadow-inner shadow-white xl:flex">
+              <Search className="h-5 w-5 text-slate-400" />
               <input
                 type="text"
                 placeholder="Search OSO..."
-                className="w-48 bg-transparent text-sm font-semibold text-slate-800 outline-none placeholder:text-slate-400"
+                className="w-64 bg-transparent text-[15px] font-bold text-slate-800 outline-none placeholder:text-slate-400"
+                aria-label="Search Omni Skills Olympiad"
               />
             </div>
 
-            <ProfileDropdown />
+            <div className="hidden items-center gap-3 rounded-full border border-slate-200 bg-white px-3 py-2 shadow-[0_12px_30px_rgba(15,23,42,0.07)] transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-[0_16px_38px_rgba(37,99,235,0.12)] lg:flex">
+              <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-blue-50 text-blue-700">
+                <UserRound className="h-5 w-5" />
+              </span>
+
+              <span className="text-[15px] font-black text-slate-900">
+                Login
+              </span>
+
+              <ProfileDropdown />
+            </div>
+
+            <div className="lg:hidden">
+              <ProfileDropdown />
+            </div>
 
             <button
               type="button"
               onClick={() => setMobileOpen(true)}
-              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-800 outline-none transition hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-blue-600 lg:hidden"
+              className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-800 outline-none transition hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-blue-600 lg:hidden"
               aria-label="Open navigation menu"
             >
               <Menu className="h-5 w-5" />
@@ -123,36 +144,53 @@ export default function CompetitionNavbar() {
             />
 
             <motion.aside
-              className="fixed right-0 top-0 z-[80] flex h-full w-[340px] max-w-[88vw] flex-col border-l border-slate-200 bg-white p-5 shadow-2xl"
+              className="fixed right-0 top-0 z-[80] flex h-full w-[360px] max-w-[90vw] flex-col border-l border-slate-200 bg-white p-5 shadow-2xl"
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 28, stiffness: 260 }}
             >
               <div className="mb-8 flex items-center justify-between gap-4">
-                <div className="relative h-[54px] w-[205px] overflow-hidden">
+                <Link
+                  href="/"
+                  onClick={() => setMobileOpen(false)}
+                  aria-label="Go to Omni Skills Olympiad home"
+                  className="relative flex h-[66px] w-[250px] items-center overflow-visible"
+                >
                   <Image
                     src="/brand/omni-logo-h.png"
                     alt="Omni Skills Olympiad"
                     width={1191}
                     height={843}
-                    className="absolute left-1/2 top-1/2 w-[220px] max-w-none -translate-x-1/2 -translate-y-1/2 object-contain brightness-0"
+                    className="h-auto w-[232px] object-contain brightness-0"
                   />
-                </div>
+                </Link>
 
                 <button
                   type="button"
                   onClick={() => setMobileOpen(false)}
-                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 text-slate-800 transition hover:bg-slate-50"
+                  className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 text-slate-800 transition hover:bg-slate-50"
                   aria-label="Close navigation menu"
                 >
                   <X className="h-5 w-5" />
                 </button>
               </div>
 
+              <div className="mb-5 flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
+                <Search className="h-5 w-5 text-slate-400" />
+                <input
+                  type="text"
+                  placeholder="Search OSO..."
+                  className="w-full bg-transparent text-[15px] font-bold text-slate-800 outline-none placeholder:text-slate-400"
+                  aria-label="Search Omni Skills Olympiad"
+                />
+              </div>
+
               <nav className="space-y-2" aria-label="Mobile navigation">
                 {navItems.map((item) => {
-                  const active = pathname === item.href;
+                  const active =
+                    pathname === item.href ||
+                    (item.href !== "/" && pathname.startsWith(item.href));
                   const Icon = item.icon;
 
                   return (
@@ -160,7 +198,7 @@ export default function CompetitionNavbar() {
                       key={item.href}
                       href={item.href}
                       onClick={() => setMobileOpen(false)}
-                      className={`flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-black transition ${
+                      className={`flex min-h-14 items-center gap-3 rounded-2xl px-4 py-3 text-base font-black transition ${
                         active
                           ? "bg-blue-600 text-white"
                           : "text-slate-700 hover:bg-slate-100 hover:text-slate-950"
@@ -172,6 +210,15 @@ export default function CompetitionNavbar() {
                   );
                 })}
               </nav>
+
+              <Link
+                href="/login"
+                onClick={() => setMobileOpen(false)}
+                className="mt-6 inline-flex min-h-14 items-center justify-center gap-3 rounded-2xl bg-slate-950 px-5 py-3 text-base font-black text-white transition hover:bg-blue-700"
+              >
+                <UserRound className="h-5 w-5" />
+                Login
+              </Link>
             </motion.aside>
           </>
         ) : null}

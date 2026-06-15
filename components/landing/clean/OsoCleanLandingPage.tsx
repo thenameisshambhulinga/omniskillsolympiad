@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
@@ -13,7 +14,6 @@ import {
   CalendarDays,
   CircuitBoard,
   Cpu,
-  GraduationCap,
   Radio,
   Trophy,
 } from "lucide-react";
@@ -31,6 +31,8 @@ type AnnouncementItem = {
   imageUrl?: string;
   tag?: string;
 };
+
+const heroTitle = "India's Engineering Skills Competition Ecosystem";
 
 const outcomeStats = [
   {
@@ -163,38 +165,36 @@ function CleanHeroSection({
   posters: unknown[];
   reduceMotion: boolean;
 }) {
-  const visiblePosters = normalizePosters(posters).slice(0, 3);
+  const visiblePosters = normalizePosters(posters).slice(0, 2);
 
   return (
     <section className="relative overflow-hidden border-b border-slate-200 bg-white">
-      <div className="oso-container py-16 lg:py-24">
+      <div className="oso-container py-14 lg:py-20">
         <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
           <motion.div
             initial={reduceMotion ? { opacity: 1 } : { opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-blue-700">
+            <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-5 py-2.5 text-xs font-black uppercase tracking-[0.18em] text-blue-700">
               <Radio className="h-4 w-4" />
               Engineering Skills League
             </div>
 
-            <h1 className="oso-heading mt-7 max-w-5xl text-5xl font-black leading-[1.02] text-[#1a202c] sm:text-6xl lg:text-7xl">
-              India&apos;s Engineering Skills Competition Ecosystem
-            </h1>
+            <TypewriterHeading reduceMotion={reduceMotion} />
 
-            <p className="mt-6 max-w-3xl text-lg font-medium leading-9 text-slate-700">
+            <p className="mt-6 max-w-4xl text-[21px] font-medium leading-10 text-slate-700">
               Learn, practice, compete, get ranked and build an industry-ready
               engineering identity through structured challenges, Omni Score,
               Silicon Points and national-level recognition.
             </p>
 
-            <div className="mt-7 flex flex-wrap gap-2.5">
+            <div className="mt-7 flex flex-wrap gap-3">
               {["Learn", "Practice", "Compete", "Innovate", "Get Ranked"].map(
                 (item) => (
                   <span
                     key={item}
-                    className="rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-black uppercase tracking-[0.16em] text-slate-700"
+                    className="rounded-full border border-slate-200 bg-slate-50 px-5 py-2.5 text-[13px] font-black uppercase tracking-[0.16em] text-slate-700 transition hover:-translate-y-0.5 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700"
                   >
                     {item}
                   </span>
@@ -202,21 +202,21 @@ function CleanHeroSection({
               )}
             </div>
 
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-10 flex flex-col gap-4 sm:flex-row">
               <Link
                 href="/login"
-                className="inline-flex min-h-14 items-center justify-center gap-3 rounded-full bg-blue-600 px-7 py-4 text-sm font-black uppercase tracking-[0.14em] text-white shadow-[0_14px_28px_rgba(37,99,235,0.18)] transition hover:-translate-y-0.5 hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
+                className="group inline-flex min-h-16 items-center justify-center gap-3 rounded-full bg-blue-600 px-8 py-4 text-[15px] font-black uppercase tracking-[0.16em] text-white shadow-[0_18px_36px_rgba(37,99,235,0.22)] transition duration-200 hover:-translate-y-1 hover:bg-blue-700 hover:shadow-[0_24px_48px_rgba(37,99,235,0.28)] active:translate-y-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
               >
                 Register as Student
-                <ArrowRight className="h-5 w-5" />
+                <ArrowRight className="h-5 w-5 transition group-hover:translate-x-1" />
               </Link>
 
               <Link
                 href="/competition"
-                className="inline-flex min-h-14 items-center justify-center gap-3 rounded-full border border-slate-300 bg-white px-7 py-4 text-sm font-black uppercase tracking-[0.14em] text-slate-900 transition hover:-translate-y-0.5 hover:border-blue-400 hover:text-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
+                className="group inline-flex min-h-16 items-center justify-center gap-3 rounded-full border border-slate-300 bg-white px-8 py-4 text-[15px] font-black uppercase tracking-[0.16em] text-slate-950 shadow-[0_14px_32px_rgba(15,23,42,0.06)] transition duration-200 hover:-translate-y-1 hover:border-blue-400 hover:text-blue-700 hover:shadow-[0_20px_44px_rgba(15,23,42,0.1)] active:translate-y-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
               >
                 Explore Competitions
-                <ArrowRight className="h-5 w-5" />
+                <ArrowRight className="h-5 w-5 transition group-hover:translate-x-1" />
               </Link>
             </div>
           </motion.div>
@@ -231,17 +231,17 @@ function CleanHeroSection({
             }}
             className="rounded-[2rem] border border-slate-200 bg-[#f8f9fa] p-5 shadow-[0_22px_70px_rgba(15,23,42,0.08)]"
           >
-            <div className="mb-4 flex items-center justify-between gap-4">
+            <div className="mb-5 flex items-center justify-between gap-4">
               <div>
                 <p className="text-xs font-black uppercase tracking-[0.2em] text-blue-700">
                   Live Poster Board
                 </p>
-                <h2 className="oso-heading mt-1 text-2xl font-black">
-                  Latest OSO Updates
+                <h2 className="oso-heading mt-1 text-3xl font-black">
+                  Skillathon Updates
                 </h2>
               </div>
 
-              <span className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-black text-emerald-700">
+              <span className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-black text-emerald-700">
                 Active
               </span>
             </div>
@@ -262,46 +262,91 @@ function CleanHeroSection({
   );
 }
 
+function TypewriterHeading({ reduceMotion }: { reduceMotion: boolean }) {
+  const [visibleCount, setVisibleCount] = useState(
+    reduceMotion ? heroTitle.length : 0,
+  );
+
+  useEffect(() => {
+    if (reduceMotion) {
+      setVisibleCount(heroTitle.length);
+      return;
+    }
+
+    setVisibleCount(0);
+
+    const interval = window.setInterval(() => {
+      setVisibleCount((current) => {
+        if (current >= heroTitle.length) {
+          window.clearInterval(interval);
+          return current;
+        }
+
+        return current + 1;
+      });
+    }, 34);
+
+    return () => window.clearInterval(interval);
+  }, [reduceMotion]);
+
+  const visibleTitle = useMemo(
+    () => heroTitle.slice(0, visibleCount),
+    [visibleCount],
+  );
+
+  return (
+    <h1
+      className="oso-heading mt-7 min-h-[13rem] max-w-6xl text-[4.4rem] font-black leading-[0.98] text-[#1a202c] sm:text-[5.1rem] lg:text-[5.7rem] xl:text-[6.2rem]"
+      aria-label={heroTitle}
+    >
+      <span aria-hidden="true">{visibleTitle}</span>
+      <span
+        aria-hidden="true"
+        className="ml-1 inline-block h-[0.82em] w-[5px] translate-y-2 animate-pulse rounded-full bg-blue-600"
+      />
+    </h1>
+  );
+}
+
 function AnnouncementCard({ poster }: { poster: AnnouncementItem }) {
   return (
     <Link
       href={poster.ctaHref}
-      className="group grid overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-[0_18px_40px_rgba(15,23,42,0.08)] sm:grid-cols-[180px_1fr]"
+      className="group grid overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm transition duration-200 hover:-translate-y-1 hover:border-blue-300 hover:shadow-[0_20px_45px_rgba(15,23,42,0.1)] active:translate-y-0 sm:grid-cols-[220px_1fr]"
     >
-      <div className="relative min-h-40 bg-slate-100">
+      <div className="relative min-h-[190px] bg-slate-100">
         {poster.imageUrl ? (
           <Image
             src={poster.imageUrl}
             alt={poster.title}
             fill
-            sizes="(max-width: 640px) 100vw, 180px"
-            className="object-cover"
+            unoptimized
+            sizes="(max-width: 640px) 100vw, 220px"
+            className="object-cover transition duration-300 group-hover:scale-[1.03]"
           />
         ) : (
-          <div className="flex h-full min-h-40 items-center justify-center bg-blue-50">
-            <Trophy className="h-10 w-10 text-blue-600" />
+          <div className="flex h-full min-h-[190px] items-center justify-center bg-blue-50">
+            <Trophy className="h-11 w-11 text-blue-600" />
           </div>
         )}
       </div>
 
-      <div className="p-5">
-        <div className="flex items-center gap-2">
-          <span className="rounded-full bg-slate-100 px-3 py-1 text-[11px] font-black uppercase tracking-[0.14em] text-slate-600">
-            {poster.tag ?? "Announcement"}
-          </span>
-        </div>
+      <div className="flex flex-col p-6">
+        <span className="w-fit rounded-full bg-slate-100 px-3 py-1 text-[11px] font-black uppercase tracking-[0.16em] text-slate-600">
+          {poster.tag ?? "Announcement"}
+        </span>
 
-        <h3 className="oso-heading mt-3 text-xl font-black text-slate-950">
+        <h3 className="oso-heading mt-4 text-2xl font-black text-slate-950">
           {poster.title}
         </h3>
 
-        <p className="mt-2 line-clamp-2 text-sm font-medium leading-6 text-slate-600">
+        <p className="mt-2 text-base font-medium leading-7 text-slate-600">
           {poster.description}
         </p>
 
-        <div className="mt-4 inline-flex items-center gap-2 text-sm font-black text-blue-700">
+        <div className="mt-5 inline-flex items-center gap-2 text-base font-black text-blue-700">
           {poster.ctaLabel}
-          <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+          <ArrowRight className="h-5 w-5 transition group-hover:translate-x-1" />
         </div>
       </div>
     </Link>
@@ -340,7 +385,7 @@ function GrowthOutcomeDashboard({ reduceMotion }: { reduceMotion: boolean }) {
                   <Sparkline points={item.trend} />
                 </div>
 
-                <p className="mt-4 text-sm font-medium leading-6 text-slate-600">
+                <p className="mt-4 text-base font-medium leading-7 text-slate-600">
                   {item.helper}
                 </p>
               </div>
@@ -407,7 +452,7 @@ function DomainShowcase({ reduceMotion }: { reduceMotion: boolean }) {
                 {domain}
               </h3>
 
-              <p className="mt-3 text-sm font-medium leading-6 text-slate-600">
+              <p className="mt-3 text-base font-medium leading-7 text-slate-600">
                 Structured missions, competitions and measurable learning
                 progress for future-ready engineering skills.
               </p>
@@ -454,7 +499,7 @@ function VibgyorPipeline({ reduceMotion }: { reduceMotion: boolean }) {
                     {step.title}
                   </h3>
 
-                  <p className="mt-3 text-sm font-medium leading-6 text-slate-600">
+                  <p className="mt-3 text-base font-medium leading-7 text-slate-600">
                     {step.description}
                   </p>
                 </div>
@@ -480,7 +525,7 @@ function CompetitionCalendar({ reduceMotion }: { reduceMotion: boolean }) {
 
           <Link
             href="/competition"
-            className="inline-flex w-fit items-center gap-2 rounded-full bg-blue-600 px-6 py-3 text-sm font-black uppercase tracking-[0.14em] text-white transition hover:bg-blue-700"
+            className="inline-flex w-fit items-center gap-2 rounded-full bg-blue-600 px-6 py-3.5 text-sm font-black uppercase tracking-[0.14em] text-white transition hover:-translate-y-0.5 hover:bg-blue-700"
           >
             View all
             <ArrowRight className="h-4 w-4" />
@@ -524,7 +569,7 @@ function CompetitionCalendar({ reduceMotion }: { reduceMotion: boolean }) {
                 </p>
               </div>
 
-              <p className="mt-5 flex-1 text-sm font-medium leading-7 text-slate-600">
+              <p className="mt-5 flex-1 text-base font-medium leading-7 text-slate-600">
                 {card.description}
               </p>
 
@@ -543,7 +588,7 @@ function CompetitionCalendar({ reduceMotion }: { reduceMotion: boolean }) {
 
               <Link
                 href="/competition"
-                className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-slate-950 px-5 py-3 text-sm font-black text-white transition hover:bg-blue-700"
+                className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-slate-950 px-5 py-3 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-blue-700"
               >
                 View details
                 <ArrowRight className="h-4 w-4" />
@@ -576,7 +621,7 @@ function FinalCta({ reduceMotion }: { reduceMotion: boolean }) {
               Turn engineering skills into visible opportunities.
             </h2>
 
-            <p className="mt-5 max-w-3xl text-base font-medium leading-8 text-slate-300">
+            <p className="mt-5 max-w-3xl text-lg font-medium leading-8 text-slate-300">
               Join OSO to practice daily, compete nationally, earn recognition
               and build a stronger engineering identity.
             </p>
@@ -585,7 +630,7 @@ function FinalCta({ reduceMotion }: { reduceMotion: boolean }) {
           <div className="flex flex-col gap-3 sm:flex-row lg:flex-col xl:flex-row">
             <Link
               href="/login"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3.5 text-sm font-black uppercase tracking-[0.14em] text-slate-950 transition hover:bg-blue-50"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3.5 text-sm font-black uppercase tracking-[0.14em] text-slate-950 transition hover:-translate-y-0.5 hover:bg-blue-50"
             >
               Register
               <ArrowRight className="h-4 w-4" />
@@ -593,7 +638,7 @@ function FinalCta({ reduceMotion }: { reduceMotion: boolean }) {
 
             <Link
               href="/competition"
-              className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 px-6 py-3.5 text-sm font-black uppercase tracking-[0.14em] text-white transition hover:border-white hover:bg-white/10"
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 px-6 py-3.5 text-sm font-black uppercase tracking-[0.14em] text-white transition hover:-translate-y-0.5 hover:border-white hover:bg-white/10"
             >
               Explore
               <ArrowRight className="h-4 w-4" />
@@ -624,7 +669,7 @@ function SectionHeader({
         {title}
       </h2>
 
-      <p className="mt-4 text-base font-medium leading-8 text-slate-600">
+      <p className="mt-4 text-lg font-medium leading-8 text-slate-600">
         {description}
       </p>
     </div>
@@ -679,8 +724,8 @@ function DashboardLine({
       </span>
 
       <div>
-        <h3 className="oso-heading text-lg font-black">{title}</h3>
-        <p className="mt-1 text-sm font-medium leading-6 text-slate-600">
+        <h3 className="oso-heading text-xl font-black">{title}</h3>
+        <p className="mt-1 text-base font-medium leading-7 text-slate-600">
           {description}
         </p>
       </div>
@@ -722,7 +767,7 @@ function normalizePoster(poster: unknown, index: number): AnnouncementItem | nul
     getString(poster.ctaLabel) ??
     getString(poster.buttonLabel) ??
     getString(poster.actionLabel) ??
-    "View details";
+    "Explore";
 
   const imageUrl =
     getString(poster.imageUrl) ??
@@ -735,7 +780,7 @@ function normalizePoster(poster: unknown, index: number): AnnouncementItem | nul
     getString(poster.tag) ??
     getString(poster.category) ??
     getString(poster.type) ??
-    "Announcement";
+    "Silicon Skillathon";
 
   return {
     id: getString(poster.id) ?? `announcement-${index}`,
@@ -756,7 +801,7 @@ function createFallbackAnnouncement(): AnnouncementItem {
       "Announcements published from the admin poster board will appear here.",
     ctaHref: "/competition",
     ctaLabel: "Explore",
-    tag: "Announcement",
+    tag: "Silicon Skillathon",
   };
 }
 
