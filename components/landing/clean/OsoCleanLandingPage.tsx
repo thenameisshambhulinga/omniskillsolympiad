@@ -2,21 +2,29 @@
 
 import type { ReactNode } from "react";
 import { useEffect, useMemo, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import {
   ArrowRight,
   BadgeCheck,
-  BarChart3,
   BookOpenCheck,
   BriefcaseBusiness,
   CalendarDays,
   CircuitBoard,
   Cpu,
   Radio,
-  Trophy,
 } from "lucide-react";
+
+import OsoBenchmarkCard, {
+  type BenchmarkScoreRow,
+} from "@/components/landing/clean/OsoBenchmarkCard";
+import OsoLivePosterBoard, {
+  type LivePosterItem,
+} from "@/components/landing/clean/OsoLivePosterBoard";
+import OsoSummitJourneyBand from "@/components/landing/clean/OsoSummitJourneyBand";
+import LoopTypewriter from "@/components/ui/LoopTypewriter";
+import KaggleInspiredWrapper from "@/components/landing/clean/KaggleInspiredWrapper";
+
 
 type OsoCleanLandingPageProps = {
   posters: unknown[];
@@ -30,6 +38,17 @@ type AnnouncementItem = {
   ctaLabel: string;
   imageUrl?: string;
   tag?: string;
+};
+
+type CompetitionCard = {
+  title: string;
+  provider: string;
+  deadline: string;
+  category: string;
+  description: string;
+  prize: string;
+  rankCount: number;
+  scoreRows: BenchmarkScoreRow[];
 };
 
 const heroTitle = "India's Engineering Skills Competition Ecosystem";
@@ -108,7 +127,7 @@ const vibgyorSteps = [
   },
 ];
 
-const competitionCards = [
+const competitionCards: CompetitionCard[] = [
   {
     title: "Embedded Systems Sprint",
     provider: "Omni Skills Olympiad",
@@ -117,6 +136,12 @@ const competitionCards = [
     description:
       "Solve microcontroller, firmware and debugging missions designed for practical engineering growth.",
     prize: "Omni Score + Silicon Points",
+    rankCount: 42,
+    scoreRows: [
+      { label: "Firmware Logic", value: "84%", percent: 84, iconLabel: "F" },
+      { label: "Debug Accuracy", value: "76%", percent: 76, iconLabel: "D" },
+      { label: "Circuit Reasoning", value: "69%", percent: 69, iconLabel: "C" },
+    ],
   },
   {
     title: "PCB Innovation Challenge",
@@ -126,6 +151,12 @@ const competitionCards = [
     description:
       "Move from schematic thinking to board-level reasoning with structured design tasks.",
     prize: "Recognition + Ranking",
+    rankCount: 31,
+    scoreRows: [
+      { label: "Layout Quality", value: "81%", percent: 81, iconLabel: "L" },
+      { label: "Signal Flow", value: "72%", percent: 72, iconLabel: "S" },
+      { label: "Design Rules", value: "66%", percent: 66, iconLabel: "D" },
+    ],
   },
   {
     title: "AI & Robotics Arena",
@@ -135,6 +166,12 @@ const competitionCards = [
     description:
       "Attempt automation, sensors, control and intelligent systems challenges for future-ready skills.",
     prize: "Badge + Leaderboard Rank",
+    rankCount: 58,
+    scoreRows: [
+      { label: "Automation", value: "79%", percent: 79, iconLabel: "A" },
+      { label: "Sensor Logic", value: "73%", percent: 73, iconLabel: "S" },
+      { label: "Control Flow", value: "67%", percent: 67, iconLabel: "C" },
+    ],
   },
 ];
 
@@ -165,12 +202,12 @@ function CleanHeroSection({
   posters: unknown[];
   reduceMotion: boolean;
 }) {
-  const visiblePosters = normalizePosters(posters).slice(0, 2);
+  const heroPosters = normalizePosters(posters).slice(0, 4);
 
   return (
     <section className="relative overflow-hidden border-b border-slate-200 bg-white">
       <div className="oso-container py-14 lg:py-20">
-        <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
+        <div className="grid items-start gap-12 lg:grid-cols-[1.02fr_0.98fr]">
           <motion.div
             initial={reduceMotion ? { opacity: 1 } : { opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
@@ -181,7 +218,7 @@ function CleanHeroSection({
               Engineering Skills League
             </div>
 
-            <TypewriterHeading reduceMotion={reduceMotion} />
+            <TypewriterHeading />
 
             <p className="mt-6 max-w-4xl text-[21px] font-medium leading-10 text-slate-700">
               Learn, practice, compete, get ranked and build an industry-ready
@@ -229,130 +266,33 @@ function CleanHeroSection({
               delay: 0.08,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="rounded-[2rem] border border-slate-200 bg-[#f8f9fa] p-5 shadow-[0_22px_70px_rgba(15,23,42,0.08)]"
+            className="lg:pt-4"
           >
-            <div className="mb-5 flex items-center justify-between gap-4">
-              <div>
-                <p className="text-xs font-black uppercase tracking-[0.2em] text-blue-700">
-                  Live Poster Board
-                </p>
-                <h2 className="oso-heading mt-1 text-3xl font-black">
-                  Skillathon Updates
-                </h2>
-              </div>
-
-              <span className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-black text-emerald-700">
-                Active
-              </span>
-            </div>
-
-            <div className="grid gap-4">
-              {visiblePosters.length > 0 ? (
-                visiblePosters.map((poster) => (
-                  <AnnouncementCard key={poster.id} poster={poster} />
-                ))
-              ) : (
-                <AnnouncementCard poster={createFallbackAnnouncement()} />
-              )}
-            </div>
+            <OsoLivePosterBoard posters={heroPosters} />
           </motion.div>
         </div>
+
+        <OsoSummitJourneyBand />
       </div>
     </section>
   );
 }
-
-function TypewriterHeading({ reduceMotion }: { reduceMotion: boolean }) {
-  const [visibleCount, setVisibleCount] = useState(
-    reduceMotion ? heroTitle.length : 0,
-  );
-
-  useEffect(() => {
-    if (reduceMotion) {
-      setVisibleCount(heroTitle.length);
-      return;
-    }
-
-    setVisibleCount(0);
-
-    const interval = window.setInterval(() => {
-      setVisibleCount((current) => {
-        if (current >= heroTitle.length) {
-          window.clearInterval(interval);
-          return current;
-        }
-
-        return current + 1;
-      });
-    }, 34);
-
-    return () => window.clearInterval(interval);
-  }, [reduceMotion]);
-
-  const visibleTitle = useMemo(
-    () => heroTitle.slice(0, visibleCount),
-    [visibleCount],
-  );
-
+function TypewriterHeading() {
   return (
     <h1
-      className="oso-heading mt-7 min-h-[13rem] max-w-6xl text-[4.4rem] font-black leading-[0.98] text-[#1a202c] sm:text-[5.1rem] lg:text-[5.7rem] xl:text-[6.2rem]"
+      className="oso-heading mt-7 min-h-[10.5rem] max-w-6xl text-[3.6rem] font-black leading-[1.02] text-[#1a202c] sm:text-[4.35rem] lg:text-[4.85rem] xl:text-[5.25rem]"
       aria-label={heroTitle}
     >
-      <span aria-hidden="true">{visibleTitle}</span>
-      <span
-        aria-hidden="true"
-        className="ml-1 inline-block h-[0.82em] w-[5px] translate-y-2 animate-pulse rounded-full bg-blue-600"
+      <LoopTypewriter
+        text={heroTitle}
+        speedMs={34}
+        deleteSpeedMs={18}
+        pauseMs={2200}
+        startDelayMs={300}
       />
     </h1>
   );
 }
-
-function AnnouncementCard({ poster }: { poster: AnnouncementItem }) {
-  return (
-    <Link
-      href={poster.ctaHref}
-      className="group grid overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm transition duration-200 hover:-translate-y-1 hover:border-blue-300 hover:shadow-[0_20px_45px_rgba(15,23,42,0.1)] active:translate-y-0 sm:grid-cols-[220px_1fr]"
-    >
-      <div className="relative min-h-[190px] bg-slate-100">
-        {poster.imageUrl ? (
-          <Image
-            src={poster.imageUrl}
-            alt={poster.title}
-            fill
-            unoptimized
-            sizes="(max-width: 640px) 100vw, 220px"
-            className="object-cover transition duration-300 group-hover:scale-[1.03]"
-          />
-        ) : (
-          <div className="flex h-full min-h-[190px] items-center justify-center bg-blue-50">
-            <Trophy className="h-11 w-11 text-blue-600" />
-          </div>
-        )}
-      </div>
-
-      <div className="flex flex-col p-6">
-        <span className="w-fit rounded-full bg-slate-100 px-3 py-1 text-[11px] font-black uppercase tracking-[0.16em] text-slate-600">
-          {poster.tag ?? "Announcement"}
-        </span>
-
-        <h3 className="oso-heading mt-4 text-2xl font-black text-slate-950">
-          {poster.title}
-        </h3>
-
-        <p className="mt-2 text-base font-medium leading-7 text-slate-600">
-          {poster.description}
-        </p>
-
-        <div className="mt-5 inline-flex items-center gap-2 text-base font-black text-blue-700">
-          {poster.ctaLabel}
-          <ArrowRight className="h-5 w-5 transition group-hover:translate-x-1" />
-        </div>
-      </div>
-    </Link>
-  );
-}
-
 function GrowthOutcomeDashboard({ reduceMotion }: { reduceMotion: boolean }) {
   return (
     <section className="oso-section bg-[#f8f9fa]">
@@ -427,13 +367,15 @@ function DomainShowcase({ reduceMotion }: { reduceMotion: boolean }) {
           description="The OSO ecosystem keeps technical tracks discoverable through clean, direct domain cards."
         />
 
-        <motion.div
+        <KaggleInspiredWrapper className="mt-10">
+  <motion.div
           initial={reduceMotion ? { opacity: 1 } : { opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.4 }}
           className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
         >
+          
           {domains.map((domain, index) => (
             <div key={domain} className="oso-card oso-card-hover rounded-3xl p-6">
               <div className="flex items-start justify-between gap-4">
@@ -459,6 +401,7 @@ function DomainShowcase({ reduceMotion }: { reduceMotion: boolean }) {
             </div>
           ))}
         </motion.div>
+        </KaggleInspiredWrapper>
       </div>
     </section>
   );
@@ -520,7 +463,7 @@ function CompetitionCalendar({ reduceMotion }: { reduceMotion: boolean }) {
           <SectionHeader
             eyebrow="Competition Calendar"
             title="Upcoming skill missions and engineering challenges."
-            description="Competition cards are designed like global challenge platforms: clear category, deadline, summary, eligibility and action."
+            description="Competition cards are designed like global benchmark platforms: clear title, category, current top signals, eligibility and action."
           />
 
           <Link
@@ -531,7 +474,8 @@ function CompetitionCalendar({ reduceMotion }: { reduceMotion: boolean }) {
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
-
+          
+        <KaggleInspiredWrapper className="mt-10">
         <motion.div
           initial={reduceMotion ? { opacity: 1 } : { opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -540,62 +484,24 @@ function CompetitionCalendar({ reduceMotion }: { reduceMotion: boolean }) {
           className="mt-10 grid gap-5 lg:grid-cols-3"
         >
           {competitionCards.map((card) => (
-            <article
+            <OsoBenchmarkCard
               key={card.title}
-              className="oso-card oso-card-hover flex min-h-[360px] flex-col rounded-[1.75rem] p-6"
-            >
-              <div className="flex items-start justify-between gap-4">
-                <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-black text-slate-700">
-                  {card.category}
-                </span>
-
-                <CalendarDays className="h-5 w-5 text-blue-600" />
-              </div>
-
-              <h3 className="oso-heading mt-6 text-2xl font-black">
-                {card.title}
-              </h3>
-
-              <p className="mt-2 text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
-                {card.provider}
-              </p>
-
-              <div className="mt-6">
-                <p className="text-xs font-black uppercase tracking-[0.18em] text-slate-500">
-                  Deadline
-                </p>
-                <p className="mt-1 text-xl font-black text-slate-950">
-                  {card.deadline}
-                </p>
-              </div>
-
-              <p className="mt-5 flex-1 text-base font-medium leading-7 text-slate-600">
-                {card.description}
-              </p>
-
-              <div className="mt-6 flex flex-wrap gap-2">
-                <span className="rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-black text-blue-700">
-                  Global
-                </span>
-                <span className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-black text-emerald-700">
-                  Open to students
-                </span>
-              </div>
-
-              <p className="mt-5 text-sm font-black text-slate-800">
-                Prize summary: {card.prize}
-              </p>
-
-              <Link
-                href="/competition"
-                className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-slate-950 px-5 py-3 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-blue-700"
-              >
-                View details
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </article>
+              title={card.title}
+              organizer={card.provider}
+              description={card.description}
+              category={card.category}
+              taskLabel={card.deadline}
+              href="/competition"
+              actionLabel="View details"
+              rankCount={card.rankCount}
+              scoreRows={card.scoreRows}
+              badges={["Global", "Open to students", card.prize]}
+              logoIcon={CalendarDays}
+            />
           ))}
         </motion.div>
+    
+        </KaggleInspiredWrapper>
       </div>
     </section>
   );
@@ -733,10 +639,19 @@ function DashboardLine({
   );
 }
 
-function normalizePosters(posters: unknown[]): AnnouncementItem[] {
+function normalizePosters(posters: unknown[]): LivePosterItem[] {
   return posters
     .map((poster, index) => normalizePoster(poster, index))
-    .filter((poster): poster is AnnouncementItem => poster !== null);
+    .filter((poster): poster is AnnouncementItem => poster !== null)
+    .map<LivePosterItem>((poster) => ({
+      id: poster.id,
+      title: poster.title,
+      description: poster.description,
+      ctaHref: poster.ctaHref,
+      ctaLabel: poster.ctaLabel,
+      imageUrl: poster.imageUrl,
+      tag: poster.tag,
+    }));
 }
 
 function normalizePoster(poster: unknown, index: number): AnnouncementItem | null {
@@ -771,6 +686,7 @@ function normalizePoster(poster: unknown, index: number): AnnouncementItem | nul
 
   const imageUrl =
     getString(poster.imageUrl) ??
+    getString(poster.mobileImageUrl) ??
     getString(poster.image) ??
     getString(poster.posterUrl) ??
     getString(poster.coverImage) ??
@@ -790,18 +706,6 @@ function normalizePoster(poster: unknown, index: number): AnnouncementItem | nul
     ctaLabel,
     imageUrl,
     tag,
-  };
-}
-
-function createFallbackAnnouncement(): AnnouncementItem {
-  return {
-    id: "fallback-announcement",
-    title: "Omni Skills Olympiad",
-    description:
-      "Announcements published from the admin poster board will appear here.",
-    ctaHref: "/competition",
-    ctaLabel: "Explore",
-    tag: "Silicon Skillathon",
   };
 }
 

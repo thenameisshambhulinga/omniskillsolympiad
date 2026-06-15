@@ -211,3 +211,23 @@
     animation-iteration-count: 1 !important;
   }
 }
+
+.mountain-illustration-fixed {
+  width: 100%;
+  max-width: 1200px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  mix-blend-mode: multiply;
+  filter: contrast(1.1);
+}
+
+.oso-readable-prose {
+  font-size: clamp(1rem, 0.95rem + 0.25vw, 1.16rem);
+  line-height: 1.85;
+}
+
+.oso-nav-text {
+  font-size: 0.98rem;
+  letter-spacing: 0.01em;
+}

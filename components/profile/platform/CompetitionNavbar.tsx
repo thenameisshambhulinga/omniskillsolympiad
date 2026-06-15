@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 
 import ProfileDropdown from "@/components/profile/platform/ProfileDropdown";
+import GoogleIcon from "@/components/ui/GoogleIcon";
 
 const navItems = [
   {
@@ -52,16 +53,16 @@ export default function CompetitionNavbar() {
           <Link
             href="/"
             aria-label="Go to Omni Skills Olympiad home"
-            className="group inline-flex shrink-0 items-center rounded-2xl outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
+            className="group inline-flex shrink-0 items-center rounded-2xl pl-1 outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
           >
-            <div className="relative flex h-[76px] w-[315px] items-center overflow-visible">
+            <div className="relative flex h-[78px] w-[332px] items-center overflow-visible">
               <Image
                 src="/brand/omni-logo-h.png"
                 alt="Omni Skills Olympiad"
                 width={1191}
                 height={843}
                 priority
-                className="h-auto w-[286px] object-contain brightness-0 transition duration-200 group-hover:scale-[1.02]"
+                className="h-auto w-[300px] object-contain object-left brightness-0 transition duration-200 group-hover:scale-[1.02]"
               />
             </div>
           </Link>
@@ -99,20 +100,22 @@ export default function CompetitionNavbar() {
               <input
                 type="text"
                 placeholder="Search OSO..."
-                className="w-64 bg-transparent text-[15px] font-bold text-slate-800 outline-none placeholder:text-slate-400"
+                className="w-64 bg-transparent text-[16px] tracking-[0.01em]font-bold text-slate-800 outline-none placeholder:text-slate-400"
                 aria-label="Search Omni Skills Olympiad"
               />
             </div>
 
-            <div className="hidden items-center gap-3 rounded-full border border-slate-200 bg-white px-3 py-2 shadow-[0_12px_30px_rgba(15,23,42,0.07)] transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-[0_16px_38px_rgba(37,99,235,0.12)] lg:flex">
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-blue-50 text-blue-700">
-                <UserRound className="h-5 w-5" />
+            <Link
+              href="/login"
+              className="hidden min-h-14 items-center gap-3 rounded-full border border-slate-200 bg-white px-4 py-2 text-base tracking-[0.01em]font-black text-slate-950 shadow-[0_12px_30px_rgba(15,23,42,0.07)] transition duration-200 hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-[0_16px_38px_rgba(37,99,235,0.12)] lg:inline-flex"
+            >
+              <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-slate-50">
+                <GoogleIcon className="h-5 w-5" />
               </span>
+              <span>Login</span>
+            </Link>
 
-              <span className="text-[15px] font-black text-slate-900">
-                Login
-              </span>
-
+            <div className="hidden lg:block">
               <ProfileDropdown />
             </div>
 
@@ -155,14 +158,14 @@ export default function CompetitionNavbar() {
                   href="/"
                   onClick={() => setMobileOpen(false)}
                   aria-label="Go to Omni Skills Olympiad home"
-                  className="relative flex h-[66px] w-[250px] items-center overflow-visible"
+                  className="relative flex h-[66px] w-[260px] items-center overflow-visible pl-1"
                 >
                   <Image
                     src="/brand/omni-logo-h.png"
                     alt="Omni Skills Olympiad"
                     width={1191}
                     height={843}
-                    className="h-auto w-[232px] object-contain brightness-0"
+                    className="h-auto w-[238px] object-contain object-left brightness-0"
                   />
                 </Link>
 
@@ -181,7 +184,7 @@ export default function CompetitionNavbar() {
                 <input
                   type="text"
                   placeholder="Search OSO..."
-                  className="w-full bg-transparent text-[15px] font-bold text-slate-800 outline-none placeholder:text-slate-400"
+                  className="w-full bg-transparent text-base font-bold text-slate-800 outline-none placeholder:text-slate-400"
                   aria-label="Search Omni Skills Olympiad"
                 />
               </div>
@@ -214,10 +217,10 @@ export default function CompetitionNavbar() {
               <Link
                 href="/login"
                 onClick={() => setMobileOpen(false)}
-                className="mt-6 inline-flex min-h-14 items-center justify-center gap-3 rounded-2xl bg-slate-950 px-5 py-3 text-base font-black text-white transition hover:bg-blue-700"
+                className="mt-6 inline-flex min-h-14 items-center justify-center gap-3 rounded-2xl border border-slate-200 bg-white px-5 py-3 text-base font-black text-slate-950 transition hover:border-blue-300 hover:bg-slate-50"
               >
-                <UserRound className="h-5 w-5" />
-                Login
+                <GoogleIcon className="h-5 w-5" />
+                Login with Google
               </Link>
             </motion.aside>
           </>
