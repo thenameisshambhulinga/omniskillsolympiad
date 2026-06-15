@@ -18,6 +18,10 @@ import {
   Trash2,
 } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+export const runtime = "nodejs";
+
 export type SerializedPoster = {
   id: string;
   title: string;

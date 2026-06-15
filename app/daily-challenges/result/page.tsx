@@ -20,7 +20,9 @@ import { calculateEngineeringTier } from "@/lib/engineering-tier";
 import MotionWrapper from "@/components/motion/MotionWrapper";
 import HoverScale from "@/components/motion/HoverScale";
 import GlassCard from "@/components/ui/GlassCard";
-
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+export const runtime = "nodejs";
 interface Props {
   searchParams: Promise<{
     score?: string;

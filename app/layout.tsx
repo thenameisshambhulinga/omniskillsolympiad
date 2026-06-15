@@ -1,46 +1,33 @@
 import type { Metadata } from "next";
-
-import { Geist, Geist_Mono, Inter, Manrope } from "next/font/google";
+import { Lato } from "next/font/google";
 
 import "./globals.css";
 
 import CompetitionNavbar from "@/components/profile/platform/CompetitionNavbar";
-import CompetitionBackground from "@/components/profile/platform/CompetitionBackground";
+import ConditionalSiteFooter from "@/components/layout/ConditionalSiteFooter";
 
-const manrope = Manrope({
+const lato = Lato({
   subsets: ["latin"],
+  weight: ["300", "400", "700", "900"],
   variable: "--font-heading",
-});
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-body",
-});
-
-const geistSans = Geist({
-  subsets: ["latin"],
-  variable: "--font-geist-sans",
-});
-
-const geistMono = Geist_Mono({
-  subsets: ["latin"],
-  variable: "--font-geist-mono",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+  ),
   title: "Omni Skills Olympiad",
-  description: "National Engineering Excellence Ecosystem",
-
+  description: "India's Engineering Skills Competition Ecosystem",
   openGraph: {
     title: "Omni Skills Olympiad",
-    description: "National Engineering Excellence Ecosystem",
+    description: "Learn. Build. Compete. Get Ranked.",
     images: ["/og-image.png"],
   },
-
   twitter: {
     card: "summary_large_image",
     title: "Omni Skills Olympiad",
-    description: "National Engineering Excellence Ecosystem",
+    description: "India's Engineering Skills Competition Ecosystem",
     images: ["/og-image.png"],
   },
 };
@@ -52,22 +39,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" data-scroll-behavior="smooth">
-      <body
-        className={`
-          ${manrope.variable}
-          ${inter.variable}
-          ${geistSans.variable}
-          ${geistMono.variable}
-          bg-black
-          text-white
-          antialiased
-        `}
-      >
-        <CompetitionBackground />
-
+      <body className={`${lato.variable} min-h-screen bg-[#f8f9fa] antialiased`}>
         <CompetitionNavbar />
-
-        <main className="relative z-10 pt-32">{children}</main>
+        <main className="relative min-h-screen">{children}</main>
+        <ConditionalSiteFooter />
       </body>
     </html>
   );

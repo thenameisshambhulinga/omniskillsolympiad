@@ -10,6 +10,9 @@ interface Props {
     challengeId: string;
   }>;
 }
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+export const runtime = "nodejs";
 
 export default async function ChallengePage({ params }: Props) {
   const { challengeId } = await params;

@@ -2,6 +2,10 @@
 
 import { useMemo, useState } from "react";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+export const runtime = "nodejs";
+
 export default function CreateQuizPage() {
   const [loading, setLoading] = useState(false);
 

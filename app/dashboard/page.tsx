@@ -14,6 +14,10 @@ import { prisma } from "@/lib/prisma";
 import OfflineState from "@/components/system/OfflineState";
 import { calculateOmniScore } from "@/lib/engineering-system";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+export const runtime = "nodejs";
+
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions);
 

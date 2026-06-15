@@ -13,6 +13,9 @@ type QuestionForm = {
   points: number;
 };
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+export const runtime = "nodejs";
 export default function AddQuestionsPage() {
   const params = useParams<{ quizId: string }>();
   const quizId = params.quizId;

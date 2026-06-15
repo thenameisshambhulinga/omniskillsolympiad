@@ -1,3 +1,6 @@
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+export const runtime = "nodejs";
 export default function MockTestsPage() {
   return (
     <main className="relative min-h-screen overflow-hidden bg-black text-white">

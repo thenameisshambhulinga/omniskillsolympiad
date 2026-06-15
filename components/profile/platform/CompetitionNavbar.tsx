@@ -1,21 +1,17 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
-
+import Link from "next/link";
 import { usePathname } from "next/navigation";
-
+import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
-
-import { motion, AnimatePresence } from "framer-motion";
-
 import {
-  LayoutDashboard,
-  Trophy,
   BrainCircuit,
   Cpu,
-  Search,
+  LayoutDashboard,
   Menu,
+  Search,
+  Trophy,
   X,
 } from "lucide-react";
 
@@ -46,75 +42,68 @@ const navItems = [
 
 export default function CompetitionNavbar() {
   const pathname = usePathname();
-
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
     <>
-      <header className="fixed left-0 right-0 top-0 z-50 px-4 py-5 md:px-6">
-        <div className="mx-auto flex max-w-7xl items-center justify-between rounded-[32px] border border-white/10 bg-black/30 px-4 py-4 shadow-2xl backdrop-blur-3xl md:px-6">
-          {/* LEFT */}
-          <Link href="/dashboard" className="group flex items-center">
-            <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-black/20 px-3 py-2 backdrop-blur-xl transition duration-300 hover:border-cyan-400/40">
+      <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/92 backdrop-blur-xl">
+        <div className="mx-auto flex h-20 w-full max-w-[1600px] items-center justify-between gap-6 px-4 sm:px-6 lg:px-8">
+          <Link
+            href="/"
+            aria-label="Go to Omni Skills Olympiad home"
+            className="group inline-flex shrink-0 items-center rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
+          >
+            <div className="relative h-[58px] w-[222px] overflow-hidden">
               <Image
-                src="/sims-logo.png"
-                alt="SIMS Logo"
-                width={190}
-                height={60}
+                src="/brand/omni-logo-h.png"
+                alt="Omni Skills Olympiad"
+                width={1191}
+                height={843}
                 priority
-                className="h-auto w-auto object-contain"
+                className="absolute left-1/2 top-1/2 w-[240px] max-w-none -translate-x-1/2 -translate-y-1/2 object-contain brightness-0 transition duration-200 group-hover:scale-[1.02]"
               />
             </div>
           </Link>
 
-          {/* DESKTOP NAV */}
-          <nav className="hidden items-center gap-2 lg:flex">
+          <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
             {navItems.map((item) => {
               const active = pathname === item.href;
-
               const Icon = item.icon;
 
               return (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`group relative flex items-center gap-2 overflow-hidden rounded-2xl px-5 py-3 text-sm font-semibold transition-all duration-300 ${
+                  className={`inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-bold outline-none transition focus-visible:ring-2 focus-visible:ring-blue-600 ${
                     active
-                      ? "bg-cyan-400 text-black shadow-lg shadow-cyan-500/30"
-                      : "text-white/70 hover:text-white"
+                      ? "bg-blue-600 text-white"
+                      : "text-slate-700 hover:bg-slate-100 hover:text-slate-950"
                   }`}
                 >
-                  {!active && (
-                    <div className="absolute inset-0 scale-0 rounded-2xl bg-white/10 transition duration-300 group-hover:scale-100" />
-                  )}
-
-                  <Icon className="relative z-10 h-4 w-4" />
-
-                  <span className="relative z-10">{item.label}</span>
+                  <Icon className="h-4 w-4" />
+                  {item.label}
                 </Link>
               );
             })}
           </nav>
 
-          {/* RIGHT */}
           <div className="flex items-center gap-3">
-            {/* SEARCH */}
-            <div className="hidden items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 backdrop-blur-xl md:flex">
-              <Search className="h-4 w-4 text-white/40" />
-
+            <div className="hidden h-11 items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-4 xl:flex">
+              <Search className="h-4 w-4 text-slate-400" />
               <input
                 type="text"
-                placeholder="Search ecosystem..."
-                className="bg-transparent text-sm text-white outline-none placeholder:text-white/30"
+                placeholder="Search OSO..."
+                className="w-48 bg-transparent text-sm font-semibold text-slate-800 outline-none placeholder:text-slate-400"
               />
             </div>
 
             <ProfileDropdown />
 
-            {/* MOBILE MENU */}
             <button
+              type="button"
               onClick={() => setMobileOpen(true)}
-              className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-white lg:hidden"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-800 outline-none transition hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-blue-600 lg:hidden"
+              aria-label="Open navigation menu"
             >
               <Menu className="h-5 w-5" />
             </button>
@@ -122,50 +111,48 @@ export default function CompetitionNavbar() {
         </div>
       </header>
 
-      {/* MOBILE SIDEBAR */}
       <AnimatePresence>
-        {mobileOpen && (
+        {mobileOpen ? (
           <>
-            {/* BACKDROP */}
             <motion.div
+              className="fixed inset-0 z-[70] bg-slate-950/35 backdrop-blur-sm"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setMobileOpen(false)}
-              className="fixed inset-0 z-[60] bg-black/70 backdrop-blur-sm"
             />
 
-            {/* SIDEBAR */}
-            <motion.div
+            <motion.aside
+              className="fixed right-0 top-0 z-[80] flex h-full w-[340px] max-w-[88vw] flex-col border-l border-slate-200 bg-white p-5 shadow-2xl"
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
-              transition={{ type: "spring", damping: 30 }}
-              className="fixed right-0 top-0 z-[70] flex h-full w-[320px] flex-col border-l border-white/10 bg-black/95 p-6 backdrop-blur-3xl"
+              transition={{ type: "spring", damping: 28, stiffness: 260 }}
             >
-              {/* TOP */}
-              <div className="mb-10 flex items-center justify-between">
-                <Image
-                  src="/sims-logo.png"
-                  alt="SIMS Logo"
-                  width={150}
-                  height={50}
-                  className="h-auto w-auto"
-                />
+              <div className="mb-8 flex items-center justify-between gap-4">
+                <div className="relative h-[54px] w-[205px] overflow-hidden">
+                  <Image
+                    src="/brand/omni-logo-h.png"
+                    alt="Omni Skills Olympiad"
+                    width={1191}
+                    height={843}
+                    className="absolute left-1/2 top-1/2 w-[220px] max-w-none -translate-x-1/2 -translate-y-1/2 object-contain brightness-0"
+                  />
+                </div>
 
                 <button
+                  type="button"
                   onClick={() => setMobileOpen(false)}
-                  className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-white"
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 text-slate-800 transition hover:bg-slate-50"
+                  aria-label="Close navigation menu"
                 >
                   <X className="h-5 w-5" />
                 </button>
               </div>
 
-              {/* NAV ITEMS */}
-              <div className="flex flex-col gap-3">
+              <nav className="space-y-2" aria-label="Mobile navigation">
                 {navItems.map((item) => {
                   const active = pathname === item.href;
-
                   const Icon = item.icon;
 
                   return (
@@ -173,22 +160,21 @@ export default function CompetitionNavbar() {
                       key={item.href}
                       href={item.href}
                       onClick={() => setMobileOpen(false)}
-                      className={`flex items-center gap-3 rounded-2xl px-5 py-4 transition ${
+                      className={`flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-black transition ${
                         active
-                          ? "bg-cyan-400 text-black"
-                          : "text-white/70 hover:bg-white/10 hover:text-white"
+                          ? "bg-blue-600 text-white"
+                          : "text-slate-700 hover:bg-slate-100 hover:text-slate-950"
                       }`}
                     >
                       <Icon className="h-5 w-5" />
-
                       {item.label}
                     </Link>
                   );
                 })}
-              </div>
-            </motion.div>
+              </nav>
+            </motion.aside>
           </>
-        )}
+        ) : null}
       </AnimatePresence>
     </>
   );

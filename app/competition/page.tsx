@@ -37,6 +37,10 @@ import {
 import { getRankSnapshot } from "@/lib/profile/rank-engine";
 import { getVibgyorJourneySnapshot } from "@/lib/profile/vibgyor-progress";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+export const runtime = "nodejs";
+
 export default async function CompetitionPage() {
   const session = await getServerSession(authOptions);
 
