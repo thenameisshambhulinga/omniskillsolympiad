@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { Menu, Radio, ShieldCheck, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -34,11 +35,11 @@ export default function AdminHeader({
 
             <div className="min-w-0">
               <p className="text-xs font-black uppercase tracking-[0.3em] text-cyan-300">
-                Enterprise Command Network
+                SIMS Skillathon Admin
               </p>
 
               <h1 className="mt-1 truncate text-xl font-black text-white sm:text-2xl">
-                Admin Operations Center
+                Unified Operations Center
               </h1>
             </div>
           </div>
@@ -46,22 +47,22 @@ export default function AdminHeader({
           <div className="hidden items-center gap-3 md:flex">
             <StatusPill
               icon={<Radio className="h-4 w-4" />}
-              label="System Status"
+              label="System"
               value="Online"
               tone="cyan"
             />
 
             <StatusPill
               icon={<Sparkles className="h-4 w-4" />}
-              label="Competition"
-              value="Live"
+              label="Control"
+              value="Unified"
               tone="purple"
             />
 
             <StatusPill
               icon={<ShieldCheck className="h-4 w-4" />}
-              label="Security"
-              value="Verified"
+              label="Access"
+              value="Admin Only"
               tone="emerald"
             />
           </div>
@@ -69,7 +70,7 @@ export default function AdminHeader({
           <div className="flex items-center gap-2 md:hidden">
             <span className="h-2.5 w-2.5 rounded-full bg-emerald-300 shadow-[0_0_18px_rgba(110,231,183,0.85)]" />
             <span className="text-xs font-bold uppercase tracking-[0.18em] text-emerald-200">
-              Live
+              Admin
             </span>
           </div>
         </div>
@@ -84,7 +85,7 @@ function StatusPill({
   value,
   tone,
 }: {
-  icon: React.ReactNode;
+  icon: ReactNode;
   label: string;
   value: string;
   tone: "cyan" | "purple" | "emerald";
@@ -108,7 +109,6 @@ function StatusPill({
         <p className="text-[10px] font-bold uppercase tracking-[0.18em] opacity-70">
           {label}
         </p>
-
         <p className="text-sm font-black">{value}</p>
       </div>
     </motion.div>

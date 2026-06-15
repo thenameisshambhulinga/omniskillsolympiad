@@ -1,18 +1,19 @@
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
-import OnboardingClient from "@/app/onboarding/OnboardingClient";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+
+import SuccessClient from "./SuccessClient";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-export default async function OnboardingPage() {
+export default async function OnboardingSuccessPage() {
   const session = await getServerSession(authOptions);
 
   if (!session?.user?.email) {
-    redirect("/login?callbackUrl=/onboarding");
+    redirect("/login");
   }
 
   const user = await prisma.user.findUnique({
@@ -20,22 +21,20 @@ export default async function OnboardingPage() {
       email: session.user.email,
     },
     select: {
-      role: true,
+      fullName: true,
+      omniId: true,
       isOnboarded: true,
     },
   });
 
-  if (!user) {
-    redirect("/login");
+  if (!user?.isOnboarded || !user.omniId) {
+    redirect("/onboarding");
   }
 
-  if (user.role === "ADMIN") {
-    redirect("/admin");
-  }
-
-  if (user.isOnboarded) {
-    redirect("/");
-  }
-
-  return <OnboardingClient />;
+  return (
+    <SuccessClient
+      fullName={user.fullName ?? "Engineer"}
+      omniId={user.omniId}
+    />
+  );
 }

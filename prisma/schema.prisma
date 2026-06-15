@@ -8,41 +8,43 @@ datasource db {
 }
 
 model User {
-  id            String   @id @default(cuid())
-  email         String   @unique
-  college       String?
-  branch        String?
-  year          String?
-  siliconPoints Int      @default(0)
-  streak        Int      @default(0)
-  createdAt     DateTime @default(now())
-  image         String?
-  fullName      String?
-  phone         String?
-  dateOfBirth   String?
-  university    String?
-  usn           String?
-  course        String?
-  semester      String?
-  state         String?
-  district      String?
-  pincode       String?
-  careerInterests String[]
-  isOnboarded   Boolean  @default(false)
-  bio           String?
-  skills        String[]
-  role          UserRole @default(STUDENT)
-
-  accounts       Account[]
-  activities     Activity[]
-  dailyAttempts  DailyAttempt[]
-  quizAttempts   QuizAttempt[]
-  seasonProgress SeasonProgress?
-  sessions       Session[]
-  skillProgress  SkillProgress[]
-  submissions    Submission[]
-
-  omniId String? @unique
+  id                                                          String               @id @default(cuid())
+  email                                                       String               @unique
+  college                                                     String?
+  branch                                                      String?
+  year                                                        String?
+  siliconPoints                                               Int                  @default(0)
+  streak                                                      Int                  @default(0)
+  createdAt                                                   DateTime             @default(now())
+  image                                                       String?
+  fullName                                                    String?
+  isOnboarded                                                 Boolean              @default(false)
+  bio                                                         String?
+  skills                                                      String[]
+  role                                                        UserRole             @default(STUDENT)
+  omniId                                                      String?              @unique
+  careerInterests                                             String[]
+  course                                                      String?
+  dateOfBirth                                                 String?
+  district                                                    String?
+  phone                                                       String?
+  pincode                                                     String?
+  semester                                                    String?
+  state                                                       String?
+  university                                                  String?
+  usn                                                         String?
+  accounts                                                    Account[]
+  activities                                                  Activity[]
+  CompetitionHistory_CompetitionHistory_adminIdToUser         CompetitionHistory[] @relation("CompetitionHistory_adminIdToUser")
+  CompetitionHistory_CompetitionHistory_userIdToUser          CompetitionHistory[] @relation("CompetitionHistory_userIdToUser")
+  CompetitionProfile_CompetitionProfile_lastUpdatedByIdToUser CompetitionProfile[] @relation("CompetitionProfile_lastUpdatedByIdToUser")
+  CompetitionProfile_CompetitionProfile_userIdToUser          CompetitionProfile?  @relation("CompetitionProfile_userIdToUser")
+  dailyAttempts                                               DailyAttempt[]
+  quizAttempts                                                QuizAttempt[]
+  seasonProgress                                              SeasonProgress?
+  sessions                                                    Session[]
+  skillProgress                                               SkillProgress[]
+  submissions                                                 Submission[]
 }
 
 model OmniCounter {
@@ -221,7 +223,106 @@ model Activity {
   @@index([userId])
 }
 
+model CompetitionHistory {
+  id                                    String                        @id
+  userId                                String
+  adminId                               String?
+  vibgyorStage                          CompetitionVibgyorStage
+  omniStep                              CompetitionOmniStep
+  assessmentName                        String?
+  assessmentScore                       Int?
+  judgeEvaluation                       String?
+  verificationStatus                    CompetitionVerificationStatus
+  siliconPoints                         Int
+  remarks                               String?
+  evaluator                             String?
+  createdAt                             DateTime                      @default(now())
+  User_CompetitionHistory_adminIdToUser User?                         @relation("CompetitionHistory_adminIdToUser", fields: [adminId], references: [id])
+  User_CompetitionHistory_userIdToUser  User                          @relation("CompetitionHistory_userIdToUser", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([adminId])
+  @@index([userId, createdAt])
+  @@index([verificationStatus])
+  @@index([vibgyorStage])
+}
+
+model CompetitionProfile {
+  id                                            String                        @id
+  userId                                        String                        @unique
+  vibgyorStage                                  CompetitionVibgyorStage       @default(VIOLET)
+  omniStep                                      CompetitionOmniStep           @default(O)
+  assessmentName                                String?
+  assessmentScore                               Int?
+  judgeEvaluation                               String?
+  verificationStatus                            CompetitionVerificationStatus @default(PENDING)
+  siliconPoints                                 Int                           @default(0)
+  remarks                                       String?
+  evaluator                                     String?
+  lastUpdatedById                               String?
+  createdAt                                     DateTime                      @default(now())
+  updatedAt                                     DateTime
+  User_CompetitionProfile_lastUpdatedByIdToUser User?                         @relation("CompetitionProfile_lastUpdatedByIdToUser", fields: [lastUpdatedById], references: [id])
+  User_CompetitionProfile_userIdToUser          User                          @relation("CompetitionProfile_userIdToUser", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([lastUpdatedById])
+  @@index([userId])
+  @@index([verificationStatus])
+  @@index([vibgyorStage])
+}
+
 enum UserRole {
   ADMIN
   STUDENT
+}
+
+enum CompetitionOmniStep {
+  O
+  M
+  N
+  I
+}
+
+enum CompetitionVerificationStatus {
+  PENDING
+  UNDER_REVIEW
+  VERIFIED
+  REJECTED
+}
+
+enum CompetitionVibgyorStage {
+  VIOLET
+  INDIGO
+  BLUE
+  GREEN
+  YELLOW
+  ORANGE
+  RED
+}
+model AnnouncementPoster {
+  id             String   @id @default(cuid())
+
+  title          String
+  subtitle       String
+  category       String
+  status         String
+
+  imageUrl       String
+  mobileImageUrl String?
+
+  ctaLabel       String
+  ctaHref        String
+
+  placement      String   @default("LOGIN_HERO")
+  priority       Int      @default(0)
+
+  isHero         Boolean  @default(false)
+  isPublished    Boolean  @default(false)
+
+  publishAt      DateTime @default(now())
+  expiresAt      DateTime?
+
+  highlights     String   @default("")
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }

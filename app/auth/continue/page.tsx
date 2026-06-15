@@ -1,18 +1,18 @@
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
-import OnboardingClient from "@/app/onboarding/OnboardingClient";
 import { authOptions } from "@/lib/auth";
+import { getPostLoginRedirect } from "@/lib/post-login-redirect";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-export default async function OnboardingPage() {
+export default async function AuthContinuePage() {
   const session = await getServerSession(authOptions);
 
   if (!session?.user?.email) {
-    redirect("/login?callbackUrl=/onboarding");
+    redirect("/login");
   }
 
   const user = await prisma.user.findUnique({
@@ -25,17 +25,5 @@ export default async function OnboardingPage() {
     },
   });
 
-  if (!user) {
-    redirect("/login");
-  }
-
-  if (user.role === "ADMIN") {
-    redirect("/admin");
-  }
-
-  if (user.isOnboarded) {
-    redirect("/");
-  }
-
-  return <OnboardingClient />;
+  redirect(getPostLoginRedirect(user));
 }

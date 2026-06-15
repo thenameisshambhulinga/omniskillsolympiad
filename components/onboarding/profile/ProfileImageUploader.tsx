@@ -14,6 +14,7 @@ import {
 import CropRepositionPanel from "@/components/onboarding/profile/CropRepositionPanel";
 import type { ProfileImageState } from "@/types/onboarding";
 import {
+  MAX_PROFILE_IMAGE_SIZE_BYTES,
   formatFileSize,
   validateProfileImage,
 } from "@/utils/validateProfileImage";
@@ -95,6 +96,7 @@ export default function ProfileImageUploader({
           isValid: false,
           error: validation.error,
         });
+
         return;
       }
 
@@ -162,7 +164,6 @@ export default function ProfileImageUploader({
 
   return (
     <div className="grid gap-8 xl:grid-cols-[420px_minmax(0,1fr)]">
-      {" "}
       <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-black/25 p-4 backdrop-blur-xl">
         <div
           aria-hidden="true"
@@ -177,7 +178,10 @@ export default function ProfileImageUploader({
 
             <div>
               <p className="text-sm font-black text-white">Profile Image</p>
-              <p className="text-xs text-white/45">Required to continue</p>
+              <p className="text-[11px] text-white/40">
+                JPG, PNG or WEBP · Max{" "}
+                {formatFileSize(MAX_PROFILE_IMAGE_SIZE_BYTES)}
+              </p>
             </div>
           </div>
 
@@ -236,9 +240,20 @@ export default function ProfileImageUploader({
                   Drag and drop your image here, or click to browse.
                 </p>
 
-                <p className="mt-4 text-xs uppercase tracking-[0.18em] text-cyan-40/10">
-                  JPG · PNG · WEBP · Max 1MB
-                </p>
+                <div className="mt-4 flex flex-wrap items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-[0.14em] text-white/45">
+                  <span className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1">
+                    JPG
+                  </span>
+                  <span className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1">
+                    PNG
+                  </span>
+                  <span className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1">
+                    WEBP
+                  </span>
+                  <span className="rounded-full border border-cyan-400/20 bg-cyan-400/10 px-2.5 py-1 text-cyan-200">
+                    Max {formatFileSize(MAX_PROFILE_IMAGE_SIZE_BYTES)}
+                  </span>
+                </div>
               </>
             )}
           </button>
@@ -275,7 +290,7 @@ export default function ProfileImageUploader({
                     initial={{ width: 0 }}
                     animate={{ width: `${value.uploadProgress}%` }}
                     transition={{ duration: 0.25 }}
-                    className="h-full rounded-full bg-linear-to-r from-cyan-300 via-blue-400 to-purple-400 shadow-[0_0_24px_rgba(34,211,238,0.34)]"
+                    className="h-full rounded-full bg-gradient-to-r from-cyan-300 via-blue-400 to-purple-400 shadow-[0_0_24px_rgba(34,211,238,0.34)]"
                   />
                 </div>
               </div>
@@ -303,6 +318,7 @@ export default function ProfileImageUploader({
           )}
         </div>
       </div>
+
       <CropRepositionPanel
         zoom={value.zoom}
         positionX={value.positionX}

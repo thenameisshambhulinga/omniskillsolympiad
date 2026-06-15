@@ -8,17 +8,22 @@ export default withAuth(
       authorized: ({ token, req }) => {
         const pathname = req.nextUrl.pathname;
 
-        // Not logged in
-        if (!token) {
-          return false;
-        }
-
-        // Admin routes protection
         if (pathname.startsWith("/admin")) {
-          return token.role === "ADMIN";
+          return Boolean(token);
         }
 
-        // Student + Admin allowed
+        if (pathname.startsWith("/dashboard")) {
+          return Boolean(token);
+        }
+
+        if (pathname.startsWith("/profile")) {
+          return Boolean(token);
+        }
+
+        if (pathname.startsWith("/daily-challenges")) {
+          return Boolean(token);
+        }
+
         return true;
       },
     },

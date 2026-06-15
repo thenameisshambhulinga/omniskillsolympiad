@@ -6,7 +6,7 @@ export const ALLOWED_PROFILE_IMAGE_TYPES = [
   "image/webp",
 ] as const;
 
-export const MAX_PROFILE_IMAGE_SIZE_BYTES = 1024 * 1024;
+export const MAX_PROFILE_IMAGE_SIZE_BYTES = 500 * 1024;
 
 export function formatFileSize(bytes: number): string {
   if (bytes < 1024) {
@@ -14,7 +14,7 @@ export function formatFileSize(bytes: number): string {
   }
 
   if (bytes < 1024 * 1024) {
-    return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${Math.round(bytes / 1024)} KB`;
   }
 
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
@@ -42,7 +42,9 @@ export function validateProfileImage(file: File | null): ImageValidationResult {
   if (file.size > MAX_PROFILE_IMAGE_SIZE_BYTES) {
     return {
       valid: false,
-      error: "Profile image must be less than 1 MB",
+      error: `Profile image must be less than ${formatFileSize(
+        MAX_PROFILE_IMAGE_SIZE_BYTES,
+      )}.`,
     };
   }
 

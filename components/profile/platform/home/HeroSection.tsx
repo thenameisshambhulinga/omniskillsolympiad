@@ -37,13 +37,15 @@
 //   );
 // }
 import PosterAnnouncementCarousel from "@/components/landing/PosterAnnouncementCarousel";
-import { posterAnnouncements } from "@/data/posterAnnouncements";
+import { getPublishedAnnouncementPosters } from "@/lib/announcement-posters";
 
-export default function HeroSection() {
+export default async function HeroSection() {
+  const posters = await getPublishedAnnouncementPosters();
+
   return (
     <section className="relative z-10 min-h-screen overflow-hidden px-4 py-10 text-white sm:px-6 md:px-10 lg:px-16 lg:py-20">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        <div className="absolute left-[-140px] top-[80px] h-[420px] w-[420px] rounded-full bg-purple-600/20 blur-3xl" />
+        <div className="absolute left-[-140px] top-20 h-[420px] w-[420px] rounded-full bg-purple-600/20 blur-3xl" />
 
         <div className="absolute bottom-[-140px] right-[-120px] h-[420px] w-[420px] rounded-full bg-cyan-500/20 blur-3xl" />
 
@@ -55,9 +57,18 @@ export default function HeroSection() {
       </div>
 
       <div className="relative z-10 mx-auto grid min-h-[calc(100vh-5rem)] max-w-7xl items-center gap-10 lg:grid-cols-[1.15fr_0.85fr]">
-        <PosterAnnouncementCarousel posters={posterAnnouncements} />
+        {posters.length === 0 ? (
+          <div className="min-h-155 rounded-[2.75rem] border border-cyan-300/20 bg-white/[0.035] p-10 shadow-[0_42px_180px_rgba(0,0,0,0.58)] backdrop-blur-2xl">
+            <p className="text-center text-base font-bold text-white/80">
+              No live posters yet. Admin can publish posters from Announcement
+              Center.
+            </p>
+          </div>
+        ) : (
+          <PosterAnnouncementCarousel posters={posters} />
+        )}
 
-        <div className="relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/[0.04] p-6 shadow-[0_28px_120px_rgba(0,0,0,0.42)] backdrop-blur-2xl sm:p-8">
+        <div className="relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/4 p-6 shadow-[0_28px_120px_rgba(0,0,0,0.42)] backdrop-blur-2xl sm:p-8">
           <div
             aria-hidden="true"
             className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.16),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(168,85,247,0.14),transparent_34%)]"

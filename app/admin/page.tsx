@@ -2,369 +2,491 @@ import Link from "next/link";
 import {
   Activity,
   ArrowRight,
-  BarChart3,
   CircuitBoard,
-  Crown,
+  Clock3,
   Database,
   Gauge,
+  Megaphone,
   Plus,
   ShieldCheck,
   Sparkles,
-  Trophy,
+  Swords,
   Users,
 } from "lucide-react";
 
 import { prisma } from "@/lib/prisma";
-import { requireAdmin } from "@/lib/admin-auth";
 import MotionWrapper from "@/components/motion/MotionWrapper";
 import HoverScale from "@/components/motion/HoverScale";
 import GlassCard from "@/components/ui/GlassCard";
 
-export default async function AdminPage() {
-  await requireAdmin();
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
-  const [totalChallenges, totalUsers, totalAttempts, leaderboard] =
-    await Promise.all([
-      prisma.dailyChallenge.count(),
-      prisma.user.count(),
-      prisma.dailyAttempt.count(),
-      (prisma as any).seasonProgress.findMany({
+export default async function AdminPage() {
+  const [
+    totalUsers,
+    onboardedUsers,
+    totalChallenges,
+    publishedChallenges,
+    totalAttempts,
+    livePosters,
+    draftPosters,
+    competitionProfiles,
+    verifiedCompetitionProfiles,
+    pendingCompetitionProfiles,
+    recentChallenges,
+    recentCompetitionHistory,
+  ] = await Promise.all([
+    prisma.user.count(),
+    prisma.user.count({
+      where: {
+        isOnboarded: true,
+      },
+    }),
+    prisma.dailyChallenge.count(),
+    prisma.dailyChallenge.count({
+      where: {
+        isPublished: true,
+      },
+    }),
+    prisma.dailyAttempt.count(),
+    prisma.announcementPoster.count({
+      where: {
+        isPublished: true,
+      },
+    }),
+    prisma.announcementPoster.count({
+      where: {
+        isPublished: false,
+      },
+    }),
+    prisma.competitionProfile.count(),
+    prisma.competitionProfile.count({
+      where: {
+        verificationStatus: "VERIFIED",
+      },
+    }),
+    prisma.competitionProfile.count({
+      where: {
+        verificationStatus: {
+          in: ["PENDING", "UNDER_REVIEW"],
+        },
+      },
+    }),
+    prisma.dailyChallenge.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+      take: 4,
+      select: {
+        id: true,
+        title: true,
+        dayNumber: true,
+        isPublished: true,
+        questions: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    }),
+    prisma.competitionHistory.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+      take: 5,
+      select: {
+        id: true,
+        userId: true,
+        vibgyorStage: true,
+        omniStep: true,
+        assessmentName: true,
+        verificationStatus: true,
+        siliconPoints: true,
+        createdAt: true,
+      },
+    }),
+  ]);
+
+  const recentCompetitionUserIds = [
+    ...new Set(recentCompetitionHistory.map((entry) => entry.userId)),
+  ];
+
+  const recentCompetitionUsers = recentCompetitionUserIds.length
+    ? await prisma.user.findMany({
         where: {
-          championBlocked: false,
+          id: {
+            in: recentCompetitionUserIds,
+          },
         },
-        include: {
-          user: true,
+        select: {
+          id: true,
+          fullName: true,
+          email: true,
+          omniId: true,
         },
-        orderBy: {
-          weightedRankScore: "desc",
-        },
-        take: 5,
-      }),
-    ]);
+      })
+    : [];
+
+  const userById = new Map(
+    recentCompetitionUsers.map((user) => [user.id, user]),
+  );
+
+  const onboardingPercent =
+    totalUsers > 0 ? Math.round((onboardedUsers / totalUsers) * 100) : 0;
+
+  const challengePublishPercent =
+    totalChallenges > 0
+      ? Math.round((publishedChallenges / totalChallenges) * 100)
+      : 0;
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-slate-950 px-4 py-8 text-white sm:px-6 lg:px-8">
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_10%,rgba(34,211,238,0.18),transparent_32%),radial-gradient(circle_at_85%_18%,rgba(168,85,247,0.16),transparent_30%),radial-gradient(circle_at_50%_95%,rgba(59,130,246,0.12),transparent_35%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.022)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.022)_1px,transparent_1px)] bg-[size:72px_72px] opacity-35 [mask-image:radial-gradient(circle_at_center,black,transparent_75%)]" />
-        <div className="absolute -left-32 top-0 h-[34rem] w-[34rem] rounded-full bg-cyan-400/10 blur-3xl" />
-        <div className="absolute -right-36 top-24 h-[38rem] w-[38rem] rounded-full bg-purple-500/10 blur-3xl" />
-        <div className="absolute bottom-0 left-1/3 h-[32rem] w-[32rem] rounded-full bg-blue-500/10 blur-3xl" />
-      </div>
+    <div className="mx-auto flex w-full max-w-7xl flex-col gap-8">
+      <MotionWrapper>
+        <section className="relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/[0.035] p-6 shadow-[0_30px_130px_rgba(0,0,0,0.45)] backdrop-blur-2xl sm:p-8 lg:p-10">
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.2),transparent_35%),radial-gradient(circle_at_bottom_right,rgba(168,85,247,0.18),transparent_35%)]" />
+          <div className="pointer-events-none absolute left-0 top-0 h-px w-full bg-gradient-to-r from-transparent via-cyan-300/70 to-transparent" />
+          <div className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full bg-cyan-400/15 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-24 -left-24 h-80 w-80 rounded-full bg-purple-500/15 blur-3xl" />
 
-      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-8">
-        <MotionWrapper>
-          <section className="relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/[0.035] p-6 shadow-[0_30px_130px_rgba(0,0,0,0.45)] backdrop-blur-2xl sm:p-8 lg:p-10">
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.2),transparent_35%),radial-gradient(circle_at_bottom_right,rgba(168,85,247,0.18),transparent_35%)]" />
-            <div className="pointer-events-none absolute left-0 top-0 h-px w-full bg-linear-to-r from-transparent via-cyan-300/70 to-transparent" />
-            <div className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full bg-cyan-400/15 blur-3xl" />
-            <div className="pointer-events-none absolute -bottom-24 -left-24 h-80 w-80 rounded-full bg-purple-500/15 blur-3xl" />
+          <div className="relative z-10 grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.36em] text-cyan-300 sm:text-sm">
+                Admin Command Center
+              </p>
 
-            <div className="relative z-10 grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
-              <div>
-                <p className="text-xs font-bold uppercase tracking-[0.36em] text-cyan-300 sm:text-sm">
-                  Omni Skills Olympiad Admin
-                </p>
+              <h1 className="mt-5 text-4xl font-black leading-tight tracking-tight sm:text-5xl md:text-6xl">
+                One control room for{" "}
+                <span className="bg-gradient-to-r from-cyan-300 via-blue-300 to-purple-300 bg-clip-text text-transparent">
+                  challenges, competition and posters
+                </span>
+              </h1>
 
-                <h1 className="mt-5 text-4xl font-black leading-tight tracking-tight sm:text-5xl md:text-6xl">
-                  Enterprise{" "}
-                  <span className="bg-linear-to-r from-cyan-300 via-blue-300 to-purple-300 bg-clip-text text-transparent">
-                    Control Center
-                  </span>
-                </h1>
+              <p className="mt-6 max-w-3xl text-sm leading-7 text-white/60 sm:text-base md:text-lg md:leading-8">
+                This is the admin-only operations layer. Daily challenges,
+                offline competition progress and event posters stay connected
+                from login to the final student experience.
+              </p>
 
-                <p className="mt-6 max-w-3xl text-sm leading-7 text-white/60 sm:text-base md:text-lg md:leading-8">
-                  Monitor challenge operations, user growth, attempts, and
-                  leaderboard health from a single executive-grade command
-                  dashboard.
-                </p>
+              <div className="mt-7 flex flex-wrap gap-3">
+                <StatusBadge
+                  icon={<ShieldCheck className="h-4 w-4" />}
+                  label="Admin Verified"
+                  tone="emerald"
+                />
+                <StatusBadge
+                  icon={<Sparkles className="h-4 w-4" />}
+                  label="Unified Control"
+                  tone="purple"
+                />
+                <StatusBadge
+                  icon={<Database className="h-4 w-4" />}
+                  label="Database Driven"
+                  tone="cyan"
+                />
+              </div>
+            </div>
 
-                <div className="mt-7 flex flex-wrap gap-3">
-                  <span className="inline-flex items-center gap-2 rounded-full border border-cyan-400/25 bg-cyan-400/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-cyan-200">
-                    <ShieldCheck className="h-4 w-4" />
-                    Admin Verified
-                  </span>
+            <GlassCard className="relative overflow-hidden p-6 sm:p-7">
+              <div className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-cyan-400/10 blur-3xl" />
 
-                  <span className="inline-flex items-center gap-2 rounded-full border border-purple-400/25 bg-purple-400/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-purple-200">
-                    <CircuitBoard className="h-4 w-4" />
-                    Operations Live
-                  </span>
+              <div className="relative z-10">
+                <div className="flex items-center gap-4">
+                  <div className="rounded-2xl border border-cyan-400/25 bg-cyan-400/10 p-3 shadow-[0_0_32px_rgba(34,211,238,0.12)]">
+                    <Gauge className="h-7 w-7 text-cyan-300" />
+                  </div>
 
-                  <span className="inline-flex items-center gap-2 rounded-full border border-emerald-400/25 bg-emerald-400/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-emerald-200">
-                    <Sparkles className="h-4 w-4" />
-                    Competition Ready
-                  </span>
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-[0.24em] text-white/45">
+                      Platform Load
+                    </p>
+                    <p className="mt-1 text-4xl font-black text-white">
+                      {totalAttempts}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-6 grid grid-cols-2 gap-3">
+                  <MiniMetric
+                    label="Onboarded"
+                    value={`${onboardingPercent}%`}
+                    tone="cyan"
+                  />
+                  <MiniMetric
+                    label="Published"
+                    value={`${challengePublishPercent}%`}
+                    tone="purple"
+                  />
                 </div>
               </div>
+            </GlassCard>
+          </div>
+        </section>
+      </MotionWrapper>
 
-              <GlassCard className="relative overflow-hidden p-6 sm:p-7">
-                <div className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-cyan-400/10 blur-3xl" />
+      <section className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+        <KpiCard
+          icon={<Users className="h-6 w-6 text-cyan-300" />}
+          label="Users"
+          value={totalUsers}
+          helper={`${onboardedUsers} onboarded`}
+          delay={0.04}
+        />
 
-                <div className="relative z-10">
-                  <div className="flex items-center gap-4">
-                    <div className="rounded-2xl border border-cyan-400/25 bg-cyan-400/10 p-3 shadow-[0_0_32px_rgba(34,211,238,0.12)]">
-                      <Gauge className="h-7 w-7 text-cyan-300" />
-                    </div>
+        <KpiCard
+          icon={<CircuitBoard className="h-6 w-6 text-purple-300" />}
+          label="Challenges"
+          value={totalChallenges}
+          helper={`${publishedChallenges} published`}
+          delay={0.08}
+        />
 
-                    <div>
-                      <p className="text-xs font-bold uppercase tracking-[0.24em] text-white/45">
-                        Platform Load
-                      </p>
+        <KpiCard
+          icon={<Swords className="h-6 w-6 text-emerald-300" />}
+          label="Competition Profiles"
+          value={competitionProfiles}
+          helper={`${verifiedCompetitionProfiles} verified`}
+          delay={0.12}
+        />
 
-                      <p className="mt-1 text-4xl font-black text-white">
-                        {totalAttempts}
-                      </p>
-                    </div>
-                  </div>
+        <KpiCard
+          icon={<Megaphone className="h-6 w-6 text-amber-300" />}
+          label="Live Posters"
+          value={livePosters}
+          helper={`${draftPosters} drafts`}
+          delay={0.16}
+        />
+      </section>
 
-                  <div className="mt-6 grid grid-cols-2 gap-3">
-                    <div className="rounded-2xl border border-cyan-400/20 bg-cyan-400/10 p-4">
-                      <p className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-200/70">
-                        Challenges
-                      </p>
-                      <p className="mt-2 text-2xl font-black text-cyan-200">
-                        {totalChallenges}
-                      </p>
-                    </div>
+      <section className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
+        <MotionWrapper delay={0.18}>
+          <GlassCard className="h-full p-6 sm:p-7">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.3em] text-cyan-300">
+                  Operations
+                </p>
+                <h2 className="mt-3 text-2xl font-black text-white sm:text-3xl">
+                  Control Modules
+                </h2>
+              </div>
 
-                    <div className="rounded-2xl border border-purple-400/20 bg-purple-400/10 p-4">
-                      <p className="text-xs font-bold uppercase tracking-[0.2em] text-purple-200/70">
-                        Users
-                      </p>
-                      <p className="mt-2 text-2xl font-black text-purple-200">
-                        {totalUsers}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </GlassCard>
+              <div className="rounded-2xl border border-cyan-400/20 bg-cyan-400/10 p-3">
+                <Database className="h-6 w-6 text-cyan-300" />
+              </div>
             </div>
-          </section>
+
+            <div className="mt-6 grid gap-4">
+              <ActionLink
+                href="/admin/create-daily-challenge"
+                icon={<Plus className="h-5 w-5" />}
+                title="Create Daily Challenge"
+                description="Launch a new daily engineering mission."
+                tone="cyan"
+              />
+
+              <ActionLink
+                href="/admin/manage-challenges"
+                icon={<CircuitBoard className="h-5 w-5" />}
+                title="Manage Daily Challenges"
+                description="Edit questions, publish challenges and monitor readiness."
+                tone="purple"
+              />
+
+              <ActionLink
+                href="/admin/competition"
+                icon={<Swords className="h-5 w-5" />}
+                title="Competition Control"
+                description="Control offline progress, assessment and verification."
+                tone="emerald"
+              />
+
+              <ActionLink
+                href="/admin/announcements"
+                icon={<Megaphone className="h-5 w-5" />}
+                title="Poster Publisher"
+                description="Publish landing/login posters without code changes."
+                tone="amber"
+              />
+            </div>
+          </GlassCard>
         </MotionWrapper>
 
-        <section className="grid gap-5 md:grid-cols-3">
-          <KpiCard
-            icon={<CircuitBoard className="h-6 w-6 text-cyan-300" />}
-            label="Challenges"
-            value={totalChallenges}
-            helper="Published and draft operations"
-            delay={0.04}
-          />
-
-          <KpiCard
-            icon={<Users className="h-6 w-6 text-purple-300" />}
-            label="Users"
-            value={totalUsers}
-            helper="Registered competitors"
-            delay={0.08}
-          />
-
-          <KpiCard
-            icon={<Activity className="h-6 w-6 text-emerald-300" />}
-            label="Attempts"
-            value={totalAttempts}
-            helper="Challenge submissions tracked"
-            delay={0.12}
-          />
-        </section>
-
-        <section className="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
-          <MotionWrapper delay={0.16}>
-            <GlassCard className="h-full p-6 sm:p-7">
-              <div className="flex items-center justify-between gap-4">
-                <div>
-                  <p className="text-xs font-bold uppercase tracking-[0.3em] text-cyan-300">
-                    Quick Actions
-                  </p>
-
-                  <h2 className="mt-3 text-2xl font-black text-white sm:text-3xl">
-                    Challenge Operations
-                  </h2>
-                </div>
-
-                <div className="rounded-2xl border border-cyan-400/20 bg-cyan-400/10 p-3">
-                  <Database className="h-6 w-6 text-cyan-300" />
-                </div>
+        <MotionWrapper delay={0.22}>
+          <GlassCard className="h-full p-6 sm:p-7">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.3em] text-purple-300">
+                  Live Intelligence
+                </p>
+                <h2 className="mt-3 text-2xl font-black text-white sm:text-3xl">
+                  Recent Operations
+                </h2>
               </div>
 
-              <div className="mt-6 grid gap-4">
-                <HoverScale>
-                  <Link
-                    href="/admin/create-daily-challenge"
-                    className="group flex items-center justify-between gap-4 rounded-[1.5rem] border border-cyan-400/25 bg-cyan-400/10 p-5 shadow-[0_0_34px_rgba(34,211,238,0.1)] transition hover:border-cyan-300/45 hover:bg-cyan-400/15 focus:outline-none focus:ring-2 focus:ring-cyan-400/50"
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className="rounded-2xl border border-cyan-400/25 bg-cyan-400/10 p-3">
-                        <Plus className="h-5 w-5 text-cyan-200" />
-                      </div>
-
-                      <div>
-                        <p className="font-bold text-white">Create Challenge</p>
-                        <p className="mt-1 text-sm text-white/50">
-                          Launch a new daily engineering mission.
-                        </p>
-                      </div>
-                    </div>
-
-                    <ArrowRight className="h-5 w-5 text-cyan-200 transition group-hover:translate-x-1" />
-                  </Link>
-                </HoverScale>
-
-                <HoverScale>
-                  <Link
-                    href="/admin/manage-challenges"
-                    className="group flex items-center justify-between gap-4 rounded-[1.5rem] border border-white/10 bg-white/[0.04] p-5 transition hover:border-purple-400/30 hover:bg-purple-400/10 focus:outline-none focus:ring-2 focus:ring-purple-400/50"
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className="rounded-2xl border border-purple-400/25 bg-purple-400/10 p-3">
-                        <BarChart3 className="h-5 w-5 text-purple-200" />
-                      </div>
-
-                      <div>
-                        <p className="font-bold text-white">
-                          Manage Challenges
-                        </p>
-                        <p className="mt-1 text-sm text-white/50">
-                          Review, edit, and operate challenge inventory.
-                        </p>
-                      </div>
-                    </div>
-
-                    <ArrowRight className="h-5 w-5 text-purple-200 transition group-hover:translate-x-1" />
-                  </Link>
-                </HoverScale>
+              <div className="rounded-2xl border border-purple-400/20 bg-purple-400/10 p-3">
+                <Activity className="h-6 w-6 text-purple-300" />
               </div>
-            </GlassCard>
-          </MotionWrapper>
+            </div>
 
-          <MotionWrapper delay={0.2}>
-            <GlassCard className="h-full p-6 sm:p-7">
-              <div className="flex items-center justify-between gap-4">
-                <div>
-                  <p className="text-xs font-bold uppercase tracking-[0.3em] text-purple-300">
-                    Ranking Monitor
-                  </p>
+            <div className="mt-6 grid gap-5 lg:grid-cols-2">
+              <div>
+                <p className="mb-3 text-xs font-black uppercase tracking-[0.22em] text-white/40">
+                  Daily Challenge Queue
+                </p>
 
-                  <h2 className="mt-3 text-2xl font-black text-white sm:text-3xl">
-                    Leaderboard Preview
-                  </h2>
-                </div>
-
-                <div className="rounded-2xl border border-purple-400/20 bg-purple-400/10 p-3">
-                  <Trophy className="h-6 w-6 text-purple-300" />
-                </div>
-              </div>
-
-              <div className="mt-6 space-y-3">
-                {leaderboard.map((entry: any, index: number) => (
-                  <HoverScale key={entry.id}>
-                    <div className="flex items-center justify-between gap-4 rounded-[1.35rem] border border-white/10 bg-black/25 p-4 transition hover:border-cyan-400/25 hover:bg-cyan-400/[0.05]">
-                      <div className="flex min-w-0 items-center gap-4">
-                        <div
+                <div className="space-y-3">
+                  {recentChallenges.map((challenge) => (
+                    <Link
+                      key={challenge.id}
+                      href={`/admin/challenge/${challenge.id}`}
+                      className="block rounded-2xl border border-white/10 bg-black/25 p-4 transition hover:border-cyan-400/30 hover:bg-cyan-400/10"
+                    >
+                      <div className="flex items-center justify-between gap-3">
+                        <p className="text-sm font-black text-white">
+                          Day {challenge.dayNumber}
+                        </p>
+                        <span
                           className={
-                            index === 0
-                              ? "flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-yellow-300/30 bg-yellow-400/10 text-sm font-black text-yellow-200 shadow-[0_0_24px_rgba(250,204,21,0.14)]"
-                              : "flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04] text-sm font-black text-white/60"
+                            challenge.isPublished
+                              ? "rounded-full border border-emerald-400/25 bg-emerald-400/10 px-2.5 py-1 text-[10px] font-black uppercase text-emerald-200"
+                              : "rounded-full border border-amber-400/25 bg-amber-400/10 px-2.5 py-1 text-[10px] font-black uppercase text-amber-200"
                           }
                         >
-                          {index === 0 ? (
-                            <Crown className="h-5 w-5" />
-                          ) : (
-                            `#${index + 1}`
-                          )}
-                        </div>
-
-                        <div className="min-w-0">
-                          <p className="truncate font-bold text-white">
-                            {entry.user.fullName}
-                          </p>
-
-                          <p className="mt-1 text-xs uppercase tracking-[0.18em] text-white/35">
-                            Competitor Rank #{index + 1}
-                          </p>
-                        </div>
+                          {challenge.isPublished ? "Live" : "Draft"}
+                        </span>
                       </div>
+                      <p className="mt-2 line-clamp-1 text-sm text-white/55">
+                        {challenge.title}
+                      </p>
+                      <p className="mt-2 text-xs font-bold text-white/35">
+                        {challenge.questions.length} questions attached
+                      </p>
+                    </Link>
+                  ))}
 
-                      <div className="text-right">
-                        <p className="text-lg font-black tabular-nums text-cyan-200">
-                          {entry.weightedRankScore.toFixed(2)}
-                        </p>
-
-                        <p className="text-xs uppercase tracking-[0.18em] text-white/35">
-                          Omni Score
-                        </p>
-                      </div>
-                    </div>
-                  </HoverScale>
-                ))}
+                  {recentChallenges.length === 0 && (
+                    <EmptyState label="No daily challenges created yet." />
+                  )}
+                </div>
               </div>
 
-              <div className="mt-6">
-                <Link
-                  href="/daily-leaderboard"
-                  className="inline-flex items-center gap-2 rounded-full border border-cyan-400/25 bg-cyan-400/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-cyan-200 transition hover:bg-cyan-400/20 focus:outline-none focus:ring-2 focus:ring-cyan-400/50"
-                >
-                  Open Full Leaderboard
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
+              <div>
+                <p className="mb-3 text-xs font-black uppercase tracking-[0.22em] text-white/40">
+                  Competition Updates
+                </p>
+
+                <div className="space-y-3">
+                  {recentCompetitionHistory.map((entry) => {
+                    const participant = userById.get(entry.userId);
+
+                    return (
+                      <div
+                        key={entry.id}
+                        className="rounded-2xl border border-white/10 bg-black/25 p-4"
+                      >
+                        <div className="flex items-start justify-between gap-3">
+                          <div>
+                            <p className="text-sm font-black text-white">
+                              {participant?.fullName ??
+                                participant?.email ??
+                                "Participant"}
+                            </p>
+                            <p className="mt-1 text-xs font-bold text-white/35">
+                              {participant?.omniId ?? entry.userId}
+                            </p>
+                          </div>
+
+                          <span className="rounded-full border border-cyan-400/25 bg-cyan-400/10 px-2.5 py-1 text-[10px] font-black uppercase text-cyan-200">
+                            {entry.verificationStatus}
+                          </span>
+                        </div>
+
+                        <p className="mt-3 text-sm text-white/55">
+                          {entry.assessmentName ?? "Competition update"} ·{" "}
+                          {entry.vibgyorStage} / {entry.omniStep}
+                        </p>
+
+                        <p className="mt-2 flex items-center gap-2 text-xs font-bold text-white/35">
+                          <Clock3 className="h-3.5 w-3.5" />
+                          {entry.createdAt.toLocaleString()}
+                        </p>
+                      </div>
+                    );
+                  })}
+
+                  {recentCompetitionHistory.length === 0 && (
+                    <EmptyState label="No competition updates recorded yet." />
+                  )}
+                </div>
               </div>
-            </GlassCard>
-          </MotionWrapper>
-        </section>
+            </div>
+          </GlassCard>
+        </MotionWrapper>
+      </section>
 
-        <section className="grid gap-6 lg:grid-cols-3">
-          <MotionWrapper delay={0.24}>
-            <GlassCard className="h-full p-6">
-              <p className="text-xs font-bold uppercase tracking-[0.3em] text-emerald-300">
-                Challenge Health
-              </p>
+      {pendingCompetitionProfiles > 0 && (
+        <MotionWrapper delay={0.26}>
+          <div className="rounded-[2rem] border border-amber-400/20 bg-amber-400/10 p-5 text-amber-100">
+            <p className="text-sm font-black">
+              {pendingCompetitionProfiles} competition profile
+              {pendingCompetitionProfiles === 1 ? " is" : "s are"} waiting for
+              admin verification.
+            </p>
+          </div>
+        </MotionWrapper>
+      )}
+    </div>
+  );
+}
 
-              <h3 className="mt-3 text-2xl font-black text-white">
-                Operational
-              </h3>
+function StatusBadge({
+  icon,
+  label,
+  tone,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  tone: "cyan" | "purple" | "emerald";
+}) {
+  const toneClass =
+    tone === "cyan"
+      ? "border-cyan-400/25 bg-cyan-400/10 text-cyan-200"
+      : tone === "purple"
+        ? "border-purple-400/25 bg-purple-400/10 text-purple-200"
+        : "border-emerald-400/25 bg-emerald-400/10 text-emerald-200";
 
-              <p className="mt-4 text-sm leading-7 text-white/55">
-                Challenge creation, management, and leaderboard synchronization
-                are available from the admin control surface.
-              </p>
-            </GlassCard>
-          </MotionWrapper>
+  return (
+    <span
+      className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] ${toneClass}`}
+    >
+      {icon}
+      {label}
+    </span>
+  );
+}
 
-          <MotionWrapper delay={0.28}>
-            <GlassCard className="h-full p-6">
-              <p className="text-xs font-bold uppercase tracking-[0.3em] text-cyan-300">
-                Activity Feed
-              </p>
+function MiniMetric({
+  label,
+  value,
+  tone,
+}: {
+  label: string;
+  value: string;
+  tone: "cyan" | "purple";
+}) {
+  const toneClass =
+    tone === "cyan"
+      ? "border-cyan-400/20 bg-cyan-400/10 text-cyan-200"
+      : "border-purple-400/20 bg-purple-400/10 text-purple-200";
 
-              <h3 className="mt-3 text-2xl font-black text-white">
-                {totalAttempts} Attempts
-              </h3>
-
-              <p className="mt-4 text-sm leading-7 text-white/55">
-                Total tracked challenge attempts across the current competition
-                environment.
-              </p>
-            </GlassCard>
-          </MotionWrapper>
-
-          <MotionWrapper delay={0.32}>
-            <GlassCard className="h-full p-6">
-              <p className="text-xs font-bold uppercase tracking-[0.3em] text-purple-300">
-                Competition Monitoring
-              </p>
-
-              <h3 className="mt-3 text-2xl font-black text-white">
-                {leaderboard.length} Ranked
-              </h3>
-
-              <p className="mt-4 text-sm leading-7 text-white/55">
-                Previewing the top active competitors by weighted rank score.
-              </p>
-            </GlassCard>
-          </MotionWrapper>
-        </section>
-      </div>
-    </main>
+  return (
+    <div className={`rounded-2xl border p-4 ${toneClass}`}>
+      <p className="text-xs font-bold uppercase tracking-[0.2em] opacity-70">
+        {label}
+      </p>
+      <p className="mt-2 text-2xl font-black">{value}</p>
+    </div>
   );
 }
 
@@ -383,29 +505,76 @@ function KpiCard({
 }) {
   return (
     <MotionWrapper delay={delay}>
-      <HoverScale>
-        <GlassCard className="h-full p-6 sm:p-7">
-          <div className="flex items-center justify-between gap-4">
-            <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-3">
-              {icon}
-            </div>
-
-            <span className="rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-cyan-200/80">
-              Live
-            </span>
+      <GlassCard className="h-full p-5">
+        <div className="flex items-center justify-between gap-4">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.24em] text-white/40">
+              {label}
+            </p>
+            <p className="mt-3 text-4xl font-black text-white">{value}</p>
+            <p className="mt-2 text-sm font-semibold text-white/45">
+              {helper}
+            </p>
           </div>
 
-          <p className="mt-6 text-xs font-bold uppercase tracking-[0.22em] text-white/45">
-            {label}
-          </p>
-
-          <p className="mt-3 text-5xl font-black tracking-tight text-white">
-            {value}
-          </p>
-
-          <p className="mt-3 text-sm leading-6 text-white/55">{helper}</p>
-        </GlassCard>
-      </HoverScale>
+          <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-3">
+            {icon}
+          </div>
+        </div>
+      </GlassCard>
     </MotionWrapper>
+  );
+}
+
+function ActionLink({
+  href,
+  icon,
+  title,
+  description,
+  tone,
+}: {
+  href: string;
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  tone: "cyan" | "purple" | "emerald" | "amber";
+}) {
+  const toneClass =
+    tone === "cyan"
+      ? "border-cyan-400/25 bg-cyan-400/10 text-cyan-100 hover:border-cyan-300/45 hover:bg-cyan-400/15"
+      : tone === "purple"
+        ? "border-purple-400/25 bg-purple-400/10 text-purple-100 hover:border-purple-300/45 hover:bg-purple-400/15"
+        : tone === "emerald"
+          ? "border-emerald-400/25 bg-emerald-400/10 text-emerald-100 hover:border-emerald-300/45 hover:bg-emerald-400/15"
+          : "border-amber-400/25 bg-amber-400/10 text-amber-100 hover:border-amber-300/45 hover:bg-amber-400/15";
+
+  return (
+    <HoverScale>
+      <Link
+        href={href}
+        className={`group flex items-center justify-between gap-4 rounded-[1.5rem] border p-5 shadow-[0_0_34px_rgba(0,0,0,0.12)] transition focus:outline-none focus:ring-2 focus:ring-cyan-400/50 ${toneClass}`}
+      >
+        <div className="flex items-center gap-4">
+          <div className="rounded-2xl border border-white/10 bg-black/20 p-3">
+            {icon}
+          </div>
+
+          <div>
+            <p className="font-black text-white">{title}</p>
+            <p className="mt-1 text-sm text-white/50">{description}</p>
+          </div>
+        </div>
+
+        <ArrowRight className="h-5 w-5 transition group-hover:translate-x-1" />
+      </Link>
+    </HoverScale>
+  );
+}
+
+function EmptyState({ label }: { label: string }) {
+  return (
+    <div className="rounded-2xl border border-dashed border-white/15 bg-black/20 p-5 text-center text-sm font-semibold text-white/40">
+      {label}
+    </div>
   );
 }

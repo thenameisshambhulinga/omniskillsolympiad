@@ -142,13 +142,7 @@ export default function RegistrationWizard() {
         throw new Error(result.error || "Unable to complete onboarding");
       }
 
-      router.push("/dashboard");
-    } catch (error) {
-      setSubmitError(
-        error instanceof Error
-          ? error.message
-          : "Unable to complete onboarding",
-      );
+     router.push("/onboarding/success");
     } finally {
       setIsSubmitting(false);
     }
@@ -181,11 +175,10 @@ export default function RegistrationWizard() {
 
   return (
     <RegistrationShell
-      title="Complete Your Engineering Identity"
-      subtitle="Create your Omni Skills Olympiad profile foundation before entering the competition ecosystem."
-      studentId={formData.studentId}
-      completionPercent={completionPercent}
-    >
+       title="Complete Your Engineering Identity"
+       subtitle="Create your Omni Skills Olympiad profile foundation before entering the competition ecosystem."
+       completionPercent={completionPercent} >
+
       <div className="grid w-full gap-8 xl:grid-cols-[240px_minmax(0,1fr)]">
         <RegistrationProgress
           steps={steps}

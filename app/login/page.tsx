@@ -1,7 +1,10 @@
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
+import { getPublishedAnnouncementPosters } from "@/lib/announcement-posters";
 import { authOptions } from "@/lib/auth";
+import { getPostLoginRedirect } from "@/lib/post-login-redirect";
+import { prisma } from "@/lib/prisma";
 
 import LoginClient from "./LoginClient";
 
@@ -11,9 +14,21 @@ export const revalidate = 0;
 export default async function LoginPage() {
   const session = await getServerSession(authOptions);
 
-  if (session?.user) {
-    redirect("/dashboard");
+  if (session?.user?.email) {
+    const user = await prisma.user.findUnique({
+      where: {
+        email: session.user.email,
+      },
+      select: {
+        role: true,
+        isOnboarded: true,
+      },
+    });
+
+    redirect(getPostLoginRedirect(user));
   }
 
-  return <LoginClient />;
+  const posters = await getPublishedAnnouncementPosters();
+
+  return <LoginClient posters={posters} />;
 }

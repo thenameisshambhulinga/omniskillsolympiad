@@ -3,10 +3,14 @@
 import { signIn } from "next-auth/react";
 import { ShieldCheck } from "lucide-react";
 
-import { posterAnnouncements } from "@/data/posterAnnouncements";
-import PosterAnnouncementCarousel from "@/components/landing/PosterAnnouncementCarousel";
-
-export default function LoginClient() {
+import PosterAnnouncementCarousel, {
+  type PosterAnnouncement,
+} from "@/components/landing/PosterAnnouncementCarousel";
+export default function LoginClient({
+  posters,
+}: {
+  posters: PosterAnnouncement[];
+}) {
   return (
     <main className="relative min-h-screen overflow-hidden bg-slate-950 px-4 py-6 text-white sm:px-6 lg:px-8">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
@@ -17,7 +21,7 @@ export default function LoginClient() {
       </div>
 
       <div className="relative z-10 mx-auto grid min-h-[calc(100vh-3rem)] w-full max-w-[92rem] items-start gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(340px,0.8fr)]">
-        <PosterAnnouncementCarousel posters={posterAnnouncements} />
+        <PosterAnnouncementCarousel posters={posters} />
         <section
           aria-label="Authentication"
           className="group relative overflow-hidden rounded-[2.75rem] border border-cyan-300/25 bg-white/[0.065] p-6 shadow-[0_38px_160px_rgba(0,0,0,0.62),0_0_90px_rgba(34,211,238,0.14)] backdrop-blur-2xl sm:p-8"
@@ -96,8 +100,8 @@ export default function LoginClient() {
               type="button"
               onClick={() =>
                 signIn("google", {
-                  callbackUrl: "/onboarding",
-                })
+  callbackUrl: "/auth/continue",
+})
               }
               className="group/google relative inline-flex w-full min-h-14 items-center justify-center gap-3 overflow-hidden rounded-2xl border border-white/10 bg-white px-6 py-4 text-sm font-black uppercase tracking-[0.14em] text-slate-950 shadow-[0_0_44px_rgba(255,255,255,0.12)] transition hover:scale-[1.015] hover:bg-cyan-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/50"
             >

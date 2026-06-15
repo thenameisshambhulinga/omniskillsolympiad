@@ -58,8 +58,8 @@ export async function POST(request: Request) {
     },
   });
 
-  return NextResponse.json({
-    success: true,
-    omniId: updatedUser.omniId,
-  });
+ return NextResponse.json({
+  success: true,
+  redirectTo: "/onboarding/success",
+});
 }
