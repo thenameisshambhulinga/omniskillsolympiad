@@ -1,26 +1,33 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   AlertCircle,
+  ArrowRight,
   CheckCircle2,
   ExternalLink,
   Eye,
   ImageOff,
   ImagePlus,
   Loader2,
+  Megaphone,
   Plus,
   Radio,
   RefreshCcw,
   Save,
+  ShieldCheck,
   Star,
+  ToggleLeft,
+  ToggleRight,
   Trash2,
 } from "lucide-react";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
-export const runtime = "nodejs";
+import OsoGlassSurface from "@/components/oso/OsoGlassSurface";
+import OsoMetricTile from "@/components/oso/OsoMetricTile";
+import OsoSectionHeader from "@/components/oso/OsoSectionHeader";
+import OsoStatusPill from "@/components/oso/OsoStatusPill";
 
 export type SerializedPoster = {
   id: string;
@@ -174,7 +181,9 @@ export default function AnnouncementPosterManager({
   const [deletingPosterId, setDeletingPosterId] = useState<string | null>(null);
   const [notice, setNotice] = useState<Notice | null>(null);
 
+  const totalPosters = posters.length;
   const livePosterCount = posters.filter((poster) => poster.isPublished).length;
+  const draftPosterCount = totalPosters - livePosterCount;
   const heroPoster = posters.find(
     (poster) => poster.isHero && poster.isPublished,
   );
@@ -339,46 +348,118 @@ export default function AnnouncementPosterManager({
   };
 
   return (
-    <div className="mx-auto w-full max-w-[1500px] space-y-7">
-      <section className="relative overflow-hidden rounded-[2.35rem] border border-white/10 bg-white/[0.04] p-6 shadow-[0_28px_110px_rgba(0,0,0,0.38)] backdrop-blur-2xl sm:p-8">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.16),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(168,85,247,0.12),transparent_34%)]" />
-
-        <div className="relative z-10 grid gap-6 lg:grid-cols-[1fr_auto] lg:items-end">
+    <div className="mx-auto grid w-full max-w-[1600px] gap-8">
+      <OsoGlassSurface hover={false} className="p-6 sm:p-8 lg:p-10">
+        <div className="grid gap-8 lg:grid-cols-[1fr_380px] lg:items-center">
           <div>
-            <p className="text-xs font-black uppercase tracking-[0.3em] text-cyan-300">
-              Admin Announcement Center
-            </p>
-            <h1 className="mt-3 text-3xl font-black text-white sm:text-4xl">
-              Poster Publisher
+            <div className="flex flex-wrap gap-3">
+              <OsoStatusPill
+                label="Poster Publisher"
+                tone="yellow"
+                icon={<Megaphone className="h-3.5 w-3.5" />}
+              />
+
+              <OsoStatusPill
+                label={`${livePosterCount} Live`}
+                tone="emerald"
+                icon={<Radio className="h-3.5 w-3.5" />}
+              />
+
+              <OsoStatusPill
+                label={`${draftPosterCount} Drafts`}
+                tone="blue"
+                icon={<ShieldCheck className="h-3.5 w-3.5" />}
+              />
+            </div>
+
+            <h1 className="oso-heading mt-6 max-w-5xl text-4xl font-black leading-tight text-slate-950 sm:text-5xl lg:text-6xl">
+              Publish announcement posters{" "}
+              <span className="text-blue-600">without touching code.</span>
             </h1>
-            <p className="mt-3 max-w-3xl text-sm leading-7 text-white/55">
-              Create, publish, edit, delete and prioritize landing/login posters
-              from database. No manual poster code required.
+
+            <p className="mt-5 max-w-3xl text-lg font-medium leading-9 text-slate-600">
+              Create, edit, preview and delete landing/login posters from one
+              database-driven admin workspace. The existing poster APIs stay
+              unchanged.
             </p>
+
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <a
+                href="#create-poster"
+                className="group inline-flex min-h-14 items-center justify-center gap-3 rounded-full bg-blue-600 px-7 py-4 text-sm font-black uppercase tracking-[0.14em] text-white shadow-[0_18px_36px_rgba(37,99,235,0.22)] transition hover:-translate-y-0.5 hover:bg-blue-700"
+              >
+                Create Poster
+                <Plus className="h-4 w-4 transition group-hover:rotate-90" />
+              </a>
+
+              <Link
+                href="/admin"
+                className="group inline-flex min-h-14 items-center justify-center gap-3 rounded-full border border-slate-300 bg-white px-7 py-4 text-sm font-black uppercase tracking-[0.14em] text-slate-950 shadow-[0_14px_34px_rgba(15,23,42,0.055)] transition hover:-translate-y-0.5 hover:border-blue-300 hover:text-blue-700"
+              >
+                Back to Admin
+                <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+              </Link>
+            </div>
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-3">
-            <Metric label="Total" value={posters.length} tone="cyan" />
-            <Metric label="Live" value={livePosterCount} tone="emerald" />
-            <Metric label="Hero" value={heroPoster ? 1 : 0} tone="purple" />
+          <div className="rounded-[2rem] border border-slate-200 bg-white/80 p-6 shadow-sm backdrop-blur-xl">
+            <p className="text-xs font-black uppercase tracking-[0.22em] text-slate-500">
+              Active Hero Poster
+            </p>
+
+            <p className="oso-heading mt-3 text-3xl font-black leading-tight text-slate-950">
+              {heroPoster ? heroPoster.title : "Not Set"}
+            </p>
+
+            <p className="mt-3 text-sm font-semibold leading-6 text-slate-500">
+              {heroPoster
+                ? "This poster is currently marked as published hero content."
+                : "Publish and mark one poster as hero to highlight it."}
+            </p>
           </div>
         </div>
+      </OsoGlassSurface>
+
+      <section className="grid gap-5 md:grid-cols-3">
+        <OsoMetricTile
+          icon={<Megaphone className="h-5 w-5" />}
+          label="Total Posters"
+          value={totalPosters}
+          helper="All poster records"
+          tone="yellow"
+        />
+
+        <OsoMetricTile
+          icon={<ToggleRight className="h-5 w-5" />}
+          label="Live"
+          value={livePosterCount}
+          helper="Visible to users"
+          tone="emerald"
+        />
+
+        <OsoMetricTile
+          icon={<ToggleLeft className="h-5 w-5" />}
+          label="Drafts"
+          value={draftPosterCount}
+          helper="Hidden from public pages"
+          tone="blue"
+        />
       </section>
 
       <section className="grid gap-7 xl:grid-cols-[minmax(360px,520px)_minmax(0,1fr)]">
-        <div className="space-y-7">
-          <section className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-5 shadow-[0_24px_90px_rgba(0,0,0,0.28)] backdrop-blur-2xl">
-            <div className="mb-5 flex items-start justify-between gap-4">
+        <div id="create-poster" className="space-y-7">
+          <OsoGlassSurface hover={false} className="p-5 sm:p-6">
+            <div className="mb-6 flex items-start justify-between gap-4">
               <div className="flex items-center gap-3">
-                <div className="grid h-12 w-12 place-items-center rounded-2xl border border-cyan-400/25 bg-cyan-400/10">
-                  <ImagePlus className="h-5 w-5 text-cyan-200" />
+                <div className="grid h-12 w-12 place-items-center rounded-2xl border border-blue-200 bg-blue-50 text-blue-700">
+                  <ImagePlus className="h-5 w-5" />
                 </div>
 
                 <div>
-                  <h2 className="text-xl font-black text-white">
+                  <h2 className="oso-heading text-2xl font-black text-slate-950">
                     {form.id ? "Edit Poster" : "Create Poster"}
                   </h2>
-                  <p className="mt-1 text-xs font-semibold text-white/40">
+                  <p className="mt-1 text-sm font-semibold text-slate-500">
                     Admin-controlled landing content
                   </p>
                 </div>
@@ -387,7 +468,7 @@ export default function AnnouncementPosterManager({
               <button
                 type="button"
                 onClick={() => setForm(sampleForm)}
-                className="rounded-2xl border border-purple-400/25 bg-purple-400/10 px-3 py-2 text-[10px] font-black uppercase tracking-[0.16em] text-purple-100 transition hover:bg-purple-400/15"
+                className="rounded-2xl border border-yellow-200 bg-yellow-50 px-3 py-2 text-[10px] font-black uppercase tracking-[0.16em] text-yellow-700 transition hover:bg-yellow-100"
               >
                 Sample
               </button>
@@ -515,38 +596,21 @@ export default function AnnouncementPosterManager({
                 />
               </div>
 
-              {notice && (
-                <div
-                  className={
-                    notice.type === "success"
-                      ? "flex items-start gap-3 rounded-2xl border border-emerald-400/20 bg-emerald-400/10 px-4 py-3 text-sm font-bold text-emerald-100"
-                      : notice.type === "error"
-                        ? "flex items-start gap-3 rounded-2xl border border-red-400/20 bg-red-400/10 px-4 py-3 text-sm font-bold text-red-100"
-                        : "flex items-start gap-3 rounded-2xl border border-cyan-400/20 bg-cyan-400/10 px-4 py-3 text-sm font-bold text-cyan-100"
-                  }
-                >
-                  {notice.type === "success" ? (
-                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />
-                  ) : (
-                    <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
-                  )}
-                  {notice.text}
-                </div>
-              )}
+              {notice ? <NoticeBox notice={notice} /> : null}
 
               <div className="grid gap-3 sm:grid-cols-2">
                 <button
                   type="button"
                   onClick={savePoster}
                   disabled={saving}
-                  className="inline-flex items-center justify-center gap-2 rounded-2xl bg-cyan-300 px-5 py-4 text-sm font-black uppercase tracking-[0.16em] text-black transition hover:bg-cyan-200 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="inline-flex items-center justify-center gap-2 rounded-2xl bg-blue-600 px-5 py-4 text-sm font-black uppercase tracking-[0.16em] text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {saving ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
                   ) : (
                     <Save className="h-4 w-4" />
                   )}
-                  {form.id ? "Update" : "Publish"}
+                  {form.id ? "Update" : "Save"}
                 </button>
 
                 <button
@@ -555,42 +619,40 @@ export default function AnnouncementPosterManager({
                     setForm(emptyForm);
                     setNotice(null);
                   }}
-                  className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-4 text-sm font-black uppercase tracking-[0.16em] text-white/65 transition hover:bg-white/[0.07]"
+                  className="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-300 bg-white px-5 py-4 text-sm font-black uppercase tracking-[0.16em] text-slate-700 transition hover:border-blue-300 hover:text-blue-700"
                 >
                   <RefreshCcw className="h-4 w-4" />
                   Reset
                 </button>
               </div>
             </div>
-          </section>
+          </OsoGlassSurface>
         </div>
 
         <div className="space-y-7">
-          <section className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-5 shadow-[0_24px_90px_rgba(0,0,0,0.28)] backdrop-blur-2xl">
-            <div className="mb-5 flex items-center justify-between gap-4">
-              <div>
-                <p className="text-xs font-black uppercase tracking-[0.24em] text-purple-300">
-                  Live Preview
-                </p>
-                <h2 className="mt-2 text-xl font-black text-white">
-                  What users will see
-                </h2>
-              </div>
+          <OsoGlassSurface hover={false} className="p-5 sm:p-6">
+            <div className="mb-6 flex items-center justify-between gap-4">
+              <OsoSectionHeader
+                eyebrow="Live Preview"
+                title="What users will see"
+                description="Preview updates before saving the poster."
+                icon={<Eye className="h-5 w-5" />}
+              />
 
-              {form.ctaHref && (
+              {form.ctaHref ? (
                 <a
                   href={form.ctaHref}
                   target={form.ctaHref.startsWith("http") ? "_blank" : "_self"}
                   rel="noreferrer"
-                  className="inline-flex items-center gap-2 rounded-2xl border border-cyan-400/25 bg-cyan-400/10 px-3 py-2 text-xs font-black text-cyan-100"
+                  className="hidden shrink-0 items-center gap-2 rounded-2xl border border-blue-200 bg-blue-50 px-3 py-2 text-xs font-black text-blue-700 sm:inline-flex"
                 >
                   CTA
                   <ExternalLink className="h-3.5 w-3.5" />
                 </a>
-              )}
+              ) : null}
             </div>
 
-            <div className="relative min-h-[24rem] overflow-hidden rounded-[1.75rem] border border-white/10 bg-black/35">
+            <div className="relative min-h-[24rem] overflow-hidden rounded-[1.75rem] border border-slate-200 bg-slate-100 shadow-sm">
               {activePreviewImage ? (
                 <img
                   src={activePreviewImage}
@@ -598,77 +660,75 @@ export default function AnnouncementPosterManager({
                   className="absolute inset-0 h-full w-full object-cover"
                 />
               ) : (
-                <div className="absolute inset-0 grid place-items-center bg-white/[0.03]">
-                  <div className="text-center text-white/35">
+                <div className="absolute inset-0 grid place-items-center bg-slate-100">
+                  <div className="text-center text-slate-400">
                     <ImageOff className="mx-auto mb-3 h-9 w-9" />
                     Add image URL to preview poster.
                   </div>
                 </div>
               )}
 
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/45 to-black/10" />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/45 to-slate-950/10" />
 
               <div className="absolute inset-x-0 bottom-0 p-5">
                 <div className="mb-4 flex flex-wrap gap-2">
-                  <span className="rounded-full border border-emerald-400/25 bg-emerald-400/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-emerald-200">
+                  <span className="rounded-full border border-emerald-300/40 bg-emerald-400/20 px-3 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-emerald-100">
                     {form.status || "Status"}
                   </span>
 
-                  <span className="rounded-full border border-cyan-400/25 bg-cyan-400/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-cyan-200">
+                  <span className="rounded-full border border-blue-300/40 bg-blue-400/20 px-3 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-blue-100">
                     {form.category || "Category"}
                   </span>
 
-                  {form.isHero && (
-                    <span className="rounded-full border border-purple-400/25 bg-purple-400/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-purple-200">
+                  {form.isHero ? (
+                    <span className="rounded-full border border-yellow-300/40 bg-yellow-400/20 px-3 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-yellow-100">
                       Hero
                     </span>
-                  )}
+                  ) : null}
                 </div>
 
                 <h3 className="max-w-2xl text-3xl font-black text-white sm:text-4xl">
                   {form.title || "Poster title"}
                 </h3>
 
-                <p className="mt-3 max-w-xl text-sm leading-7 text-white/65">
+                <p className="mt-3 max-w-xl text-sm leading-7 text-white/75">
                   {form.subtitle ||
                     "Poster subtitle will appear here once entered."}
                 </p>
 
-                {parsedHighlights.length > 0 && (
+                {parsedHighlights.length > 0 ? (
                   <div className="mt-4 flex flex-wrap gap-2">
                     {parsedHighlights.slice(0, 3).map((highlight) => (
                       <span
                         key={highlight}
-                        className="rounded-full border border-white/10 bg-black/35 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-white/55"
+                        className="rounded-full border border-white/15 bg-black/35 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-white/75"
                       >
                         {highlight}
                       </span>
                     ))}
                   </div>
-                )}
+                ) : null}
 
-                <div className="mt-5 inline-flex rounded-2xl bg-cyan-300 px-5 py-3 text-xs font-black uppercase tracking-[0.16em] text-black">
+                <div className="mt-5 inline-flex rounded-2xl bg-blue-600 px-5 py-3 text-xs font-black uppercase tracking-[0.16em] text-white">
                   {form.ctaLabel || "CTA Label"}
                 </div>
               </div>
             </div>
-          </section>
+          </OsoGlassSurface>
 
-          <section className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-5 shadow-[0_24px_90px_rgba(0,0,0,0.28)] backdrop-blur-2xl">
-            <div className="mb-5 flex items-center justify-between gap-4">
-              <div>
-                <p className="text-xs font-black uppercase tracking-[0.24em] text-cyan-300">
-                  Poster Library
-                </p>
-                <h2 className="mt-2 text-xl font-black text-white">
-                  Published and draft posters
-                </h2>
-              </div>
+          <OsoGlassSurface hover={false} className="p-5 sm:p-6">
+            <div className="mb-6 flex items-center justify-between gap-4">
+              <OsoSectionHeader
+                eyebrow="Poster Library"
+                title="Published and draft posters"
+                description="Edit or delete existing announcement posters."
+                icon={<Megaphone className="h-5 w-5" />}
+              />
 
               <button
                 type="button"
                 onClick={refreshPosters}
-                className="rounded-2xl border border-white/10 bg-white/[0.04] p-3 text-white/60 transition hover:bg-white/[0.08] hover:text-white"
+                className="shrink-0 rounded-2xl border border-slate-200 bg-white p-3 text-slate-500 transition hover:bg-blue-50 hover:text-blue-700"
               >
                 <RefreshCcw className="h-4 w-4" />
               </button>
@@ -676,134 +736,141 @@ export default function AnnouncementPosterManager({
 
             <div className="grid gap-4 lg:grid-cols-2">
               {posters.map((poster) => (
-                <article
+                <PosterCard
                   key={poster.id}
-                  className="overflow-hidden rounded-[1.5rem] border border-white/10 bg-black/25"
-                >
-                  <div className="relative h-48 bg-white/[0.04]">
-                    <img
-                      src={poster.imageUrl}
-                      alt={poster.title}
-                      className="h-full w-full object-cover"
-                    />
-
-                    <div className="absolute left-3 top-3 flex flex-wrap gap-2">
-                      {poster.isHero && (
-                        <span className="inline-flex items-center gap-1 rounded-full bg-cyan-300 px-3 py-1 text-[10px] font-black uppercase text-black">
-                          <Star className="h-3 w-3" />
-                          Hero
-                        </span>
-                      )}
-
-                      {poster.isPublished ? (
-                        <span className="rounded-full bg-emerald-300 px-3 py-1 text-[10px] font-black uppercase text-black">
-                          Published
-                        </span>
-                      ) : (
-                        <span className="rounded-full bg-amber-300 px-3 py-1 text-[10px] font-black uppercase text-black">
-                          Draft
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="p-4">
-                    <div className="mb-3 flex items-center justify-between gap-3">
-                      <span className="inline-flex items-center gap-2 rounded-full border border-cyan-400/25 bg-cyan-400/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-cyan-200">
-                        <Radio className="h-3 w-3" />
-                        {poster.status}
-                      </span>
-
-                      <span className="text-xs font-bold text-white/35">
-                        Priority {poster.priority}
-                      </span>
-                    </div>
-
-                    <h3 className="text-lg font-black text-white">
-                      {poster.title}
-                    </h3>
-
-                    <p className="mt-2 line-clamp-2 text-sm leading-6 text-white/50">
-                      {poster.subtitle}
-                    </p>
-
-                    <p className="mt-3 text-xs font-bold text-white/35">
-                      Updated {new Date(poster.updatedAt).toLocaleString()}
-                    </p>
-
-                    <div className="mt-4 grid grid-cols-2 gap-2">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setForm(posterToForm(poster));
-                          setNotice({
-                            type: "info",
-                            text: "Poster loaded for editing.",
-                          });
-                        }}
-                        className="inline-flex items-center justify-center gap-2 rounded-xl border border-cyan-400/25 bg-cyan-400/10 px-3 py-2 text-xs font-black text-cyan-100 transition hover:bg-cyan-400/15"
-                      >
-                        <Eye className="h-3.5 w-3.5" />
-                        Edit
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => deletePoster(poster.id)}
-                        disabled={deletingPosterId === poster.id}
-                        className="inline-flex items-center justify-center gap-2 rounded-xl border border-red-400/25 bg-red-400/10 px-3 py-2 text-xs font-black text-red-100 transition hover:bg-red-400/15 disabled:opacity-50"
-                      >
-                        {deletingPosterId === poster.id ? (
-                          <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                        ) : (
-                          <Trash2 className="h-3.5 w-3.5" />
-                        )}
-                        Delete
-                      </button>
-                    </div>
-                  </div>
-                </article>
+                  poster={poster}
+                  deletingPosterId={deletingPosterId}
+                  onEdit={() => {
+                    setForm(posterToForm(poster));
+                    setNotice({
+                      type: "info",
+                      text: "Poster loaded for editing.",
+                    });
+                  }}
+                  onDelete={() => deletePoster(poster.id)}
+                />
               ))}
 
-              {posters.length === 0 && (
-                <div className="rounded-[1.5rem] border border-dashed border-white/15 p-8 text-center text-white/45">
-                  <Plus className="mx-auto mb-3 h-8 w-8 text-cyan-200" />
-                  <p className="font-black text-white/55">No posters yet.</p>
-                  <p className="mt-2 text-sm">
-                    Fill the form or use Sample to create your first poster.
-                  </p>
-                </div>
-              )}
+              {posters.length === 0 ? <EmptyPosterState /> : null}
             </div>
-          </section>
+          </OsoGlassSurface>
         </div>
       </section>
     </div>
   );
 }
 
-function Metric({
-  label,
-  value,
-  tone,
+function PosterCard({
+  poster,
+  deletingPosterId,
+  onEdit,
+  onDelete,
 }: {
-  label: string;
-  value: number;
-  tone: "cyan" | "emerald" | "purple";
+  poster: SerializedPoster;
+  deletingPosterId: string | null;
+  onEdit: () => void;
+  onDelete: () => void;
 }) {
-  const toneClass =
-    tone === "cyan"
-      ? "border-cyan-400/20 bg-cyan-400/10 text-cyan-200"
-      : tone === "emerald"
-        ? "border-emerald-400/20 bg-emerald-400/10 text-emerald-200"
-        : "border-purple-400/20 bg-purple-400/10 text-purple-200";
+  return (
+    <article className="group overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white/82 shadow-[0_16px_44px_rgba(15,23,42,0.055)] backdrop-blur-xl transition hover:-translate-y-1 hover:border-blue-200 hover:shadow-[0_22px_62px_rgba(15,23,42,0.085)]">
+      <div className="relative h-48 bg-slate-100">
+        <img
+          src={poster.imageUrl}
+          alt={poster.title}
+          className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.03]"
+        />
+
+        <div className="absolute left-3 top-3 flex flex-wrap gap-2">
+          {poster.isHero ? (
+            <span className="inline-flex items-center gap-1 rounded-full bg-blue-600 px-3 py-1 text-[10px] font-black uppercase text-white">
+              <Star className="h-3 w-3" />
+              Hero
+            </span>
+          ) : null}
+
+          {poster.isPublished ? (
+            <span className="rounded-full bg-emerald-500 px-3 py-1 text-[10px] font-black uppercase text-white">
+              Published
+            </span>
+          ) : (
+            <span className="rounded-full bg-yellow-400 px-3 py-1 text-[10px] font-black uppercase text-yellow-950">
+              Draft
+            </span>
+          )}
+        </div>
+      </div>
+
+      <div className="p-4">
+        <div className="mb-3 flex items-center justify-between gap-3">
+          <span className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-blue-700">
+            <Radio className="h-3 w-3" />
+            {poster.status}
+          </span>
+
+          <span className="text-xs font-bold text-slate-400">
+            Priority {poster.priority}
+          </span>
+        </div>
+
+        <h3 className="oso-heading text-lg font-black text-slate-950">
+          {poster.title}
+        </h3>
+
+        <p className="mt-2 line-clamp-2 text-sm font-medium leading-6 text-slate-600">
+          {poster.subtitle}
+        </p>
+
+        <p className="mt-3 text-xs font-bold text-slate-400">
+          Updated {new Date(poster.updatedAt).toLocaleString()}
+        </p>
+
+        <div className="mt-4 grid grid-cols-2 gap-2">
+          <button
+            type="button"
+            onClick={onEdit}
+            className="inline-flex items-center justify-center gap-2 rounded-xl border border-blue-200 bg-blue-50 px-3 py-2 text-xs font-black text-blue-700 transition hover:bg-blue-100"
+          >
+            <Eye className="h-3.5 w-3.5" />
+            Edit
+          </button>
+
+          <button
+            type="button"
+            onClick={onDelete}
+            disabled={deletingPosterId === poster.id}
+            className="inline-flex items-center justify-center gap-2 rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-xs font-black text-red-700 transition hover:bg-red-100 disabled:opacity-50"
+          >
+            {deletingPosterId === poster.id ? (
+              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+            ) : (
+              <Trash2 className="h-3.5 w-3.5" />
+            )}
+            Delete
+          </button>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function NoticeBox({ notice }: { notice: Notice }) {
+  const className =
+    notice.type === "success"
+      ? "border-emerald-200 bg-emerald-50 text-emerald-800"
+      : notice.type === "error"
+        ? "border-red-200 bg-red-50 text-red-800"
+        : "border-blue-200 bg-blue-50 text-blue-800";
 
   return (
-    <div className={`rounded-2xl border px-4 py-3 ${toneClass}`}>
-      <p className="text-[10px] font-black uppercase tracking-[0.18em] opacity-70">
-        {label}
-      </p>
-      <p className="mt-1 text-2xl font-black">{value}</p>
+    <div
+      className={`flex items-start gap-3 rounded-2xl border px-4 py-3 text-sm font-bold ${className}`}
+    >
+      {notice.type === "success" ? (
+        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />
+      ) : (
+        <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+      )}
+      {notice.text}
     </div>
   );
 }
@@ -826,10 +893,10 @@ function AdminInput({
   required?: boolean;
 }) {
   return (
-    <label className="block rounded-2xl border border-white/10 bg-black/25 p-4 transition focus-within:border-cyan-400/35 focus-within:bg-cyan-400/[0.04]">
-      <span className="text-[10px] font-black uppercase tracking-[0.2em] text-cyan-300">
+    <label className="block rounded-2xl border border-slate-200 bg-white/80 p-4 transition focus-within:border-blue-300 focus-within:bg-blue-50/35">
+      <span className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-700">
         {label}
-        {required && <span className="ml-1 text-red-300">*</span>}
+        {required ? <span className="ml-1 text-red-500">*</span> : null}
       </span>
 
       <input
@@ -837,10 +904,14 @@ function AdminInput({
         value={value}
         placeholder={placeholder}
         onChange={(event) => onChange(event.target.value)}
-        className="mt-3 w-full bg-transparent text-sm font-semibold text-white outline-none placeholder:text-white/20"
+        className="mt-3 w-full bg-transparent text-sm font-semibold text-slate-950 outline-none placeholder:text-slate-300"
       />
 
-      {helper && <p className="mt-2 text-xs text-white/35">{helper}</p>}
+      {helper ? (
+        <p className="mt-2 text-xs font-medium leading-5 text-slate-500">
+          {helper}
+        </p>
+      ) : null}
     </label>
   );
 }
@@ -863,10 +934,10 @@ function AdminTextarea({
   required?: boolean;
 }) {
   return (
-    <label className="block rounded-2xl border border-white/10 bg-black/25 p-4 transition focus-within:border-cyan-400/35 focus-within:bg-cyan-400/[0.04]">
-      <span className="text-[10px] font-black uppercase tracking-[0.2em] text-cyan-300">
+    <label className="block rounded-2xl border border-slate-200 bg-white/80 p-4 transition focus-within:border-blue-300 focus-within:bg-blue-50/35">
+      <span className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-700">
         {label}
-        {required && <span className="ml-1 text-red-300">*</span>}
+        {required ? <span className="ml-1 text-red-500">*</span> : null}
       </span>
 
       <textarea
@@ -874,10 +945,14 @@ function AdminTextarea({
         placeholder={placeholder}
         onChange={(event) => onChange(event.target.value)}
         rows={rows}
-        className="mt-3 w-full resize-none bg-transparent text-sm font-semibold leading-6 text-white outline-none placeholder:text-white/20"
+        className="mt-3 w-full resize-none bg-transparent text-sm font-semibold leading-6 text-slate-950 outline-none placeholder:text-slate-300"
       />
 
-      {helper && <p className="mt-2 text-xs text-white/35">{helper}</p>}
+      {helper ? (
+        <p className="mt-2 text-xs font-medium leading-5 text-slate-500">
+          {helper}
+        </p>
+      ) : null}
     </label>
   );
 }
@@ -897,8 +972,8 @@ function ToggleField({
       onClick={() => onChange(!checked)}
       className={
         checked
-          ? "flex items-center justify-between rounded-2xl border border-cyan-400/25 bg-cyan-400/10 p-4 text-cyan-100"
-          : "flex items-center justify-between rounded-2xl border border-white/10 bg-black/25 p-4 text-white/55"
+          ? "flex items-center justify-between rounded-2xl border border-blue-200 bg-blue-50 p-4 text-blue-700"
+          : "flex items-center justify-between rounded-2xl border border-slate-200 bg-white/80 p-4 text-slate-500"
       }
     >
       <span className="text-xs font-black uppercase tracking-[0.18em]">
@@ -908,18 +983,30 @@ function ToggleField({
       <span
         className={
           checked
-            ? "flex h-6 w-11 items-center rounded-full bg-cyan-300 p-1"
-            : "flex h-6 w-11 items-center rounded-full bg-white/15 p-1"
+            ? "flex h-6 w-11 items-center rounded-full bg-blue-600 p-1"
+            : "flex h-6 w-11 items-center rounded-full bg-slate-300 p-1"
         }
       >
         <span
           className={
             checked
-              ? "h-4 w-4 translate-x-5 rounded-full bg-black transition"
-              : "h-4 w-4 rounded-full bg-white/65 transition"
+              ? "h-4 w-4 translate-x-5 rounded-full bg-white transition"
+              : "h-4 w-4 rounded-full bg-white transition"
           }
         />
       </span>
     </button>
+  );
+}
+
+function EmptyPosterState() {
+  return (
+    <div className="rounded-[1.5rem] border border-dashed border-slate-300 bg-white/70 p-8 text-center text-slate-500">
+      <Plus className="mx-auto mb-3 h-8 w-8 text-blue-600" />
+      <p className="font-black text-slate-700">No posters yet.</p>
+      <p className="mt-2 text-sm font-medium">
+        Fill the form or use Sample to create your first poster.
+      </p>
+    </div>
   );
 }

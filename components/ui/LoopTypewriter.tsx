@@ -1,14 +1,20 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type LoopTypewriterProps = {
   text: string;
   className?: string;
   cursorClassName?: string;
+
   speedMs?: number;
   deleteSpeedMs?: number;
   pauseMs?: number;
+
+  typeSpeed?: number;
+  deleteSpeed?: number;
+  holdDelay?: number;
+
   startDelayMs?: number;
 };
 
@@ -16,78 +22,86 @@ export default function LoopTypewriter({
   text,
   className = "",
   cursorClassName = "",
-  speedMs = 38,
-  deleteSpeedMs = 22,
-  pauseMs = 1700,
+  speedMs,
+  deleteSpeedMs,
+  pauseMs,
+  typeSpeed,
+  deleteSpeed,
+  holdDelay,
   startDelayMs = 250,
 }: LoopTypewriterProps) {
-  const [visibleCount, setVisibleCount] = useState(0);
-  const [phase, setPhase] = useState<"starting" | "typing" | "pausing" | "deleting">(
-    "starting",
-  );
+  const cleanText = useMemo(() => text.trim(), [text]);
 
-  const timeoutRef = useRef<number | null>(null);
+  const typingDelay = typeSpeed ?? speedMs ?? 42;
+  const deletingDelay = deleteSpeed ?? deleteSpeedMs ?? 22;
+  const holdingDelay = holdDelay ?? pauseMs ?? 1800;
+
+  const [displayText, setDisplayText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
 
   useEffect(() => {
-    if (timeoutRef.current !== null) {
-      window.clearTimeout(timeoutRef.current);
-    }
+    setDisplayText("");
+    setIsDeleting(false);
+    setHasStarted(false);
+  }, [cleanText]);
 
-    if (!text.trim()) {
-      setVisibleCount(0);
+  useEffect(() => {
+    if (!cleanText) {
       return;
     }
 
-    if (phase === "starting") {
-      timeoutRef.current = window.setTimeout(() => {
-        setPhase("typing");
+    if (!hasStarted) {
+      const starter = window.setTimeout(() => {
+        setHasStarted(true);
       }, startDelayMs);
+
+      return () => window.clearTimeout(starter);
     }
 
-    if (phase === "typing") {
-      timeoutRef.current = window.setTimeout(() => {
-        setVisibleCount((current) => {
-          if (current >= text.length) {
-            setPhase("pausing");
-            return current;
-          }
+    const isFullyTyped = displayText === cleanText;
+    const isFullyDeleted = displayText.length === 0;
 
-          return current + 1;
-        });
-      }, speedMs);
+    let delay = isDeleting ? deletingDelay : typingDelay;
+
+    if (!isDeleting && isFullyTyped) {
+      delay = holdingDelay;
     }
 
-    if (phase === "pausing") {
-      timeoutRef.current = window.setTimeout(() => {
-        setPhase("deleting");
-      }, pauseMs);
-    }
+    const timer = window.setTimeout(() => {
+      if (!isDeleting) {
+        if (isFullyTyped) {
+          setIsDeleting(true);
+          return;
+        }
 
-    if (phase === "deleting") {
-      timeoutRef.current = window.setTimeout(() => {
-        setVisibleCount((current) => {
-          if (current <= 0) {
-            setPhase("typing");
-            return 0;
-          }
-
-          return current - 1;
-        });
-      }, deleteSpeedMs);
-    }
-
-    return () => {
-      if (timeoutRef.current !== null) {
-        window.clearTimeout(timeoutRef.current);
+        setDisplayText(cleanText.slice(0, displayText.length + 1));
+        return;
       }
-    };
-  }, [deleteSpeedMs, pauseMs, phase, speedMs, startDelayMs, text]);
 
-  const visibleText = useMemo(() => text.slice(0, visibleCount), [text, visibleCount]);
+      if (isFullyDeleted) {
+        setIsDeleting(false);
+        return;
+      }
+
+      setDisplayText(cleanText.slice(0, displayText.length - 1));
+    }, delay);
+
+    return () => window.clearTimeout(timer);
+  }, [
+    cleanText,
+    deletingDelay,
+    displayText,
+    hasStarted,
+    holdingDelay,
+    isDeleting,
+    startDelayMs,
+    typingDelay,
+  ]);
 
   return (
-    <span className={className} aria-label={text}>
-      <span aria-hidden="true">{visibleText}</span>
+    <span className={className} aria-label={cleanText || text}>
+      <span>{displayText}</span>
       <span
         aria-hidden="true"
         className={`ml-1 inline-block h-[0.85em] w-[4px] translate-y-1 animate-pulse rounded-full bg-blue-600 ${cursorClassName}`}

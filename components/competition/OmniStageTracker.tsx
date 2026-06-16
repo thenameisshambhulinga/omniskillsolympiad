@@ -1,115 +1,228 @@
 "use client";
 
+import { CheckCircle2, Circle, Crown, Lock, Zap } from "lucide-react";
 import { motion } from "framer-motion";
-import { Check } from "lucide-react";
 
-import {
-  VIBGYOR_PROGRESS_STAGES,
-  getStageStatus,
-  type VibgyorJourneySnapshot,
-} from "@/lib/profile/vibgyor-progress";
+import CompetitionGlassPanel, {
+  CompetitionProgressBar,
+  CompetitionSectionHeading,
+  CompetitionStatusPill,
+  clampPercent,
+} from "@/components/competition/CompetitionGlassPanel";
 
-export default function OmniStageTracker({
-  snapshot,
-}: {
-  snapshot: VibgyorJourneySnapshot;
-}) {
+const VIBGYOR_STAGES = [
+  {
+    name: "Violet",
+    title: "Electronics Explorer",
+    focus: "Foundation electronics",
+    tone: "bg-violet-500",
+  },
+  {
+    name: "Indigo",
+    title: "Circuit Builder",
+    focus: "Analog and digital circuits",
+    tone: "bg-indigo-500",
+  },
+  {
+    name: "Blue",
+    title: "Embedded Engineer",
+    focus: "Microcontrollers and firmware",
+    tone: "bg-blue-600",
+  },
+  {
+    name: "Green",
+    title: "Product Developer",
+    focus: "PCB and product engineering",
+    tone: "bg-emerald-600",
+  },
+  {
+    name: "Yellow",
+    title: "IoT Innovator",
+    focus: "Sensors and smart systems",
+    tone: "bg-yellow-500",
+  },
+  {
+    name: "Orange",
+    title: "Automation Specialist",
+    focus: "Robotics and automation",
+    tone: "bg-orange-500",
+  },
+  {
+    name: "Red",
+    title: "Innovation Champion",
+    focus: "Grand challenges and R&D",
+    tone: "bg-red-500",
+  },
+];
+
+export default function OmniStageTracker({ snapshot }: { snapshot: unknown }) {
+  const data = toRecord(snapshot);
+  const currentStage = getDisplayValue(data.currentStage, "name", "Violet");
+  const completedStages = getArray(data.completedStages)
+    .map((stage) => getDisplayValue(stage, "name", ""))
+    .filter(Boolean);
+  const completedSteps = getNumber(data, "completedSteps", 0);
+  const totalSteps = Math.max(1, getNumber(data, "totalSteps", 28));
+  const progress = clampPercent(
+    getNumber(data, "journeyCompletion", (completedSteps / totalSteps) * 100),
+  );
+
+  const activeIndex = Math.max(
+    0,
+    VIBGYOR_STAGES.findIndex(
+      (stage) => stage.name.toLowerCase() === currentStage.toLowerCase(),
+    ),
+  );
+
   return (
-    <section className="relative overflow-hidden rounded-[3rem] border border-white/10 bg-white/[0.04] p-6 shadow-[0_34px_150px_rgba(0,0,0,0.45)] backdrop-blur-2xl lg:p-8">
-      <div className="relative z-10">
-        <p className="text-sm font-black uppercase tracking-[0.32em] text-purple-300">
-          VIBGYOR Stage Tracker
-        </p>
+    <CompetitionGlassPanel className="p-6 sm:p-8">
+      <CompetitionSectionHeading
+        eyebrow="VIBGYOR Stage Tracker"
+        title="A game-like engineering progression map."
+        description="Students move through VIBGYOR levels from electronics foundation to innovation championship."
+        icon={<Crown className="h-5 w-5" />}
+      />
 
-        <div className="mt-8 grid gap-4 md:grid-cols-7">
-          {VIBGYOR_PROGRESS_STAGES.map((stage, index) => {
-            const status = getStageStatus(stage, snapshot.siliconPoints);
-            const completed = status === "COMPLETED";
-            const current = status === "IN_PROGRESS";
+      <div className="mt-7 rounded-[1.5rem] border border-slate-200 bg-white/80 p-5 shadow-sm backdrop-blur-xl">
+        <div className="mb-3 flex items-center justify-between gap-4">
+          <CompetitionStatusPill label={`${progress}% Journey`} tone="blue" />
+          <p className="text-sm font-black text-slate-950">
+            {completedSteps}/{totalSteps} steps
+          </p>
+        </div>
 
-            return (
-              <motion.article
-                key={stage.key}
-                initial={{ opacity: 0, y: 18 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.42, delay: index * 0.04 }}
-                whileHover={{ y: -5, scale: 1.012 }}
-                className={`relative overflow-hidden rounded-[2rem] border p-5 text-center ${
-                  current
-                    ? "border-cyan-400/35 bg-cyan-400/10 shadow-[0_0_70px_rgba(34,211,238,0.16)]"
-                    : completed
-                      ? "border-emerald-400/25 bg-emerald-400/10"
-                      : "border-white/10 bg-black/25"
-                }`}
-              >
+        <CompetitionProgressBar value={progress} tone="blue" />
+      </div>
+
+      <div className="mt-7 grid gap-4 md:grid-cols-2 xl:grid-cols-7">
+        {VIBGYOR_STAGES.map((stage, index) => {
+          const isCompleted =
+            index < activeIndex ||
+            completedStages.some(
+              (item) => item.toLowerCase() === stage.name.toLowerCase(),
+            );
+          const isActive = index === activeIndex;
+          const isLocked = index > activeIndex;
+
+          return (
+            <motion.article
+              key={stage.name}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.18 }}
+              transition={{
+                duration: 0.36,
+                delay: index * 0.04,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className={[
+                "relative isolate overflow-hidden rounded-[1.5rem] border p-5 shadow-sm backdrop-blur-xl transition hover:-translate-y-1",
+                isActive
+                  ? "border-blue-200 bg-blue-50/85 shadow-[0_18px_44px_rgba(37,99,235,0.12)]"
+                  : isCompleted
+                    ? "border-emerald-200 bg-emerald-50/70"
+                    : "border-slate-200 bg-white/80",
+              ].join(" ")}
+            >
+              <div
+                aria-hidden="true"
+                className={`absolute left-0 top-0 h-1.5 w-full ${stage.tone}`}
+              />
+
+              <div className="flex items-center justify-between gap-3">
                 <div
-                  className="pointer-events-none absolute inset-x-0 top-0 h-px"
-                  style={{
-                    backgroundColor:
-                      completed || current
-                        ? stage.color
-                        : "rgba(255,255,255,0.1)",
-                  }}
-                />
-
-                <div
-                  className="mx-auto grid h-16 w-16 place-items-center rounded-2xl border text-2xl font-black"
-                  style={{
-                    borderColor:
-                      completed || current
-                        ? stage.color
-                        : "rgba(255,255,255,0.12)",
-                    backgroundColor:
-                      completed || current
-                        ? stage.softColor
-                        : "rgba(255,255,255,0.04)",
-                    color:
-                      completed || current
-                        ? stage.color
-                        : "rgba(255,255,255,0.36)",
-                  }}
+                  className={[
+                    "flex h-11 w-11 items-center justify-center rounded-2xl border",
+                    isActive
+                      ? "border-blue-200 bg-white text-blue-700"
+                      : isCompleted
+                        ? "border-emerald-200 bg-white text-emerald-700"
+                        : "border-slate-200 bg-slate-50 text-slate-400",
+                  ].join(" ")}
                 >
-                  {completed ? (
-                    <Check className="h-7 w-7" />
-                  ) : current ? (
-                    "●"
+                  {isCompleted ? (
+                    <CheckCircle2 className="h-5 w-5" />
+                  ) : isActive ? (
+                    <Zap className="h-5 w-5" />
+                  ) : isLocked ? (
+                    <Lock className="h-5 w-5" />
                   ) : (
-                    "○"
+                    <Circle className="h-5 w-5" />
                   )}
                 </div>
 
-                <p className="mt-5 text-[10px] font-black uppercase tracking-[0.22em] text-white/38">
-                  {status.replace("_", " ")}
-                </p>
+                <span className="text-xs font-black text-slate-400">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+              </div>
 
-                <h3 className="mt-2 text-lg font-black text-white">
-                  {stage.letter}
-                </h3>
+              <p className="mt-5 text-xs font-black uppercase tracking-[0.18em] text-slate-500">
+                {stage.name}
+              </p>
 
-                <p className="mt-1 text-sm font-bold text-white/55">
-                  {stage.name}
-                </p>
-              </motion.article>
-            );
-          })}
-        </div>
+              <h3 className="oso-heading mt-2 text-lg font-black leading-tight text-slate-950">
+                {stage.title}
+              </h3>
 
-        <div className="mt-8 flex flex-wrap gap-3">
-          <Legend symbol="✓" label="Completed" />
-          <Legend symbol="●" label="Current" />
-          <Legend symbol="○" label="Locked" />
-        </div>
+              <p className="mt-3 text-sm font-medium leading-6 text-slate-600">
+                {stage.focus}
+              </p>
+
+              <div className="mt-5">
+                <CompetitionStatusPill
+                  label={
+                    isActive ? "Active" : isCompleted ? "Completed" : "Locked"
+                  }
+                  tone={isActive ? "blue" : isCompleted ? "emerald" : "slate"}
+                />
+              </div>
+            </motion.article>
+          );
+        })}
       </div>
-    </section>
+    </CompetitionGlassPanel>
   );
 }
 
-function Legend({ symbol, label }: { symbol: string; label: string }) {
-  return (
-    <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/25 px-4 py-2 text-sm font-bold text-white/60">
-      <span className="text-cyan-200">{symbol}</span>
-      {label}
-    </div>
-  );
+function toRecord(value: unknown): Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value)
+    ? (value as Record<string, unknown>)
+    : {};
+}
+
+function getNumber(record: Record<string, unknown>, key: string, fallback: number) {
+  const value = record[key];
+
+  return typeof value === "number" && Number.isFinite(value) ? value : fallback;
+}
+
+function getArray(value: unknown): unknown[] {
+  return Array.isArray(value) ? value : [];
+}
+
+function getDisplayValue(value: unknown, preferredKey: string, fallback: string) {
+  if (typeof value === "string" && value.trim()) {
+    return value.trim();
+  }
+
+  if (typeof value === "object" && value !== null && !Array.isArray(value)) {
+    const record = value as Record<string, unknown>;
+    const preferred = record[preferredKey];
+    const name = record.name;
+    const title = record.title;
+
+    if (typeof preferred === "string" && preferred.trim()) {
+      return preferred.trim();
+    }
+
+    if (typeof name === "string" && name.trim()) {
+      return name.trim();
+    }
+
+    if (typeof title === "string" && title.trim()) {
+      return title.trim();
+    }
+  }
+
+  return fallback;
 }

@@ -21,10 +21,11 @@ export default function OsoSummitJourneyBand() {
         </p>
       </div>
 
-      <div className="mx-auto mt-7 flex max-w-[1200px] justify-center overflow-visible px-4">
-       <OsoJourneyIllustration className="max-h-[360px] max-w-[1200px] sm:max-h-[390px] lg:max-h-[420px]" />
+      <div className="mx-auto mt-6 flex max-w-[1160px] justify-center overflow-visible px-4">
+        <OsoJourneyIllustration className="max-h-[340px] max-w-[1080px] sm:max-h-[380px] lg:max-h-[410px]" />
       </div>
-      <div className="mx-auto mt-7 grid max-w-4xl gap-3 sm:grid-cols-3">
+
+      <div className="mx-auto mt-6 grid max-w-4xl gap-3 sm:grid-cols-3">
         <JourneySignal
           icon={<Route className="h-5 w-5" />}
           title="Onboarding"
@@ -65,7 +66,7 @@ function JourneySignal({
   text: string;
 }) {
   return (
-    <div className="rounded-[1.25rem] border border-slate-200 bg-white px-5 py-4 text-center shadow-[0_10px_28px_rgba(15,23,42,0.045)] transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-[0_14px_34px_rgba(15,23,42,0.075)]">
+    <div className="rounded-[1.25rem] border border-slate-200 bg-white/88 px-5 py-4 text-center shadow-[0_10px_28px_rgba(15,23,42,0.045)] backdrop-blur-xl transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-[0_14px_34px_rgba(15,23,42,0.075)]">
       <div className="mx-auto inline-flex h-10 w-10 items-center justify-center rounded-full bg-blue-50 text-blue-700">
         {icon}
       </div>

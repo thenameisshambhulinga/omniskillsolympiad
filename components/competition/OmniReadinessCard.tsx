@@ -1,104 +1,152 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Gauge, Medal, Route, Zap } from "lucide-react";
+import { Activity, BrainCircuit, Gauge, Lightbulb, Target } from "lucide-react";
 
-import type { VibgyorJourneySnapshot } from "@/lib/profile/vibgyor-progress";
+import CompetitionGlassPanel, {
+  CompetitionMetricTile,
+  CompetitionProgressBar,
+  CompetitionSectionHeading,
+  CompetitionStatusPill,
+  clampPercent,
+} from "@/components/competition/CompetitionGlassPanel";
 
-export default function OmniReadinessCard({
-  snapshot,
-}: {
-  snapshot: VibgyorJourneySnapshot;
-}) {
-  const metrics = [
-    {
-      label: "Tier",
-      value: snapshot.currentTier,
-      helper: `${snapshot.tierProgressPercent}% tier progress`,
-      icon: Medal,
-    },
-    {
-      label: "Silicon Points",
-      value: snapshot.siliconPoints,
-      helper: "Progression score",
-      icon: Zap,
-    },
-    {
-      label: "Journey Completion",
-      value: `${snapshot.journeyCompletion}%`,
-      helper: `${snapshot.completedSteps}/${snapshot.totalSteps} steps`,
-      icon: Route,
-    },
-  ];
+export default function OmniReadinessCard({ snapshot }: { snapshot: unknown }) {
+  const data = toRecord(snapshot);
+  const score = clampPercent(getNumber(data, "readinessScore", 0));
+  const level = getString(data, "readinessLevel", getReadinessLabel(score));
+  const completion = clampPercent(getNumber(data, "journeyCompletion", 0));
+  const tierProgress = clampPercent(getNumber(data, "tierProgressPercent", 0));
+  const remainingSteps = Math.max(0, getNumber(data, "remainingSteps", 0));
+  const currentStage = getDisplayValue(data.currentStage, "name", "Foundation");
 
   return (
-    <motion.article
-      initial={{ opacity: 0, y: 18, scale: 0.98 }}
-      whileInView={{ opacity: 1, y: 0, scale: 1 }}
-      viewport={{ once: true, amount: 0.35 }}
-      whileHover={{ y: -6, scale: 1.01 }}
-      transition={{ duration: 0.45 }}
-      className="relative overflow-hidden rounded-[3rem] border border-emerald-400/20 bg-emerald-400/10 p-6 shadow-[0_30px_130px_rgba(0,0,0,0.45)] backdrop-blur-2xl"
-    >
-      <div className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-emerald-400/20 blur-3xl" />
+    <CompetitionGlassPanel className="p-6 sm:p-8">
+      <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+        <div>
+          <CompetitionSectionHeading
+            eyebrow="OMNI Readiness"
+            title="Competition readiness snapshot."
+            description="This card converts journey movement into a simple readiness signal for students."
+            icon={<Gauge className="h-5 w-5" />}
+          />
 
-      <div className="relative z-10">
-        <div className="flex items-center gap-3">
-          <Gauge className="h-5 w-5 text-emerald-200" />
+          <div className="mt-7 rounded-[1.5rem] border border-slate-200 bg-white/80 p-6 shadow-sm backdrop-blur-xl">
+            <div className="flex items-end justify-between gap-5">
+              <div>
+                <p className="text-xs font-black uppercase tracking-[0.2em] text-slate-500">
+                  Readiness Score
+                </p>
 
-          <p className="text-xs font-black uppercase tracking-[0.28em] text-emerald-300">
-            Engineering Readiness
-          </p>
-        </div>
-
-        <div className="mt-7 grid gap-6 xl:grid-cols-[220px_minmax(0,1fr)] xl:items-center">
-          <div className="flex flex-col items-center text-center">
-            <div
-              className="grid h-44 w-44 place-items-center rounded-full"
-              style={{
-                background: `conic-gradient(rgb(52 211 153) ${snapshot.readinessScore}%, rgba(255,255,255,0.08) 0)`,
-              }}
-            >
-              <div className="grid h-32 w-32 place-items-center rounded-full border border-white/10 bg-black/70 backdrop-blur-xl">
-                <span className="text-4xl font-black text-white">
-                  {snapshot.readinessScore}%
-                </span>
+                <p className="oso-heading mt-2 text-5xl font-black text-slate-950">
+                  {score}%
+                </p>
               </div>
+
+              <CompetitionStatusPill
+                label={level}
+                tone={score >= 75 ? "emerald" : score >= 45 ? "yellow" : "blue"}
+              />
             </div>
 
-            <h3 className="mt-5 text-2xl font-black text-white">
-              {snapshot.readinessLevel}
-            </h3>
-          </div>
-
-          <div className="grid gap-4 sm:grid-cols-3">
-            {metrics.map((metric) => {
-              const Icon = metric.icon;
-
-              return (
-                <div
-                  key={metric.label}
-                  className="rounded-[2rem] border border-white/10 bg-black/25 p-5"
-                >
-                  <Icon className="h-5 w-5 text-emerald-200" />
-
-                  <p className="mt-4 text-[10px] font-black uppercase tracking-[0.22em] text-white/35">
-                    {metric.label}
-                  </p>
-
-                  <p className="mt-3 truncate text-2xl font-black text-white">
-                    {metric.value}
-                  </p>
-
-                  <p className="mt-2 text-sm font-semibold text-white/50">
-                    {metric.helper}
-                  </p>
-                </div>
-              );
-            })}
+            <div className="mt-5">
+              <CompetitionProgressBar
+                value={score}
+                tone={score >= 75 ? "emerald" : score >= 45 ? "yellow" : "blue"}
+              />
+            </div>
           </div>
         </div>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          <CompetitionMetricTile
+            icon={<BrainCircuit className="h-5 w-5" />}
+            label="Current Stage"
+            value={currentStage}
+            helper="Active engineering stage"
+            tone="blue"
+          />
+
+          <CompetitionMetricTile
+            icon={<Activity className="h-5 w-5" />}
+            label="Journey"
+            value={`${completion}%`}
+            helper="Overall VIBGYOR movement"
+            tone="emerald"
+          />
+
+          <CompetitionMetricTile
+            icon={<Target className="h-5 w-5" />}
+            label="Tier Growth"
+            value={`${tierProgress}%`}
+            helper="Progress toward the next tier"
+            tone="yellow"
+          />
+
+          <CompetitionMetricTile
+            icon={<Lightbulb className="h-5 w-5" />}
+            label="Remaining Steps"
+            value={remainingSteps}
+            helper="Growth path still open"
+            tone="cyan"
+          />
+        </div>
       </div>
-    </motion.article>
+    </CompetitionGlassPanel>
   );
+}
+
+function getReadinessLabel(score: number) {
+  if (score >= 85) {
+    return "Competition Ready";
+  }
+
+  if (score >= 65) {
+    return "Strong Progress";
+  }
+
+  if (score >= 40) {
+    return "Building Readiness";
+  }
+
+  return "Awaiting Evaluation";
+}
+
+function toRecord(value: unknown): Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value)
+    ? (value as Record<string, unknown>)
+    : {};
+}
+
+function getNumber(record: Record<string, unknown>, key: string, fallback: number) {
+  const value = record[key];
+
+  return typeof value === "number" && Number.isFinite(value) ? value : fallback;
+}
+
+function getString(record: Record<string, unknown>, key: string, fallback: string) {
+  const value = record[key];
+
+  return typeof value === "string" && value.trim() ? value.trim() : fallback;
+}
+
+function getDisplayValue(value: unknown, preferredKey: string, fallback: string) {
+  if (typeof value === "string" && value.trim()) {
+    return value.trim();
+  }
+
+  if (typeof value === "object" && value !== null && !Array.isArray(value)) {
+    const record = value as Record<string, unknown>;
+    const preferred = record[preferredKey];
+    const name = record.name;
+
+    if (typeof preferred === "string" && preferred.trim()) {
+      return preferred.trim();
+    }
+
+    if (typeof name === "string" && name.trim()) {
+      return name.trim();
+    }
+  }
+
+  return fallback;
 }

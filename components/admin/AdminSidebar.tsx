@@ -67,7 +67,9 @@ const navItems: AdminNavItem[] = [
 ];
 
 function isNavActive(pathname: string, item: AdminNavItem) {
-  if (item.href === "/admin") return pathname === "/admin";
+  if (item.href === "/admin") {
+    return pathname === "/admin";
+  }
 
   return item.match.some(
     (pattern) => pathname === pattern || pathname.startsWith(`${pattern}/`),
@@ -82,32 +84,28 @@ export default function AdminSidebar({
   const pathname = usePathname();
 
   return (
-    <div className="relative flex h-full flex-col overflow-hidden rounded-[2.25rem] border border-white/10 bg-white/[0.035] p-4 shadow-[0_30px_120px_rgba(0,0,0,0.42)] backdrop-blur-2xl">
+    <div className="relative flex h-full flex-col overflow-hidden rounded-[2.25rem] border border-slate-200/90 bg-white/78 p-4 shadow-[0_24px_70px_rgba(15,23,42,0.08)] backdrop-blur-2xl">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.16),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(168,85,247,0.12),transparent_34%)]"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -right-20 -top-20 h-52 w-52 rounded-full bg-cyan-400/10 blur-3xl"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(37,99,235,0.09),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(250,204,21,0.10),transparent_34%)]"
       />
 
       <div className="relative z-10 flex h-full flex-col">
-        <div className="rounded-[1.75rem] border border-cyan-400/20 bg-cyan-400/10 p-4 shadow-[0_0_34px_rgba(34,211,238,0.1)]">
+        <div className="rounded-[1.75rem] border border-blue-200 bg-blue-50/70 p-4 shadow-[0_12px_34px_rgba(37,99,235,0.08)]">
           <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-cyan-400/25 bg-slate-950/55 text-cyan-200 shadow-[0_0_28px_rgba(34,211,238,0.16)]">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-blue-200 bg-white text-blue-700 shadow-sm">
               <Crown className="h-6 w-6" />
             </div>
 
             <div>
-              <p className="font-black text-white">Administrator</p>
-              <p className="mt-1 text-xs font-semibold uppercase tracking-[0.18em] text-white/45">
+              <p className="font-black text-slate-950">Administrator</p>
+              <p className="mt-1 text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
                 Command Authority
               </p>
             </div>
           </div>
 
-          <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-emerald-400/25 bg-emerald-400/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-emerald-200">
+          <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-emerald-700">
             <ShieldCheck className="h-3.5 w-3.5" />
             Admin Verified
           </div>
@@ -135,22 +133,22 @@ export default function AdminSidebar({
                   aria-current={isActive ? "page" : undefined}
                   className={
                     isActive
-                      ? "group relative flex items-start gap-3 overflow-hidden rounded-2xl border border-cyan-400/30 bg-cyan-400/15 px-4 py-3 text-cyan-100 shadow-[0_0_34px_rgba(34,211,238,0.14)] transition focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/50"
-                      : "group relative flex items-start gap-3 overflow-hidden rounded-2xl border border-transparent px-4 py-3 text-white/62 transition hover:border-white/10 hover:bg-white/[0.055] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/50"
+                      ? "group relative flex items-start gap-3 overflow-hidden rounded-2xl border border-blue-200 bg-blue-600 px-4 py-3 text-white shadow-[0_14px_30px_rgba(37,99,235,0.22)] transition focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
+                      : "group relative flex items-start gap-3 overflow-hidden rounded-2xl border border-transparent px-4 py-3 text-slate-600 transition hover:border-slate-200 hover:bg-white hover:text-slate-950 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
                   }
                 >
-                  {isActive && (
+                  {isActive ? (
                     <motion.span
                       layoutId="admin-active-indicator"
-                      className="absolute left-0 top-1/2 h-9 w-1 -translate-y-1/2 rounded-r-full bg-cyan-300 shadow-[0_0_18px_rgba(34,211,238,0.9)]"
+                      className="absolute left-0 top-1/2 h-9 w-1 -translate-y-1/2 rounded-r-full bg-white"
                     />
-                  )}
+                  ) : null}
 
                   <span
                     className={
                       isActive
-                        ? "relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-cyan-400/25 bg-cyan-400/10 text-cyan-200"
-                        : "relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-white/45 transition group-hover:text-cyan-200"
+                        ? "relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/20 bg-white/15 text-white"
+                        : "relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-500 transition group-hover:border-blue-200 group-hover:text-blue-700"
                     }
                   >
                     <Icon className="h-5 w-5" />
@@ -160,19 +158,16 @@ export default function AdminSidebar({
                     <span className="block text-sm font-black">
                       {item.label}
                     </span>
-                    <span className="mt-1 block text-[11px] font-semibold leading-5 text-white/38">
+                    <span
+                      className={
+                        isActive
+                          ? "mt-1 block text-[11px] font-semibold leading-5 text-white/76"
+                          : "mt-1 block text-[11px] font-semibold leading-5 text-slate-400"
+                      }
+                    >
                       {item.description}
                     </span>
                   </span>
-
-                  {isActive && (
-                    <motion.span
-                      aria-hidden="true"
-                      animate={{ opacity: [0.3, 0.75, 0.3] }}
-                      transition={{ duration: 2.2, repeat: Infinity }}
-                      className="absolute inset-0 bg-[radial-gradient(circle_at_left,rgba(34,211,238,0.2),transparent_55%)]"
-                    />
-                  )}
                 </Link>
               </motion.div>
             );
@@ -183,21 +178,21 @@ export default function AdminSidebar({
           </div>
         </nav>
 
-        <div className="mt-auto rounded-[1.5rem] border border-purple-400/20 bg-purple-400/10 p-4">
+        <div className="mt-auto rounded-[1.5rem] border border-yellow-200 bg-yellow-50/80 p-4">
           <div className="flex items-center gap-3">
-            <div className="rounded-2xl border border-purple-400/25 bg-purple-400/10 p-2.5">
-              <BarChart3 className="h-5 w-5 text-purple-200" />
+            <div className="rounded-2xl border border-yellow-200 bg-white p-2.5 text-yellow-700">
+              <BarChart3 className="h-5 w-5" />
             </div>
 
             <div>
-              <p className="text-sm font-black text-white">Command Sync</p>
-              <p className="mt-1 text-xs text-white/45">
+              <p className="text-sm font-black text-slate-950">Command Sync</p>
+              <p className="mt-1 text-xs font-medium leading-5 text-slate-600">
                 One admin space. Zero duplicate control.
               </p>
             </div>
           </div>
 
-          <div className="mt-4 h-2 overflow-hidden rounded-full bg-white/10">
+          <div className="mt-4 h-2 overflow-hidden rounded-full bg-white">
             <motion.div
               animate={{ x: ["-20%", "0%", "-20%"] }}
               transition={{
@@ -205,7 +200,7 @@ export default function AdminSidebar({
                 repeat: Infinity,
                 ease: "easeInOut",
               }}
-              className="h-full w-3/4 rounded-full bg-gradient-to-r from-cyan-300 via-blue-400 to-purple-400 shadow-[0_0_24px_rgba(34,211,238,0.32)]"
+              className="h-full w-3/4 rounded-full bg-gradient-to-r from-blue-500 via-cyan-400 to-yellow-400"
             />
           </div>
         </div>

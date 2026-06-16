@@ -1,6 +1,9 @@
 "use client";
 
 import type { ReactNode } from "react";
+import OsoIllustrationAsset, {
+  OSO_ILLUSTRATIONS,
+} from "@/components/landing/clean/OsoIllustrationAsset";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
@@ -127,141 +130,157 @@ export default function OsoLivePosterBoard({
   const activePoster = safePosters[activeIndex];
 
   return (
-    <section className="overflow-hidden rounded-[2rem] border border-slate-200 bg-[#f8f9fa] shadow-[0_24px_70px_rgba(15,23,42,0.08)]">
-      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 bg-white px-6 py-5 sm:px-7">
-        <div>
-          <p className="text-xs font-black uppercase tracking-[0.22em] text-blue-700">
-            Live Poster Board
-          </p>
-
-          <h2 className="oso-heading mt-1 min-h-[2.4rem] text-[1.9rem] font-black leading-tight text-slate-950">
-            <LoopTypewriter
-            text="Latest OSO Updates"
-            speedMs={45}
-            deleteSpeedMs={25}
-            pauseMs={2200}
-              startDelayMs={500}
-             />
-</h2>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <span className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-black text-emerald-700">
-            Active
-          </span>
-
-          <div className="flex items-center gap-2">
-            <PosterNavButton
-              label="Show previous poster"
-              onClick={() =>
-                setActiveIndex((current) =>
-                  current === 0 ? safePosters.length - 1 : current - 1,
-                )
-              }
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </PosterNavButton>
-
-            <PosterNavButton
-              label="Show next poster"
-              onClick={() =>
-                setActiveIndex((current) => (current + 1) % safePosters.length)
-              }
-            >
-              <ChevronRight className="h-4 w-4" />
-            </PosterNavButton>
-          </div>
-        </div>
+    <section className="relative overflow-hidden rounded-[2rem] border border-slate-200 bg-[#f8f9fa] shadow-[0_24px_70px_rgba(15,23,42,0.08)]">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 opacity-[0.22]"
+      >
+        <OsoIllustrationAsset
+          src={OSO_ILLUSTRATIONS.postCardPattern}
+          alt="Abstract OSO post card background pattern"
+          decorative
+          imageClassName="h-full w-full object-cover mix-blend-multiply"
+          className="h-full w-full"
+        />
       </div>
 
-      <div className="p-5 sm:p-6">
-        <AnimatePresence mode="wait">
-          <motion.article
-            key={activePoster.id}
-            initial={{ opacity: 0, y: 18, scale: 0.985 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -18, scale: 0.985 }}
-            transition={{ duration: 0.28, ease: "easeOut" }}
-          >
-            <Link
-              href={activePoster.ctaHref}
-              className="group grid overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm transition duration-200 hover:-translate-y-1 hover:border-blue-300 hover:shadow-[0_20px_48px_rgba(15,23,42,0.1)] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 md:grid-cols-[260px_1fr]"
-            >
-              <div className="relative min-h-[235px] overflow-hidden border-b border-slate-200 bg-slate-200 md:border-b-0 md:border-r">
-                {activePoster.imageUrl ? (
-                  <img
-                    src={activePoster.imageUrl}
-                    alt={activePoster.title}
-                    loading="lazy"
-                    className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.035]"
-                  />
-                ) : (
-                  <div className="flex h-full w-full items-center justify-center bg-[linear-gradient(135deg,#dbeafe,#eef2ff)]">
-                    <div className="rounded-[1.4rem] border border-white/70 bg-white/85 px-8 py-6 text-center shadow-lg backdrop-blur">
-                      <Sparkles className="mx-auto h-8 w-8 text-blue-700" />
-                      <p className="mt-3 text-xs font-black uppercase tracking-[0.22em] text-blue-700">
-                        OSO Live
-                      </p>
-                    </div>
-                  </div>
-                )}
-              </div>
+      <div className="relative z-10">
+        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 bg-white px-6 py-5 sm:px-7">
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.22em] text-blue-700">
+              Live Poster Board
+            </p>
+<h2 className="oso-heading mt-1 min-h-10 text-[1.9rem] font-black leading-tight text-slate-950">
+  <LoopTypewriter
+    text="Latest OSO Updates"
+    speedMs={45}
+    deleteSpeedMs={25}
+    pauseMs={2200}
+    startDelayMs={500}
+  />
+</h2>
+          </div>
 
-              <div className="flex flex-col justify-center p-6 sm:p-7">
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <span className="w-fit rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-[11px] font-black uppercase tracking-[0.18em] text-slate-600">
-                    {activePoster.tag ?? "Announcement"}
-                  </span>
+          <div className="flex items-center gap-3">
+            <span className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-black text-emerald-700">
+              Active
+            </span>
 
-                  <span className="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-[0.18em] text-emerald-600">
-                    <Radio className="h-3.5 w-3.5" />
-                    Live
-                  </span>
-                </div>
-
-                <h3 className="oso-heading mt-5 text-[2rem] font-black leading-tight text-slate-950">
-                  {activePoster.title}
-                </h3>
-
-                <p className="mt-4 text-[1.08rem] font-medium leading-8 text-slate-600">
-                  {activePoster.description}
-                </p>
-
-                <div className="mt-6 inline-flex items-center gap-2 text-sm font-black uppercase tracking-[0.14em] text-blue-700">
-                  {activePoster.ctaLabel}
-                  <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
-                </div>
-              </div>
-            </Link>
-          </motion.article>
-        </AnimatePresence>
-
-        <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-          {safePosters.slice(0, 4).map((item, index) => {
-            const active = index === activeIndex;
-
-            return (
-              <button
-                key={item.id}
-                type="button"
-                onClick={() => setActiveIndex(index)}
-                className={`rounded-2xl border px-4 py-3 text-left transition duration-200 ${
-                  active
-                    ? "border-blue-300 bg-blue-50 shadow-[0_10px_22px_rgba(37,99,235,0.10)]"
-                    : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50"
-                }`}
-                aria-label={`Show poster ${item.title}`}
-                aria-pressed={active}
+            <div className="flex items-center gap-2">
+              <PosterNavButton
+                label="Show previous poster"
+                onClick={() =>
+                  setActiveIndex((current) =>
+                    current === 0 ? safePosters.length - 1 : current - 1,
+                  )
+                }
               >
-                <p className="truncate text-[11px] font-black uppercase tracking-[0.2em] text-slate-500">
-                  {item.tag ?? "Poster"}
-                </p>
-                <p className="mt-2 line-clamp-2 text-sm font-black leading-6 text-slate-900">
-                  {item.title}
-                </p>
-              </button>
-            );
-          })}
+                <ChevronLeft className="h-4 w-4" />
+              </PosterNavButton>
+
+              <PosterNavButton
+                label="Show next poster"
+                onClick={() =>
+                  setActiveIndex(
+                    (current) => (current + 1) % safePosters.length,
+                  )
+                }
+              >
+                <ChevronRight className="h-4 w-4" />
+              </PosterNavButton>
+            </div>
+          </div>
+        </div>
+
+        <div className="p-5 sm:p-6">
+          <AnimatePresence mode="wait">
+            <motion.article
+              key={activePoster.id}
+              initial={{ opacity: 0, y: 18, scale: 0.985 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -18, scale: 0.985 }}
+              transition={{ duration: 0.28, ease: "easeOut" }}
+            >
+              <Link
+                href={activePoster.ctaHref}
+                className="group grid overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm transition duration-200 hover:-translate-y-1 hover:border-blue-300 hover:shadow-[0_20px_48px_rgba(15,23,42,0.1)] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 md:grid-cols-[260px_1fr]"
+              >
+                <div className="relative min-h-[235px] overflow-hidden border-b border-slate-200 bg-slate-200 md:border-b-0 md:border-r">
+                  {activePoster.imageUrl ? (
+                    <img
+                      src={activePoster.imageUrl}
+                      alt={activePoster.title}
+                      loading="lazy"
+                      className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.035]"
+                    />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center bg-[linear-gradient(135deg,#dbeafe,#eef2ff)]">
+                      <div className="rounded-[1.4rem] border border-white/70 bg-white/85 px-8 py-6 text-center shadow-lg backdrop-blur">
+                        <Sparkles className="mx-auto h-8 w-8 text-blue-700" />
+                        <p className="mt-3 text-xs font-black uppercase tracking-[0.22em] text-blue-700">
+                          OSO Live
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex flex-col justify-center p-6 sm:p-7">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <span className="w-fit rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-[11px] font-black uppercase tracking-[0.18em] text-slate-600">
+                      {activePoster.tag ?? "Announcement"}
+                    </span>
+
+                    <span className="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-[0.18em] text-emerald-600">
+                      <Radio className="h-3.5 w-3.5" />
+                      Live
+                    </span>
+                  </div>
+
+                  <h3 className="oso-heading mt-5 text-[2rem] font-black leading-tight text-slate-950">
+                    {activePoster.title}
+                  </h3>
+
+                  <p className="mt-4 text-[1.08rem] font-medium leading-8 text-slate-600">
+                    {activePoster.description}
+                  </p>
+
+                  <div className="mt-6 inline-flex items-center gap-2 text-sm font-black uppercase tracking-[0.14em] text-blue-700">
+                    {activePoster.ctaLabel}
+                    <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+                  </div>
+                </div>
+              </Link>
+            </motion.article>
+          </AnimatePresence>
+
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            {safePosters.slice(0, 4).map((item, index) => {
+              const active = index === activeIndex;
+
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => setActiveIndex(index)}
+                  className={`rounded-2xl border px-4 py-3 text-left transition duration-200 ${
+                    active
+                      ? "border-blue-300 bg-blue-50 shadow-[0_10px_22px_rgba(37,99,235,0.10)]"
+                      : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50"
+                  }`}
+                  aria-label={`Show poster ${item.title}`}
+                  aria-pressed={active}
+                >
+                  <p className="truncate text-[11px] font-black uppercase tracking-[0.2em] text-slate-500">
+                    {item.tag ?? "Poster"}
+                  </p>
+                  <p className="mt-2 line-clamp-2 text-sm font-black leading-6 text-slate-900">
+                    {item.title}
+                  </p>
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>

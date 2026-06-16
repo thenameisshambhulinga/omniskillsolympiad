@@ -231,3 +231,124 @@
   font-size: 0.98rem;
   letter-spacing: 0.01em;
 }
+
+.oso-glass-panel {
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(248, 250, 252, 0.76));
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.08);
+  backdrop-filter: blur(18px);
+}
+
+.oso-illustration-multiply {
+  mix-blend-mode: multiply;
+  filter: contrast(1.05) saturate(1.02);
+}
+
+.oso-soft-pattern-layer {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  opacity: 0.18;
+}
+
+/* OSO illustration system fixes */
+.oso-illustration-clean {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  object-position: center;
+  filter: contrast(1.06) saturate(1.02);
+}
+
+.oso-illustration-blend {
+  mix-blend-mode: multiply;
+}
+
+.oso-illustration-hover {
+  transition:
+    transform 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+    filter 0.3s ease;
+  transform-origin: center;
+}
+
+.oso-illustration-hover:hover {
+  transform: scale(1.035);
+}
+
+.oso-glass-card {
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.9),
+      rgba(248, 250, 252, 0.76)
+    );
+  box-shadow: 0 22px 64px rgba(15, 23, 42, 0.075);
+  backdrop-filter: blur(18px);
+}
+
+.oso-safe-layer {
+  position: relative;
+  isolation: isolate;
+}
+
+.oso-safe-layer > * {
+  position: relative;
+  z-index: 1;
+} 
+
+/* Floating illustration system: Kaggle / mountain-climb style */
+.oso-floating-illustration-stage {
+  position: relative;
+  isolation: isolate;
+  overflow: visible;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+}
+
+.oso-floating-illustration-stage::before {
+  content: "";
+  position: absolute;
+  inset: 8% 4%;
+  z-index: -1;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 30% 40%, rgba(37, 99, 235, 0.08), transparent 38%),
+    radial-gradient(circle at 70% 62%, rgba(250, 204, 21, 0.1), transparent 34%);
+  filter: blur(34px);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.oso-floating-illustration-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  object-position: center;
+  mix-blend-mode: multiply;
+  filter: contrast(1.06) saturate(1.03);
+  transition:
+    transform 0.42s cubic-bezier(0.25, 1, 0.5, 1),
+    filter 0.3s ease;
+  transform-origin: center center;
+}
+
+.oso-floating-illustration-stage:hover .oso-floating-illustration-img {
+  transform: scale(1.025);
+  filter: contrast(1.08) saturate(1.05);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .oso-floating-illustration-img {
+    transition: none;
+  }
+
+  .oso-floating-illustration-stage:hover .oso-floating-illustration-img {
+    transform: none;
+  }
+}

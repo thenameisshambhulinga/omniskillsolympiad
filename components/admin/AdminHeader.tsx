@@ -15,11 +15,11 @@ export default function AdminHeader({
         initial={{ opacity: 0, y: -14 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-        className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-slate-950/70 px-4 py-4 shadow-[0_24px_90px_rgba(0,0,0,0.38)] backdrop-blur-2xl sm:px-5"
+        className="relative overflow-hidden rounded-[2rem] border border-slate-200/90 bg-white/82 px-4 py-4 shadow-[0_18px_60px_rgba(15,23,42,0.08)] backdrop-blur-2xl sm:px-5"
       >
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.12),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(168,85,247,0.1),transparent_34%)]"
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(37,99,235,0.09),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(14,165,233,0.08),transparent_34%)]"
         />
 
         <div className="relative z-10 flex items-center justify-between gap-4">
@@ -28,17 +28,17 @@ export default function AdminHeader({
               type="button"
               aria-label="Open admin navigation"
               onClick={onOpenSidebar}
-              className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.05] text-white transition hover:border-cyan-400/30 hover:bg-cyan-400/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/50 lg:hidden"
+              className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-slate-200 bg-white text-slate-800 transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 lg:hidden"
             >
               <Menu className="h-5 w-5" />
             </button>
 
             <div className="min-w-0">
-              <p className="text-xs font-black uppercase tracking-[0.3em] text-cyan-300">
-                SIMS Skillathon Admin
+              <p className="text-xs font-black uppercase tracking-[0.28em] text-blue-700">
+                OSO Admin
               </p>
 
-              <h1 className="mt-1 truncate text-xl font-black text-white sm:text-2xl">
+              <h1 className="mt-1 truncate text-xl font-black text-slate-950 sm:text-2xl">
                 Unified Operations Center
               </h1>
             </div>
@@ -49,14 +49,14 @@ export default function AdminHeader({
               icon={<Radio className="h-4 w-4" />}
               label="System"
               value="Online"
-              tone="cyan"
+              tone="blue"
             />
 
             <StatusPill
               icon={<Sparkles className="h-4 w-4" />}
               label="Control"
               value="Unified"
-              tone="purple"
+              tone="yellow"
             />
 
             <StatusPill
@@ -68,8 +68,8 @@ export default function AdminHeader({
           </div>
 
           <div className="flex items-center gap-2 md:hidden">
-            <span className="h-2.5 w-2.5 rounded-full bg-emerald-300 shadow-[0_0_18px_rgba(110,231,183,0.85)]" />
-            <span className="text-xs font-bold uppercase tracking-[0.18em] text-emerald-200">
+            <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 shadow-[0_0_18px_rgba(16,185,129,0.55)]" />
+            <span className="text-xs font-bold uppercase tracking-[0.18em] text-emerald-700">
               Admin
             </span>
           </div>
@@ -88,14 +88,14 @@ function StatusPill({
   icon: ReactNode;
   label: string;
   value: string;
-  tone: "cyan" | "purple" | "emerald";
+  tone: "blue" | "yellow" | "emerald";
 }) {
   const toneClass =
-    tone === "cyan"
-      ? "border-cyan-400/25 bg-cyan-400/10 text-cyan-200"
-      : tone === "purple"
-        ? "border-purple-400/25 bg-purple-400/10 text-purple-200"
-        : "border-emerald-400/25 bg-emerald-400/10 text-emerald-200";
+    tone === "blue"
+      ? "border-blue-200 bg-blue-50 text-blue-700"
+      : tone === "yellow"
+        ? "border-yellow-200 bg-yellow-50 text-yellow-700"
+        : "border-emerald-200 bg-emerald-50 text-emerald-700";
 
   return (
     <motion.div

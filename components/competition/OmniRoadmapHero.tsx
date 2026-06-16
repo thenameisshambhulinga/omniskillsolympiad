@@ -1,131 +1,170 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Layers3, Medal, Route, Sparkles } from "lucide-react";
-import type { OmniRoadmapSnapshot } from "@/lib/profile/omni-roadmap";
+import {
+  ArrowRight,
+  BadgeCheck,
+  CircuitBoard,
+  Flag,
+  Gauge,
+  Route,
+  Sparkles,
+} from "lucide-react";
 
-export default function OmniRoadmapHero({
-  snapshot,
-}: {
-  snapshot: OmniRoadmapSnapshot;
-}) {
+import CompetitionGlassPanel, {
+  CompetitionMetricTile,
+  CompetitionProgressBar,
+  CompetitionSectionHeading,
+  CompetitionStatusPill,
+  clampPercent,
+} from "@/components/competition/CompetitionGlassPanel";
+
+export default function OmniRoadmapHero({ snapshot }: { snapshot: unknown }) {
+  const data = toRecord(snapshot);
+  const points = getNumber(data, "points", getNumber(data, "siliconPoints", 0));
+  const currentTier = getDisplayValue(data.currentTier, "name", "Emerging Engineer");
+  const currentStage = getDisplayValue(data.currentStage, "name", "Foundation");
+  const nextStage = getDisplayValue(data.nextStage, "name", "Next Stage");
+  const nextStep = getDisplayValue(data.nextOmniStep, "meaning", "Continue the next mission");
+  const completedSteps = getNumber(data, "completedSteps", 0);
+  const totalSteps = Math.max(1, getNumber(data, "totalSteps", 28));
+  const progressPercent = clampPercent(
+    getNumber(data, "progressPercent", (completedSteps / totalSteps) * 100),
+  );
+  const tierProgress = clampPercent(getNumber(data, "tierProgress", 0));
+
   return (
-    <section className="relative z-10 border-t border-white/10 px-6 py-24 md:px-16">
-      <div className="mx-auto max-w-[1600px]">
-        <div className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_460px] xl:items-stretch">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.6 }}
-            className="relative overflow-hidden rounded-[3rem] border border-white/10 bg-white/[0.045] p-8 shadow-[0_34px_150px_rgba(0,0,0,0.52)] backdrop-blur-2xl lg:p-10"
-          >
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_15%_10%,rgba(34,211,238,0.18),transparent_34%),radial-gradient(circle_at_85%_18%,rgba(168,85,247,0.15),transparent_34%)]" />
+    <CompetitionGlassPanel className="p-6 sm:p-8 lg:p-10">
+      <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+        <div>
+          <CompetitionSectionHeading
+            eyebrow="OMNI Roadmap"
+            title="Your engineering growth journey is now measurable."
+            description="Track points, stage movement, next OMNI step, tier growth and readiness signals inside a single competition pathway."
+            icon={<Route className="h-5 w-5" />}
+          />
 
-            <div className="relative z-10">
-              <div className="inline-flex items-center gap-3 rounded-full border border-cyan-400/25 bg-cyan-400/10 px-4 py-2">
-                <Route className="h-4 w-4 text-cyan-200" />
-                <p className="text-xs font-black uppercase tracking-[0.24em] text-cyan-200">
-                  OMNI Engineering Journey
+          <div className="mt-7 flex flex-wrap gap-3">
+            <CompetitionStatusPill label={currentTier} tone="blue" />
+            <CompetitionStatusPill label={currentStage} tone="emerald" />
+            <CompetitionStatusPill label={`${progressPercent}% Complete`} tone="yellow" />
+          </div>
+
+          <div className="mt-8 rounded-[1.5rem] border border-slate-200 bg-white/78 p-5 shadow-sm backdrop-blur-xl">
+            <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+              <div>
+                <p className="text-xs font-black uppercase tracking-[0.2em] text-slate-500">
+                  Total Silicon Points
+                </p>
+                <p className="oso-heading mt-2 text-4xl font-black text-slate-950">
+                  {points}
                 </p>
               </div>
 
-              <h2 className="mt-7 max-w-5xl text-4xl font-black leading-tight tracking-tight text-white md:text-6xl">
-                From Electronics Foundations
-                <span className="block bg-gradient-to-r from-violet-300 via-cyan-200 to-red-300 bg-clip-text text-transparent">
-                  To National Innovation
-                </span>
-              </h2>
-
-              <p className="mt-7 max-w-3xl text-lg leading-8 text-white/62">
-                Track your engineering growth across 7 VIBGYOR stages and 28
-                OMNI skill milestones powered by Silicon Points.
-              </p>
-
-              <div className="mt-10 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-                <HeroMetric
-                  icon={<Layers3 className="h-5 w-5 text-cyan-200" />}
-                  label="Current Stage"
-                  value={snapshot.currentStage.name.toUpperCase()}
-                />
-
-                <HeroMetric
-                  icon={<Medal className="h-5 w-5 text-purple-200" />}
-                  label="Current Tier"
-                  value={snapshot.currentTier}
-                />
-
-                <HeroMetric
-                  icon={<Sparkles className="h-5 w-5 text-emerald-200" />}
-                  label="Completed"
-                  value={`${snapshot.completedSteps} / ${snapshot.totalSteps}`}
-                />
-
-                <HeroMetric
-                  icon={<Route className="h-5 w-5 text-amber-200" />}
-                  label="Next Stage"
-                  value={snapshot.nextStage?.name ?? "Complete"}
-                />
+              <div className="rounded-2xl border border-yellow-200 bg-yellow-50 px-5 py-4 text-yellow-800">
+                <div className="flex items-center gap-2">
+                  <Sparkles className="h-5 w-5" />
+                  <p className="text-sm font-black">Next: {nextStage}</p>
+                </div>
               </div>
             </div>
-          </motion.div>
 
-          <motion.aside
-            initial={{ opacity: 0, y: 24, scale: 0.96 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="relative overflow-hidden rounded-[3rem] border border-cyan-400/20 bg-cyan-400/10 p-8 shadow-[0_34px_150px_rgba(0,0,0,0.52)] backdrop-blur-2xl"
-          >
-            <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-cyan-300/20 blur-3xl" />
-
-            <div className="relative z-10">
-              <p className="text-xs font-black uppercase tracking-[0.28em] text-cyan-200">
-                Progress
-              </p>
-
-              <p className="mt-5 text-7xl font-black text-white">
-                {snapshot.progressPercent}%
-              </p>
-
-              <p className="mt-4 text-sm font-semibold leading-7 text-white/58">
-                Journey completion based on completed OMNI steps across the
-                VIBGYOR electronics engineering roadmap.
-              </p>
-
-              <div className="mt-8 h-3 overflow-hidden rounded-full bg-white/10">
-                <motion.div
-                  initial={{ width: 0 }}
-                  whileInView={{ width: `${snapshot.progressPercent}%` }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8 }}
-                  className="h-full rounded-full bg-gradient-to-r from-violet-300 via-cyan-300 to-red-300"
-                />
+            <div className="mt-5">
+              <div className="mb-2 flex items-center justify-between gap-3">
+                <p className="text-xs font-black uppercase tracking-[0.18em] text-slate-500">
+                  Journey Progress
+                </p>
+                <p className="text-sm font-black text-slate-950">
+                  {completedSteps}/{totalSteps} steps
+                </p>
               </div>
+
+              <CompetitionProgressBar value={progressPercent} tone="blue" />
             </div>
-          </motion.aside>
+          </div>
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          <CompetitionMetricTile
+            icon={<CircuitBoard className="h-5 w-5" />}
+            label="Current Stage"
+            value={currentStage}
+            helper="Active VIBGYOR engineering stage"
+            tone="blue"
+          />
+
+          <CompetitionMetricTile
+            icon={<BadgeCheck className="h-5 w-5" />}
+            label="Current Tier"
+            value={currentTier}
+            helper="Based on progress and points"
+            tone="emerald"
+          />
+
+          <CompetitionMetricTile
+            icon={<Gauge className="h-5 w-5" />}
+            label="Tier Progress"
+            value={`${tierProgress}%`}
+            helper="Momentum toward the next tier"
+            tone="yellow"
+          />
+
+          <CompetitionMetricTile
+            icon={<Flag className="h-5 w-5" />}
+            label="Next OMNI Step"
+            value={nextStep}
+            helper="Recommended next movement"
+            tone="cyan"
+          />
         </div>
       </div>
-    </section>
+    </CompetitionGlassPanel>
   );
 }
 
-function HeroMetric({
-  icon,
-  label,
-  value,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  value: string | number;
-}) {
-  return (
-    <div className="rounded-[2rem] border border-white/10 bg-black/25 p-5">
-      {icon}
-      <p className="mt-4 text-[10px] font-black uppercase tracking-[0.22em] text-white/35">
-        {label}
-      </p>
-      <p className="mt-2 truncate text-2xl font-black text-white">{value}</p>
-    </div>
-  );
+function toRecord(value: unknown): Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value)
+    ? (value as Record<string, unknown>)
+    : {};
+}
+
+function getNumber(record: Record<string, unknown>, key: string, fallback: number) {
+  const value = record[key];
+
+  return typeof value === "number" && Number.isFinite(value) ? value : fallback;
+}
+
+function getDisplayValue(value: unknown, preferredKey: string, fallback: string) {
+  if (typeof value === "string" && value.trim()) {
+    return value.trim();
+  }
+
+  if (typeof value === "number" && Number.isFinite(value)) {
+    return String(value);
+  }
+
+  if (typeof value === "object" && value !== null && !Array.isArray(value)) {
+    const record = value as Record<string, unknown>;
+    const preferred = record[preferredKey];
+    const name = record.name;
+    const label = record.label;
+    const title = record.title;
+
+    if (typeof preferred === "string" && preferred.trim()) {
+      return preferred.trim();
+    }
+
+    if (typeof name === "string" && name.trim()) {
+      return name.trim();
+    }
+
+    if (typeof label === "string" && label.trim()) {
+      return label.trim();
+    }
+
+    if (typeof title === "string" && title.trim()) {
+      return title.trim();
+    }
+  }
+
+  return fallback;
 }

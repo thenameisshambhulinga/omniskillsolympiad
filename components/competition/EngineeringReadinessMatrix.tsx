@@ -1,218 +1,272 @@
 "use client";
 
-import { motion } from "framer-motion";
 import {
-  ArrowUpRight,
-  Brain,
+  Activity,
+  BarChart3,
+  CheckCircle2,
+  Compass,
   Gauge,
-  ShieldCheck,
+  Lightbulb,
   Target,
   Trophy,
-  Wrench,
 } from "lucide-react";
 
-import type { EngineeringReadinessResult } from "@/lib/profile/readiness-engine";
+import CompetitionGlassPanel, {
+  CompetitionMetricTile,
+  CompetitionProgressBar,
+  CompetitionSectionHeading,
+  CompetitionStatusPill,
+  clampPercent,
+} from "@/components/competition/CompetitionGlassPanel";
+
+const factorLabels: Record<string, string> = {
+  tier: "Tier Strength",
+  siliconPoints: "Silicon Points",
+  journeyCompletion: "Journey Completion",
+  dailyParticipation: "Daily Participation",
+  consistency: "Consistency",
+  activity: "Activity Signal",
+};
 
 export default function EngineeringReadinessMatrix({
   readiness,
 }: {
-  readiness: EngineeringReadinessResult;
+  readiness: unknown;
 }) {
-  const factorCards = [
-    { label: "Tier Weight", value: readiness.factors.tier },
-    { label: "Silicon Points", value: readiness.factors.siliconPoints },
-    { label: "Journey Completion", value: readiness.factors.journeyCompletion },
-    {
-      label: "Daily Participation",
-      value: readiness.factors.dailyParticipation,
-    },
-    { label: "Consistency", value: readiness.factors.consistency },
-    { label: "Activity", value: readiness.factors.activity },
-  ];
+  const data = toRecord(readiness);
+  const score = clampPercent(getNumber(data, "score", 0));
+  const level = getString(data, "level", getReadinessLabel(score));
+  const factors = toRecord(data.factors);
+  const strengthAreas = getStringArray(data.strengthAreas);
+  const focusAreas = getStringArray(data.focusAreas);
+  const guidance = getString(
+    data,
+    "improvementGuidance",
+    "Continue completing challenges and assessments to improve readiness.",
+  );
+  const nextMilestone = getString(
+    data,
+    "nextMilestone",
+    "Complete the next competition milestone.",
+  );
+
+  const factorEntries = Object.entries(factors).filter(
+    ([, value]) => typeof value === "number" && Number.isFinite(value),
+  );
 
   return (
-    <motion.section
-      initial={{ opacity: 0, y: 18, scale: 0.98 }}
-      whileInView={{ opacity: 1, y: 0, scale: 1 }}
-      viewport={{ once: true, amount: 0.25 }}
-      transition={{ duration: 0.5 }}
-      className="relative overflow-hidden rounded-[3rem] border border-cyan-400/20 bg-white/[0.045] p-6 shadow-[0_34px_150px_rgba(0,0,0,0.5)] backdrop-blur-2xl lg:p-8"
-    >
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_12%_10%,rgba(34,211,238,0.17),transparent_34%),radial-gradient(circle_at_88%_20%,rgba(168,85,247,0.15),transparent_34%),radial-gradient(circle_at_50%_100%,rgba(16,185,129,0.12),transparent_34%)]" />
+    <CompetitionGlassPanel className="p-6 sm:p-8">
+      <CompetitionSectionHeading
+        eyebrow="Engineering Readiness Matrix"
+        title="Benchmark-style readiness intelligence."
+        description="A clean evaluation matrix that converts participation, consistency, activity and progression into visible engineering readiness."
+        icon={<BarChart3 className="h-5 w-5" />}
+      />
 
-      <div className="relative z-10">
-        <div className="flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between">
-          <div>
-            <div className="inline-flex items-center gap-3 rounded-full border border-cyan-400/25 bg-cyan-400/10 px-4 py-2">
-              <Brain className="h-4 w-4 text-cyan-200" />
+      <div className="mt-8 grid gap-6 xl:grid-cols-[0.88fr_1.12fr]">
+        <div className="rounded-[1.6rem] border border-slate-200 bg-white/80 p-6 shadow-sm backdrop-blur-xl">
+          <div className="flex items-start justify-between gap-5">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.2em] text-slate-500">
+                Overall Readiness
+              </p>
 
-              <p className="text-xs font-black uppercase tracking-[0.26em] text-cyan-200">
-                Engineering Readiness Matrix
+              <p className="oso-heading mt-2 text-6xl font-black text-slate-950">
+                {score}%
               </p>
             </div>
 
-            <h2 className="mt-6 text-4xl font-black tracking-tight text-white md:text-5xl">
-              WorldSkills-Style
-              <span className="block bg-gradient-to-r from-cyan-200 via-purple-300 to-emerald-300 bg-clip-text text-transparent">
-                Capability Analysis
-              </span>
-            </h2>
+            <CompetitionStatusPill
+              label={level}
+              tone={score >= 75 ? "emerald" : score >= 45 ? "yellow" : "blue"}
+            />
           </div>
 
-          <div className="rounded-[2rem] border border-emerald-400/25 bg-emerald-400/10 px-6 py-5">
-            <p className="text-xs font-black uppercase tracking-[0.24em] text-emerald-200">
-              Readiness Level
-            </p>
-
-            <p className="mt-2 text-3xl font-black text-white">
-              {readiness.level}
-            </p>
-          </div>
-        </div>
-
-        <div className="mt-9 grid gap-8 xl:grid-cols-[260px_minmax(0,1fr)] xl:items-center">
-          <div className="flex flex-col items-center text-center">
-            <div
-              className="grid h-52 w-52 place-items-center rounded-full"
-              style={{
-                background: `conic-gradient(rgb(34 211 238) ${readiness.score}%, rgba(255,255,255,0.08) 0)`,
-              }}
-            >
-              <div className="grid h-38 w-38 place-items-center rounded-full border border-white/10 bg-black/75 backdrop-blur-xl">
-                <div>
-                  <p className="text-5xl font-black text-white">
-                    {readiness.score}%
-                  </p>
-
-                  <p className="mt-2 text-[10px] font-black uppercase tracking-[0.22em] text-white/40">
-                    Readiness
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <p className="mt-5 max-w-xs text-sm font-semibold leading-7 text-white/55">
-              Calculated from tier, Silicon Points, journey completion, daily
-              participation, consistency and platform activity.
-            </p>
+          <div className="mt-6">
+            <CompetitionProgressBar
+              value={score}
+              tone={score >= 75 ? "emerald" : score >= 45 ? "yellow" : "blue"}
+            />
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-            {factorCards.map((factor, index) => (
-              <motion.article
-                key={factor.label}
-                initial={{ opacity: 0, y: 14 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: index * 0.04 }}
-                whileHover={{ y: -4, scale: 1.012 }}
-                className="rounded-[2rem] border border-white/10 bg-black/25 p-5"
-              >
-                <Gauge className="h-5 w-5 text-cyan-200" />
+          <div className="mt-6 grid gap-4 sm:grid-cols-2">
+            <CompetitionMetricTile
+              icon={<Target className="h-5 w-5" />}
+              label="Next Milestone"
+              value={nextMilestone}
+              tone="blue"
+            />
 
-                <p className="mt-4 text-[10px] font-black uppercase tracking-[0.22em] text-white/35">
-                  {factor.label}
-                </p>
-
-                <p className="mt-3 text-3xl font-black text-white">
-                  {factor.value}%
-                </p>
-
-                <div className="mt-4 h-2 overflow-hidden rounded-full bg-white/10">
-                  <motion.div
-                    initial={{ width: 0 }}
-                    whileInView={{ width: `${factor.value}%` }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.7 }}
-                    className="h-full rounded-full bg-gradient-to-r from-cyan-300 via-blue-400 to-purple-400"
-                  />
-                </div>
-              </motion.article>
-            ))}
+            <CompetitionMetricTile
+              icon={<Compass className="h-5 w-5" />}
+              label="Guidance"
+              value="Action Plan"
+              helper={guidance}
+              tone="yellow"
+            />
           </div>
         </div>
 
-        <div className="mt-8 grid gap-6 xl:grid-cols-3">
-          <MatrixPanel
-            icon={<ShieldCheck className="h-5 w-5 text-emerald-200" />}
-            title="Strength Areas"
-            tone="emerald"
-            items={readiness.strengthAreas}
-          />
+        <div className="grid gap-4 sm:grid-cols-2">
+          {factorEntries.length > 0 ? (
+            factorEntries.map(([key, value]) => {
+              const percent = clampPercent(value as number);
 
-          <MatrixPanel
-            icon={<Wrench className="h-5 w-5 text-amber-200" />}
-            title="Focus Areas"
-            tone="amber"
-            items={readiness.focusAreas}
-          />
+              return (
+                <div
+                  key={key}
+                  className="rounded-[1.4rem] border border-slate-200 bg-white/80 p-5 shadow-sm backdrop-blur-xl"
+                >
+                  <div className="flex items-center justify-between gap-4">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-blue-200 bg-blue-50 text-blue-700">
+                      <Gauge className="h-5 w-5" />
+                    </div>
 
-          <div className="relative overflow-hidden rounded-[2.25rem] border border-purple-400/20 bg-purple-400/10 p-6">
-            <Target className="h-5 w-5 text-purple-200" />
+                    <p className="text-sm font-black text-slate-950">
+                      {percent}%
+                    </p>
+                  </div>
 
-            <p className="mt-4 text-xs font-black uppercase tracking-[0.24em] text-purple-200">
-              Improvement Guidance
-            </p>
+                  <p className="mt-4 text-xs font-black uppercase tracking-[0.18em] text-slate-500">
+                    {factorLabels[key] ?? formatFactorLabel(key)}
+                  </p>
 
-            <p className="mt-4 text-sm font-semibold leading-7 text-white/68">
-              {readiness.improvementGuidance}
-            </p>
-
-            <div className="mt-6 rounded-2xl border border-cyan-400/20 bg-cyan-400/10 p-4">
-              <div className="flex items-center gap-2">
-                <Trophy className="h-4 w-4 text-cyan-200" />
-
-                <p className="text-[10px] font-black uppercase tracking-[0.22em] text-white/35">
-                  Next Milestone
-                </p>
-              </div>
-
-              <p className="mt-3 flex items-center gap-2 text-lg font-black text-white">
-                {readiness.nextMilestone}
-                <ArrowUpRight className="h-4 w-4 text-cyan-200" />
-              </p>
+                  <div className="mt-3">
+                    <CompetitionProgressBar value={percent} tone="blue" />
+                  </div>
+                </div>
+              );
+            })
+          ) : (
+            <div className="rounded-[1.4rem] border border-dashed border-slate-300 bg-white/70 p-5 text-sm font-semibold text-slate-500 sm:col-span-2">
+              Readiness factors will appear after evaluation signals are
+              available.
             </div>
-          </div>
+          )}
         </div>
       </div>
-    </motion.section>
+
+      <div className="mt-6 grid gap-5 lg:grid-cols-2">
+        <SignalList
+          title="Strength Areas"
+          icon={<CheckCircle2 className="h-5 w-5" />}
+          items={strengthAreas}
+          emptyLabel="Strength areas will appear after more completed signals."
+          tone="emerald"
+        />
+
+        <SignalList
+          title="Focus Areas"
+          icon={<Lightbulb className="h-5 w-5" />}
+          items={focusAreas}
+          emptyLabel="Focus areas will appear after more completed signals."
+          tone="yellow"
+        />
+      </div>
+    </CompetitionGlassPanel>
   );
 }
 
-function MatrixPanel({
-  icon,
+function SignalList({
   title,
-  tone,
+  icon,
   items,
+  emptyLabel,
+  tone,
 }: {
-  icon: React.ReactNode;
   title: string;
-  tone: "emerald" | "amber";
+  icon: React.ReactNode;
   items: string[];
+  emptyLabel: string;
+  tone: "emerald" | "yellow";
 }) {
-  const classes =
+  const toneClass =
     tone === "emerald"
-      ? "border-emerald-400/20 bg-emerald-400/10 text-emerald-200"
-      : "border-amber-400/20 bg-amber-400/10 text-amber-200";
+      ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+      : "border-yellow-200 bg-yellow-50 text-yellow-700";
 
   return (
-    <div className={`rounded-[2.25rem] border p-6 ${classes}`}>
-      {icon}
+    <div className="rounded-[1.5rem] border border-slate-200 bg-white/80 p-5 shadow-sm backdrop-blur-xl">
+      <div className="flex items-center gap-3">
+        <div className={`flex h-11 w-11 items-center justify-center rounded-2xl border ${toneClass}`}>
+          {icon}
+        </div>
 
-      <p className="mt-4 text-xs font-black uppercase tracking-[0.24em]">
-        {title}
-      </p>
+        <h3 className="oso-heading text-xl font-black text-slate-950">
+          {title}
+        </h3>
+      </div>
 
-      <div className="mt-5 space-y-3">
-        {items.map((item) => (
-          <p
-            key={item}
-            className="rounded-2xl border border-white/10 bg-black/25 px-4 py-3 text-sm font-bold text-white/68"
-          >
-            {item}
+      <div className="mt-5 grid gap-3">
+        {items.length > 0 ? (
+          items.map((item) => (
+            <div
+              key={item}
+              className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-slate-50/80 px-4 py-3"
+            >
+              <Trophy className="mt-0.5 h-4 w-4 shrink-0 text-blue-700" />
+              <p className="text-sm font-semibold leading-6 text-slate-600">
+                {item}
+              </p>
+            </div>
+          ))
+        ) : (
+          <p className="rounded-2xl border border-dashed border-slate-300 bg-slate-50/80 px-4 py-4 text-sm font-semibold leading-6 text-slate-500">
+            {emptyLabel}
           </p>
-        ))}
+        )}
       </div>
     </div>
   );
+}
+
+function getReadinessLabel(score: number) {
+  if (score >= 85) {
+    return "Competition Ready";
+  }
+
+  if (score >= 65) {
+    return "Strong Progress";
+  }
+
+  if (score >= 40) {
+    return "Building Readiness";
+  }
+
+  return "Awaiting Evaluation";
+}
+
+function toRecord(value: unknown): Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value)
+    ? (value as Record<string, unknown>)
+    : {};
+}
+
+function getNumber(record: Record<string, unknown>, key: string, fallback: number) {
+  const value = record[key];
+
+  return typeof value === "number" && Number.isFinite(value) ? value : fallback;
+}
+
+function getString(record: Record<string, unknown>, key: string, fallback: string) {
+  const value = record[key];
+
+  return typeof value === "string" && value.trim() ? value.trim() : fallback;
+}
+
+function getStringArray(value: unknown) {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value.filter((item): item is string => typeof item === "string" && item.trim().length > 0);
+}
+
+function formatFactorLabel(key: string) {
+  return key
+    .replace(/([A-Z])/g, " $1")
+    .replace(/[_-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .replace(/^./, (char) => char.toUpperCase());
 }

@@ -10,13 +10,16 @@ export default function AdminShell({ children }: { children: ReactNode }) {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-slate-950 text-white">
+    <div className="relative min-h-screen overflow-hidden bg-[#f8f9fa] text-slate-950">
       <div aria-hidden="true" className="pointer-events-none fixed inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_10%,rgba(34,211,238,0.16),transparent_32%),radial-gradient(circle_at_88%_18%,rgba(168,85,247,0.14),transparent_30%),radial-gradient(circle_at_50%_95%,rgba(59,130,246,0.1),transparent_35%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.022)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.022)_1px,transparent_1px)] bg-[size:72px_72px] opacity-35 [mask-image:radial-gradient(circle_at_center,black,transparent_75%)]" />
-        <div className="absolute -left-32 top-0 h-[34rem] w-[34rem] rounded-full bg-cyan-400/10 blur-3xl" />
-        <div className="absolute -right-36 top-24 h-[38rem] w-[38rem] rounded-full bg-purple-500/10 blur-3xl" />
-        <div className="absolute bottom-0 left-1/3 h-[32rem] w-[32rem] rounded-full bg-blue-500/10 blur-3xl" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_10%_5%,rgba(37,99,235,0.10),transparent_30%),radial-gradient(circle_at_85%_10%,rgba(14,165,233,0.10),transparent_28%),radial-gradient(circle_at_48%_92%,rgba(250,204,21,0.10),transparent_32%)]" />
+
+        <div className="absolute inset-0 opacity-[0.32] [mask-image:linear-gradient(to_bottom,black,transparent_82%)]">
+          <div className="h-full w-full bg-[linear-gradient(rgba(15,23,42,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(15,23,42,0.035)_1px,transparent_1px)] bg-[size:64px_64px]" />
+        </div>
+
+        <div className="absolute -left-40 top-10 h-[30rem] w-[30rem] rounded-full bg-blue-200/35 blur-3xl" />
+        <div className="absolute -right-40 top-28 h-[34rem] w-[34rem] rounded-full bg-cyan-200/30 blur-3xl" />
       </div>
 
       <div className="relative z-10 flex min-h-screen">
@@ -25,7 +28,7 @@ export default function AdminShell({ children }: { children: ReactNode }) {
         </aside>
 
         <AnimatePresence>
-          {mobileSidebarOpen && (
+          {mobileSidebarOpen ? (
             <>
               <motion.button
                 type="button"
@@ -33,7 +36,7 @@ export default function AdminShell({ children }: { children: ReactNode }) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 z-40 bg-black/70 backdrop-blur-sm lg:hidden"
+                className="fixed inset-0 z-40 bg-slate-950/35 backdrop-blur-sm lg:hidden"
                 onClick={() => setMobileSidebarOpen(false)}
               />
 
@@ -47,13 +50,13 @@ export default function AdminShell({ children }: { children: ReactNode }) {
                 <AdminSidebar onNavigate={() => setMobileSidebarOpen(false)} />
               </motion.aside>
             </>
-          )}
+          ) : null}
         </AnimatePresence>
 
         <div className="flex min-w-0 flex-1 flex-col">
           <AdminHeader onOpenSidebar={() => setMobileSidebarOpen(true)} />
 
-          <main className="relative z-10 flex-1 px-4 pb-8 pt-4 sm:px-6 lg:px-8">
+          <main className="relative z-10 flex-1 px-4 pb-10 pt-4 sm:px-6 lg:px-8">
             {children}
           </main>
         </div>

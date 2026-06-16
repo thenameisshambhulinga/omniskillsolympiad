@@ -3,6 +3,8 @@
 import type { ReactNode } from "react";
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import OsoVibgyorSpectrum from "@/components/landing/clean/OsoVibgyorSpectrum";
+import OsoEcosystemOverview from "@/components/landing/clean/OsoEcosystemOverview";
 import { motion, useReducedMotion } from "framer-motion";
 import {
   ArrowRight,
@@ -24,6 +26,8 @@ import OsoLivePosterBoard, {
 import OsoSummitJourneyBand from "@/components/landing/clean/OsoSummitJourneyBand";
 import LoopTypewriter from "@/components/ui/LoopTypewriter";
 import KaggleInspiredWrapper from "@/components/landing/clean/KaggleInspiredWrapper";
+import OsoExploreSection from "@/components/landing/clean/OsoExploreSection";
+import OsoBenchmarkEnvironmentSection from "@/components/landing/clean/OsoBenchmarkEnvironmentSection";
 
 
 type OsoCleanLandingPageProps = {
@@ -183,14 +187,18 @@ export default function OsoCleanLandingPage({
   return (
     <div className="min-h-screen bg-[#f8f9fa] text-slate-950">
       <CleanHeroSection
-        posters={posters}
-        reduceMotion={Boolean(reduceMotion)}
-      />
-      <GrowthOutcomeDashboard reduceMotion={Boolean(reduceMotion)} />
-      <DomainShowcase reduceMotion={Boolean(reduceMotion)} />
-      <VibgyorPipeline reduceMotion={Boolean(reduceMotion)} />
-      <CompetitionCalendar reduceMotion={Boolean(reduceMotion)} />
-      <FinalCta reduceMotion={Boolean(reduceMotion)} />
+  posters={posters}
+  reduceMotion={Boolean(reduceMotion)}
+/>
+<OsoExploreSection reduceMotion={Boolean(reduceMotion)} />
+<OsoEcosystemOverview />
+<OsoVibgyorSpectrum />
+<GrowthOutcomeDashboard reduceMotion={Boolean(reduceMotion)} />
+<DomainShowcase reduceMotion={Boolean(reduceMotion)} />
+<VibgyorPipeline reduceMotion={Boolean(reduceMotion)} />
+<OsoBenchmarkEnvironmentSection reduceMotion={Boolean(reduceMotion)} />
+<CompetitionCalendar reduceMotion={Boolean(reduceMotion)} />
+<FinalCta reduceMotion={Boolean(reduceMotion)} />
     </div>
   );
 }
@@ -280,7 +288,7 @@ function CleanHeroSection({
 function TypewriterHeading() {
   return (
     <h1
-      className="oso-heading mt-7 min-h-[10.5rem] max-w-6xl text-[3.6rem] font-black leading-[1.02] text-[#1a202c] sm:text-[4.35rem] lg:text-[4.85rem] xl:text-[5.25rem]"
+      className="oso-heading mt-7 min-h-42 max-w-6xl text-[3.45rem] font-black leading-[1.03] text-[#1a202c] sm:text-[4.15rem] lg:text-[4.65rem] xl:text-[5.05rem]"
       aria-label={heroTitle}
     >
       <LoopTypewriter
@@ -293,7 +301,7 @@ function TypewriterHeading() {
     </h1>
   );
 }
-function GrowthOutcomeDashboard({ reduceMotion }: { reduceMotion: boolean }) {
+ function GrowthOutcomeDashboard({ reduceMotion }: { reduceMotion: boolean }) {
   return (
     <section className="oso-section bg-[#f8f9fa]">
       <div className="oso-container">

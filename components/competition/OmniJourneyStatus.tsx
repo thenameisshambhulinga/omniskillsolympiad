@@ -1,94 +1,164 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { BarChart3, Footprints, Gauge, Layers3 } from "lucide-react";
+import {
+  Activity,
+  BadgeCheck,
+  CircuitBoard,
+  Layers3,
+  Sparkles,
+} from "lucide-react";
 
-import type { VibgyorJourneySnapshot } from "@/lib/profile/vibgyor-progress";
+import CompetitionGlassPanel, {
+  CompetitionMetricTile,
+  CompetitionProgressBar,
+  CompetitionSectionHeading,
+  CompetitionStatusPill,
+  clampPercent,
+} from "@/components/competition/CompetitionGlassPanel";
 
-export default function OmniJourneyStatus({
-  snapshot,
-}: {
-  snapshot: VibgyorJourneySnapshot;
-}) {
-  const statusCards = [
-    {
-      label: "Current Stage",
-      value: snapshot.currentStage.name,
-      helper: `${snapshot.currentStage.letter} Stage`,
-      icon: Layers3,
-    },
-    {
-      label: "Current OMNI Step",
-      value: `${snapshot.currentStep.code} — ${snapshot.currentStep.meaning}`,
-      helper: snapshot.currentStep.skill,
-      icon: Footprints,
-    },
-    {
-      label: "Completed Steps",
-      value: `${snapshot.completedSteps} / ${snapshot.totalSteps}`,
-      helper: `${snapshot.remainingSteps} remaining`,
-      icon: BarChart3,
-    },
-    {
-      label: "Journey",
-      value: `${snapshot.journeyCompletion}%`,
-      helper: "Offline progression completion",
-      icon: Gauge,
-    },
-  ];
+export default function OmniJourneyStatus({ snapshot }: { snapshot: unknown }) {
+  const data = toRecord(snapshot);
+  const siliconPoints = getNumber(data, "siliconPoints", 0);
+  const currentTier = getDisplayValue(data.currentTier, "name", "Emerging Engineer");
+  const currentStage = toRecord(data.currentStage);
+  const currentStep = toRecord(data.currentStep);
+
+  const stageName = getString(currentStage, "name", "Foundation Stage");
+  const stageDescription = getString(
+    currentStage,
+    "description",
+    "Current active engineering progression stage.",
+  );
+  const stepCode = getString(currentStep, "code", "O");
+  const stepMeaning = getString(currentStep, "meaning", "Continue learning");
+  const stepSkill = getString(currentStep, "skill", "Engineering Skill");
+  const difficulty = getString(currentStep, "difficulty", "Core");
+
+  const completedSteps = getNumber(data, "completedSteps", 0);
+  const totalSteps = Math.max(1, getNumber(data, "totalSteps", 28));
+  const remainingSteps = getNumber(data, "remainingSteps", totalSteps - completedSteps);
+  const completion = clampPercent(
+    getNumber(data, "journeyCompletion", (completedSteps / totalSteps) * 100),
+  );
 
   return (
-    <section className="relative overflow-hidden rounded-[3rem] border border-white/10 bg-white/[0.045] p-6 shadow-[0_34px_150px_rgba(0,0,0,0.5)] backdrop-blur-2xl lg:p-8">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_12%_10%,rgba(34,211,238,0.16),transparent_35%),radial-gradient(circle_at_88%_20%,rgba(168,85,247,0.14),transparent_35%)]" />
+    <CompetitionGlassPanel className="p-6 sm:p-8">
+      <CompetitionSectionHeading
+        eyebrow="Journey Status"
+        title="Your current VIBGYOR position."
+        description={stageDescription}
+        icon={<Activity className="h-5 w-5" />}
+      />
 
-      <div className="relative z-10">
-        <p className="text-sm font-black uppercase tracking-[0.32em] text-cyan-300">
-          VIBGYOR Progression Foundation
-        </p>
+      <div className="mt-7 grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
+        <div className="rounded-[1.6rem] border border-slate-200 bg-white/80 p-6 shadow-sm backdrop-blur-xl">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.22em] text-blue-700">
+                Active Stage
+              </p>
 
-        <h2 className="mt-5 text-4xl font-black tracking-tight text-white md:text-5xl">
-          Offline OMNI
-          <span className="block bg-gradient-to-r from-cyan-200 via-purple-300 to-emerald-300 bg-clip-text text-transparent">
-            Journey Status
-          </span>
-        </h2>
+              <h3 className="oso-heading mt-3 text-3xl font-black text-slate-950">
+                {stageName}
+              </h3>
+            </div>
 
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          {statusCards.map((card, index) => {
-            const Icon = card.icon;
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-blue-200 bg-blue-50 text-blue-700">
+              <CircuitBoard className="h-6 w-6" />
+            </div>
+          </div>
 
-            return (
-              <motion.article
-                key={card.label}
-                initial={{ opacity: 0, y: 18 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.42, delay: index * 0.05 }}
-                whileHover={{ y: -5, scale: 1.012 }}
-                className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-black/25 p-5"
-              >
-                <div className="pointer-events-none absolute -right-12 -top-12 h-36 w-36 rounded-full bg-cyan-400/10 blur-3xl" />
+          <div className="mt-6">
+            <div className="mb-2 flex items-center justify-between gap-3">
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-slate-500">
+                Journey Completion
+              </p>
+              <p className="text-sm font-black text-slate-950">{completion}%</p>
+            </div>
 
-                <div className="relative z-10">
-                  <Icon className="h-5 w-5 text-cyan-200" />
+            <CompetitionProgressBar value={completion} tone="blue" />
+          </div>
 
-                  <p className="mt-4 text-[10px] font-black uppercase tracking-[0.24em] text-white/35">
-                    {card.label}
-                  </p>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <CompetitionStatusPill label={currentTier} tone="emerald" />
+            <CompetitionStatusPill label={`${siliconPoints} Points`} tone="yellow" />
+          </div>
+        </div>
 
-                  <p className="mt-3 truncate text-2xl font-black text-white">
-                    {card.value}
-                  </p>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <CompetitionMetricTile
+            icon={<Layers3 className="h-5 w-5" />}
+            label="Current Step"
+            value={`${stepCode} · ${stepMeaning}`}
+            helper={stepSkill}
+            tone="blue"
+          />
 
-                  <p className="mt-2 text-sm font-semibold text-white/55">
-                    {card.helper}
-                  </p>
-                </div>
-              </motion.article>
-            );
-          })}
+          <CompetitionMetricTile
+            icon={<BadgeCheck className="h-5 w-5" />}
+            label="Difficulty"
+            value={difficulty}
+            helper="Current OMNI step complexity"
+            tone="yellow"
+          />
+
+          <CompetitionMetricTile
+            icon={<Sparkles className="h-5 w-5" />}
+            label="Completed"
+            value={`${completedSteps}/${totalSteps}`}
+            helper="Tracked progression steps"
+            tone="emerald"
+          />
+
+          <CompetitionMetricTile
+            icon={<Activity className="h-5 w-5" />}
+            label="Remaining"
+            value={Math.max(0, remainingSteps)}
+            helper="Steps left in the full journey"
+            tone="cyan"
+          />
         </div>
       </div>
-    </section>
+    </CompetitionGlassPanel>
   );
+}
+
+function toRecord(value: unknown): Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value)
+    ? (value as Record<string, unknown>)
+    : {};
+}
+
+function getNumber(record: Record<string, unknown>, key: string, fallback: number) {
+  const value = record[key];
+
+  return typeof value === "number" && Number.isFinite(value) ? value : fallback;
+}
+
+function getString(record: Record<string, unknown>, key: string, fallback: string) {
+  const value = record[key];
+
+  return typeof value === "string" && value.trim() ? value.trim() : fallback;
+}
+
+function getDisplayValue(value: unknown, preferredKey: string, fallback: string) {
+  if (typeof value === "string" && value.trim()) {
+    return value.trim();
+  }
+
+  if (typeof value === "object" && value !== null && !Array.isArray(value)) {
+    const record = value as Record<string, unknown>;
+    const preferred = record[preferredKey];
+    const name = record.name;
+
+    if (typeof preferred === "string" && preferred.trim()) {
+      return preferred.trim();
+    }
+
+    if (typeof name === "string" && name.trim()) {
+      return name.trim();
+    }
+  }
+
+  return fallback;
 }
