@@ -7,15 +7,10 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import {
   BookOpenCheck,
-  BrainCircuit,
   BriefcaseBusiness,
   Building2,
-  GraduationCap,
-  LayoutDashboard,
   Menu,
-  Network,
   Search,
-  Trophy,
   UserRound,
   X,
 } from "lucide-react";
@@ -27,14 +22,6 @@ import {
 } from "@/data/omni-ecosystem";
 import ProfileDropdown from "@/components/profile/platform/ProfileDropdown";
 import GoogleIcon from "@/components/ui/GoogleIcon";
-
-const iconMap = {
-  Dashboard: LayoutDashboard,
-  Challenges: BrainCircuit,
-  Competitions: Trophy,
-  Leaderboard: Trophy,
-  WorldSkills: GraduationCap,
-};
 
 export default function CompetitionNavbar() {
   const pathname = usePathname();
@@ -51,13 +38,13 @@ export default function CompetitionNavbar() {
           >
             <div className="relative flex h-[72px] w-[280px] items-center overflow-visible sm:w-[310px]">
               <Image
-                src="/brand/omni-logo-h.png"
-                alt="Omni Skills Olympiad"
-                width={1191}
-                height={843}
-                priority
-                className="h-auto w-[255px] object-contain object-left brightness-0 transition duration-200 group-hover:scale-[1.02] sm:w-[285px]"
-              />
+  src="/brand/omni-logo-new.jpeg"
+  alt="Omni Skills Olympiad"
+  width={2048}
+  height={397}
+  priority
+  className="h-12 w-auto object-contain object-left transition duration-200 group-hover:scale-[1.02] sm:h-14 lg:h-16"
+/>
             </div>
           </Link>
 
@@ -69,8 +56,6 @@ export default function CompetitionNavbar() {
               const active =
                 pathname === item.href ||
                 (item.href !== "/" && pathname.startsWith(item.href));
-              const Icon =
-                iconMap[item.label as keyof typeof iconMap] ?? Network;
 
               return (
                 <Link
@@ -82,7 +67,6 @@ export default function CompetitionNavbar() {
                       : "text-slate-700 hover:-translate-y-0.5 hover:bg-slate-100 hover:text-slate-950"
                   }`}
                 >
-                  <Icon className="h-4.5 w-4.5" />
                   {item.label}
                 </Link>
               );
@@ -188,7 +172,7 @@ export default function CompetitionNavbar() {
                     alt="Omni Skills Olympiad"
                     width={1191}
                     height={843}
-                    className="h-auto w-[230px] object-contain object-left brightness-0"
+                    className="h-auto w-57.5 object-contain object-left"
                   />
                 </Link>
 
@@ -217,8 +201,6 @@ export default function CompetitionNavbar() {
                   const active =
                     pathname === item.href ||
                     (item.href !== "/" && pathname.startsWith(item.href));
-                  const Icon =
-                    iconMap[item.label as keyof typeof iconMap] ?? Network;
 
                   return (
                     <MobileLink
@@ -226,7 +208,6 @@ export default function CompetitionNavbar() {
                       href={item.href}
                       active={active}
                       onClick={() => setMobileOpen(false)}
-                      icon={<Icon className="h-5 w-5" />}
                     >
                       {item.label}
                     </MobileLink>
@@ -314,7 +295,7 @@ function MobileLink({
   href: string;
   active: boolean;
   onClick: () => void;
-  icon: React.ReactNode;
+  icon?: React.ReactNode;
   children: React.ReactNode;
 }) {
   return (
@@ -327,7 +308,7 @@ function MobileLink({
           : "text-slate-700 hover:bg-slate-100 hover:text-slate-950"
       }`}
     >
-      {icon}
+      {icon ? icon : null}
       {children}
     </Link>
   );

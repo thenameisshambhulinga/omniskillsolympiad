@@ -144,34 +144,33 @@ export const competitionEcosystem = [
   },
 ];
 
-export const omniLevels: OmniLevel[] = [
+export const omniLevels = [
   {
-    code: "OMNI-1",
+    code: "Campus League",
     title: "Institution Level",
     scope: "College and department ranking",
   },
   {
-    code: "OMNI-2",
+    code: "District League",
     title: "District Level",
     scope: "District-level recognition",
   },
   {
-    code: "OMNI-3",
+    code: "State League",
     title: "State Level",
     scope: "State-level competition pathway",
   },
   {
-    code: "OMNI-4",
+    code: "National League",
     title: "National Level",
     scope: "National Olympiad readiness",
   },
   {
-    code: "OMNI-5",
+    code: "Global Pathway",
     title: "International Level",
     scope: "WorldSkills pathway",
   },
-];
-
+] as const;
 export const worldSkillsPathway = [
   "Institution",
   "District",

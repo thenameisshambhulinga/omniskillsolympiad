@@ -296,11 +296,21 @@ export default function DailyChallengeClient({
   };
 
   const isLowTime = timeLeft !== null && timeLeft <= 60 && !challengeEnded;
-  const timerProgress =
-    timeLeft === null
-      ? 100
-      : Math.max(0, Math.min(100, (timeLeft / 900) * 100));
+const initialDurationRef = useRef<number | null>(null);
 
+useEffect(() => {
+  if (timeLeft !== null && initialDurationRef.current === null) {
+    initialDurationRef.current = Math.max(timeLeft, 1);
+  }
+}, [timeLeft]);
+
+const timerProgress =
+  timeLeft === null
+    ? 100
+    : Math.max(
+        0,
+        Math.min(100, (timeLeft / (initialDurationRef.current ?? timeLeft)) * 100),
+      );
   return (
     <main className="relative min-h-screen overflow-hidden bg-slate-950 px-4 pb-28 pt-6 text-white sm:px-6 lg:px-8">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">

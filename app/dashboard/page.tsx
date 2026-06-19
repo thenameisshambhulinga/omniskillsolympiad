@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
+import DashboardSmartMissionPlanner from "@/components/dashboard/DashboardSmartMissionPlanner";
 import type { ReactNode } from "react";
 import {
   ArrowRight,
-  Award,
   BookOpenCheck,
   BrainCircuit,
   BriefcaseBusiness,
@@ -21,10 +21,10 @@ import {
   Sparkles,
   Target,
   Trophy,
-  UserRound,
   Zap,
 } from "lucide-react";
 
+import DashboardSkillPassportShowcase from "@/components/dashboard/DashboardSkillPassportShowcase";
 import OsoActionTile from "@/components/oso/OsoActionTile";
 import OsoGlassSurface from "@/components/oso/OsoGlassSurface";
 import OsoMetricTile from "@/components/oso/OsoMetricTile";
@@ -34,11 +34,11 @@ import OsoSectionHeader from "@/components/oso/OsoSectionHeader";
 import OsoStatusPill from "@/components/oso/OsoStatusPill";
 import OfflineState from "@/components/system/OfflineState";
 
-import { authOptions } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
-import { calculateOmniScore } from "@/lib/engineering-system";
-import { getTierProgress, getVibgyorProgress } from "@/lib/profile/tier-engine";
 import { omniGrowthLoop, worldSkillsPathway } from "@/data/omni-ecosystem";
+import { authOptions } from "@/lib/auth";
+import { calculateOmniScore } from "@/lib/engineering-system";
+import { prisma } from "@/lib/prisma";
+import { getTierProgress, getVibgyorProgress } from "@/lib/profile/tier-engine";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -221,6 +221,26 @@ export default async function DashboardPage() {
     profileCompletion,
   });
 
+  const portfolioReadiness = getPortfolioReadiness({
+    profileCompletion,
+    completedChallenges,
+    siliconPoints,
+    skillsCount: user.skills.length,
+  });
+
+  const careerReadiness = getCareerReadiness({
+    averageAccuracy,
+    omniScore,
+    careerInterestsCount: user.careerInterests.length,
+  });
+
+  const worldSkillsReadiness = getWorldSkillsReadiness({
+    completedChallenges,
+    streak: user.streak ?? 0,
+    averageAccuracy,
+    siliconPoints,
+  });
+
   return (
     <OsoPageShell>
       <OsoGlassSurface hover={false} className="p-6 sm:p-8 lg:p-10">
@@ -230,19 +250,16 @@ export default async function DashboardPage() {
               <OsoStatusPill
                 label="Student Growth Dashboard"
                 tone="blue"
-                icon={<UserRound className="h-3.5 w-3.5" />}
               />
 
               <OsoStatusPill
                 label={tierProgress.currentTier}
                 tone="emerald"
-                icon={<Award className="h-3.5 w-3.5" />}
               />
 
               <OsoStatusPill
                 label={`${vibgyorProgress.currentStage} Stage`}
                 tone="yellow"
-                icon={<Layers3 className="h-3.5 w-3.5" />}
               />
             </div>
 
@@ -341,6 +358,32 @@ export default async function DashboardPage() {
           tone="slate"
         />
       </section>
+      <DashboardSmartMissionPlanner
+  profileCompletion={profileCompletion}
+  completedChallenges={completedChallenges}
+  totalChallenges={totalChallenges}
+  siliconPoints={siliconPoints}
+  accuracy={averageAccuracy}
+  streak={user.streak ?? 0}
+  skillsCount={user.skills.length}
+  careerInterestsCount={user.careerInterests.length}
+  nationalRank={nationalRank}
+  currentStage={vibgyorProgress.currentStage}
+  currentTier={tierProgress.currentTier}
+/>
+
+      <DashboardSkillPassportShowcase
+        studentName={user.fullName}
+        omniId={user.omniId}
+        branch={user.branch}
+        college={user.college}
+        omniScore={omniScore}
+        siliconPoints={siliconPoints}
+        skillRankLabel={`#${nationalRank}`}
+        portfolioReadiness={portfolioReadiness}
+        careerReadiness={careerReadiness}
+        worldSkillsReadiness={worldSkillsReadiness}
+      />
 
       <section className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
         <OsoGlassSurface hover={false} className="p-6 sm:p-8">
@@ -612,6 +655,7 @@ export default async function DashboardPage() {
                     {String(index + 1).padStart(2, "0")}
                   </p>
                 </div>
+              
 
                 <div>
                   <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">
@@ -768,4 +812,67 @@ function getNextAction({
   }
 
   return "Keep practicing daily and start entering competition tracks to improve national visibility.";
+}
+
+function getPortfolioReadiness({
+  profileCompletion,
+  completedChallenges,
+  siliconPoints,
+  skillsCount,
+}: {
+  profileCompletion: number;
+  completedChallenges: number;
+  siliconPoints: number;
+  skillsCount: number;
+}) {
+  return clampPercent(
+    profileCompletion * 0.45 +
+      Math.min(completedChallenges, 20) * 1.5 +
+      Math.min(siliconPoints, 1500) / 40 +
+      Math.min(skillsCount, 8) * 2,
+  );
+}
+
+function getCareerReadiness({
+  averageAccuracy,
+  omniScore,
+  careerInterestsCount,
+}: {
+  averageAccuracy: number;
+  omniScore: number;
+  careerInterestsCount: number;
+}) {
+  return clampPercent(
+    averageAccuracy * 0.45 +
+      Math.min(omniScore, 1000) / 20 +
+      Math.min(careerInterestsCount, 5) * 4,
+  );
+}
+
+function getWorldSkillsReadiness({
+  completedChallenges,
+  streak,
+  averageAccuracy,
+  siliconPoints,
+}: {
+  completedChallenges: number;
+  streak: number;
+  averageAccuracy: number;
+  siliconPoints: number;
+}) {
+  return clampPercent(
+    5 +
+      Math.min(completedChallenges, 30) * 1.5 +
+      Math.min(streak, 30) * 0.9 +
+      averageAccuracy * 0.25 +
+      Math.min(siliconPoints, 2000) / 80,
+  );
+}
+
+function clampPercent(value: number) {
+  if (!Number.isFinite(value)) {
+    return 0;
+  }
+
+  return Math.max(0, Math.min(100, Math.round(value)));
 }

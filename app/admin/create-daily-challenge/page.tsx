@@ -2,9 +2,15 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
-export const runtime = "nodejs";
+
+type CreateChallengeResponse = {
+  success?: boolean;
+  id?: string;
+  error?: string;
+  challenge?: {
+    id?: string;
+  };
+};
 
 export default function CreateDailyChallengePage() {
   const router = useRouter();
@@ -30,37 +36,38 @@ export default function CreateDailyChallengePage() {
         },
         body: JSON.stringify({
           dayNumber: Number(dayNumber),
-          title,
-          description,
+          title: title.trim(),
+          description: description.trim(),
         }),
       });
 
-      const data = await response.json();
-
-      console.log("API RESPONSE:", data);
+      const data = (await response.json()) as CreateChallengeResponse;
 
       if (!response.ok) {
         throw new Error(data.error || "Failed to create challenge");
       }
 
-      if (!data.id) {
+      const challengeId = data.challenge?.id ?? data.id;
+
+      if (!challengeId) {
         throw new Error("Challenge ID missing from API response");
       }
 
-      router.push(`/admin/challenge/${data.id}`);
-    } catch (err: any) {
-      console.error(err);
+      router.push(`/admin/challenge/${challengeId}`);
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Something went wrong";
 
-      setError(err.message || "Something went wrong");
+      setError(message);
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <div className="min-h-screen bg-black text-white px-8 py-10">
-      <div className="max-w-3xl mx-auto">
-        <h1 className="text-5xl font-bold mb-10">Create Daily Challenge</h1>
+    <div className="min-h-screen bg-black px-8 py-10 text-white">
+      <div className="mx-auto max-w-3xl">
+        <h1 className="mb-10 text-5xl font-bold">Create Daily Challenge</h1>
 
         <form onSubmit={handleCreateChallenge} className="space-y-6">
           <input
@@ -69,7 +76,8 @@ export default function CreateDailyChallengePage() {
             value={dayNumber}
             onChange={(e) => setDayNumber(e.target.value)}
             required
-            className="w-full rounded-xl bg-zinc-900 border border-zinc-800 px-5 py-4 outline-none"
+            min={1}
+            className="w-full rounded-xl border border-zinc-800 bg-zinc-900 px-5 py-4 outline-none"
           />
 
           <input
@@ -78,7 +86,7 @@ export default function CreateDailyChallengePage() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
-            className="w-full rounded-xl bg-zinc-900 border border-zinc-800 px-5 py-4 outline-none"
+            className="w-full rounded-xl border border-zinc-800 bg-zinc-900 px-5 py-4 outline-none"
           />
 
           <textarea
@@ -87,11 +95,11 @@ export default function CreateDailyChallengePage() {
             onChange={(e) => setDescription(e.target.value)}
             required
             rows={5}
-            className="w-full rounded-xl bg-zinc-900 border border-zinc-800 px-5 py-4 outline-none resize-none"
+            className="w-full resize-none rounded-xl border border-zinc-800 bg-zinc-900 px-5 py-4 outline-none"
           />
 
           {error && (
-            <div className="bg-red-500/20 border border-red-500 text-red-300 rounded-xl px-4 py-3">
+            <div className="rounded-xl border border-red-500 bg-red-500/20 px-4 py-3 text-red-300">
               {error}
             </div>
           )}
@@ -99,7 +107,7 @@ export default function CreateDailyChallengePage() {
           <button
             type="submit"
             disabled={loading}
-            className="bg-blue-600 hover:bg-blue-700 transition-all rounded-xl px-8 py-4 font-semibold disabled:opacity-50"
+            className="rounded-xl bg-blue-600 px-8 py-4 font-semibold transition-all hover:bg-blue-700 disabled:opacity-50"
           >
             {loading ? "Creating..." : "Create Challenge"}
           </button>

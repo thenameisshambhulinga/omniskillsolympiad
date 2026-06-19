@@ -672,7 +672,7 @@ export default async function ProfilePage() {
             eyebrow="WorldSkills Direction"
             title="Where this passport can lead."
             description="OMNI profile data should support future WorldSkills and national recognition pathways."
-            icon={<GraduationCap className="h-5 w-5" />}
+            // icon={<GraduationCap className="h-5 w-5" />}
           />
 
           <div className="mt-7 flex flex-wrap gap-2">

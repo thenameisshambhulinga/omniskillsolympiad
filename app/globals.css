@@ -32,7 +32,7 @@
   --color-ring: var(--ring);
 
   --font-sans: var(--font-body);
-  --font-heading: var(--font-heading);
+  --font-heading: var(--font-body);
   --font-body: var(--font-body);
   --font-mono: var(--font-mono);
 
@@ -48,24 +48,25 @@
   --font-body:
     -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
     "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
   --font-mono:
     "SF Mono", "Cascadia Code", "Roboto Mono", Consolas, "Courier New",
     monospace;
 
   --background: #f8f9fa;
-  --foreground: #1a202c;
+  --foreground: #30343b;
 
   --card: #ffffff;
-  --card-foreground: #1a202c;
+  --card-foreground: #30343b;
 
   --popover: #ffffff;
-  --popover-foreground: #1a202c;
+  --popover-foreground: #30343b;
 
-  --primary: #0f62fe;
+  --primary: #2563eb;
   --primary-foreground: #ffffff;
 
   --secondary: #eef2f7;
-  --secondary-foreground: #1a202c;
+  --secondary-foreground: #1455d6;
 
   --muted: #f1f5f9;
   --muted-foreground: #64748b;
@@ -80,6 +81,43 @@
   --ring: #0f62fe;
 
   --radius: 0.875rem;
+
+  --oso-heading-color: #6d6e6f;
+  --oso-ink: #111827;
+  --oso-muted: #64748b;
+  --oso-blue: #2563eb;
+  --oso-cyan: #22d3ee;
+  --oso-violet: #7c3aed;
+  --oso-indigo: #4f46e5;
+  --oso-green: #10b981;
+  --oso-yellow: #facc15;
+  --oso-orange: #f97316;
+  --oso-red: #ef4444;
+
+  --oso-glass-shadow: 0 24px 70px rgba(15, 23, 42, 0.08);
+
+  --oso-vibgyor-gradient: linear-gradient(
+    120deg,
+    rgba(124, 58, 237, 0.2),
+    rgba(79, 70, 229, 0.18),
+    rgba(37, 99, 235, 0.18),
+    rgba(16, 185, 129, 0.18),
+    rgba(250, 204, 21, 0.2),
+    rgba(249, 115, 22, 0.18),
+    rgba(239, 68, 68, 0.18)
+  );
+
+  --oso-cta-border: rgba(37, 99, 235, 0.26);
+  --oso-cta-start: rgba(37, 99, 235, 0.94);
+  --oso-cta-mid: rgba(14, 165, 233, 0.92);
+  --oso-cta-end: rgba(34, 211, 238, 0.9);
+  --oso-cta-shadow:
+    0 18px 42px rgba(37, 99, 235, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.34);
+  --oso-cta-hover-shadow:
+    0 24px 58px rgba(37, 99, 235, 0.3),
+    0 0 34px rgba(34, 211, 238, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.42);
 }
 
 @layer base {
@@ -89,15 +127,15 @@
 
   html {
     scroll-behavior: smooth;
-    background: #f8f9fa;
+    background: var(--background);
     font-family: var(--font-body);
   }
 
   body {
     min-height: 100vh;
     overflow-x: hidden;
-    background: #f8f9fa;
-    color: #1a202c;
+    background: var(--background);
+    color: var(--foreground);
     font-family: var(--font-body);
     font-weight: 400;
     text-rendering: optimizeLegibility;
@@ -118,10 +156,23 @@
   h4,
   h5,
   h6,
-  .oso-heading {
-    font-family: var(--font-heading), var(--font-body);
-    color: #1a202c;
+  .oso-heading,
+  .oso-title,
+  .oso-section-title,
+  .oso-page-title,
+  .oso-card-title {
+    font-family: var(--font-body);
+    color: var(--oso-heading-color);
     letter-spacing: -0.035em;
+  }
+
+  :where(h1, h2, h3, h4, h5, h6).text-white,
+  .text-white.oso-heading,
+  .text-white.oso-title,
+  .text-white.oso-section-title,
+  .text-white.oso-page-title,
+  .text-white.oso-card-title {
+    color: #ffffff;
   }
 
   a {
@@ -177,7 +228,709 @@
     border-color: #93c5fd;
     box-shadow: 0 22px 60px rgba(15, 23, 42, 0.1);
   }
+
+  .oso-readable-prose {
+    font-size: clamp(1rem, 0.95rem + 0.25vw, 1.16rem);
+    line-height: 1.85;
+  }
+
+  .oso-nav-text {
+    font-size: 0.98rem;
+    letter-spacing: 0.01em;
+  }
+
+  .oso-glass-panel {
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    background:
+      linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.88),
+        rgba(248, 250, 252, 0.76)
+      );
+    box-shadow: 0 24px 70px rgba(15, 23, 42, 0.08);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+  }
+
+  .oso-glass-card {
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    background:
+      linear-gradient(
+        180deg,
+        rgba(102, 196, 236, 0.9),
+        rgba(144, 227, 175, 0.76)
+      );
+    box-shadow: 0 22px 64px rgba(15, 23, 42, 0.075);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+  }
+
+  .oso-glass-premium {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    background:
+      linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.78),
+        rgba(255, 255, 255, 0.48)
+      ),
+      var(--oso-vibgyor-gradient);
+    box-shadow: var(--oso-glass-shadow);
+    backdrop-filter: blur(22px);
+    -webkit-backdrop-filter: blur(22px);
+  }
+
+  .oso-glass-premium::before {
+    content: "";
+    position: absolute;
+    inset: -40% -20% auto auto;
+    z-index: -1;
+    height: 16rem;
+    width: 16rem;
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.14);
+    filter: blur(44px);
+    opacity: 0.8;
+    pointer-events: none;
+  }
+
+  .oso-vibgyor-soft {
+    background:
+      radial-gradient(
+        circle at 12% 12%,
+        rgba(124, 58, 237, 0.13),
+        transparent 30%
+      ),
+      radial-gradient(
+        circle at 32% 18%,
+        rgba(37, 99, 235, 0.12),
+        transparent 30%
+      ),
+      radial-gradient(
+        circle at 62% 18%,
+        rgba(16, 185, 129, 0.12),
+        transparent 30%
+      ),
+      radial-gradient(
+        circle at 84% 22%,
+        rgba(250, 204, 21, 0.16),
+        transparent 30%
+      ),
+      linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.88),
+        rgba(255, 255, 255, 0.66)
+      );
+  }
+
+  .oso-magic-card {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    border-radius: 1.75rem;
+    border: 1px solid rgba(148, 163, 184, 0.24);
+    background: rgba(255, 255, 255, 0.72);
+    box-shadow: 0 18px 48px rgba(15, 23, 42, 0.065);
+    backdrop-filter: blur(22px);
+    -webkit-backdrop-filter: blur(22px);
+    transform: translateZ(0);
+    transition:
+      transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 320ms ease,
+      border-color 320ms ease;
+  }
+
+  .oso-magic-card::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    z-index: -1;
+    background:
+      radial-gradient(
+        circle at var(--mouse-x, 50%) var(--mouse-y, 20%),
+        rgba(34, 211, 238, 0.24),
+        transparent 30%
+      ),
+      var(--oso-vibgyor-gradient);
+    opacity: 0;
+    transition: opacity 280ms ease;
+  }
+
+  .oso-magic-card:hover {
+    transform: translateY(-7px) scale(1.012);
+    border-color: rgba(37, 99, 235, 0.28);
+    box-shadow: 0 28px 78px rgba(15, 23, 42, 0.115);
+  }
+
+  .oso-magic-card:hover::before {
+    opacity: 1;
+  }
+
+  .oso-horizontal-track {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 0.75rem;
+  }
+
+  .oso-horizontal-track > * {
+    scroll-snap-align: start;
+  }
+
+  .oso-glow-icon {
+    color: #ffffff;
+    filter: drop-shadow(0 0 7px rgba(34, 211, 238, 0.9));
+  }
+
+  .oso-safe-layer {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .oso-safe-layer > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .mountain-illustration-fixed {
+    width: 100%;
+    max-width: 1200px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    mix-blend-mode: multiply;
+    filter: contrast(1.1);
+  }
+
+  .oso-illustration-clean {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    object-position: center;
+    filter: contrast(1.06) saturate(1.02);
+  }
+
+  .oso-illustration-multiply,
+  .oso-illustration-blend {
+    mix-blend-mode: multiply;
+  }
+
+  .oso-illustration-hover {
+    transition:
+      transform 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+      filter 0.3s ease;
+    transform-origin: center;
+  }
+
+  .oso-illustration-hover:hover {
+    transform: scale(1.035);
+  }
+
+  .oso-illustration-multiply {
+    filter: contrast(1.05) saturate(1.02);
+  }
+
+  .oso-soft-pattern-layer {
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    opacity: 0.18;
+  }
+
+  .oso-floating-illustration-stage {
+    position: relative;
+    isolation: isolate;
+    overflow: visible;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+  }
+
+  .oso-floating-illustration-stage::before {
+    content: "";
+    position: absolute;
+    inset: 8% 4%;
+    z-index: -1;
+    border-radius: 999px;
+    background:
+      radial-gradient(
+        circle at 30% 40%,
+        rgba(37, 99, 235, 0.08),
+        transparent 38%
+      ),
+      radial-gradient(
+        circle at 70% 62%,
+        rgba(250, 204, 21, 0.1),
+        transparent 34%
+      );
+    filter: blur(34px);
+    opacity: 0.9;
+    pointer-events: none;
+  }
+
+  .oso-floating-illustration-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+    object-position: center;
+    mix-blend-mode: multiply;
+    filter: contrast(1.06) saturate(1.03);
+    transition:
+      transform 0.42s cubic-bezier(0.25, 1, 0.5, 1),
+      filter 0.3s ease;
+    transform-origin: center center;
+  }
+
+  .oso-floating-illustration-stage:hover .oso-floating-illustration-img {
+    transform: scale(1.025);
+    filter: contrast(1.08) saturate(1.05);
+  }
+
+  .oso-infinity-loader {
+    position: relative;
+    height: 7rem;
+    width: 14rem;
+  }
+
+  .oso-infinity-loader::before,
+  .oso-infinity-loader::after {
+    content: "";
+    position: absolute;
+    top: 1.55rem;
+    width: 4.5rem;
+    height: 4.5rem;
+    border: 0.55rem solid rgba(37, 99, 235, 0.18);
+    border-top-color: rgba(34, 211, 238, 0.95);
+    border-right-color: rgba(124, 58, 237, 0.75);
+    border-bottom-color: rgba(250, 204, 21, 0.45);
+    border-radius: 999px;
+    filter: drop-shadow(0 0 16px rgba(34, 211, 238, 0.5));
+    animation: osoInfinitySpin 1.2s linear infinite;
+  }
+
+  .oso-infinity-loader::before {
+    left: 2.05rem;
+    transform-origin: 4.9rem 2.25rem;
+  }
+
+  .oso-infinity-loader::after {
+    right: 2.05rem;
+    transform-origin: -0.4rem 2.25rem;
+    animation-direction: reverse;
+  }
+
+  .oso-loader-spark {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    height: 0.75rem;
+    width: 0.75rem;
+    border-radius: 999px;
+    background: #22d3ee;
+    box-shadow:
+      0 0 16px rgba(34, 211, 238, 0.95),
+      0 0 34px rgba(37, 99, 235, 0.65);
+    animation: osoInfinitySpark 2.4s ease-in-out infinite;
+  }
 }
+
+/* =========================================================
+   GLOBAL HEADLINE COLOR
+   ========================================================= */
+
+.oso-container :where(h1, h2, h3, h4, h5, h6),
+.oso-heading,
+.oso-title,
+.oso-section-title,
+.oso-page-title,
+.oso-card-title {
+  color: var(--oso-heading-color) !important;
+}
+
+:where(h1, h2, h3, h4, h5, h6).text-white,
+.text-white.oso-heading,
+.text-white.oso-title,
+.text-white.oso-section-title,
+.text-white.oso-page-title,
+.text-white.oso-card-title {
+  color: #ffffff !important;
+}
+
+/* =========================================================
+   ONLY RESTYLE UPPERCASE + LETTER-SPACED MICRO TEXT
+   Apple/system font is preserved. This only removes the harsh
+   wide-spaced look and makes labels cleaner.
+   ========================================================= */
+
+[class*="uppercase"][class*="tracking"],
+[class*="tracking-"][class*="font-black"],
+[class*="tracking-"][class*="font-bold"] {
+  font-family: var(--font-body) !important;
+  font-weight: 750 !important;
+  letter-spacing: 0.035em !important;
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+}
+
+nav [class*="uppercase"],
+header [class*="uppercase"],
+.oso-container [class*="uppercase"] {
+  font-family: var(--font-body) !important;
+  font-weight: 750 !important;
+  letter-spacing: 0.035em !important;
+}
+
+[class*="rounded-full"][class*="uppercase"],
+[class*="rounded-"][class*="uppercase"] {
+  letter-spacing: 0.03em !important;
+  line-height: 1.15 !important;
+}
+
+/* =========================================================
+   GLOBAL CONSISTENT PRIMARY TEXT CTA BUTTONS
+   Icon-only buttons are excluded because they do not use uppercase.
+   ========================================================= */
+
+.oso-btn,
+a[class*="rounded-full"][class*="uppercase"][class*="bg-blue-600"],
+button[class*="rounded-full"][class*="uppercase"][class*="bg-blue-600"],
+a[class*="rounded-full"][class*="uppercase"][class*="bg-slate-950"],
+button[class*="rounded-full"][class*="uppercase"][class*="bg-slate-950"],
+a[class*="rounded-full"][class*="uppercase"][class*="bg-slate-900"],
+button[class*="rounded-full"][class*="uppercase"][class*="bg-slate-900"] {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  min-height: 3.35rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  overflow: hidden;
+  border-radius: 999px;
+  border: 1px solid var(--oso-cta-border) !important;
+  background:
+    linear-gradient(
+      135deg,
+      var(--oso-cta-start) 0%,
+      var(--oso-cta-mid) 52%,
+      var(--oso-cta-end) 100%
+    ) !important;
+  color: #ffffff !important;
+  font-family: var(--font-body) !important;
+  font-size: 0.875rem;
+  font-weight: 800 !important;
+  letter-spacing: 0.035em !important;
+  text-transform: uppercase;
+  padding: 0.9rem 1.55rem;
+  box-shadow: var(--oso-cta-shadow) !important;
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease,
+    border-color 220ms ease,
+    background 220ms ease,
+    color 220ms ease !important;
+}
+
+.oso-btn::before,
+a[class*="rounded-full"][class*="uppercase"][class*="bg-blue-600"]::before,
+button[class*="rounded-full"][class*="uppercase"][class*="bg-blue-600"]::before,
+a[class*="rounded-full"][class*="uppercase"][class*="bg-slate-950"]::before,
+button[class*="rounded-full"][class*="uppercase"][class*="bg-slate-950"]::before,
+a[class*="rounded-full"][class*="uppercase"][class*="bg-slate-900"]::before,
+button[class*="rounded-full"][class*="uppercase"][class*="bg-slate-900"]::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  z-index: -1;
+  border-radius: inherit;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.34),
+      rgba(255, 255, 255, 0.08) 42%,
+      rgba(255, 255, 255, 0.2)
+    );
+  opacity: 0.72;
+  pointer-events: none;
+}
+
+.oso-btn::after,
+a[class*="rounded-full"][class*="uppercase"][class*="bg-blue-600"]::after,
+button[class*="rounded-full"][class*="uppercase"][class*="bg-blue-600"]::after,
+a[class*="rounded-full"][class*="uppercase"][class*="bg-slate-950"]::after,
+button[class*="rounded-full"][class*="uppercase"][class*="bg-slate-950"]::after,
+a[class*="rounded-full"][class*="uppercase"][class*="bg-slate-900"]::after,
+button[class*="rounded-full"][class*="uppercase"][class*="bg-slate-900"]::after {
+  content: "";
+  position: absolute;
+  left: -35%;
+  top: -120%;
+  z-index: -1;
+  width: 42%;
+  height: 320%;
+  transform: rotate(24deg);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.48),
+    transparent
+  );
+  opacity: 0;
+  transition:
+    left 520ms ease,
+    opacity 220ms ease;
+  pointer-events: none;
+}
+
+.oso-btn:hover,
+a[class*="rounded-full"][class*="uppercase"][class*="bg-blue-600"]:hover,
+button[class*="rounded-full"][class*="uppercase"][class*="bg-blue-600"]:hover,
+a[class*="rounded-full"][class*="uppercase"][class*="bg-slate-950"]:hover,
+button[class*="rounded-full"][class*="uppercase"][class*="bg-slate-950"]:hover,
+a[class*="rounded-full"][class*="uppercase"][class*="bg-slate-900"]:hover,
+button[class*="rounded-full"][class*="uppercase"][class*="bg-slate-900"]:hover {
+  transform: translateY(-2px);
+  border-color: rgba(125, 211, 252, 0.58) !important;
+  box-shadow: var(--oso-cta-hover-shadow) !important;
+}
+
+.oso-btn:hover::after,
+a[class*="rounded-full"][class*="uppercase"][class*="bg-blue-600"]:hover::after,
+button[class*="rounded-full"][class*="uppercase"][class*="bg-blue-600"]:hover::after,
+a[class*="rounded-full"][class*="uppercase"][class*="bg-slate-950"]:hover::after,
+button[class*="rounded-full"][class*="uppercase"][class*="bg-slate-950"]:hover::after,
+a[class*="rounded-full"][class*="uppercase"][class*="bg-slate-900"]:hover::after,
+button[class*="rounded-full"][class*="uppercase"][class*="bg-slate-900"]:hover::after {
+  left: 120%;
+  opacity: 1;
+}
+
+/* =========================================================
+   GLOBAL CONSISTENT SECONDARY TEXT CTA BUTTONS
+   Icon-only circles are excluded.
+   ========================================================= */
+
+.oso-btn-secondary,
+a[class*="rounded-full"][class*="uppercase"][class*="border"][class*="bg-white"],
+button[class*="rounded-full"][class*="uppercase"][class*="border"][class*="bg-white"],
+a[class*="rounded-full"][class*="uppercase"][class*="border-slate"][class*="bg-white"],
+button[class*="rounded-full"][class*="uppercase"][class*="border-slate"][class*="bg-white"] {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  min-height: 3.35rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  overflow: hidden;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.34) !important;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.86),
+      rgba(239, 246, 255, 0.72),
+      rgba(224, 242, 254, 0.74)
+    ) !important;
+  color: #0f172a !important;
+  font-family: var(--font-body) !important;
+  font-size: 0.875rem;
+  font-weight: 800 !important;
+  letter-spacing: 0.035em !important;
+  text-transform: uppercase;
+  padding: 0.9rem 1.55rem;
+  box-shadow:
+    0 14px 34px rgba(15, 23, 42, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.82) !important;
+  backdrop-filter: blur(18px) saturate(145%);
+  -webkit-backdrop-filter: blur(18px) saturate(145%);
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease,
+    border-color 220ms ease,
+    background 220ms ease,
+    color 220ms ease !important;
+}
+
+.oso-btn-secondary::before,
+a[class*="rounded-full"][class*="uppercase"][class*="border"][class*="bg-white"]::before,
+button[class*="rounded-full"][class*="uppercase"][class*="border"][class*="bg-white"]::before,
+a[class*="rounded-full"][class*="uppercase"][class*="border-slate"][class*="bg-white"]::before,
+button[class*="rounded-full"][class*="uppercase"][class*="border-slate"][class*="bg-white"]::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  z-index: -1;
+  border-radius: inherit;
+  background:
+    radial-gradient(
+      circle at 20% 20%,
+      rgba(37, 99, 235, 0.12),
+      transparent 34%
+    ),
+    radial-gradient(
+      circle at 82% 20%,
+      rgba(34, 211, 238, 0.13),
+      transparent 34%
+    );
+  pointer-events: none;
+}
+
+.oso-btn-secondary:hover,
+a[class*="rounded-full"][class*="uppercase"][class*="border"][class*="bg-white"]:hover,
+button[class*="rounded-full"][class*="uppercase"][class*="border"][class*="bg-white"]:hover,
+a[class*="rounded-full"][class*="uppercase"][class*="border-slate"][class*="bg-white"]:hover,
+button[class*="rounded-full"][class*="uppercase"][class*="border-slate"][class*="bg-white"]:hover {
+  transform: translateY(-2px);
+  border-color: rgba(37, 99, 235, 0.36) !important;
+  color: #1d4ed8 !important;
+  box-shadow:
+    0 20px 48px rgba(37, 99, 235, 0.14),
+    0 0 26px rgba(34, 211, 238, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.86) !important;
+}
+
+/* =========================================================
+   ICON VISIBILITY + SHAPE PROTECTION
+   ========================================================= */
+
+.oso-btn > *,
+.oso-btn-secondary > *,
+a[class*="rounded-full"] > *,
+button[class*="rounded-full"] > * {
+  position: relative;
+  z-index: 5;
+}
+
+.oso-btn svg,
+.oso-btn-secondary svg,
+a[class*="rounded-full"] svg,
+button[class*="rounded-full"] svg {
+  position: relative;
+  z-index: 6;
+  color: currentColor !important;
+  stroke: currentColor !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Login remains a text pill */
+header a[href*="login"],
+header a[href*="/login"],
+nav a[href*="login"],
+nav a[href*="/login"] {
+  width: auto !important;
+  min-width: unset !important;
+  min-height: 3.35rem !important;
+  aspect-ratio: auto !important;
+  padding: 0.85rem 1.45rem !important;
+  border-radius: 999px !important;
+}
+
+/* Header menu/hamburger stays circular */
+button[aria-label*="menu"],
+button[aria-label*="Menu"],
+button[aria-label*="navigation"],
+button[aria-label*="Navigation"] {
+  width: 3rem !important;
+  height: 3rem !important;
+  min-width: 3rem !important;
+  min-height: 3rem !important;
+  aspect-ratio: 1 / 1 !important;
+  padding: 0 !important;
+  border-radius: 999px !important;
+  color: #0f172a !important;
+}
+
+button[aria-label*="menu"] svg,
+button[aria-label*="Menu"] svg,
+button[aria-label*="navigation"] svg,
+button[aria-label*="Navigation"] svg {
+  color: #0f172a !important;
+  stroke: #0f172a !important;
+}
+
+/* Carousel arrows stay visible */
+button[aria-label*="Previous"],
+button[aria-label*="Next"],
+button[aria-label*="previous"],
+button[aria-label*="next"] {
+  width: 3rem !important;
+  height: 3rem !important;
+  min-width: 3rem !important;
+  min-height: 3rem !important;
+  aspect-ratio: 1 / 1 !important;
+  padding: 0 !important;
+  border-radius: 999px !important;
+  color: #2563eb !important;
+}
+
+button[aria-label*="Previous"] svg,
+button[aria-label*="Next"] svg,
+button[aria-label*="previous"] svg,
+button[aria-label*="next"] svg {
+  color: #2563eb !important;
+  stroke: #2563eb !important;
+}
+
+/* Footer social media icons stay circular, never CTA pills */
+footer a[aria-label][class*="rounded-full"]:has(svg),
+footer button[aria-label][class*="rounded-full"]:has(svg) {
+  width: 3.85rem !important;
+  height: 3.85rem !important;
+  min-width: 3.85rem !important;
+  min-height: 3.85rem !important;
+  aspect-ratio: 1 / 1 !important;
+  padding: 0 !important;
+  border-radius: 999px !important;
+  color: #0f172a !important;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.82),
+      rgba(226, 232, 240, 0.72)
+    ) !important;
+  border: 1px solid rgba(255, 255, 255, 0.72) !important;
+  box-shadow:
+    0 14px 32px rgba(15, 23, 42, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.82) !important;
+}
+
+footer a[aria-label][class*="rounded-full"]:has(svg)::after,
+footer button[aria-label][class*="rounded-full"]:has(svg)::after {
+  display: none !important;
+}
+
+footer a[aria-label][class*="rounded-full"]:has(svg) svg,
+footer button[aria-label][class*="rounded-full"]:has(svg) svg {
+  width: 1.15rem !important;
+  height: 1.15rem !important;
+  color: #0f172a !important;
+  stroke: #0f172a !important;
+}
+
+/* Status pills must not become CTA-sized */
+span[class*="rounded-full"][class*="uppercase"],
+div[class*="rounded-full"][class*="uppercase"]:not(a):not(button) {
+  width: auto !important;
+  min-width: unset !important;
+  min-height: unset !important;
+  aspect-ratio: auto !important;
+  padding-block: 0.42rem !important;
+  padding-inline: 0.78rem !important;
+}
+
+/* =========================================================
+   SCROLLBAR / SELECTION
+   ========================================================= */
 
 ::-webkit-scrollbar {
   width: 10px;
@@ -201,6 +954,61 @@
   color: #0f172a;
 }
 
+/* =========================================================
+   KEYFRAMES
+   ========================================================= */
+
+@keyframes osoInfinitySpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes oso-infinity-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes osoInfinitySpark {
+  0% {
+    transform: translate(-5.3rem, -0.35rem) scale(0.8);
+    opacity: 0.35;
+  }
+
+  25% {
+    transform: translate(-1.5rem, -2.35rem) scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: translate(0, -0.35rem) scale(0.9);
+    opacity: 0.8;
+  }
+
+  75% {
+    transform: translate(1.5rem, 1.65rem) scale(1);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate(5.3rem, -0.35rem) scale(0.8);
+    opacity: 0.35;
+  }
+}
+
+/* =========================================================
+   ACCESSIBILITY + MOTION
+   ========================================================= */
+
+.oso-btn:focus-visible,
+.oso-btn-secondary:focus-visible,
+a[class*="rounded-full"]:focus-visible,
+button[class*="rounded-full"]:focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.32);
+  outline-offset: 3px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -210,140 +1018,7 @@
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
   }
-}
 
-.mountain-illustration-fixed {
-  width: 100%;
-  max-width: 1200px;
-  height: auto;
-  display: block;
-  margin: 0 auto;
-  mix-blend-mode: multiply;
-  filter: contrast(1.1);
-}
-
-.oso-readable-prose {
-  font-size: clamp(1rem, 0.95rem + 0.25vw, 1.16rem);
-  line-height: 1.85;
-}
-
-.oso-nav-text {
-  font-size: 0.98rem;
-  letter-spacing: 0.01em;
-}
-
-.oso-glass-panel {
-  border: 1px solid rgba(226, 232, 240, 0.9);
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(248, 250, 252, 0.76));
-  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.08);
-  backdrop-filter: blur(18px);
-}
-
-.oso-illustration-multiply {
-  mix-blend-mode: multiply;
-  filter: contrast(1.05) saturate(1.02);
-}
-
-.oso-soft-pattern-layer {
-  pointer-events: none;
-  position: absolute;
-  inset: 0;
-  opacity: 0.18;
-}
-
-/* OSO illustration system fixes */
-.oso-illustration-clean {
-  display: block;
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-  object-position: center;
-  filter: contrast(1.06) saturate(1.02);
-}
-
-.oso-illustration-blend {
-  mix-blend-mode: multiply;
-}
-
-.oso-illustration-hover {
-  transition:
-    transform 0.4s cubic-bezier(0.25, 1, 0.5, 1),
-    filter 0.3s ease;
-  transform-origin: center;
-}
-
-.oso-illustration-hover:hover {
-  transform: scale(1.035);
-}
-
-.oso-glass-card {
-  border: 1px solid rgba(226, 232, 240, 0.9);
-  background:
-    linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.9),
-      rgba(248, 250, 252, 0.76)
-    );
-  box-shadow: 0 22px 64px rgba(15, 23, 42, 0.075);
-  backdrop-filter: blur(18px);
-}
-
-.oso-safe-layer {
-  position: relative;
-  isolation: isolate;
-}
-
-.oso-safe-layer > * {
-  position: relative;
-  z-index: 1;
-} 
-
-/* Floating illustration system: Kaggle / mountain-climb style */
-.oso-floating-illustration-stage {
-  position: relative;
-  isolation: isolate;
-  overflow: visible;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 0;
-}
-
-.oso-floating-illustration-stage::before {
-  content: "";
-  position: absolute;
-  inset: 8% 4%;
-  z-index: -1;
-  border-radius: 999px;
-  background:
-    radial-gradient(circle at 30% 40%, rgba(37, 99, 235, 0.08), transparent 38%),
-    radial-gradient(circle at 70% 62%, rgba(250, 204, 21, 0.1), transparent 34%);
-  filter: blur(34px);
-  opacity: 0.9;
-  pointer-events: none;
-}
-
-.oso-floating-illustration-img {
-  width: 100%;
-  height: auto;
-  display: block;
-  object-fit: contain;
-  object-position: center;
-  mix-blend-mode: multiply;
-  filter: contrast(1.06) saturate(1.03);
-  transition:
-    transform 0.42s cubic-bezier(0.25, 1, 0.5, 1),
-    filter 0.3s ease;
-  transform-origin: center center;
-}
-
-.oso-floating-illustration-stage:hover .oso-floating-illustration-img {
-  transform: scale(1.025);
-  filter: contrast(1.08) saturate(1.05);
-}
-
-@media (prefers-reduced-motion: reduce) {
   .oso-floating-illustration-img {
     transition: none;
   }
@@ -351,4 +1026,232 @@
   .oso-floating-illustration-stage:hover .oso-floating-illustration-img {
     transform: none;
   }
+
+  .oso-btn,
+  .oso-btn-secondary,
+  a[class*="rounded-full"],
+  button[class*="rounded-full"] {
+    transition: none !important;
+  }
+
+  .oso-btn::after,
+  .oso-btn-secondary::after,
+  a[class*="rounded-full"]::after,
+  button[class*="rounded-full"]::after {
+    display: none !important;
+  }
+}
+/* =========================================================
+   OSO STABLE CTA UTILITIES
+   Use these classes for important text CTAs.
+   They preserve Apple system fonts and avoid icon-only button conflicts.
+   ========================================================= */
+
+.oso-cta-primary {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  min-height: 3.5rem;
+  width: fit-content;
+  max-width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  overflow: hidden;
+  border-radius: 999px;
+  border: 1px solid rgba(37, 99, 235, 0.28);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(37, 99, 235, 0.96),
+      rgba(14, 165, 233, 0.94),
+      rgba(34, 211, 238, 0.9)
+    );
+  padding: 0.95rem 1.75rem;
+  color: #ffffff;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.035em;
+  text-align: center;
+  text-transform: uppercase;
+  white-space: nowrap;
+  box-shadow:
+    0 18px 42px rgba(37, 99, 235, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.34);
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease,
+    border-color 220ms ease,
+    color 220ms ease;
+}
+
+.oso-cta-primary::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  z-index: -1;
+  border-radius: inherit;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.34),
+      rgba(255, 255, 255, 0.08) 42%,
+      rgba(255, 255, 255, 0.2)
+    );
+  opacity: 0.72;
+  pointer-events: none;
+}
+
+.oso-cta-primary::after {
+  content: "";
+  position: absolute;
+  left: -35%;
+  top: -120%;
+  z-index: -1;
+  width: 42%;
+  height: 320%;
+  transform: rotate(24deg);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.48),
+    transparent
+  );
+  opacity: 0;
+  transition:
+    left 520ms ease,
+    opacity 220ms ease;
+  pointer-events: none;
+}
+
+.oso-cta-primary:hover {
+  transform: translateY(-2px);
+  border-color: rgba(125, 211, 252, 0.58);
+  color: #ffffff;
+  box-shadow:
+    0 24px 58px rgba(37, 99, 235, 0.3),
+    0 0 34px rgba(34, 211, 238, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.42);
+}
+
+.oso-cta-primary:hover::after {
+  left: 120%;
+  opacity: 1;
+}
+
+.oso-cta-secondary {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  min-height: 3.5rem;
+  width: fit-content;
+  max-width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  overflow: hidden;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.38);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.9),
+      rgba(239, 246, 255, 0.76),
+      rgba(224, 242, 254, 0.78)
+    );
+  padding: 0.95rem 1.75rem;
+  color: #0f172a;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.035em;
+  text-align: center;
+  text-transform: uppercase;
+  white-space: nowrap;
+  box-shadow:
+    0 14px 34px rgba(15, 23, 42, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(18px) saturate(145%);
+  -webkit-backdrop-filter: blur(18px) saturate(145%);
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease,
+    border-color 220ms ease,
+    color 220ms ease;
+}
+
+.oso-cta-secondary:hover {
+  transform: translateY(-2px);
+  border-color: rgba(37, 99, 235, 0.36);
+  color: #1d4ed8;
+  box-shadow:
+    0 20px 48px rgba(37, 99, 235, 0.14),
+    0 0 26px rgba(34, 211, 238, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.86);
+}
+
+.oso-cta-primary > *,
+.oso-cta-secondary > * {
+  position: relative;
+  z-index: 5;
+}
+
+.oso-cta-primary svg,
+.oso-cta-secondary svg {
+  flex-shrink: 0;
+  color: currentColor;
+  stroke: currentColor;
+}
+
+/* Safe circular icon action for hamburger, arrows, close buttons */
+.oso-icon-action {
+  position: relative;
+  display: inline-flex;
+  height: 3rem;
+  width: 3rem;
+  min-height: 3rem;
+  min-width: 3rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid rgba(203, 213, 225, 0.78);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.88),
+      rgba(239, 246, 255, 0.78)
+    );
+  color: #0f172a;
+  box-shadow:
+    0 12px 28px rgba(15, 23, 42, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  transition:
+    transform 200ms ease,
+    border-color 200ms ease,
+    box-shadow 200ms ease,
+    color 200ms ease;
+}
+
+.oso-icon-action:hover {
+  transform: translateY(-2px);
+  border-color: rgba(37, 99, 235, 0.32);
+  color: #2563eb;
+  box-shadow:
+    0 18px 38px rgba(37, 99, 235, 0.13),
+    inset 0 1px 0 rgba(255, 255, 255, 0.86);
+}
+
+.oso-icon-action svg {
+  height: 1.2rem;
+  width: 1.2rem;
+  color: currentColor;
+  stroke: currentColor;
 }

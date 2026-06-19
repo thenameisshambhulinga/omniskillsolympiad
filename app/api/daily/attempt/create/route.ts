@@ -1,31 +1,25 @@
-//attempt/create/route.ts
-import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
-export async function POST(req: Request) {
-  try {
-    const body = await req.json();
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
-    const challenge = await prisma.dailyChallenge.create({
-      data: {
-        dayNumber: body.dayNumber,
-        title: body.title,
-        description: body.description,
-      },
-    });
+function disabledRouteResponse() {
+  return NextResponse.json(
+    {
+      success: false,
+      error: "This route is disabled. Daily challenge creation is admin-only.",
+      code: "ROUTE_DISABLED",
+    },
+    {
+      status: 410,
+    },
+  );
+}
 
-    return NextResponse.json({
-      success: true,
-      challenge,
-    });
-  } catch (error) {
-    return NextResponse.json(
-      {
-        error: "Failed to create challenge",
-      },
-      {
-        status: 500,
-      },
-    );
-  }
+export async function GET() {
+  return disabledRouteResponse();
+}
+
+export async function POST() {
+  return disabledRouteResponse();
 }

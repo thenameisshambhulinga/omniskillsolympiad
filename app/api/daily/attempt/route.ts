@@ -1,414 +1,280 @@
-import { NextResponse } from "next/server";
-
-import { getServerSession } from "next-auth";
-
-import { authOptions } from "@/lib/auth";
-
+import { calculateOmniScore } from "@/lib/engineering-system";
 import { prisma } from "@/lib/prisma";
-import { evaluateStreak } from "@/lib/streak-system";
-
 import {
-  calculateOmniScore,
-  determineEngineeringTier,
-  calculateProtectedStreak,
-} from "@/lib/engineering-system";
+  scoreDailyAnswers,
+  type DailyScoringQuestion,
+} from "@/lib/daily-challenge/daily-score-engine";
+import { requireApiUser } from "@/lib/server/api-auth";
+import {
+  apiError,
+  apiOk,
+  cleanString,
+  readJsonObject,
+} from "@/lib/server/api-response";
 
-export async function POST(req: Request) {
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
+const POINTS_PER_CORRECT_ANSWER = 10;
+const SUBMISSION_GRACE_MS = 5000;
+
+export async function POST(request: Request) {
   try {
-    // SESSION VALIDATION
+    const auth = await requireApiUser();
 
-    const session = await getServerSession(authOptions);
-
-    if (!session?.user?.email) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Unauthorized",
-        },
-        {
-          status: 401,
-        },
-      );
+    if (auth.response) {
+      return auth.response;
     }
 
-    // REQUEST BODY
-
-    const body = await req.json();
-
-    const {
-      challengeId,
-      answers,
-    }: {
-      challengeId: string;
-
-      answers: {
-        questionId: string;
-        selectedAnswer: string;
-      }[];
-    } = body;
-
-    // PAYLOAD VALIDATION
-
-    if (!challengeId || !Array.isArray(answers)) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Invalid request payload",
-        },
-        {
-          status: 400,
-        },
-      );
-    }
-
-    // USER VALIDATION
-
-    const user = await prisma.user.findUnique({
-      where: {
-        email: session.user.email,
-      },
-
-      include: {
-        seasonProgress: true,
-      },
-    });
-
-    if (!user) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "User not found",
-        },
-        {
-          status: 404,
-        },
-      );
-    }
-
-    // ELIMINATION CHECK
+    const { user } = auth;
 
     if (user.seasonProgress?.eliminated) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "You are eliminated from this season",
-        },
-        {
-          status: 403,
-        },
+      return apiError(
+        "You are eliminated from this season.",
+        403,
+        "SEASON_ELIMINATED",
       );
     }
-
-    // CHAMPION BLOCK CHECK
 
     if (user.seasonProgress?.championBlocked) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Previous champions cannot compete again",
-        },
-        {
-          status: 403,
-        },
+      return apiError(
+        "Previous champions cannot compete again.",
+        403,
+        "CHAMPION_BLOCKED",
       );
     }
 
-    // CHALLENGE VALIDATION
+    const parsed = await readJsonObject(request);
+
+    if (parsed.response) {
+      return parsed.response;
+    }
+
+    const challengeId = cleanString(parsed.data.challengeId, 200);
+    const answers = Array.isArray(parsed.data.answers)
+      ? parsed.data.answers
+      : null;
+
+    if (!challengeId || !answers) {
+      return apiError(
+        "Challenge ID and answers are required.",
+        400,
+        "INVALID_PAYLOAD",
+      );
+    }
 
     const challenge = await prisma.dailyChallenge.findUnique({
       where: {
         id: challengeId,
       },
-
-      include: {
-        questions: true,
+      select: {
+        id: true,
+        dayNumber: true,
+        isPublished: true,
+        questions: {
+          select: {
+            id: true,
+            correctAnswer: true,
+            optionA: true,
+            optionB: true,
+            optionC: true,
+            optionD: true,
+          },
+        },
       },
     });
 
     if (!challenge || !challenge.isPublished) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Challenge unavailable",
-        },
-        {
-          status: 404,
-        },
-      );
+      return apiError("Challenge unavailable.", 404, "CHALLENGE_UNAVAILABLE");
     }
 
-    // ATTEMPT SESSION VALIDATION
+    if (challenge.questions.length === 0) {
+      return apiError(
+        "Challenge has no questions.",
+        400,
+        "EMPTY_CHALLENGE",
+      );
+    }
 
     const existingAttempt = await prisma.dailyAttempt.findFirst({
       where: {
         userId: user.id,
         challengeId,
       },
+      select: {
+        id: true,
+        completed: true,
+        expiresAt: true,
+      },
     });
 
     if (!existingAttempt) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Challenge session not started",
-        },
-        {
-          status: 400,
-        },
+      return apiError(
+        "Challenge session not started.",
+        400,
+        "SESSION_NOT_STARTED",
       );
     }
-
-    // DUPLICATE SUBMISSION BLOCK
 
     if (existingAttempt.completed) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Challenge already submitted",
-        },
-        {
-          status: 400,
-        },
+      return apiError(
+        "Challenge already submitted.",
+        409,
+        "ALREADY_SUBMITTED",
       );
     }
-
-    // NULL TIMER SAFETY
 
     if (!existingAttempt.expiresAt) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Challenge expiration missing",
-        },
-        {
-          status: 400,
-        },
+      return apiError(
+        "Challenge expiration missing.",
+        400,
+        "MISSING_EXPIRATION",
       );
     }
 
-    // TIMER EXPIRATION VALIDATION
-
-    const isExpired =
-      new Date().getTime() > new Date(existingAttempt.expiresAt).getTime();
-
-    if (isExpired) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Challenge time expired",
-        },
-        {
-          status: 400,
-        },
-      );
-    }
-
-    // QUESTION MAP
-
-    const questionMap = new Map(
-      challenge.questions.map((question) => [question.id, question]),
+    const now = new Date();
+    const expiresAt = new Date(existingAttempt.expiresAt);
+    const latestAllowedSubmission = new Date(
+      expiresAt.getTime() + SUBMISSION_GRACE_MS,
     );
 
-    // SCORE CALCULATION
-
-    let score = 0;
-
-    for (const answer of answers) {
-      if (!answer?.questionId || !answer?.selectedAnswer) {
-        continue;
-      }
-
-      const officialQuestion = questionMap.get(answer.questionId);
-
-      if (!officialQuestion) {
-        continue;
-      }
-
-      const normalizedSelected = answer.selectedAnswer.trim().toLowerCase();
-
-      const normalizedCorrect = officialQuestion.correctAnswer
-        .trim()
-        .toLowerCase();
-
-      if (normalizedSelected === normalizedCorrect) {
-        score += 1;
-      }
+    if (now > latestAllowedSubmission) {
+      return apiError("Challenge time expired.", 400, "TIME_EXPIRED");
     }
 
-    // FINAL METRICS
+    const scoreResult = scoreDailyAnswers({
+      questions: challenge.questions satisfies DailyScoringQuestion[],
+      answers,
+    });
 
-    const total = challenge.questions.length;
-
-    const percentage =
-      total === 0 ? 0 : Number(((score / total) * 100).toFixed(2));
-
-    // DATABASE TRANSACTION
+    const earnedPoints = scoreResult.score * POINTS_PER_CORRECT_ANSWER;
 
     await prisma.$transaction(async (tx) => {
-      // UPDATE ATTEMPT
-
-      await tx.dailyAttempt.update({
+      const finalizedAttempt = await tx.dailyAttempt.updateMany({
         where: {
           id: existingAttempt.id,
+          completed: false,
         },
-
         data: {
-          score,
-          total,
-          percentage,
-
+          score: scoreResult.score,
+          total: scoreResult.total,
+          percentage: scoreResult.percentage,
           completed: true,
-
-          submittedAt: new Date(),
+          submittedAt: now,
         },
       });
 
-      // EVALUATE STREAK (using null for lastCompletedAt as it's not tracked in current schema)
+      if (finalizedAttempt.count !== 1) {
+        throw new Error("ATTEMPT_ALREADY_FINALIZED");
+      }
 
-      // EVALUATE STREAK
-
-      const streakResult = evaluateStreak({
-        currentStreak: user.streak || 0,
-        lastCompletedAt: null,
+      const currentProgress = await tx.seasonProgress.findUnique({
+        where: {
+          userId: user.id,
+        },
       });
 
-      // EXISTING PROGRESS
+      const previousCompletedDays = currentProgress?.completedDays ?? 0;
+      const previousAccuracy = currentProgress?.averageAccuracy ?? 0;
+      const previousConsistency = currentProgress?.consistencyScore ?? 100;
+      const previousTotalPoints = currentProgress?.totalPoints ?? 0;
 
-      const progress = user.seasonProgress;
+      const completedDays = previousCompletedDays + 1;
 
-      // DEFAULT VALUES IF NO PROGRESS EXISTS
+      const averageAccuracy =
+        (previousAccuracy * previousCompletedDays + scoreResult.percentage) /
+        completedDays;
 
-      const existingCompletedDays = progress?.completedDays || 0;
+      const consistencyScore = Math.min(100, previousConsistency + 0.5);
 
-      const existingAccuracy = progress?.averageAccuracy || 0;
-
-      const existingConsistency = progress?.consistencyScore || 100;
-
-      const existingPoints = progress?.totalPoints || 0;
-
-      // UPDATED METRICS
-
-      const newCompletedDays = existingCompletedDays + 1;
-
-      const newAverageAccuracy =
-        (existingAccuracy * existingCompletedDays + percentage) /
-        newCompletedDays;
-
-      const updatedConsistency = Math.min(100, existingConsistency + 0.5);
-
-      // OMNI SCORE
+      const totalPoints = previousTotalPoints + earnedPoints;
 
       const omniScore = calculateOmniScore({
-        averageAccuracy: newAverageAccuracy,
-        consistencyScore: updatedConsistency,
-        completedDays: newCompletedDays,
-        totalPoints: existingPoints + score * 10,
+        averageAccuracy,
+        consistencyScore,
+        completedDays,
+        totalPoints,
       });
-
-      // ENGINEERING TIER
-
-      const engineeringTierResult = determineEngineeringTier(omniScore);
-
-      // PROTECTED STREAK
-
-      const protectedStreakData = calculateProtectedStreak({
-        currentStreak: streakResult.streak + 1,
-        completedDays: newCompletedDays,
-      });
-
-      // UPDATE USER
 
       await tx.user.update({
         where: {
           id: user.id,
         },
-
         data: {
           siliconPoints: {
-            increment: score * 10,
+            increment: earnedPoints,
           },
-
-          streak:
-            protectedStreakData.protectedStreak > 0
-              ? streakResult.streak + 1
-              : streakResult.reset
-                ? 1
-                : streakResult.streak + 1,
-
-          bio: engineeringTierResult.tier,
+          streak: {
+            increment: 1,
+          },
         },
       });
 
-      // CREATE SEASON PROGRESS
-
-      if (!progress) {
+      if (!currentProgress) {
         await tx.seasonProgress.create({
           data: {
             userId: user.id,
-
             currentDay: challenge.dayNumber + 1,
-
-            completedDays: newCompletedDays,
-
-            consistencyScore: updatedConsistency,
-
-            averageAccuracy: Number(newAverageAccuracy.toFixed(2)),
-
+            completedDays,
+            consistencyScore,
+            averageAccuracy: Number(averageAccuracy.toFixed(2)),
             weightedRankScore: omniScore,
-
-            totalPoints: score * 10,
-
-            // protectedStreak: protectedStreakData.protectedStreak > 0,
+            totalPoints,
           },
         });
-      } else {
-        // UPDATE EXISTING PROGRESS
 
-        await tx.seasonProgress.update({
-          where: {
-            userId: user.id,
-          },
-
-          data: {
-            currentDay: Math.max(progress.currentDay, challenge.dayNumber + 1),
-
-            completedDays: newCompletedDays,
-
-            consistencyScore: updatedConsistency,
-
-            averageAccuracy: Number(newAverageAccuracy.toFixed(2)),
-
-            weightedRankScore: omniScore,
-
-            totalPoints: {
-              increment: score * 10,
-            },
-
-            // protectedStreak: protectedStreakData.protectedStreak > 0,
-          },
-        });
+        return;
       }
+
+      await tx.seasonProgress.update({
+        where: {
+          userId: user.id,
+        },
+        data: {
+          currentDay: Math.max(
+            currentProgress.currentDay,
+            challenge.dayNumber + 1,
+          ),
+          completedDays,
+          consistencyScore,
+          averageAccuracy: Number(averageAccuracy.toFixed(2)),
+          weightedRankScore: omniScore,
+          totalPoints,
+        },
+      });
     });
-    // SUCCESS RESPONSE
 
-    return NextResponse.json({
-      success: true,
-
-      score,
-      total,
-      percentage,
+    return apiOk({
+      score: scoreResult.score,
+      total: scoreResult.total,
+      percentage: scoreResult.percentage,
+      earnedPoints,
+      meta: {
+        answeredCount: scoreResult.answeredCount,
+        unansweredCount: scoreResult.unansweredCount,
+        duplicateAnswerCount: scoreResult.duplicateAnswerCount,
+        unknownQuestionCount: scoreResult.unknownQuestionCount,
+        invalidAnswerCount: scoreResult.invalidAnswerCount,
+      },
     });
   } catch (error) {
-    console.error("DAILY ATTEMPT ERROR:", error);
+    if (
+      error instanceof Error &&
+      error.message === "ATTEMPT_ALREADY_FINALIZED"
+    ) {
+      return apiError(
+        "Challenge already submitted.",
+        409,
+        "ALREADY_SUBMITTED",
+      );
+    }
 
-    return NextResponse.json(
-      {
-        success: false,
-        error: "Failed to submit challenge",
-      },
-      {
-        status: 500,
-      },
+    console.error("DAILY ATTEMPT SUBMIT ERROR:", error);
+
+    return apiError(
+      "Failed to submit challenge.",
+      500,
+      "DAILY_ATTEMPT_SUBMIT_FAILED",
     );
   }
 }

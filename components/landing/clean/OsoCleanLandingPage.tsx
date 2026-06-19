@@ -2,8 +2,13 @@
 
 import type { ReactNode } from "react";
 import { useEffect, useMemo, useState } from "react";
+
 import Link from "next/link";
 import OsoVibgyorSpectrum from "@/components/landing/clean/OsoVibgyorSpectrum";
+import OsoTopPerformersCarousel, {
+  type TopPerformerItem,
+} from "@/components/landing/clean/OsoTopPerformersCarousel";
+
 import OsoEcosystemOverview from "@/components/landing/clean/OsoEcosystemOverview";
 import { motion, useReducedMotion } from "framer-motion";
 import {
@@ -32,6 +37,7 @@ import OsoBenchmarkEnvironmentSection from "@/components/landing/clean/OsoBenchm
 
 type OsoCleanLandingPageProps = {
   posters: unknown[];
+  topPerformers: TopPerformerItem[];
 };
 
 type AnnouncementItem = {
@@ -49,6 +55,7 @@ type CompetitionCard = {
   provider: string;
   deadline: string;
   category: string;
+  imageUrl?: string;
   description: string;
   prize: string;
   rankCount: number;
@@ -137,6 +144,7 @@ const competitionCards: CompetitionCard[] = [
     provider: "Omni Skills Olympiad",
     deadline: "This Week",
     category: "Embedded",
+    imageUrl: "/event-img/embedded-systems.jpg",
     description:
       "Solve microcontroller, firmware and debugging missions designed for practical engineering growth.",
     prize: "Omni Score + Silicon Points",
@@ -152,6 +160,7 @@ const competitionCards: CompetitionCard[] = [
     provider: "OSO Hardware Arena",
     deadline: "This Month",
     category: "PCB Design",
+    imageUrl: "/event-img/pcb-innovation.jpg",
     description:
       "Move from schematic thinking to board-level reasoning with structured design tasks.",
     prize: "Recognition + Ranking",
@@ -167,6 +176,7 @@ const competitionCards: CompetitionCard[] = [
     provider: "OSO Competition Track",
     deadline: "Upcoming",
     category: "Robotics",
+    imageUrl: "/event-img/ai-robotics.jpg",
     description:
       "Attempt automation, sensors, control and intelligent systems challenges for future-ready skills.",
     prize: "Badge + Leaderboard Rank",
@@ -178,9 +188,9 @@ const competitionCards: CompetitionCard[] = [
     ],
   },
 ];
-
 export default function OsoCleanLandingPage({
   posters,
+  topPerformers = [],
 }: OsoCleanLandingPageProps) {
   const reduceMotion = useReducedMotion();
 
@@ -195,7 +205,7 @@ export default function OsoCleanLandingPage({
 <OsoVibgyorSpectrum />
 <GrowthOutcomeDashboard reduceMotion={Boolean(reduceMotion)} />
 <DomainShowcase reduceMotion={Boolean(reduceMotion)} />
-<VibgyorPipeline reduceMotion={Boolean(reduceMotion)} />
+
 <OsoBenchmarkEnvironmentSection reduceMotion={Boolean(reduceMotion)} />
 <CompetitionCalendar reduceMotion={Boolean(reduceMotion)} />
 <FinalCta reduceMotion={Boolean(reduceMotion)} />
@@ -416,51 +426,104 @@ function DomainShowcase({ reduceMotion }: { reduceMotion: boolean }) {
 }
 
 function VibgyorPipeline({ reduceMotion }: { reduceMotion: boolean }) {
+  const [activeLevel, setActiveLevel] = useState(vibgyorSteps[0]?.level ?? "");
+
   return (
     <section className="oso-section bg-[#f8f9fa]">
       <div className="oso-container">
-        <SectionHeader
-          eyebrow="VIBGYOR Framework"
-          title="A clean step-by-step engineering progression pipeline."
-          description="The VIBGYOR skill framework is presented as an elegant horizontal growth pathway."
-        />
+        <div className="oso-glass-premium rounded-[2.5rem] p-6 sm:p-8 lg:p-10">
+          <SectionHeader
+            eyebrow="VIBGYOR Skill Framework"
+            title="A clean step-by-step engineering progression pipeline."
+            description="Move from fundamentals to innovation through a single-line skill track. Tap any stage to reveal more technical meaning without cluttering the layout."
+          />
 
-        <motion.div
-          initial={reduceMotion ? { opacity: 1 } : { opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.4 }}
-          className="mt-10 overflow-x-auto rounded-[2rem] border border-slate-200 bg-white p-5 shadow-[0_18px_50px_rgba(15,23,42,0.06)]"
-        >
-          <div className="flex min-w-[980px] items-stretch">
-            {vibgyorSteps.map((step, index) => (
-              <div key={step.level} className="relative flex-1 px-3 py-4">
-                <div className="absolute left-0 right-0 top-9 h-px bg-slate-200" />
+          <motion.div
+            initial={reduceMotion ? { opacity: 1 } : { opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.4 }}
+            className="mt-10"
+          >
+            <div className="oso-horizontal-track">
+              {vibgyorSteps.map((step, index) => {
+                const active = activeLevel === step.level;
 
-                <div className="relative z-10">
-                  <div className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-blue-200 bg-blue-50 text-sm font-black text-blue-700">
-                    {index + 1}
-                  </div>
+                return (
+                  <button
+                    key={step.level}
+                    type="button"
+                    onClick={() =>
+                      setActiveLevel((current) =>
+                        current === step.level ? "" : step.level,
+                      )
+                    }
+                    className="oso-magic-card min-h-[300px] min-w-[260px] p-5 text-left sm:min-w-[295px]"
+                  >
+                    <div
+                      className={`inline-flex h-12 w-12 items-center justify-center rounded-full text-sm font-black text-white shadow-lg ${getVibgyorDotClass(
+                        step.level,
+                      )}`}
+                    >
+                      {index + 1}
+                    </div>
 
-                  <p className="mt-5 text-xs font-black uppercase tracking-[0.18em] text-slate-500">
-                    {step.level}
-                  </p>
+                    <p className="mt-5 text-xs font-black uppercase tracking-[0.18em] text-slate-500">
+                      {step.level}
+                    </p>
 
-                  <h3 className="oso-heading mt-2 text-xl font-black">
-                    {step.title}
-                  </h3>
+                    <h3 className="oso-heading mt-2 text-2xl font-black">
+                      {step.title}
+                    </h3>
 
-                  <p className="mt-3 text-base font-medium leading-7 text-slate-600">
-                    {step.description}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </motion.div>
+                    <p className="mt-3 text-base font-semibold leading-7 text-slate-600">
+                      {step.description}
+                    </p>
+
+                    <div
+                      className={`grid transition-all duration-300 ${
+                        active
+                          ? "mt-5 grid-rows-[1fr] opacity-100"
+                          : "mt-0 grid-rows-[0fr] opacity-0"
+                      }`}
+                    >
+                      <div className="overflow-hidden">
+                        <div className="rounded-[1.25rem] border border-white/70 bg-white/70 p-4 text-sm font-semibold leading-7 text-slate-600 shadow-sm backdrop-blur-xl">
+                          <p className="font-black text-slate-800">
+                            More Info
+                          </p>
+                          <p className="mt-2">
+                            This stage contributes to OMNI ranking, Skill
+                            Passport growth, Silicon Points and future
+                            competition-readiness signals.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <p className="mt-5 text-xs font-black uppercase tracking-[0.16em] text-blue-700">
+                      {active ? "Hide Info" : "More Info"}
+                    </p>
+                  </button>
+                );
+              })}
+            </div>
+          </motion.div>
+        </div>
       </div>
     </section>
   );
+}
+
+function getVibgyorDotClass(level: string) {
+  if (level === "Violet") return "bg-violet-600";
+  if (level === "Indigo") return "bg-indigo-600";
+  if (level === "Blue") return "bg-blue-600";
+  if (level === "Green") return "bg-emerald-600";
+  if (level === "Yellow") return "bg-yellow-500";
+  if (level === "Orange") return "bg-orange-500";
+  if (level === "Red") return "bg-red-600";
+  return "bg-blue-600";
 }
 
 function CompetitionCalendar({ reduceMotion }: { reduceMotion: boolean }) {
@@ -493,19 +556,20 @@ function CompetitionCalendar({ reduceMotion }: { reduceMotion: boolean }) {
         >
           {competitionCards.map((card) => (
             <OsoBenchmarkCard
-              key={card.title}
-              title={card.title}
-              organizer={card.provider}
-              description={card.description}
-              category={card.category}
-              taskLabel={card.deadline}
-              href="/competition"
-              actionLabel="View details"
-              rankCount={card.rankCount}
-              scoreRows={card.scoreRows}
-              badges={["Global", "Open to students", card.prize]}
-              logoIcon={CalendarDays}
-            />
+  key={card.title}
+  title={card.title}
+  organizer={card.provider}
+  description={card.description}
+  category={card.category}
+  taskLabel={card.deadline}
+  href="/competition"
+  actionLabel="View details"
+  rankCount={card.rankCount}
+  imageUrl={card.imageUrl}
+  scoreRows={card.scoreRows}
+  badges={["Global", "Open to students", card.prize]}
+  logoIcon={CalendarDays}
+/>
           ))}
         </motion.div>
     

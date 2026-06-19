@@ -1,6 +1,7 @@
 import Link from "next/link";
 import {
   ArrowRight,
+  CalendarDays,
   ChevronUp,
   CircleDot,
   Trophy,
@@ -77,6 +78,33 @@ export default function OsoBenchmarkCard({
         className="flex flex-1 flex-col outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
         aria-label={`${actionLabel}: ${title}`}
       >
+        {imageUrl ? (
+          <div className="relative h-44 overflow-hidden border-b border-slate-200 bg-slate-100">
+            <img
+              src={imageUrl}
+              alt=""
+              className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+              loading="lazy"
+            />
+
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/68 via-slate-950/14 to-transparent" />
+
+            <div className="absolute left-5 top-5 inline-flex items-center gap-2 rounded-full border border-white/30 bg-black/30 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.14em] text-white backdrop-blur-xl">
+              <CalendarDays className="h-3.5 w-3.5" />
+              {taskLabel}
+            </div>
+
+            <div className="absolute bottom-5 left-5 right-5">
+              <p className="line-clamp-1 text-xs font-black uppercase tracking-[0.18em] text-blue-100">
+                {category}
+              </p>
+              <h3 className="mt-1 line-clamp-1 text-2xl font-black leading-tight text-white">
+                {title}
+              </h3>
+            </div>
+          </div>
+        ) : null}
+
         <header className="relative flex min-h-[186px] flex-col border-b border-slate-200 p-6">
           <div className="flex items-start justify-between gap-5">
             <div className="min-w-0">
@@ -90,19 +118,10 @@ export default function OsoBenchmarkCard({
             </div>
 
             <div className="relative flex h-[74px] w-[74px] shrink-0 items-center justify-center overflow-hidden rounded-full border-[5px] border-slate-900 bg-white shadow-[0_8px_24px_rgba(15,23,42,0.14)]">
-              {imageUrl ? (
-                <img
-                  src={imageUrl}
-                  alt=""
-                  className="h-full w-full object-cover"
-                  loading="lazy"
-                />
-              ) : (
-                <LogoIcon
-                  className="h-8 w-8 text-blue-600"
-                  aria-hidden="true"
-                />
-              )}
+              <LogoIcon
+                className="h-8 w-8 text-blue-600"
+                aria-hidden="true"
+              />
             </div>
           </div>
 
