@@ -2,8 +2,11 @@ import { NextResponse } from "next/server";
 
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
 export async function GET(
-  req: Request,
+  _req: Request,
   context: {
     params: Promise<{
       quizId: string;
@@ -17,21 +20,42 @@ export async function GET(
       where: {
         id: quizId,
       },
-      include: {
-        questions: true,
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        category: true,
+        difficulty: true,
+        duration: true,
+        isActive: true,
+        totalPoints: true,
+        questions: {
+          select: {
+            id: true,
+            question: true,
+            optionA: true,
+            optionB: true,
+            optionC: true,
+            optionD: true,
+            points: true,
+          },
+        },
       },
     });
 
-    if (!quiz) {
-      return NextResponse.json({ error: "Quiz not found" }, { status: 404 });
+    if (!quiz || !quiz.isActive) {
+      return NextResponse.json({ error: "Quiz not found." }, { status: 404 });
     }
 
-    return NextResponse.json(quiz);
+    return NextResponse.json({
+      success: true,
+      quiz,
+    });
   } catch (error) {
-    console.error(error);
+    console.error("PUBLIC QUIZ FETCH ERROR:", error);
 
     return NextResponse.json(
-      { error: "Failed to fetch quiz" },
+      { error: "Failed to fetch quiz." },
       { status: 500 },
     );
   }

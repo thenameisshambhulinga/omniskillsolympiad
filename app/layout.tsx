@@ -1,17 +1,9 @@
 import type { Metadata } from "next";
-import { Lato } from "next/font/google";
 
 import "./globals.css";
 
-import CompetitionNavbar from "@/components/profile/platform/CompetitionNavbar";
 import ConditionalSiteFooter from "@/components/layout/ConditionalSiteFooter";
-
-const lato = Lato({
-  subsets: ["latin"],
-  weight: ["300", "400", "700", "900"],
-  variable: "--font-heading",
-  display: "swap",
-});
+import ConditionalSiteNavbar from "@/components/layout/ConditionalSiteNavbar";
 
 export const metadata: Metadata = {
   metadataBase: new URL(
@@ -39,9 +31,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" data-scroll-behavior="smooth">
-      <body className={`${lato.variable} min-h-screen bg-[#f8f9fa] antialiased`}>
-        <CompetitionNavbar />
-        <main className="relative min-h-screen">{children}</main>
+      <body className="min-h-screen bg-[#f8f9fa] antialiased">
+        <ConditionalSiteNavbar />
+
+        <main className="relative min-h-screen overflow-x-clip">
+          {children}
+        </main>
+
         <ConditionalSiteFooter />
       </body>
     </html>

@@ -1,109 +1,66 @@
-import { NextResponse } from "next/server";
-
-import { getServerSession } from "next-auth";
-
-import { authOptions } from "@/lib/auth";
+import { Prisma } from "@prisma/client";
 
 import { prisma } from "@/lib/prisma";
+import { requireApiUser } from "@/lib/server/api-auth";
+import {
+  apiError,
+  apiOk,
+  cleanString,
+  readJsonObject,
+} from "@/lib/server/api-response";
+
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
 const CHALLENGE_DURATION_MINUTES = 2;
 
-export async function POST(req: Request) {
+export async function POST(request: Request) {
   try {
-    // SESSION VALIDATION
-    const session = await getServerSession(authOptions);
+    const auth = await requireApiUser();
 
-    if (!session?.user?.email) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Unauthorized",
-        },
-        {
-          status: 401,
-        },
+    if (auth.response) {
+      return auth.response;
+    }
+
+    const { user } = auth;
+
+    if (user.seasonProgress?.eliminated) {
+      return apiError(
+        "You are eliminated from this season.",
+        403,
+        "SEASON_ELIMINATED",
       );
     }
 
-    // BODY VALIDATION
-    let body: unknown;
-
-    try {
-      body = await req.json();
-    } catch {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Invalid request body",
-        },
-        {
-          status: 400,
-        },
+    if (user.seasonProgress?.championBlocked) {
+      return apiError(
+        "Previous champions cannot compete again.",
+        403,
+        "CHAMPION_BLOCKED",
       );
     }
 
-    // Normalize to expected payload shape: { challengeId: string }
-    const challengeId =
-      typeof body === "object" &&
-      body !== null &&
-      "challengeId" in body &&
-      typeof (body as any).challengeId === "string"
-        ? (body as any).challengeId.trim()
-        : "";
+    const parsed = await readJsonObject(request);
+
+    if (parsed.response) {
+      return parsed.response;
+    }
+
+    const challengeId = cleanString(parsed.data.challengeId, 200);
 
     if (!challengeId) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Challenge ID required",
-        },
-        {
-          status: 400,
-        },
-      );
+      return apiError("Challenge ID is required.", 400, "CHALLENGE_ID_REQUIRED");
     }
 
-    // USER FETCH
-    const user = await prisma.user.findUnique({
-      where: {
-        email: session.user.email,
-      },
-      include: {
-        seasonProgress: true,
-      },
-    });
-
-    if (!user) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "User not found",
-        },
-        {
-          status: 404,
-        },
-      );
-    }
-
-    // ELIMINATION CHECK
-    if (user.seasonProgress?.eliminated) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "You are eliminated from this season",
-        },
-        {
-          status: 403,
-        },
-      );
-    }
-
-    // CHALLENGE FETCH
     const challenge = await prisma.dailyChallenge.findUnique({
       where: {
         id: challengeId,
       },
-      include: {
+      select: {
+        id: true,
+        dayNumber: true,
+        title: true,
+        isPublished: true,
         questions: {
           select: {
             id: true,
@@ -113,134 +70,155 @@ export async function POST(req: Request) {
     });
 
     if (!challenge) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Challenge not found",
-        },
-        {
-          status: 404,
-        },
-      );
+      return apiError("Challenge not found.", 404, "CHALLENGE_NOT_FOUND");
     }
 
-    // PUBLISHED CHECK
     if (!challenge.isPublished) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Challenge is not published",
-        },
-        {
-          status: 403,
-        },
+      return apiError(
+        "Challenge is not published.",
+        403,
+        "CHALLENGE_NOT_PUBLISHED",
       );
     }
 
-    // EMPTY CHALLENGE CHECK
-    if (!challenge.questions || challenge.questions.length === 0) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Challenge has no questions",
-        },
-        {
-          status: 400,
-        },
-      );
+    if (challenge.questions.length === 0) {
+      return apiError("Challenge has no questions.", 400, "EMPTY_CHALLENGE");
     }
 
-    // EXISTING ATTEMPT
-    const existingAttempt = await prisma.dailyAttempt.findFirst({
+    const existingAttempt = await prisma.dailyAttempt.findUnique({
       where: {
-        userId: user.id,
-        challengeId,
+        userId_challengeId: {
+          userId: user.id,
+          challengeId,
+        },
+      },
+      select: {
+        id: true,
+        completed: true,
+        score: true,
+        total: true,
+        percentage: true,
+        expiresAt: true,
+        submittedAt: true,
       },
     });
 
-    // ALREADY COMPLETED
     if (existingAttempt?.completed) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Challenge already completed",
-        },
-        {
-          status: 400,
-        },
-      );
-    }
-
-    // EXPIRED SESSION BLOCK
-    if (
-      existingAttempt &&
-      existingAttempt.expiresAt &&
-      new Date() > new Date(existingAttempt.expiresAt)
-    ) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Challenge time expired",
-        },
-        {
-          status: 403,
-        },
-      );
-    }
-
-    // RESUME ACTIVE SESSION
-    if (
-      existingAttempt &&
-      existingAttempt.expiresAt &&
-      new Date() < new Date(existingAttempt.expiresAt)
-    ) {
-      return NextResponse.json({
-        success: true,
-        resumed: true,
-        attemptId: existingAttempt.id,
-        expiresAt: existingAttempt.expiresAt,
-        remainingMs: new Date(existingAttempt.expiresAt).getTime() - Date.now(),
+      return apiError("Challenge already completed", 409, "ALREADY_COMPLETED", {
+        score: existingAttempt.score,
+        total: existingAttempt.total,
+        percentage: existingAttempt.percentage,
+        submittedAt: existingAttempt.submittedAt,
       });
     }
 
-    // CREATE NEW SESSION
+    const now = new Date();
+
+    if (existingAttempt?.expiresAt) {
+      const remainingMs = existingAttempt.expiresAt.getTime() - now.getTime();
+
+      if (remainingMs > 0) {
+        return apiOk({
+          attemptId: existingAttempt.id,
+          resumed: true,
+          expiresAt: existingAttempt.expiresAt,
+          remainingMs,
+          durationMs: CHALLENGE_DURATION_MINUTES * 60 * 1000,
+          serverNow: now.toISOString(),
+        });
+      }
+
+      return apiError(
+        "Challenge time expired",
+        403,
+        "ATTEMPT_EXPIRED",
+        {
+          attemptId: existingAttempt.id,
+          expiresAt: existingAttempt.expiresAt,
+        },
+      );
+    }
+
     const expiresAt = new Date(
-      Date.now() + CHALLENGE_DURATION_MINUTES * 60 * 1000,
+      now.getTime() + CHALLENGE_DURATION_MINUTES * 60 * 1000,
     );
 
-    const newAttempt = await prisma.dailyAttempt.create({
-      data: {
-        userId: user.id,
-        challengeId,
-        challengeDay: challenge.dayNumber,
-        score: 0,
-        total: challenge.questions.length,
-        percentage: 0,
-        completed: false,
-        expiresAt,
-      },
-    });
+    try {
+const newAttempt = await prisma.dailyAttempt.create({
+  data: {
+    userId: user.id,
+    challengeId,
+    challengeDay: challenge.dayNumber,
+    score: 0,
+    total: challenge.questions.length,
+    percentage: 0,
+    completed: false,
+    expiresAt,
+  },
+  select: {
+    id: true,
+  },
+});
 
-    return NextResponse.json({
-      success: true,
-      resumed: false,
-      attemptId: newAttempt.id,
-      expiresAt: newAttempt.expiresAt,
-      remainingMs: newAttempt.expiresAt
-        ? new Date(newAttempt.expiresAt).getTime() - Date.now()
-        : 0,
-    });
+return apiOk({
+  attemptId: newAttempt.id,
+  resumed: false,
+  expiresAt,
+  remainingMs: Math.max(0, expiresAt.getTime() - Date.now()),
+  durationMs: CHALLENGE_DURATION_MINUTES * 60 * 1000,
+  serverNow: now.toISOString(),
+});
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === "P2002"
+      ) {
+        const activeAttempt = await prisma.dailyAttempt.findUnique({
+          where: {
+            userId_challengeId: {
+              userId: user.id,
+              challengeId,
+            },
+          },
+          select: {
+            id: true,
+            completed: true,
+            expiresAt: true,
+          },
+        });
+
+        if (activeAttempt?.completed) {
+          return apiError(
+            "Challenge already completed",
+            409,
+            "ALREADY_COMPLETED",
+          );
+        }
+
+        if (activeAttempt?.expiresAt) {
+          return apiOk({
+            attemptId: activeAttempt.id,
+            resumed: true,
+            expiresAt: activeAttempt.expiresAt,
+            remainingMs: Math.max(
+              0,
+              activeAttempt.expiresAt.getTime() - Date.now(),
+            ),
+            durationMs: CHALLENGE_DURATION_MINUTES * 60 * 1000,
+            serverNow: new Date().toISOString(),
+          });
+        }
+      }
+
+      throw error;
+    }
   } catch (error) {
     console.error("DAILY START ERROR:", error);
 
-    return NextResponse.json(
-      {
-        success: false,
-        error: "Failed to start challenge",
-      },
-      {
-        status: 500,
-      },
+    return apiError(
+      "Failed to start challenge.",
+      500,
+      "DAILY_START_FAILED",
     );
   }
 }

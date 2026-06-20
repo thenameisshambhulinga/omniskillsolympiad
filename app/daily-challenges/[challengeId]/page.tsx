@@ -2,51 +2,84 @@ import { notFound } from "next/navigation";
 
 import DailyChallengeClient from "./DailyChallengeClient";
 
-import { prisma } from "@/lib/prisma";
 import OfflineState from "@/components/system/OfflineState";
+import { prisma } from "@/lib/prisma";
+import { withDatabaseResult } from "@/lib/server/database-guard";
 
-interface Props {
+type ChallengePageProps = {
   params: Promise<{
     challengeId: string;
   }>;
-}
+};
+
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 export const runtime = "nodejs";
 
-export default async function ChallengePage({ params }: Props) {
+export default async function ChallengePage({ params }: ChallengePageProps) {
   const { challengeId } = await params;
 
-  let challenge = null;
+  const challengeResult = await withDatabaseResult({
+    label: "ChallengePage.getDailyChallenge",
+    action: async () => {
+      return prisma.dailyChallenge.findUnique({
+        where: {
+          id: challengeId,
+        },
+        select: {
+          id: true,
+          title: true,
+          description: true,
+          dayNumber: true,
+          isPublished: true,
+          questions: {
+            orderBy: {
+              createdAt: "asc",
+            },
+            select: {
+              id: true,
+              question: true,
+              optionA: true,
+              optionB: true,
+              optionC: true,
+              optionD: true,
+            },
+          },
+        },
+      });
+    },
+  });
 
-  try {
-    challenge = await prisma.dailyChallenge.findUnique({
-      where: {
-        id: challengeId,
-      },
-
-      include: {
-        questions: true,
-      },
-    });
-  } catch (error) {
-    console.error(error);
-  }
-
-  if (!challenge) {
-    // If Prisma is down we return OfflineState instead of a 500.
+  if (!challengeResult.ok) {
     return (
-      <main className="relative z-10 min-h-screen px-6 pb-20 pt-32 text-white">
+      <main className="min-h-screen bg-[#f8f9fa] px-6 py-12">
         <OfflineState />
       </main>
     );
   }
 
-  return (
-    <main className="relative z-10 min-h-screen px-6 pb-20 pt-32 text-white">
-      <div className="mx-auto max-w-5xl">
-        <DailyChallengeClient initialChallenge={challenge} />
-      </div>
-    </main>
-  );
+  const challenge = challengeResult.data;
+
+  if (!challenge || !challenge.isPublished) {
+    notFound();
+  }
+
+  if (challenge.questions.length === 0) {
+    return (
+      <main className="min-h-screen bg-[#f8f9fa] px-6 py-12">
+        <section className="mx-auto max-w-2xl rounded-[2rem] border border-yellow-200 bg-yellow-50 p-8 text-center shadow-sm">
+          <h1 className="text-3xl font-black text-slate-950">
+            Challenge is not ready
+          </h1>
+
+          <p className="mt-3 text-sm font-semibold leading-7 text-slate-600">
+            This mission has been published but does not contain questions yet.
+            Please contact admin.
+          </p>
+        </section>
+      </main>
+    );
+  }
+
+  return <DailyChallengeClient initialChallenge={challenge} />;
 }

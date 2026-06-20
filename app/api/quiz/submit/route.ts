@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
-
 import { getServerSession } from "next-auth";
 
 import { authOptions } from "@/lib/auth";
-
 import { prisma } from "@/lib/prisma";
+import { scoreQuizAnswers } from "@/lib/quiz/quiz-score-engine";
+
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
 export async function POST(req: Request) {
   try {
@@ -14,58 +16,131 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const body = await req.json();
+    const body = (await req.json()) as {
+      quizId?: unknown;
+      answers?: unknown;
+    };
 
-    const { score, total, category } = body;
+    const quizId = typeof body.quizId === "string" ? body.quizId.trim() : "";
+    const answers = Array.isArray(body.answers) ? body.answers : null;
+
+    if (!quizId || !answers) {
+      return NextResponse.json(
+        { error: "Quiz ID and answers are required." },
+        { status: 400 },
+      );
+    }
 
     const user = await prisma.user.findUnique({
       where: {
         email: session.user.email,
       },
+      select: {
+        id: true,
+      },
     });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ error: "User not found." }, { status: 404 });
     }
 
-    const percentage = total === 0 ? 0 : (score / total) * 100;
-
-    await prisma.quizAttempt.create({
-      data: {
-        score,
-        total,
-        percentage,
-        category,
-        userId: user.id,
+    const quiz = await prisma.quiz.findUnique({
+      where: {
+        id: quizId,
+      },
+      select: {
+        id: true,
+        category: true,
+        isActive: true,
+        questions: {
+          select: {
+            id: true,
+            optionA: true,
+            optionB: true,
+            optionC: true,
+            optionD: true,
+            correctAnswer: true,
+            points: true,
+          },
+        },
       },
     });
 
-    const earnedPoints = Math.round(percentage);
+    if (!quiz || !quiz.isActive) {
+      return NextResponse.json(
+        { error: "Quiz unavailable." },
+        { status: 404 },
+      );
+    }
 
-    await prisma.user.update({
-      where: {
-        id: user.id,
-      },
+    if (quiz.questions.length === 0) {
+      return NextResponse.json(
+        { error: "Quiz has no questions." },
+        { status: 400 },
+      );
+    }
 
-      data: {
-        siliconPoints: {
-          increment: earnedPoints,
+    const result = scoreQuizAnswers({
+      questions: quiz.questions,
+      answers,
+    });
+
+    const earnedPoints = Math.max(0, Math.min(100, Math.round(result.percentage)));
+
+    await prisma.$transaction(async (tx) => {
+      await tx.quizAttempt.create({
+        data: {
+          score: result.score,
+          total: result.total,
+          percentage: result.percentage,
+          category: quiz.category,
+          userId: user.id,
         },
+      });
 
-        streak: {
-          increment: 1,
+      await tx.submission.create({
+        data: {
+          userId: user.id,
+          quizId: quiz.id,
+          score: result.score,
         },
-      },
+      });
+
+      await tx.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          siliconPoints: {
+            increment: earnedPoints,
+          },
+          streak: {
+            increment: 1,
+          },
+        },
+      });
     });
 
     return NextResponse.json({
       success: true,
+      score: result.score,
+      total: result.total,
+      percentage: result.percentage,
       earnedPoints,
-      percentage,
+      meta: {
+        answeredCount: result.answeredCount,
+        unansweredCount: result.unansweredCount,
+        duplicateAnswerCount: result.duplicateAnswerCount,
+        unknownQuestionCount: result.unknownQuestionCount,
+        invalidAnswerCount: result.invalidAnswerCount,
+      },
     });
   } catch (error) {
-    console.error(error);
+    console.error("SECURE QUIZ SUBMIT ERROR:", error);
 
-    return NextResponse.json({ error: "Server error" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to submit quiz." },
+      { status: 500 },
+    );
   }
 }

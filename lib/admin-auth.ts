@@ -4,6 +4,10 @@ import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
+function redirectToDatabaseUnavailable(): never {
+  redirect("/database-unavailable");
+}
+
 export async function getCurrentDbUser() {
   const session = await getServerSession(authOptions);
 
@@ -11,11 +15,16 @@ export async function getCurrentDbUser() {
     return null;
   }
 
-  return prisma.user.findUnique({
-    where: {
-      email: session.user.email,
-    },
-  });
+  try {
+    return await prisma.user.findUnique({
+      where: {
+        email: session.user.email,
+      },
+    });
+  } catch (error) {
+    console.error("AUTH DATABASE CONNECTION FAILED:", error);
+    redirectToDatabaseUnavailable();
+  }
 }
 
 export async function requireUser() {
