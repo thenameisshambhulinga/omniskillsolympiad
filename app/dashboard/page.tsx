@@ -1,16 +1,13 @@
 import Link from "next/link";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import DashboardSmartMissionPlanner from "@/components/dashboard/DashboardSmartMissionPlanner";
 import type { ReactNode } from "react";
 import {
   ArrowRight,
   BookOpenCheck,
-  BrainCircuit,
   BriefcaseBusiness,
   CalendarDays,
   CheckCircle2,
-  ClipboardList,
   Flame,
   Gauge,
   GraduationCap,
@@ -24,8 +21,7 @@ import {
   Zap,
 } from "lucide-react";
 
-import DashboardSkillPassportShowcase from "@/components/dashboard/DashboardSkillPassportShowcase";
-import OsoActionTile from "@/components/oso/OsoActionTile";
+import DashboardSmartMissionPlanner from "@/components/dashboard/DashboardSmartMissionPlanner";
 import OsoGlassSurface from "@/components/oso/OsoGlassSurface";
 import OsoMetricTile from "@/components/oso/OsoMetricTile";
 import OsoPageShell from "@/components/oso/OsoPageShell";
@@ -34,7 +30,7 @@ import OsoSectionHeader from "@/components/oso/OsoSectionHeader";
 import OsoStatusPill from "@/components/oso/OsoStatusPill";
 import OfflineState from "@/components/system/OfflineState";
 
-import { omniGrowthLoop, worldSkillsPathway } from "@/data/omni-ecosystem";
+import { worldSkillsPathway } from "@/data/omni-ecosystem";
 import { authOptions } from "@/lib/auth";
 import { calculateOmniScore } from "@/lib/engineering-system";
 import { prisma } from "@/lib/prisma";
@@ -43,6 +39,54 @@ import { getTierProgress, getVibgyorProgress } from "@/lib/profile/tier-engine";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 export const runtime = "nodejs";
+
+const journeySupportSteps = [
+  {
+    label: "Learn",
+    description:
+      "Structured LMS-based learning will help students build fundamentals before they enter hands-on and competitive stages.",
+  },
+  {
+    label: "Practice",
+    description:
+      "Students can practice in guided hands-on environments and labs to convert theory into applied engineering skill.",
+  },
+  {
+    label: "Compete",
+    description:
+      "Students participate in OMNI events and challenge arenas to prove readiness under performance conditions.",
+  },
+  {
+    label: "Rank",
+    description:
+      "Points, streak, challenge outcomes and consistency translate into measurable ranking visibility.",
+  },
+  {
+    label: "Get Recognized",
+    description:
+      "Badges, achievements and selection visibility turn good performance into public engineering proof.",
+  },
+  {
+    label: "Build Portfolio",
+    description:
+      "Profile evidence, skills, readiness and work proof come together in the Skill Passport and public identity layer.",
+  },
+  {
+    label: "Get Internships",
+    description:
+      "Once readiness signals improve, OMNI can help guide students toward internship-facing opportunities.",
+  },
+  {
+    label: "Get Hired",
+    description:
+      "The platform should ultimately help students become placement-ready with visible proof of capability.",
+  },
+  {
+    label: "Become a Leader",
+    description:
+      "Advanced learners can mentor peers, represent institutions and grow into leadership-facing engineering roles.",
+  },
+] as const;
 
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions);
@@ -63,6 +107,7 @@ export default async function DashboardPage() {
       omniId: true,
       college: true,
       state: true,
+      district: true,
       branch: true,
       semester: true,
       year: true,
@@ -136,12 +181,22 @@ export default async function DashboardPage() {
   const [
     totalChallenges,
     usersAboveNational,
+    usersAboveDistrict,
     usersAboveState,
     usersAboveCollege,
   ] = await prisma.$transaction([
     prisma.dailyChallenge.count(),
     prisma.user.count({
       where: {
+        siliconPoints: {
+          gt: siliconPoints,
+        },
+      },
+    }),
+    prisma.user.count({
+      where: {
+        district: user.district || undefined,
+        state: user.state || undefined,
         siliconPoints: {
           gt: siliconPoints,
         },
@@ -194,6 +249,7 @@ export default async function DashboardPage() {
   const vibgyorProgress = getVibgyorProgress(siliconPoints);
 
   const nationalRank = usersAboveNational + 1;
+  const districtRank = user.district ? usersAboveDistrict + 1 : null;
   const stateRank = user.state ? usersAboveState + 1 : null;
   const collegeRank = user.college ? usersAboveCollege + 1 : null;
 
@@ -241,22 +297,17 @@ export default async function DashboardPage() {
     siliconPoints,
   });
 
+  const passportActionLabel =
+    profileCompletion >= 100 ? "Edit Passport" : "Complete Passport";
+
   return (
     <OsoPageShell>
       <OsoGlassSurface hover={false} className="p-6 sm:p-8 lg:p-10">
-        <div className="grid gap-8 lg:grid-cols-[1fr_390px] lg:items-center">
+        <div className="grid gap-8 xl:grid-cols-[1.08fr_0.92fr] xl:items-start">
           <div>
             <div className="flex flex-wrap gap-3">
-              <OsoStatusPill
-                label="Student Growth Dashboard"
-                tone="blue"
-              />
-
-              <OsoStatusPill
-                label={tierProgress.currentTier}
-                tone="emerald"
-              />
-
+              <OsoStatusPill label="Student Growth Dashboard" tone="blue" />
+              <OsoStatusPill label={tierProgress.currentTier} tone="emerald" />
               <OsoStatusPill
                 label={`${vibgyorProgress.currentStage} Stage`}
                 tone="yellow"
@@ -271,12 +322,12 @@ export default async function DashboardPage() {
             </h1>
 
             <p className="mt-5 max-w-3xl text-lg font-medium leading-9 text-slate-600">
-              This is your OMNI growth control room: practice progress,
-              rankings, VIBGYOR stage, skill passport readiness and career
-              direction in one clean view.
+              Your dashboard and Skill Passport now live together in one clear
+              command center — so profile proof, readiness, growth stage and
+              next actions stay connected without repetition.
             </p>
 
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <Link
                 href="/daily-challenges"
                 className="group inline-flex min-h-14 items-center justify-center gap-3 rounded-full bg-blue-600 px-7 py-4 text-sm font-black uppercase tracking-[0.14em] text-white shadow-[0_18px_36px_rgba(37,99,235,0.22)] transition hover:-translate-y-0.5 hover:bg-blue-700"
@@ -289,31 +340,187 @@ export default async function DashboardPage() {
                 href="/profile"
                 className="group inline-flex min-h-14 items-center justify-center gap-3 rounded-full border border-slate-300 bg-white px-7 py-4 text-sm font-black uppercase tracking-[0.14em] text-slate-950 shadow-[0_14px_34px_rgba(15,23,42,0.055)] transition hover:-translate-y-0.5 hover:border-blue-300 hover:text-blue-700"
               >
-                View Skill Passport
+                View Passport
                 <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
               </Link>
+
+              <Link
+                href="/profile"
+                className="group inline-flex min-h-14 items-center justify-center gap-3 rounded-full border border-slate-900 bg-slate-950 px-7 py-4 text-sm font-black uppercase tracking-[0.14em] text-white shadow-[0_16px_34px_rgba(15,23,42,0.16)] transition hover:-translate-y-0.5 hover:bg-slate-800"
+              >
+                {passportActionLabel}
+                <Sparkles className="h-4 w-4" />
+              </Link>
+            </div>
+
+            <div className="mt-8 grid gap-3 sm:grid-cols-3">
+              <MiniSignal
+                icon={<BookOpenCheck className="h-4 w-4" />}
+                label="Skills Added"
+                value={user.skills.length}
+                helper="Verified profile proof"
+              />
+              <MiniSignal
+                icon={<BriefcaseBusiness className="h-4 w-4" />}
+                label="Career Interests"
+                value={user.careerInterests.length}
+                helper="Direction guidance"
+              />
+              <MiniSignal
+                icon={<Layers3 className="h-4 w-4" />}
+                label="Next Stage Goal"
+                value={
+                  vibgyorProgress.nextStage
+                    ? vibgyorProgress.nextStage
+                    : "Highest Stage"
+                }
+                helper={
+                  vibgyorProgress.pointsToNextStage !== null
+                    ? `${vibgyorProgress.pointsToNextStage} pts remaining`
+                    : "Completed"
+                }
+              />
             </div>
           </div>
 
-          <div className="rounded-[2rem] border border-slate-200 bg-white/80 p-6 shadow-sm backdrop-blur-xl">
-            <p className="text-xs font-black uppercase tracking-[0.22em] text-slate-500">
-              OMNI Score
-            </p>
+          <div className="rounded-[2rem] border border-slate-200 bg-white/82 p-6 shadow-sm backdrop-blur-xl">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+              <div>
+                <p className="text-xs font-black uppercase tracking-[0.2em] text-blue-700">
+                  Growth + Skill Passport Snapshot
+                </p>
 
-            <p className="oso-heading mt-3 text-6xl font-black text-slate-950">
-              {omniScore}
-            </p>
+                <h2 className="oso-heading mt-3 text-3xl font-black text-slate-950">
+                  {user.fullName || "OMNI Student"}
+                </h2>
 
-            <p className="mt-2 text-sm font-semibold leading-6 text-slate-500">
-              Based on accuracy, consistency, completed days and Silicon Points.
-            </p>
+                <p className="mt-2 text-sm font-semibold leading-6 text-slate-500">
+                  {(user.branch || "Engineering") +
+                    " · " +
+                    (user.college || "OMNI Campus")}
+                </p>
+              </div>
 
-            <OsoProgressBar
-              value={Math.min(100, Math.round(omniScore / 10))}
-              tone="blue"
-              className="mt-5"
-            />
+              <OsoStatusPill
+                label={user.omniId ?? "OMNI Pending"}
+                tone="emerald"
+              />
+            </div>
+
+            <div className="mt-6 grid gap-3 sm:grid-cols-2">
+              <MiniSignal
+                icon={<Zap className="h-4 w-4" />}
+                label="OMNI Score"
+                value={omniScore}
+                helper="Overall growth signal"
+              />
+              <MiniSignal
+                icon={<Medal className="h-4 w-4" />}
+                label="Silicon Points"
+                value={formatNumber(siliconPoints)}
+                helper="Competition momentum"
+              />
+              <MiniSignal
+                icon={<Layers3 className="h-4 w-4" />}
+                label="Current Stage"
+                value={vibgyorProgress.currentStage}
+                helper="VIBGYOR progression"
+              />
+              <MiniSignal
+                icon={<Target className="h-4 w-4" />}
+                label="Engineering Tier"
+                value={tierProgress.currentTier}
+                helper="Current capability band"
+              />
+            </div>
+
+            <div className="mt-6 grid gap-4">
+              <PassportTrack
+                title="Profile Completion"
+                value={profileCompletion}
+                description="Academic details, bio, skills and interests"
+                tone={
+                  profileCompletion >= 80
+                    ? "emerald"
+                    : profileCompletion >= 60
+                      ? "yellow"
+                      : "blue"
+                }
+              />
+
+              <PassportTrack
+                title="Portfolio Readiness"
+                value={portfolioReadiness}
+                description="Challenge proof, skills and portfolio signal strength"
+                tone="blue"
+              />
+
+              <PassportTrack
+                title="Career Readiness"
+                value={careerReadiness}
+                description="Direction, consistency and interview-facing preparedness"
+                tone="emerald"
+              />
+
+              <PassportTrack
+                title="WorldSkills Readiness"
+                value={worldSkillsReadiness}
+                description="Competition maturity and broader pathway potential"
+                tone="yellow"
+              />
+            </div>
+
+            <div className="mt-6 rounded-[1.35rem] border border-yellow-200 bg-yellow-50/80 p-4">
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-yellow-800">
+                Current Focus
+              </p>
+              <p className="mt-2 text-sm font-semibold leading-7 text-yellow-900">
+                {nextAction}
+              </p>
+            </div>
           </div>
+        </div>
+      </OsoGlassSurface>
+
+      <OsoGlassSurface hover={false} className="p-6 sm:p-8">
+        <OsoSectionHeader
+          eyebrow="Ranking"
+          title="All your ranking visibility, in one place."
+          description="National, zone/district, state and institute rank signals are centralized here so ranking is easy to understand and never repeated elsewhere on the dashboard."
+          icon={<LineChart className="h-5 w-5" />}
+        />
+
+        <div className="mt-7 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          <RankBox
+            label="National Rank"
+            value={`#${nationalRank}`}
+            helper="India-wide position"
+          />
+          <RankBox
+            label="Zone / District Rank"
+            value={districtRank ? `#${districtRank}` : "Pending"}
+            helper={
+              districtRank
+                ? "Local competitive standing"
+                : "Add district to unlock zone rank"
+            }
+          />
+          <RankBox
+            label="State Rank"
+            value={stateRank ? `#${stateRank}` : "Pending"}
+            helper={
+              stateRank ? "State-level visibility" : "Add state to unlock state rank"
+            }
+          />
+          <RankBox
+            label="Institute Rank"
+            value={collegeRank ? `#${collegeRank}` : "Pending"}
+            helper={
+              collegeRank
+                ? "College / institute position"
+                : "Add college to unlock institute rank"
+            }
+          />
         </div>
       </OsoGlassSurface>
 
@@ -324,6 +531,14 @@ export default async function DashboardPage() {
           value={siliconPoints}
           helper="Competition momentum"
           tone="blue"
+        />
+
+        <OsoMetricTile
+          icon={<Gauge className="h-5 w-5" />}
+          label="OMNI Score"
+          value={omniScore}
+          helper="Overall growth signal"
+          tone="slate"
         />
 
         <OsoMetricTile
@@ -343,294 +558,107 @@ export default async function DashboardPage() {
         />
 
         <OsoMetricTile
-          icon={<Gauge className="h-5 w-5" />}
+          icon={<Target className="h-5 w-5" />}
           label="Accuracy"
           value={`${averageAccuracy}%`}
           helper={`${totalCorrectAnswers}/${totalQuestionsAttempted} correct`}
           tone="cyan"
         />
-
-        <OsoMetricTile
-          icon={<Trophy className="h-5 w-5" />}
-          label="National Rank"
-          value={`#${nationalRank}`}
-          helper="India-wide position"
-          tone="slate"
-        />
       </section>
+
       <DashboardSmartMissionPlanner
-  profileCompletion={profileCompletion}
-  completedChallenges={completedChallenges}
-  totalChallenges={totalChallenges}
-  siliconPoints={siliconPoints}
-  accuracy={averageAccuracy}
-  streak={user.streak ?? 0}
-  skillsCount={user.skills.length}
-  careerInterestsCount={user.careerInterests.length}
-  nationalRank={nationalRank}
-  currentStage={vibgyorProgress.currentStage}
-  currentTier={tierProgress.currentTier}
-/>
-
-      <DashboardSkillPassportShowcase
-        studentName={user.fullName}
-        omniId={user.omniId}
-        branch={user.branch}
-        college={user.college}
-        omniScore={omniScore}
+        completedChallenges={completedChallenges}
+        totalChallenges={totalChallenges}
         siliconPoints={siliconPoints}
-        skillRankLabel={`#${nationalRank}`}
-        portfolioReadiness={portfolioReadiness}
-        careerReadiness={careerReadiness}
-        worldSkillsReadiness={worldSkillsReadiness}
+        accuracy={averageAccuracy}
+        streak={user.streak ?? 0}
+        skillsCount={user.skills.length}
+        careerInterestsCount={user.careerInterests.length}
+        currentStage={vibgyorProgress.currentStage}
+        currentTier={tierProgress.currentTier}
       />
-
-      <section className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
-        <OsoGlassSurface hover={false} className="p-6 sm:p-8">
-          <OsoSectionHeader
-            eyebrow="VIBGYOR Level"
-            title="Your current skill stage."
-            description="VIBGYOR converts raw activity into a visible engineering growth pathway."
-            icon={<Layers3 className="h-5 w-5" />}
-          />
-
-          <div className="mt-7 rounded-[1.5rem] border border-slate-200 bg-white/80 p-5 shadow-sm backdrop-blur-xl">
-            <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-              <div>
-                <p className="text-xs font-black uppercase tracking-[0.2em] text-slate-500">
-                  Current Stage
-                </p>
-
-                <h3 className="oso-heading mt-2 text-4xl font-black text-slate-950">
-                  {vibgyorProgress.currentStage}
-                </h3>
-              </div>
-
-              <OsoStatusPill
-                label={
-                  vibgyorProgress.nextStage
-                    ? `Next: ${vibgyorProgress.nextStage}`
-                    : "Highest Stage"
-                }
-                tone="blue"
-              />
-            </div>
-
-            <div className="mt-6">
-              <div className="mb-2 flex justify-between text-xs font-black uppercase tracking-[0.16em] text-slate-500">
-                <span>Stage Progress</span>
-                <span>{vibgyorProgress.progressPercent}%</span>
-              </div>
-
-              <OsoProgressBar
-                value={vibgyorProgress.progressPercent}
-                tone="blue"
-              />
-
-              <p className="mt-3 text-sm font-semibold leading-6 text-slate-500">
-                {vibgyorProgress.pointsToNextStage !== null
-                  ? `${vibgyorProgress.pointsToNextStage} points needed for the next VIBGYOR stage.`
-                  : "You have reached the highest VIBGYOR stage."}
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-5 grid gap-3 sm:grid-cols-2">
-            <MiniSignal
-              icon={<Medal className="h-4 w-4" />}
-              label="Engineering Tier"
-              value={tierProgress.currentTier}
-            />
-
-            <MiniSignal
-              icon={<Target className="h-4 w-4" />}
-              label="Next Tier"
-              value={tierProgress.nextTier ?? "Completed"}
-            />
-          </div>
-        </OsoGlassSurface>
-
-        <OsoGlassSurface hover={false} className="p-6 sm:p-8">
-          <OsoSectionHeader
-            eyebrow="Skill Passport"
-            title="Build a portfolio-ready identity."
-            description="Your Skill Passport is the proof layer for skills, ranks, badges, projects and recognition."
-            icon={<ClipboardList className="h-5 w-5" />}
-            action={
-              <Link
-                href="/profile"
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-slate-950 px-5 py-3 text-sm font-black uppercase tracking-[0.14em] text-white transition hover:-translate-y-0.5 hover:bg-blue-700"
-              >
-                Open Passport
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            }
-          />
-
-          <div className="mt-7 rounded-[1.5rem] border border-slate-200 bg-white/80 p-5 shadow-sm backdrop-blur-xl">
-            <div className="flex items-center justify-between gap-4">
-              <div>
-                <p className="text-xs font-black uppercase tracking-[0.2em] text-slate-500">
-                  Profile Completion
-                </p>
-                <p className="oso-heading mt-2 text-4xl font-black text-slate-950">
-                  {profileCompletion}%
-                </p>
-              </div>
-
-              <OsoStatusPill
-                label={user.omniId ?? "OMNI Pending"}
-                tone="emerald"
-              />
-            </div>
-
-            <OsoProgressBar
-              value={profileCompletion}
-              tone={profileCompletion >= 80 ? "emerald" : "yellow"}
-              className="mt-5"
-            />
-          </div>
-
-          <div className="mt-5 grid gap-3 sm:grid-cols-3">
-            <MiniSignal
-              icon={<BookOpenCheck className="h-4 w-4" />}
-              label="Skills"
-              value={user.skills.length}
-            />
-
-            <MiniSignal
-              icon={<BriefcaseBusiness className="h-4 w-4" />}
-              label="Careers"
-              value={user.careerInterests.length}
-            />
-
-            <MiniSignal
-              icon={<GraduationCap className="h-4 w-4" />}
-              label="College Rank"
-              value={collegeRank ? `#${collegeRank}` : "Pending"}
-            />
-          </div>
-        </OsoGlassSurface>
-      </section>
 
       <OsoGlassSurface hover={false} className="p-6 sm:p-8">
         <OsoSectionHeader
           eyebrow="Growth Loop"
-          title="Where you are in the OMNI journey."
-          description="The dashboard now follows the national ecosystem flow: learn, practice, compete, rank, get recognized and build your career."
+          title="OMNI journey support required."
+          description="This journey explains how OMNI should support a student from learning and lab practice to competitions, recognition, internships, hiring and leadership. Hover over any stage to understand it clearly."
           icon={<Route className="h-5 w-5" />}
         />
 
-        <div className="mt-7 grid gap-3 md:grid-cols-3 xl:grid-cols-9">
-          {omniGrowthLoop.map((step, index) => {
+        <div className="mt-7 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {journeySupportSteps.map((step, index) => {
             const active = index <= currentGrowthIndex;
 
             return (
-              <div
-                key={step}
-                className={
+              <article
+                key={step.label}
+                title={step.description}
+                className={`group rounded-[1.45rem] border p-5 shadow-sm transition duration-200 ${
                   active
-                    ? "rounded-[1.25rem] border border-blue-200 bg-blue-50 p-4 text-blue-800"
-                    : "rounded-[1.25rem] border border-slate-200 bg-white/78 p-4 text-slate-500"
-                }
+                    ? "border-blue-200 bg-blue-50/80 text-blue-800 hover:border-blue-300"
+                    : "border-slate-200 bg-white/78 text-slate-600 hover:border-slate-300"
+                }`}
               >
-                <p className="text-xs font-black uppercase tracking-[0.16em]">
-                  Step {index + 1}
+                <div className="flex items-center justify-between gap-3">
+                  <p className="text-base font-black sm:text-lg">{step.label}</p>
+
+                  <span
+                    className={`rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-[0.16em] ${
+                      active
+                        ? "border border-blue-200 bg-white text-blue-700"
+                        : "border border-slate-200 bg-slate-50 text-slate-500"
+                    }`}
+                  >
+                    {active ? "Active" : "Upcoming"}
+                  </span>
+                </div>
+
+                <p className="mt-3 text-sm font-semibold leading-7 text-slate-600">
+                  {step.description}
                 </p>
-                <p className="mt-2 text-sm font-black leading-6">{step}</p>
-              </div>
+
+                <p className="mt-4 text-xs font-black uppercase tracking-[0.16em] text-blue-700 opacity-0 transition duration-200 group-hover:opacity-100">
+                  Hover support enabled
+                </p>
+              </article>
             );
           })}
         </div>
       </OsoGlassSurface>
 
-      <section className="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
-        <OsoGlassSurface hover={false} className="p-6 sm:p-8">
-          <OsoSectionHeader
-            eyebrow="Ranking"
-            title="Your ranking visibility."
-            description="Ranks are calculated from your current competitive score signals."
-            icon={<LineChart className="h-5 w-5" />}
-          />
-
-          <div className="mt-7 grid gap-4 sm:grid-cols-3">
-            <RankBox label="National" value={`#${nationalRank}`} />
-            <RankBox label="State" value={stateRank ? `#${stateRank}` : "Pending"} />
-            <RankBox
-              label="College"
-              value={collegeRank ? `#${collegeRank}` : "Pending"}
-            />
-          </div>
-
-          <div className="mt-5 rounded-[1.5rem] border border-yellow-200 bg-yellow-50/80 p-5 text-yellow-900">
-            <p className="font-black">Next best action</p>
-            <p className="mt-2 text-sm font-semibold leading-7 text-yellow-900/80">
-              {nextAction}
-            </p>
-          </div>
-        </OsoGlassSurface>
-
-        <OsoGlassSurface hover={false} className="p-6 sm:p-8">
-          <OsoSectionHeader
-            eyebrow="WorldSkills Direction"
-            title="Your pathway beyond campus."
-            description="OMNI should guide students from institution level toward state, national and WorldSkills readiness."
-            icon={<GraduationCap className="h-5 w-5" />}
-          />
-
-          <div className="mt-7 flex flex-wrap gap-2">
-            {worldSkillsPathway.map((step, index) => (
-              <span
-                key={step}
-                className={
-                  index <= 1
-                    ? "rounded-full border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-black uppercase tracking-[0.1em] text-emerald-700"
-                    : "rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-black uppercase tracking-[0.1em] text-slate-500"
-                }
-              >
-                {index + 1}. {step}
-              </span>
-            ))}
-          </div>
-
-          <Link
-            href="/worldskills"
-            className="mt-6 inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-blue-600 px-5 py-3 text-sm font-black uppercase tracking-[0.14em] text-white transition hover:-translate-y-0.5 hover:bg-blue-700"
-          >
-            Explore WorldSkills Hub
-            <ArrowRight className="h-4 w-4" />
-          </Link>
-        </OsoGlassSurface>
-      </section>
-
-      <section className="grid gap-5 lg:grid-cols-3">
-        <OsoActionTile
-          href="/daily-challenges"
-          icon={<BrainCircuit className="h-5 w-5" />}
-          title="Practice Daily"
-          description="Complete today’s challenge to grow points, accuracy and streak."
-          meta="Practice"
-          tone="blue"
+      <OsoGlassSurface hover={false} className="p-6 sm:p-8">
+        <OsoSectionHeader
+          eyebrow="WorldSkills Direction"
+          title="Your pathway beyond campus."
+          description="OMNI should guide students from institution level toward district, state, national and WorldSkills readiness."
+          icon={<GraduationCap className="h-5 w-5" />}
+          action={
+            <Link
+              href="/worldskills"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-blue-600 px-5 py-3 text-sm font-black uppercase tracking-[0.14em] text-white transition hover:-translate-y-0.5 hover:bg-blue-700"
+            >
+              Explore WorldSkills Hub
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          }
         />
 
-        <OsoActionTile
-          href="/competition"
-          icon={<Trophy className="h-5 w-5" />}
-          title="Compete"
-          description="Enter the competition ecosystem and build national ranking signals."
-          meta="Competition"
-          tone="emerald"
-        />
-
-        <OsoActionTile
-          href="/profile"
-          icon={<Sparkles className="h-5 w-5" />}
-          title="Build Passport"
-          description="Improve your portfolio-ready Skill Passport and public identity."
-          meta="Identity"
-          tone="yellow"
-        />
-      </section>
+        <div className="mt-7 flex flex-wrap gap-2">
+          {worldSkillsPathway.map((step, index) => (
+            <span
+              key={step}
+              className={
+                index <= 1
+                  ? "rounded-full border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-black uppercase tracking-[0.1em] text-emerald-700"
+                  : "rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-black uppercase tracking-[0.1em] text-slate-500"
+              }
+            >
+              {step}
+            </span>
+          ))}
+        </div>
+      </OsoGlassSurface>
 
       <OsoGlassSurface hover={false} className="p-6 sm:p-8">
         <OsoSectionHeader
@@ -655,7 +683,6 @@ export default async function DashboardPage() {
                     {String(index + 1).padStart(2, "0")}
                   </p>
                 </div>
-              
 
                 <div>
                   <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">
@@ -700,10 +727,12 @@ function MiniSignal({
   icon,
   label,
   value,
+  helper,
 }: {
   icon: ReactNode;
   label: string;
   value: string | number;
+  helper?: string;
 }) {
   return (
     <div className="rounded-2xl border border-slate-200 bg-white/78 p-4">
@@ -712,18 +741,65 @@ function MiniSignal({
         {label}
       </p>
       <p className="mt-1 text-lg font-black text-slate-950">{value}</p>
+      {helper ? (
+        <p className="mt-2 text-xs font-semibold leading-5 text-slate-500">
+          {helper}
+        </p>
+      ) : null}
     </div>
   );
 }
 
-function RankBox({ label, value }: { label: string; value: string }) {
+function PassportTrack({
+  title,
+  value,
+  description,
+  tone,
+}: {
+  title: string;
+  value: number;
+  description: string;
+  tone: "blue" | "emerald" | "yellow";
+}) {
   return (
-    <div className="rounded-[1.25rem] border border-slate-200 bg-white/80 p-5 text-center shadow-sm">
+    <div className="rounded-[1.35rem] border border-slate-200 bg-slate-50/78 p-4 backdrop-blur-xl">
+      <div className="mb-2 flex items-center justify-between gap-3">
+        <div>
+          <p className="font-black text-slate-950">{title}</p>
+          <p className="mt-1 text-sm font-semibold leading-6 text-slate-500">
+            {description}
+          </p>
+        </div>
+
+        <span className="shrink-0 text-sm font-black text-slate-950">
+          {value}%
+        </span>
+      </div>
+
+      <OsoProgressBar value={value} tone={tone} />
+    </div>
+  );
+}
+
+function RankBox({
+  label,
+  value,
+  helper,
+}: {
+  label: string;
+  value: string;
+  helper: string;
+}) {
+  return (
+    <div className="rounded-[1.35rem] border border-slate-200 bg-white/82 p-5 text-center shadow-sm">
       <p className="text-xs font-black uppercase tracking-[0.18em] text-slate-500">
         {label}
       </p>
       <p className="oso-heading mt-3 text-3xl font-black text-slate-950">
         {value}
+      </p>
+      <p className="mt-2 text-sm font-semibold leading-6 text-slate-500">
+        {helper}
       </p>
     </div>
   );
@@ -770,13 +846,14 @@ function getGrowthIndex({
   skillsCount: number;
   accuracy: number;
 }) {
+  if (siliconPoints >= 2500 && accuracy >= 85) return 8;
   if (siliconPoints >= 1500 && accuracy >= 75) return 7;
-  if (siliconPoints >= 700) return 6;
-  if (siliconPoints >= 300) return 5;
-  if (skillsCount >= 3 && completedChallenges >= 5) return 4;
-  if (completedChallenges >= 3) return 3;
-  if (completedChallenges >= 1) return 2;
-  if (skillsCount > 0) return 1;
+  if (siliconPoints >= 1000) return 6;
+  if (siliconPoints >= 700) return 5;
+  if (siliconPoints >= 300) return 4;
+  if (skillsCount >= 3 && completedChallenges >= 5) return 3;
+  if (completedChallenges >= 3) return 2;
+  if (completedChallenges >= 1) return 1;
   return 0;
 }
 
@@ -792,26 +869,26 @@ function getNextAction({
   profileCompletion: number;
 }) {
   if (profileCompletion < 70) {
-    return "Complete your Skill Passport first: add skills, career interests, college details and bio.";
+    return "Complete your Skill Passport first by adding missing academic details, bio, skills and career interests.";
   }
 
   if (completedChallenges === 0) {
-    return "Start with one daily challenge today to activate your practice and ranking signals.";
+    return "Start one daily challenge today to activate your practice, score and ranking signals.";
   }
 
   if (completedChallenges < 5) {
-    return "Complete at least 5 daily challenges to build consistency and unlock stronger dashboard insights.";
+    return "Complete at least 5 daily challenges to build consistency and unlock stronger dashboard insight.";
   }
 
   if (skillsCount < 3) {
-    return "Add at least 3 skills to make your Skill Passport more meaningful for mentors and industry.";
+    return "Add at least 3 skills so your Skill Passport becomes more meaningful for mentors and industry.";
   }
 
   if (careerInterestsCount === 0) {
     return "Add your career interests so OMNI can guide you toward internships, placements and domain pathways.";
   }
 
-  return "Keep practicing daily and start entering competition tracks to improve national visibility.";
+  return "Keep practicing daily and enter competition tracks to improve visibility and readiness.";
 }
 
 function getPortfolioReadiness({
@@ -875,4 +952,12 @@ function clampPercent(value: number) {
   }
 
   return Math.max(0, Math.min(100, Math.round(value)));
+}
+
+function formatNumber(value: number): string {
+  if (!Number.isFinite(value)) {
+    return "0";
+  }
+
+  return Math.max(0, Math.round(value)).toLocaleString("en-IN");
 }

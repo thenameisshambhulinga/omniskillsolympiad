@@ -2,17 +2,12 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import {
   ArrowRight,
-  BadgeCheck,
   BookOpenCheck,
   BrainCircuit,
   BriefcaseBusiness,
-  CheckCircle2,
-  ClipboardList,
   Flame,
   GraduationCap,
-  LineChart,
   Rocket,
-  ShieldCheck,
   Sparkles,
   Target,
   Trophy,
@@ -21,7 +16,6 @@ import {
 type MissionPriority = "critical" | "high" | "medium" | "growth";
 
 type DashboardSmartMissionPlannerProps = {
-  profileCompletion: number;
   completedChallenges: number;
   totalChallenges: number;
   siliconPoints: number;
@@ -29,7 +23,6 @@ type DashboardSmartMissionPlannerProps = {
   streak: number;
   skillsCount: number;
   careerInterestsCount: number;
-  nationalRank: number;
   currentStage: string;
   currentTier: string;
 };
@@ -96,7 +89,6 @@ const priorityStyles: Record<
 };
 
 export default function DashboardSmartMissionPlanner({
-  profileCompletion,
   completedChallenges,
   totalChallenges,
   siliconPoints,
@@ -104,12 +96,10 @@ export default function DashboardSmartMissionPlanner({
   streak,
   skillsCount,
   careerInterestsCount,
-  nationalRank,
   currentStage,
   currentTier,
 }: DashboardSmartMissionPlannerProps) {
   const missions = buildSmartMissions({
-    profileCompletion,
     completedChallenges,
     totalChallenges,
     siliconPoints,
@@ -118,9 +108,6 @@ export default function DashboardSmartMissionPlanner({
     skillsCount,
     careerInterestsCount,
   });
-
-  const primaryMission = missions[0];
-  const secondaryMissions = missions.slice(1, 4);
 
   return (
     <section className="relative overflow-hidden rounded-[2.5rem] border border-slate-200 bg-white/78 p-5 shadow-[0_26px_84px_rgba(15,23,42,0.08)] backdrop-blur-2xl sm:p-7 lg:p-8">
@@ -147,78 +134,84 @@ export default function DashboardSmartMissionPlanner({
             </h2>
 
             <p className="mt-3 max-w-3xl text-base font-semibold leading-8 text-slate-600">
-              This planner converts your dashboard signals into clear next
-              actions for practice, portfolio, ranking and career readiness.
+              This planner now focuses only on the next meaningful actions for
+              practice, competition, skills, accuracy and direction — without
+              repeating the full passport block again.
             </p>
           </div>
 
-          <div className="grid grid-cols-3 gap-2 sm:min-w-[360px]">
-            <PlannerStat label="Rank" value={`#${nationalRank}`} />
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 sm:min-w-[520px]">
+            <PlannerStat label="Accuracy" value={`${accuracy}%`} />
+            <PlannerStat label="Streak" value={`${streak} Days`} />
             <PlannerStat label="Stage" value={currentStage} />
             <PlannerStat label="Tier" value={currentTier} />
           </div>
         </div>
 
-        <div className="mt-7 grid gap-5 xl:grid-cols-[0.95fr_1.05fr]">
-          <PrimaryMissionCard mission={primaryMission} />
-
-          <div className="grid gap-4">
-            {secondaryMissions.map((mission) => (
-              <CompactMissionCard key={mission.title} mission={mission} />
-            ))}
-          </div>
+        <div className="mt-7 grid gap-4 md:grid-cols-2">
+          {missions.map((mission) => (
+            <MissionCard key={mission.title} mission={mission} />
+          ))}
         </div>
       </div>
     </section>
   );
 }
 
-function PrimaryMissionCard({ mission }: { mission: MissionItem }) {
+function MissionCard({ mission }: { mission: MissionItem }) {
   const style = priorityStyles[mission.priority];
 
   return (
     <article
-      className={`relative isolate overflow-hidden rounded-[2rem] border ${style.border} ${style.surface} p-5 shadow-[0_22px_70px_rgba(15,23,42,0.08)] backdrop-blur-2xl sm:p-6`}
+      className={`relative isolate overflow-hidden rounded-[1.85rem] border ${style.border} ${style.surface} p-5 shadow-sm backdrop-blur-2xl`}
     >
       <div
         aria-hidden="true"
-        className={`absolute -right-20 -top-20 h-56 w-56 rounded-full ${style.glow} blur-3xl`}
+        className={`absolute -right-14 -top-14 h-40 w-40 rounded-full ${style.glow} blur-3xl`}
       />
 
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.62),rgba(255,255,255,0.22))]"
+        className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.66),rgba(255,255,255,0.22))]"
       />
 
       <div className="relative z-10">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-4">
             <div
-              className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border shadow-sm ${style.icon}`}
+              className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border shadow-sm ${style.icon}`}
             >
               {mission.icon}
             </div>
 
             <div>
               <span
-                className={`inline-flex rounded-full border px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.04em] ${style.badge}`}
+                className={`inline-flex rounded-full border px-3 py-1 text-[10px] font-black uppercase tracking-[0.04em] ${style.badge}`}
               >
                 {style.label}
               </span>
 
-              <h3 className="oso-heading mt-3 text-2xl font-black leading-tight sm:text-3xl">
+              <h3 className="oso-heading mt-3 text-xl font-black leading-tight sm:text-2xl">
                 {mission.title}
               </h3>
             </div>
           </div>
+
+          <Link
+            href={mission.href}
+            className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-full border border-slate-300 bg-white/86 px-4 py-2.5 text-xs font-black uppercase tracking-[0.035em] text-slate-950 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-300 hover:text-blue-700"
+          >
+            {mission.actionLabel}
+            <ArrowRight className="h-3.5 w-3.5 shrink-0" />
+          </Link>
         </div>
 
-        <p className="mt-4 text-base font-semibold leading-8 text-slate-600">
+        <p className="mt-4 text-sm font-semibold leading-7 text-slate-600 sm:text-base">
           {mission.description}
         </p>
 
-        <div className="mt-6">
-          <div className="mb-2 flex items-center justify-between gap-3 text-xs font-black uppercase tracking-[0.04em] text-slate-500">
+        <div className="mt-5">
+          <div className="mb-2 flex items-center justify-between gap-3 text-[11px] font-black uppercase tracking-[0.06em] text-slate-500">
             <span>{mission.progressLabel}</span>
             <span>{mission.progress}%</span>
           </div>
@@ -230,68 +223,6 @@ function PrimaryMissionCard({ mission }: { mission: MissionItem }) {
             />
           </div>
         </div>
-
-        <Link
-          href={mission.href}
-          className="mt-7 inline-flex min-h-14 items-center justify-center gap-3 rounded-full border border-blue-300/40 bg-gradient-to-br from-blue-600 via-sky-500 to-cyan-400 px-7 py-4 text-sm font-black uppercase tracking-[0.035em] text-white shadow-[0_18px_42px_rgba(37,99,235,0.22)] transition hover:-translate-y-0.5 hover:shadow-[0_24px_58px_rgba(37,99,235,0.30),0_0_34px_rgba(34,211,238,0.22)]"
-        >
-          {mission.actionLabel}
-          <ArrowRight className="h-4 w-4 shrink-0" />
-        </Link>
-      </div>
-    </article>
-  );
-}
-
-function CompactMissionCard({ mission }: { mission: MissionItem }) {
-  const style = priorityStyles[mission.priority];
-
-  return (
-    <article
-      className={`relative isolate overflow-hidden rounded-[1.65rem] border ${style.border} ${style.surface} p-4 shadow-sm backdrop-blur-2xl`}
-    >
-      <div
-        aria-hidden="true"
-        className={`absolute -right-14 -top-14 h-36 w-36 rounded-full ${style.glow} blur-3xl`}
-      />
-
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.64),rgba(255,255,255,0.22))]"
-      />
-
-      <div className="relative z-10 grid gap-4 sm:grid-cols-[1fr_auto] sm:items-center">
-        <div className="flex items-start gap-3">
-          <div
-            className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border shadow-sm ${style.icon}`}
-          >
-            {mission.icon}
-          </div>
-
-          <div className="min-w-0">
-            <span
-              className={`inline-flex rounded-full border px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.04em] ${style.badge}`}
-            >
-              {style.label}
-            </span>
-
-            <h3 className="oso-heading mt-2 text-lg font-black leading-tight">
-              {mission.title}
-            </h3>
-
-            <p className="mt-1 line-clamp-2 text-sm font-semibold leading-6 text-slate-600">
-              {mission.description}
-            </p>
-          </div>
-        </div>
-
-        <Link
-          href={mission.href}
-          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-slate-300 bg-white/86 px-4 py-2.5 text-xs font-black uppercase tracking-[0.035em] text-slate-950 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-300 hover:text-blue-700"
-        >
-          Open
-          <ArrowRight className="h-3.5 w-3.5 shrink-0" />
-        </Link>
       </div>
     </article>
   );
@@ -311,7 +242,6 @@ function PlannerStat({ label, value }: { label: string; value: string }) {
 }
 
 function buildSmartMissions({
-  profileCompletion,
   completedChallenges,
   totalChallenges,
   siliconPoints,
@@ -320,7 +250,6 @@ function buildSmartMissions({
   skillsCount,
   careerInterestsCount,
 }: {
-  profileCompletion: number;
   completedChallenges: number;
   totalChallenges: number;
   siliconPoints: number;
@@ -331,25 +260,11 @@ function buildSmartMissions({
 }): MissionItem[] {
   const missions: MissionItem[] = [];
 
-  if (profileCompletion < 75) {
-    missions.push({
-      title: "Complete your Skill Passport",
-      description:
-        "Your profile is the proof layer for skills, rankings, badges and career readiness. Add missing academic details, skills, bio and career interests.",
-      href: "/profile",
-      actionLabel: "Complete Passport",
-      priority: "critical",
-      icon: <ClipboardList className="h-5 w-5" />,
-      progress: profileCompletion,
-      progressLabel: "Profile completion",
-    });
-  }
-
   if (completedChallenges < 5) {
     missions.push({
       title: "Build your first challenge streak",
       description:
-        "Complete at least 5 daily challenges to activate stronger OMNI score, consistency, ranking and dashboard insights.",
+        "Complete at least 5 daily challenges to strengthen consistency, improve OMNI score quality and unlock stronger dashboard signals.",
       href: "/daily-challenges",
       actionLabel: "Start Challenge",
       priority: completedChallenges === 0 ? "critical" : "high",
@@ -363,12 +278,12 @@ function buildSmartMissions({
     missions.push({
       title: "Improve accuracy before ranking push",
       description:
-        "Your next growth boost should come from cleaner answers, better revision and fewer mistakes in technical challenge attempts.",
+        "Cleaner answers, better revision and fewer mistakes will improve your next performance jump faster than chasing volume alone.",
       href: "/daily-challenges",
       actionLabel: "Practice Again",
       priority: "high",
       icon: <Target className="h-5 w-5" />,
-      progress: accuracy,
+      progress: Math.min(100, accuracy),
       progressLabel: "Accuracy score",
     });
   }
@@ -393,7 +308,7 @@ function buildSmartMissions({
       description:
         "Add career interests so OMNI can guide you toward better internships, placements, competitions and domain pathways.",
       href: "/profile",
-      actionLabel: "Add Career Interests",
+      actionLabel: "Add Interests",
       priority: "medium",
       icon: <BriefcaseBusiness className="h-5 w-5" />,
       progress: 0,
@@ -405,7 +320,7 @@ function buildSmartMissions({
     missions.push({
       title: "Push toward 1000 Silicon Points",
       description:
-        "Silicon Points improve visibility across ranks, VIBGYOR stages and future recognition layers.",
+        "Silicon Points improve your growth stage, recognition layer strength and readiness for stronger competition positioning.",
       href: "/daily-challenges",
       actionLabel: "Earn Points",
       priority: "growth",
@@ -419,7 +334,7 @@ function buildSmartMissions({
     missions.push({
       title: "Build a 7-day discipline streak",
       description:
-        "A protected streak shows consistency and helps build reliable engineering practice habits.",
+        "A stronger streak proves consistency and builds the practice rhythm needed for long-term ranking and placement readiness.",
       href: "/daily-challenges",
       actionLabel: "Continue Streak",
       priority: "growth",
@@ -432,23 +347,24 @@ function buildSmartMissions({
   missions.push({
     title: "Explore competition pathways",
     description:
-      "Move beyond daily practice into challenge arenas, leaderboards and recognition-driven competition tracks.",
+      "Move from daily practice into challenge arenas, events and recognition-driven competition tracks.",
     href: "/competition",
     actionLabel: "Open Competitions",
     priority: "growth",
     icon: <Trophy className="h-5 w-5" />,
-    progress: totalChallenges > 0
-      ? Math.min(100, Math.round((completedChallenges / totalChallenges) * 100))
-      : 0,
+    progress:
+      totalChallenges > 0
+        ? Math.min(100, Math.round((completedChallenges / totalChallenges) * 100))
+        : 0,
     progressLabel: "Challenge coverage",
   });
 
   missions.push({
     title: "Check WorldSkills direction",
     description:
-      "Understand the path from institution level to state, national and international skill recognition.",
+      "Understand the path from institution level to district, state, national and international skill recognition.",
     href: "/worldskills",
-    actionLabel: "View WorldSkills",
+    actionLabel: "View Pathway",
     priority: "growth",
     icon: <GraduationCap className="h-5 w-5" />,
     progress: Math.min(100, Math.round((siliconPoints / 2000) * 100)),

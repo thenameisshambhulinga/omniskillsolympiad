@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   BookOpenCheck,
   BriefcaseBusiness,
@@ -23,9 +23,52 @@ import {
 import ProfileDropdown from "@/components/profile/platform/ProfileDropdown";
 import GoogleIcon from "@/components/ui/GoogleIcon";
 
+type AuthStatus = "loading" | "authenticated" | "unauthenticated";
+
 export default function CompetitionNavbar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [authStatus, setAuthStatus] = useState<AuthStatus>("loading");
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    async function syncAuthState() {
+      try {
+        const response = await fetch("/api/auth/session", {
+          cache: "no-store",
+          credentials: "same-origin",
+          signal: controller.signal,
+        });
+
+        if (!response.ok) {
+          setAuthStatus("unauthenticated");
+          return;
+        }
+
+        const session = (await response.json()) as {
+          user?: {
+            email?: string | null;
+          } | null;
+        };
+
+        setAuthStatus(session?.user?.email ? "authenticated" : "unauthenticated");
+      } catch (error) {
+        if (!controller.signal.aborted) {
+          setAuthStatus("unauthenticated");
+        }
+      }
+    }
+
+    syncAuthState();
+
+    return () => {
+      controller.abort();
+    };
+  }, []);
+
+  const isAuthenticated = authStatus === "authenticated";
+  const canShowLogin = authStatus === "unauthenticated";
 
   return (
     <>
@@ -38,13 +81,13 @@ export default function CompetitionNavbar() {
           >
             <div className="relative flex h-[72px] w-[280px] items-center overflow-visible sm:w-[310px]">
               <Image
-  src="/brand/omni-logo-new.jpeg"
-  alt="Omni Skills Olympiad"
-  width={2048}
-  height={397}
-  priority
-  className="h-12 w-auto object-contain object-left transition duration-200 group-hover:scale-[1.02] sm:h-14 lg:h-16"
-/>
+                src="/brand/omni-logo-new.jpeg"
+                alt="Omni Skills Olympiad"
+                width={2048}
+                height={397}
+                priority
+                className="h-12 w-auto object-contain object-left transition duration-200 group-hover:scale-[1.02] sm:h-14 lg:h-16"
+              />
             </div>
           </Link>
 
@@ -84,23 +127,29 @@ export default function CompetitionNavbar() {
               />
             </div>
 
-            <Link
-              href="/login"
-              className="hidden min-h-12 items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-black text-slate-950 shadow-[0_12px_30px_rgba(15,23,42,0.07)] transition duration-200 hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-[0_16px_38px_rgba(37,99,235,0.12)] lg:inline-flex"
-            >
-              <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-slate-50">
-                <GoogleIcon className="h-5 w-5" />
-              </span>
-              Login
-            </Link>
+            {canShowLogin ? (
+              <Link
+                href="/login"
+                className="hidden min-h-12 items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-black text-slate-950 shadow-[0_12px_30px_rgba(15,23,42,0.07)] transition duration-200 hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-[0_16px_38px_rgba(37,99,235,0.12)] lg:inline-flex"
+              >
+                <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-slate-50">
+                  <GoogleIcon className="h-5 w-5" />
+                </span>
+                Login
+              </Link>
+            ) : null}
 
-            <div className="hidden lg:block">
-              <ProfileDropdown />
-            </div>
+            {isAuthenticated ? (
+              <>
+                <div className="hidden lg:block">
+                  <ProfileDropdown />
+                </div>
 
-            <div className="lg:hidden">
-              <ProfileDropdown />
-            </div>
+                <div className="lg:hidden">
+                  <ProfileDropdown />
+                </div>
+              </>
+            ) : null}
 
             <button
               type="button"
@@ -168,11 +217,11 @@ export default function CompetitionNavbar() {
                   className="relative flex h-[66px] w-[250px] items-center overflow-visible pl-1"
                 >
                   <Image
-                    src="/brand/omni-logo-h.png"
+                    src="/brand/omni-logo-new.jpeg"
                     alt="Omni Skills Olympiad"
-                    width={1191}
-                    height={843}
-                    className="h-auto w-57.5 object-contain object-left"
+                    width={2048}
+                    height={397}
+                    className="h-12 w-auto object-contain object-left"
                   />
                 </Link>
 
@@ -251,14 +300,16 @@ export default function CompetitionNavbar() {
                 ))}
               </MobileGroup>
 
-              <Link
-                href="/login"
-                onClick={() => setMobileOpen(false)}
-                className="mt-6 inline-flex min-h-14 items-center justify-center gap-3 rounded-2xl border border-slate-200 bg-white px-5 py-3 text-base font-black text-slate-950 transition hover:border-blue-300 hover:bg-slate-50"
-              >
-                <GoogleIcon className="h-5 w-5" />
-                Login with Google
-              </Link>
+              {canShowLogin ? (
+                <Link
+                  href="/login"
+                  onClick={() => setMobileOpen(false)}
+                  className="mt-6 inline-flex min-h-14 items-center justify-center gap-3 rounded-2xl border border-slate-200 bg-white px-5 py-3 text-base font-black text-slate-950 transition hover:border-blue-300 hover:bg-slate-50"
+                >
+                  <GoogleIcon className="h-5 w-5" />
+                  Login with Google
+                </Link>
+              ) : null}
             </motion.aside>
           </>
         ) : null}
