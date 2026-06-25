@@ -72,7 +72,13 @@ const stepIcons: Record<
   review: BadgeCheck,
 };
 
-export default function RegistrationWizard() {
+export default function RegistrationWizard({
+  editMode = false,
+  initialData,
+}: {
+  editMode?: boolean;
+  initialData?: RegistrationFormData;
+}) {
   const router = useRouter();
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [studentId, setStudentId] = useState<string>("");
@@ -80,7 +86,7 @@ export default function RegistrationWizard() {
   const [submitError, setSubmitError] = useState("");
 
   const [formData, setFormData] = useState<RegistrationFormData>(() =>
-    createEmptyRegistrationFormData(),
+    initialData ?? createEmptyRegistrationFormData(),
   );
 
   useEffect(() => {
@@ -88,7 +94,7 @@ export default function RegistrationWizard() {
     const nextId = generateStudentId();
 
     setFormData((current) => {
-      if (current.studentId) return current;
+      if (current.studentId || editMode) return current;
 
       return {
         ...current,
@@ -130,10 +136,19 @@ export default function RegistrationWizard() {
     setSubmitError("");
 
     try {
+      const payload = {
+        ...formData,
+        personal: {
+          ...formData.personal,
+          profileImageDataUrl:
+            formData.personal.profileImage.previewUrl || undefined,
+        },
+      };
+
       const response = await fetch("/api/onboarding/complete", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
 
       const result = await response.json();
@@ -142,7 +157,7 @@ export default function RegistrationWizard() {
         throw new Error(result.error || "Unable to complete onboarding");
       }
 
-     router.push("/onboarding/success");
+      router.push(editMode ? "/profile#passport-overview" : "/onboarding/success");
     } finally {
       setIsSubmitting(false);
     }
@@ -175,8 +190,12 @@ export default function RegistrationWizard() {
 
   return (
     <RegistrationShell
-       title="Complete Your Engineering Identity"
-       subtitle="Create your Omni Skills Olympiad profile foundation before entering the competition ecosystem."
+       title={editMode ? "Edit Your Skill Passport" : "Complete Your Engineering Identity"}
+       subtitle={
+         editMode
+           ? "Update your profile image, academic identity, skills and career direction without entering admin space."
+           : "Create your Omni Skills Olympiad profile foundation before entering the competition ecosystem."
+       }
        completionPercent={completionPercent} >
 
       <div className="grid w-full gap-8 xl:grid-cols-[240px_minmax(0,1fr)]">
@@ -240,9 +259,9 @@ export default function RegistrationWizard() {
               onNext={goNext}
               nextLabel={
                 isSubmitting
-                  ? "Generating..."
+                  ? editMode ? "Saving..." : "Generating..."
                   : isLastStep
-                    ? "Generate Identity"
+                    ? editMode ? "Save Passport" : "Generate Identity"
                     : "Continue"
               }
             />

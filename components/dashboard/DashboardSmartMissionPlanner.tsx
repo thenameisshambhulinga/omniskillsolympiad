@@ -19,12 +19,8 @@ type DashboardSmartMissionPlannerProps = {
   completedChallenges: number;
   totalChallenges: number;
   siliconPoints: number;
-  accuracy: number;
-  streak: number;
   skillsCount: number;
   careerInterestsCount: number;
-  currentStage: string;
-  currentTier: string;
 };
 
 type MissionItem = {
@@ -92,19 +88,13 @@ export default function DashboardSmartMissionPlanner({
   completedChallenges,
   totalChallenges,
   siliconPoints,
-  accuracy,
-  streak,
   skillsCount,
   careerInterestsCount,
-  currentStage,
-  currentTier,
 }: DashboardSmartMissionPlannerProps) {
   const missions = buildSmartMissions({
     completedChallenges,
     totalChallenges,
     siliconPoints,
-    accuracy,
-    streak,
     skillsCount,
     careerInterestsCount,
   });
@@ -122,30 +112,21 @@ export default function DashboardSmartMissionPlanner({
       />
 
       <div className="relative z-10">
-        <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
-          <div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-xs font-black uppercase tracking-[0.04em] text-blue-700">
-              <BrainCircuit className="h-4 w-4" />
-              Smart Mission Planner
-            </div>
-
-            <h2 className="oso-heading mt-4 max-w-4xl text-3xl font-black leading-tight sm:text-4xl">
-              Your next best moves are ready.
-            </h2>
-
-            <p className="mt-3 max-w-3xl text-base font-semibold leading-8 text-slate-600">
-              This planner now focuses only on the next meaningful actions for
-              practice, competition, skills, accuracy and direction — without
-              repeating the full passport block again.
-            </p>
+        <div className="max-w-5xl">
+          <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-xs font-black uppercase tracking-[0.04em] text-blue-700">
+            <BrainCircuit className="h-4 w-4" />
+            Smart Mission Planner
           </div>
 
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 sm:min-w-[520px]">
-            <PlannerStat label="Accuracy" value={`${accuracy}%`} />
-            <PlannerStat label="Streak" value={`${streak} Days`} />
-            <PlannerStat label="Stage" value={currentStage} />
-            <PlannerStat label="Tier" value={currentTier} />
-          </div>
+          <h2 className="oso-heading mt-4 text-3xl font-black leading-tight sm:text-4xl">
+            Your next best moves are ready.
+          </h2>
+
+          <p className="mt-3 text-base font-semibold leading-8 text-slate-600">
+            Only next-action decisions are shown here. Stage, tier, accuracy and
+            streak are already available above, so this space stays focused and
+            non-repetitive.
+          </p>
         </div>
 
         <div className="mt-7 grid gap-4 md:grid-cols-2">
@@ -228,33 +209,16 @@ function MissionCard({ mission }: { mission: MissionItem }) {
   );
 }
 
-function PlannerStat({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-2xl border border-slate-200 bg-white/82 p-3 text-center shadow-sm backdrop-blur-xl">
-      <p className="text-[10px] font-black uppercase tracking-[0.04em] text-slate-400">
-        {label}
-      </p>
-      <p className="mt-1 truncate text-sm font-black text-slate-950">
-        {value}
-      </p>
-    </div>
-  );
-}
-
 function buildSmartMissions({
   completedChallenges,
   totalChallenges,
   siliconPoints,
-  accuracy,
-  streak,
   skillsCount,
   careerInterestsCount,
 }: {
   completedChallenges: number;
   totalChallenges: number;
   siliconPoints: number;
-  accuracy: number;
-  streak: number;
   skillsCount: number;
   careerInterestsCount: number;
 }): MissionItem[] {
@@ -264,9 +228,9 @@ function buildSmartMissions({
     missions.push({
       title: "Build your first challenge streak",
       description:
-        "Complete at least 5 daily challenges to strengthen consistency, improve OMNI score quality and unlock stronger dashboard signals.",
+        "Complete at least 5 daily challenges to strengthen consistency, score quality and competition readiness.",
       href: "/daily-challenges",
-      actionLabel: "Start Challenge",
+      actionLabel: "Start",
       priority: completedChallenges === 0 ? "critical" : "high",
       icon: <Flame className="h-5 w-5" />,
       progress: Math.min(100, Math.round((completedChallenges / 5) * 100)),
@@ -274,25 +238,11 @@ function buildSmartMissions({
     });
   }
 
-  if (accuracy < 70 && completedChallenges > 0) {
-    missions.push({
-      title: "Improve accuracy before ranking push",
-      description:
-        "Cleaner answers, better revision and fewer mistakes will improve your next performance jump faster than chasing volume alone.",
-      href: "/daily-challenges",
-      actionLabel: "Practice Again",
-      priority: "high",
-      icon: <Target className="h-5 w-5" />,
-      progress: Math.min(100, accuracy),
-      progressLabel: "Accuracy score",
-    });
-  }
-
   if (skillsCount < 3) {
     missions.push({
       title: "Add at least 3 verified skills",
       description:
-        "Skills make your passport more meaningful for mentors, institutions and industry-facing opportunities.",
+        "Skills make your passport more useful for mentors, institutions, internships and industry-facing opportunities.",
       href: "/profile",
       actionLabel: "Add Skills",
       priority: "medium",
@@ -308,7 +258,7 @@ function buildSmartMissions({
       description:
         "Add career interests so OMNI can guide you toward better internships, placements, competitions and domain pathways.",
       href: "/profile",
-      actionLabel: "Add Interests",
+      actionLabel: "Add",
       priority: "medium",
       icon: <BriefcaseBusiness className="h-5 w-5" />,
       progress: 0,
@@ -320,27 +270,13 @@ function buildSmartMissions({
     missions.push({
       title: "Push toward 1000 Silicon Points",
       description:
-        "Silicon Points improve your growth stage, recognition layer strength and readiness for stronger competition positioning.",
+        "Silicon Points improve your growth stage, recognition layer strength and competitive positioning.",
       href: "/daily-challenges",
-      actionLabel: "Earn Points",
+      actionLabel: "Earn",
       priority: "growth",
       icon: <Rocket className="h-5 w-5" />,
       progress: Math.min(100, Math.round((siliconPoints / 1000) * 100)),
       progressLabel: `${siliconPoints}/1000 points`,
-    });
-  }
-
-  if (streak < 7) {
-    missions.push({
-      title: "Build a 7-day discipline streak",
-      description:
-        "A stronger streak proves consistency and builds the practice rhythm needed for long-term ranking and placement readiness.",
-      href: "/daily-challenges",
-      actionLabel: "Continue Streak",
-      priority: "growth",
-      icon: <Sparkles className="h-5 w-5" />,
-      progress: Math.min(100, Math.round((streak / 7) * 100)),
-      progressLabel: `${streak}/7 day streak`,
     });
   }
 
@@ -349,7 +285,7 @@ function buildSmartMissions({
     description:
       "Move from daily practice into challenge arenas, events and recognition-driven competition tracks.",
     href: "/competition",
-    actionLabel: "Open Competitions",
+    actionLabel: "Explore",
     priority: "growth",
     icon: <Trophy className="h-5 w-5" />,
     progress:
@@ -364,12 +300,26 @@ function buildSmartMissions({
     description:
       "Understand the path from institution level to district, state, national and international skill recognition.",
     href: "/worldskills",
-    actionLabel: "View Pathway",
+    actionLabel: "View",
     priority: "growth",
     icon: <GraduationCap className="h-5 w-5" />,
     progress: Math.min(100, Math.round((siliconPoints / 2000) * 100)),
     progressLabel: "WorldSkills readiness",
   });
+
+  if (missions.length < 4) {
+    missions.push({
+      title: "Keep your proof fresh",
+      description:
+        "Continue adding proof through challenges, skills, profile updates and competition participation.",
+      href: "/profile",
+      actionLabel: "Update",
+      priority: "growth",
+      icon: <Sparkles className="h-5 w-5" />,
+      progress: 75,
+      progressLabel: "Proof freshness",
+    });
+  }
 
   return missions
     .sort((a, b) => getPriorityScore(a.priority) - getPriorityScore(b.priority))

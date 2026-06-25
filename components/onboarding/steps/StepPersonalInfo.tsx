@@ -9,7 +9,8 @@ import type { RegistrationFormData } from "@/types/onboarding";
 export function isPersonalStepValid(formData: RegistrationFormData): boolean {
   return Boolean(
     formData.personal.profileImage.isValid &&
-    formData.personal.profileImage.file &&
+    (formData.personal.profileImage.file ||
+      formData.personal.profileImage.previewUrl) &&
     formData.personal.fullName.trim() &&
     formData.personal.email.trim() &&
     formData.personal.phoneNumber.trim() &&

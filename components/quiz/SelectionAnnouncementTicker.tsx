@@ -142,7 +142,7 @@ export default function SelectionAnnouncementTicker() {
   const marqueeItems = prioritizedTests.slice(0, 6);
 
   return (
-    <section className="sticky top-0 z-[80] border-y border-blue-200/70 bg-white/95 shadow-[0_12px_35px_rgba(37,99,235,0.10)] backdrop-blur-2xl">
+    <section className="sticky top-[92px] z-30 border-y border-blue-200/70 bg-white/95 shadow-[0_12px_35px_rgba(37,99,235,0.10)] backdrop-blur-2xl xl:top-[138px]">
       <style>{`
         @keyframes osoSelectionTicker {
           0% { transform: translateX(0); }

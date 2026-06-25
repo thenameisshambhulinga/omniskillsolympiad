@@ -1299,3 +1299,84 @@ samp,
   font-family: var(--font-mono) !important;
 }
 
+/* =========================================================
+   OSO FONT SYSTEM - SF PRO BASED
+   Source: user-provided OSO global CSS font direction.
+   Keeps body, headings, controls and UI text consistent.
+   ========================================================= */
+
+:root {
+  --font-apple: "SF Pro", "SF Pro Text", "SF Pro Display", "SF Pro Rounded", sans-serif;
+  --font-display: var(--font-apple);
+  --font-body: var(--font-apple);
+  --font-heading: var(--font-apple);
+  --font-mono: "SF Mono", monospace;
+
+  --oso-heading-color: #6d6e6f;
+  --oso-ink: #111827;
+  --oso-muted: #64748b;
+}
+
+html,
+body,
+button,
+input,
+textarea,
+select {
+  font-family: var(--font-apple) !important;
+  font-feature-settings:
+    "kern" 1,
+    "liga" 1,
+    "calt" 1;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.oso-heading,
+.oso-title,
+.oso-section-title,
+.oso-page-title,
+.oso-card-title {
+  font-family: var(--font-apple) !important;
+  color: var(--oso-heading-color);
+  letter-spacing: -0.035em;
+  font-feature-settings:
+    "kern" 1,
+    "liga" 1,
+    "calt" 1;
+}
+
+:where(h1, h2, h3, h4, h5, h6).text-white,
+.text-white.oso-heading,
+.text-white.oso-title,
+.text-white.oso-section-title,
+.text-white.oso-page-title,
+.text-white.oso-card-title {
+  color: #ffffff !important;
+}
+
+code,
+pre,
+kbd,
+samp,
+.font-mono {
+  font-family: var(--font-mono) !important;
+}
+
+/* Cleaner micro-labels */
+[class*="uppercase"][class*="tracking"],
+[class*="tracking-"][class*="font-black"],
+[class*="tracking-"][class*="font-bold"] {
+  font-family: var(--font-body) !important;
+  font-weight: 750 !important;
+  letter-spacing: 0.035em !important;
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+}

@@ -234,6 +234,7 @@ export default async function ProfilePage() {
 
   return (
     <OsoPageShell>
+      <div id="passport-overview" className="scroll-mt-[190px]" />
       <OsoGlassSurface hover={false} className="p-6 sm:p-8 lg:p-10">
         <div className="grid gap-8 lg:grid-cols-[1fr_390px] lg:items-center">
           <div>
@@ -270,10 +271,10 @@ export default async function ProfilePage() {
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
-                href="/daily-challenges"
+                href="/onboarding?edit=passport"
                 className="group inline-flex min-h-14 items-center justify-center gap-3 rounded-full bg-blue-600 px-7 py-4 text-sm font-black uppercase tracking-[0.14em] text-white shadow-[0_18px_36px_rgba(37,99,235,0.22)] transition hover:-translate-y-0.5 hover:bg-blue-700"
               >
-                Improve Passport
+                Complete / Edit Passport
                 <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
               </Link>
 
@@ -317,6 +318,110 @@ export default async function ProfilePage() {
           </div>
         </div>
       </OsoGlassSurface>
+
+      <OsoGlassSurface hover={false} className="p-6 sm:p-8">
+        <OsoSectionHeader
+          eyebrow="Profile Image"
+          title="Profile Image & Identity."
+          description="Your uploaded profile image is part of the Skill Passport identity layer and should be visible to the student."
+          icon={<UserRound className="h-5 w-5" />}
+          action={
+            <Link
+              href="/onboarding?edit=passport"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-blue-600 px-5 py-3 text-sm font-black uppercase tracking-[0.14em] text-white shadow-[0_14px_34px_rgba(37,99,235,0.20)] transition hover:-translate-y-0.5 hover:bg-blue-700"
+            >
+              Edit Passport
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          }
+        />
+
+        <div className="mt-7 grid gap-5 lg:grid-cols-[260px_1fr] lg:items-center">
+          <div className="relative overflow-hidden rounded-[2rem] border border-slate-200 bg-white/86 p-4 shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
+            <div className="aspect-square overflow-hidden rounded-[1.55rem] border border-blue-200 bg-blue-50">
+              {user.image ? (
+                <img
+                  src={user.image}
+                  alt={`${user.fullName || "Student"} profile image`}
+                  className="h-full w-full object-cover"
+                  referrerPolicy="no-referrer"
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center text-blue-700">
+                  <UserRound className="h-16 w-16" />
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            <InfoCard icon={<UserRound className="h-5 w-5" />} label="Name" value={user.fullName || "Not added"} />
+            <InfoCard icon={<ShieldCheck className="h-5 w-5" />} label="OMNI ID" value={user.omniId || "Pending"} />
+            <InfoCard icon={<Building2 className="h-5 w-5" />} label="College / Institute" value={user.college || "Not added"} />
+            <InfoCard icon={<GraduationCap className="h-5 w-5" />} label="Branch" value={user.branch || "Not added"} />
+          </div>
+        </div>
+      </OsoGlassSurface>
+
+
+      <OsoGlassSurface hover={false} className="p-6 sm:p-8">
+        <div id="passport-editor" className="scroll-mt-[190px]" />
+
+        <OsoSectionHeader
+          eyebrow="Passport Editor"
+          title="Passport Completion Studio."
+          description="This is the clear action area for updating academic details, skills, career interests, bio and identity proof. Use the guided editor when your passport is incomplete."
+          icon={<ClipboardList className="h-5 w-5" />}
+          action={
+            <Link
+              href="/onboarding?edit=passport"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-blue-600 px-5 py-3 text-sm font-black uppercase tracking-[0.14em] text-white shadow-[0_14px_34px_rgba(37,99,235,0.20)] transition hover:-translate-y-0.5 hover:bg-blue-700"
+            >
+              Open Guided Editor
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          }
+        />
+
+        <div className="mt-7 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          <PassportEditCard
+            icon={<Building2 className="h-5 w-5" />}
+            title="Academic Identity"
+            description="College, branch, course, semester and education details."
+            status={user.college && user.branch ? "Ready" : "Needs update"}
+            tone={user.college && user.branch ? "emerald" : "yellow"}
+          />
+
+          <PassportEditCard
+            icon={<BookOpenCheck className="h-5 w-5" />}
+            title="Technical Skills"
+            description="Skills that make your profile meaningful for mentors and industry."
+            status={user.skills.length > 0 ? `${user.skills.length} added` : "Needs skills"}
+            tone={user.skills.length > 0 ? "emerald" : "yellow"}
+          />
+
+          <PassportEditCard
+            icon={<BriefcaseBusiness className="h-5 w-5" />}
+            title="Career Direction"
+            description="Career interests used for guidance, internships and pathways."
+            status={
+              user.careerInterests.length > 0
+                ? `${user.careerInterests.length} added`
+                : "Needs direction"
+            }
+            tone={user.careerInterests.length > 0 ? "emerald" : "yellow"}
+          />
+
+          <PassportEditCard
+            icon={<UserRound className="h-5 w-5" />}
+            title="Bio & Proof"
+            description="Short engineering bio and identity readiness details."
+            status={user.bio ? "Ready" : "Needs bio"}
+            tone={user.bio ? "emerald" : "yellow"}
+          />
+        </div>
+      </OsoGlassSurface>
+
 
       <section className="grid gap-5 md:grid-cols-2 xl:grid-cols-5">
         <OsoMetricTile
@@ -788,6 +893,46 @@ function RankBox({ label, value }: { label: string; value: string }) {
         {value}
       </p>
     </div>
+  );
+}
+
+
+function PassportEditCard({
+  icon,
+  title,
+  description,
+  status,
+  tone,
+}: {
+  icon: ReactNode;
+  title: string;
+  description: string;
+  status: string;
+  tone: "emerald" | "yellow";
+}) {
+  const style =
+    tone === "emerald"
+      ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+      : "border-yellow-200 bg-yellow-50 text-yellow-700";
+
+  return (
+    <article className="rounded-[1.45rem] border border-slate-200 bg-white/86 p-5 shadow-sm backdrop-blur-xl transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-[0_18px_46px_rgba(15,23,42,0.08)]">
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-blue-200 bg-blue-50 text-blue-700">
+          {icon}
+        </div>
+
+        <span className={`rounded-full border px-3 py-1 text-[10px] font-black uppercase tracking-[0.12em] ${style}`}>
+          {status}
+        </span>
+      </div>
+
+      <h3 className="mt-4 text-lg font-black text-slate-950">{title}</h3>
+
+      <p className="mt-2 text-sm font-semibold leading-6 text-slate-500">
+        {description}
+      </p>
+    </article>
   );
 }
 

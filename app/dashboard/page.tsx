@@ -4,12 +4,11 @@ import { redirect } from "next/navigation";
 import type { ReactNode } from "react";
 import {
   ArrowRight,
-  BookOpenCheck,
-  BriefcaseBusiness,
   CalendarDays,
   CheckCircle2,
+  CircuitBoard,
+  ExternalLink,
   Flame,
-  Gauge,
   GraduationCap,
   Layers3,
   LineChart,
@@ -22,6 +21,8 @@ import {
 } from "lucide-react";
 
 import DashboardSmartMissionPlanner from "@/components/dashboard/DashboardSmartMissionPlanner";
+import CompetitionBridgeShowcase from "@/components/dashboard/CompetitionBridgeShowcase";
+import OmniJourneySupportStrip from "@/components/dashboard/OmniJourneySupportStrip";
 import OsoGlassSurface from "@/components/oso/OsoGlassSurface";
 import OsoMetricTile from "@/components/oso/OsoMetricTile";
 import OsoPageShell from "@/components/oso/OsoPageShell";
@@ -30,7 +31,6 @@ import OsoSectionHeader from "@/components/oso/OsoSectionHeader";
 import OsoStatusPill from "@/components/oso/OsoStatusPill";
 import OfflineState from "@/components/system/OfflineState";
 
-import { worldSkillsPathway } from "@/data/omni-ecosystem";
 import { authOptions } from "@/lib/auth";
 import { calculateOmniScore } from "@/lib/engineering-system";
 import { prisma } from "@/lib/prisma";
@@ -44,47 +44,74 @@ const journeySupportSteps = [
   {
     label: "Learn",
     description:
-      "Structured LMS-based learning will help students build fundamentals before they enter hands-on and competitive stages.",
+      "Students build fundamentals through the upcoming LMS layer before entering hands-on and competition stages.",
   },
   {
     label: "Practice",
     description:
-      "Students can practice in guided hands-on environments and labs to convert theory into applied engineering skill.",
+      "Students convert concepts into applied skill through lab practice, guided exercises and hands-on setups.",
   },
   {
     label: "Compete",
     description:
-      "Students participate in OMNI events and challenge arenas to prove readiness under performance conditions.",
+      "Students participate in OMNI events and challenge arenas to prove readiness under real performance pressure.",
   },
   {
     label: "Rank",
     description:
-      "Points, streak, challenge outcomes and consistency translate into measurable ranking visibility.",
+      "Scores, streak, consistency and competition outcomes become measurable ranking visibility.",
   },
   {
     label: "Get Recognized",
     description:
-      "Badges, achievements and selection visibility turn good performance into public engineering proof.",
+      "Badges, achievements and selection signals turn performance into visible engineering recognition.",
   },
   {
     label: "Build Portfolio",
     description:
-      "Profile evidence, skills, readiness and work proof come together in the Skill Passport and public identity layer.",
+      "Skills, profile proof, challenge results and readiness tracks come together in the Skill Passport.",
   },
   {
     label: "Get Internships",
     description:
-      "Once readiness signals improve, OMNI can help guide students toward internship-facing opportunities.",
+      "Once readiness grows, OMNI can guide students toward internship-facing opportunities and proof-based discovery.",
   },
   {
     label: "Get Hired",
     description:
-      "The platform should ultimately help students become placement-ready with visible proof of capability.",
+      "The ecosystem supports placement readiness with proof, consistency, skill depth and competition confidence.",
   },
   {
     label: "Become a Leader",
     description:
-      "Advanced learners can mentor peers, represent institutions and grow into leadership-facing engineering roles.",
+      "Advanced students can represent institutions, mentor peers and grow into leadership-facing engineering roles.",
+  },
+] as const;
+
+const bridgePlatforms = [
+  {
+    title: "WorldSkills Global",
+    label: "International Skill Stage",
+    href: "https://worldskills.org/",
+    description:
+      "Global skills movement and competition pathway for excellence across technical and vocational domains.",
+    tone: "blue",
+  },
+  {
+    title: "IndiaSkills / WorldSkills India",
+    label: "National Skill Gateway",
+    href: "https://www.worldskillsindia.co.in/",
+    description:
+      "India-facing skill competition pathway where young talent can grow toward state, national and global representation.",
+    tone: "emerald",
+  },
+  {
+    title: "Kaggle Competitions",
+    label: "AI Competition Model",
+    href: "https://www.kaggle.com/competitions",
+    description:
+      "Reference-style competition discovery experience for data, AI and hackathon-like performance challenges.",
+    tone: "cyan",
   },
 ] as const;
 
@@ -297,37 +324,39 @@ export default async function DashboardPage() {
     siliconPoints,
   });
 
+  const weeklyStreakCount = Math.floor((user.streak ?? 0) / 7);
+
   const passportActionLabel =
     profileCompletion >= 100 ? "Edit Passport" : "Complete Passport";
 
   return (
     <OsoPageShell>
-      <OsoGlassSurface hover={false} className="p-6 sm:p-8 lg:p-10">
-        <div className="grid gap-8 xl:grid-cols-[1.08fr_0.92fr] xl:items-start">
-          <div>
-            <div className="flex flex-wrap gap-3">
-              <OsoStatusPill label="Student Growth Dashboard" tone="blue" />
-              <OsoStatusPill label={tierProgress.currentTier} tone="emerald" />
-              <OsoStatusPill
-                label={`${vibgyorProgress.currentStage} Stage`}
-                tone="yellow"
-              />
-            </div>
+      <OsoGlassSurface hover={false} className="p-5 sm:p-7 lg:p-9">
+        <div className="flex flex-wrap gap-3">
+          <OsoStatusPill label="Student Growth Dashboard" tone="blue" />
+          <OsoStatusPill label={tierProgress.currentTier} tone="emerald" />
+          <OsoStatusPill
+            label={`${vibgyorProgress.currentStage} Stage`}
+            tone="yellow"
+          />
+        </div>
 
-            <h1 className="oso-heading mt-6 max-w-5xl text-4xl font-black leading-tight text-slate-950 sm:text-5xl lg:text-6xl">
+        <div className="mt-6 grid gap-7">
+          <div>
+            <h1 className="oso-heading max-w-5xl text-4xl font-black leading-tight text-slate-950 sm:text-5xl lg:text-6xl">
               Welcome back,{" "}
               <span className="text-blue-600">
                 {user.fullName || "Engineer"}
               </span>
             </h1>
 
-            <p className="mt-5 max-w-3xl text-lg font-medium leading-9 text-slate-600">
-              Your dashboard and Skill Passport now live together in one clear
-              command center — so profile proof, readiness, growth stage and
-              next actions stay connected without repetition.
+            <p className="mt-5 max-w-4xl text-lg font-medium leading-9 text-slate-600">
+              Your dashboard is now arranged in a simple one-by-one flow:
+              passport proof, performance signals, rankings, planner,
+              journey support and competition bridges.
             </p>
 
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <Link
                 href="/daily-challenges"
                 className="group inline-flex min-h-14 items-center justify-center gap-3 rounded-full bg-blue-600 px-7 py-4 text-sm font-black uppercase tracking-[0.14em] text-white shadow-[0_18px_36px_rgba(37,99,235,0.22)] transition hover:-translate-y-0.5 hover:bg-blue-700"
@@ -337,7 +366,7 @@ export default async function DashboardPage() {
               </Link>
 
               <Link
-                href="/profile"
+                href="/profile#passport-overview"
                 className="group inline-flex min-h-14 items-center justify-center gap-3 rounded-full border border-slate-300 bg-white px-7 py-4 text-sm font-black uppercase tracking-[0.14em] text-slate-950 shadow-[0_14px_34px_rgba(15,23,42,0.055)] transition hover:-translate-y-0.5 hover:border-blue-300 hover:text-blue-700"
               >
                 View Passport
@@ -345,207 +374,140 @@ export default async function DashboardPage() {
               </Link>
 
               <Link
-                href="/profile"
+                href="/onboarding?edit=passport"
                 className="group inline-flex min-h-14 items-center justify-center gap-3 rounded-full border border-slate-900 bg-slate-950 px-7 py-4 text-sm font-black uppercase tracking-[0.14em] text-white shadow-[0_16px_34px_rgba(15,23,42,0.16)] transition hover:-translate-y-0.5 hover:bg-slate-800"
               >
                 {passportActionLabel}
                 <Sparkles className="h-4 w-4" />
               </Link>
             </div>
-
-            <div className="mt-8 grid gap-3 sm:grid-cols-3">
-              <MiniSignal
-                icon={<BookOpenCheck className="h-4 w-4" />}
-                label="Skills Added"
-                value={user.skills.length}
-                helper="Verified profile proof"
-              />
-              <MiniSignal
-                icon={<BriefcaseBusiness className="h-4 w-4" />}
-                label="Career Interests"
-                value={user.careerInterests.length}
-                helper="Direction guidance"
-              />
-              <MiniSignal
-                icon={<Layers3 className="h-4 w-4" />}
-                label="Next Stage Goal"
-                value={
-                  vibgyorProgress.nextStage
-                    ? vibgyorProgress.nextStage
-                    : "Highest Stage"
-                }
-                helper={
-                  vibgyorProgress.pointsToNextStage !== null
-                    ? `${vibgyorProgress.pointsToNextStage} pts remaining`
-                    : "Completed"
-                }
-              />
-            </div>
           </div>
 
-          <div className="rounded-[2rem] border border-slate-200 bg-white/82 p-6 shadow-sm backdrop-blur-xl">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-              <div>
-                <p className="text-xs font-black uppercase tracking-[0.2em] text-blue-700">
-                  Growth + Skill Passport Snapshot
-                </p>
+          <div className="relative overflow-hidden rounded-[2.25rem] border border-slate-200 bg-white/86 p-5 shadow-[0_22px_70px_rgba(15,23,42,0.10)] backdrop-blur-2xl sm:p-6 lg:p-7">
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 bg-[radial-gradient(circle_at_12%_18%,rgba(37,99,235,0.11),transparent_30%),radial-gradient(circle_at_90%_10%,rgba(16,185,129,0.11),transparent_26%),radial-gradient(circle_at_58%_105%,rgba(250,204,21,0.16),transparent_34%)]"
+            />
 
-                <h2 className="oso-heading mt-3 text-3xl font-black text-slate-950">
-                  {user.fullName || "OMNI Student"}
+            <div
+              aria-hidden="true"
+              className="absolute inset-x-0 top-0 h-2 bg-gradient-to-r from-blue-600 via-emerald-500 via-yellow-400 to-violet-600"
+            />
+
+            <div className="relative z-10 grid gap-6 xl:grid-cols-[0.9fr_1.1fr] xl:items-center">
+              <div>
+                <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-xs font-black uppercase tracking-[0.16em] text-blue-700">
+                  <CircuitBoard className="h-4 w-4" />
+                  Unified Skill Passport
+                </div>
+
+                <h2 className="oso-heading mt-5 text-3xl font-black leading-tight text-slate-950 sm:text-4xl">
+                  Your engineering proof is taking shape.
                 </h2>
 
-                <p className="mt-2 text-sm font-semibold leading-6 text-slate-500">
-                  {(user.branch || "Engineering") +
-                    " · " +
-                    (user.college || "OMNI Campus")}
+                <p className="mt-4 max-w-2xl text-base font-semibold leading-8 text-slate-600">
+                  OMNI ID, profile completion, readiness, skill signals and
+                  academic identity are now connected in one digestible snapshot.
                 </p>
+
+                <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                  <HighlightIdentity
+                    label="College / Institute"
+                    value={user.college || "Add college in passport"}
+                  />
+                  <HighlightIdentity
+                    label="Branch"
+                    value={user.branch || "Add branch in passport"}
+                  />
+                </div>
+
+                <div className="mt-5 rounded-[1.35rem] border border-yellow-200 bg-yellow-50/80 p-4">
+                  <p className="text-xs font-black uppercase tracking-[0.18em] text-yellow-800">
+                    Current Focus
+                  </p>
+                  <p className="mt-2 text-sm font-semibold leading-7 text-yellow-900">
+                    {nextAction}
+                  </p>
+                </div>
               </div>
 
-              <OsoStatusPill
-                label={user.omniId ?? "OMNI Pending"}
-                tone="emerald"
-              />
-            </div>
+              <div className="grid gap-4">
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <MiniSignal
+                    icon={<Zap className="h-4 w-4" />}
+                    label="OMNI Score"
+                    value={omniScore}
+                    helper="Overall growth signal"
+                  />
+                  <MiniSignal
+                    icon={<Medal className="h-4 w-4" />}
+                    label="Silicon Points"
+                    value={formatNumber(siliconPoints)}
+                    helper="Competition momentum"
+                  />
+                  <MiniSignal
+                    icon={<Layers3 className="h-4 w-4" />}
+                    label="Current Stage"
+                    value={vibgyorProgress.currentStage}
+                    helper={
+                      vibgyorProgress.pointsToNextStage !== null
+                        ? `${vibgyorProgress.pointsToNextStage} pts to ${vibgyorProgress.nextStage}`
+                        : "Highest stage reached"
+                    }
+                  />
+                  <MiniSignal
+                    icon={<Target className="h-4 w-4" />}
+                    label="Engineering Tier"
+                    value={tierProgress.currentTier}
+                    helper="Capability band"
+                  />
+                </div>
 
-            <div className="mt-6 grid gap-3 sm:grid-cols-2">
-              <MiniSignal
-                icon={<Zap className="h-4 w-4" />}
-                label="OMNI Score"
-                value={omniScore}
-                helper="Overall growth signal"
-              />
-              <MiniSignal
-                icon={<Medal className="h-4 w-4" />}
-                label="Silicon Points"
-                value={formatNumber(siliconPoints)}
-                helper="Competition momentum"
-              />
-              <MiniSignal
-                icon={<Layers3 className="h-4 w-4" />}
-                label="Current Stage"
-                value={vibgyorProgress.currentStage}
-                helper="VIBGYOR progression"
-              />
-              <MiniSignal
-                icon={<Target className="h-4 w-4" />}
-                label="Engineering Tier"
-                value={tierProgress.currentTier}
-                helper="Current capability band"
-              />
-            </div>
+                <PassportTrack
+                  title="Profile Completion"
+                  value={profileCompletion}
+                  description="Academic details, bio, skills and interests"
+                  tone={
+                    profileCompletion >= 80
+                      ? "emerald"
+                      : profileCompletion >= 60
+                        ? "yellow"
+                        : "blue"
+                  }
+                />
 
-            <div className="mt-6 grid gap-4">
-              <PassportTrack
-                title="Profile Completion"
-                value={profileCompletion}
-                description="Academic details, bio, skills and interests"
-                tone={
-                  profileCompletion >= 80
-                    ? "emerald"
-                    : profileCompletion >= 60
-                      ? "yellow"
-                      : "blue"
-                }
-              />
+                <PassportTrack
+                  title="Portfolio Readiness"
+                  value={portfolioReadiness}
+                  description="Challenge proof, skills and portfolio signal strength"
+                  tone="blue"
+                />
 
-              <PassportTrack
-                title="Portfolio Readiness"
-                value={portfolioReadiness}
-                description="Challenge proof, skills and portfolio signal strength"
-                tone="blue"
-              />
+                <PassportTrack
+                  title="Career Readiness"
+                  value={careerReadiness}
+                  description="Direction, consistency and interview-facing preparedness"
+                  tone="emerald"
+                />
 
-              <PassportTrack
-                title="Career Readiness"
-                value={careerReadiness}
-                description="Direction, consistency and interview-facing preparedness"
-                tone="emerald"
-              />
-
-              <PassportTrack
-                title="WorldSkills Readiness"
-                value={worldSkillsReadiness}
-                description="Competition maturity and broader pathway potential"
-                tone="yellow"
-              />
-            </div>
-
-            <div className="mt-6 rounded-[1.35rem] border border-yellow-200 bg-yellow-50/80 p-4">
-              <p className="text-xs font-black uppercase tracking-[0.18em] text-yellow-800">
-                Current Focus
-              </p>
-              <p className="mt-2 text-sm font-semibold leading-7 text-yellow-900">
-                {nextAction}
-              </p>
+                <PassportTrack
+                  title="WorldSkills Readiness"
+                  value={worldSkillsReadiness}
+                  description="Competition maturity and broader pathway potential"
+                  tone="yellow"
+                />
+              </div>
             </div>
           </div>
         </div>
       </OsoGlassSurface>
 
-      <OsoGlassSurface hover={false} className="p-6 sm:p-8">
-        <OsoSectionHeader
-          eyebrow="Ranking"
-          title="All your ranking visibility, in one place."
-          description="National, zone/district, state and institute rank signals are centralized here so ranking is easy to understand and never repeated elsewhere on the dashboard."
-          icon={<LineChart className="h-5 w-5" />}
-        />
-
-        <div className="mt-7 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          <RankBox
-            label="National Rank"
-            value={`#${nationalRank}`}
-            helper="India-wide position"
-          />
-          <RankBox
-            label="Zone / District Rank"
-            value={districtRank ? `#${districtRank}` : "Pending"}
-            helper={
-              districtRank
-                ? "Local competitive standing"
-                : "Add district to unlock zone rank"
-            }
-          />
-          <RankBox
-            label="State Rank"
-            value={stateRank ? `#${stateRank}` : "Pending"}
-            helper={
-              stateRank ? "State-level visibility" : "Add state to unlock state rank"
-            }
-          />
-          <RankBox
-            label="Institute Rank"
-            value={collegeRank ? `#${collegeRank}` : "Pending"}
-            helper={
-              collegeRank
-                ? "College / institute position"
-                : "Add college to unlock institute rank"
-            }
-          />
-        </div>
-      </OsoGlassSurface>
-
-      <section className="grid gap-5 md:grid-cols-2 xl:grid-cols-5">
-        <OsoMetricTile
-          icon={<Zap className="h-5 w-5" />}
-          label="Silicon Points"
-          value={siliconPoints}
-          helper="Competition momentum"
-          tone="blue"
-        />
-
-        <OsoMetricTile
-          icon={<Gauge className="h-5 w-5" />}
-          label="OMNI Score"
-          value={omniScore}
-          helper="Overall growth signal"
-          tone="slate"
-        />
-
+      <section className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
         <OsoMetricTile
           icon={<Flame className="h-5 w-5" />}
-          label="Streak"
-          value={user.streak ?? 0}
-          helper="Daily discipline"
+          label="Weekly Streak"
+          value={weeklyStreakCount}
+          helper="1 streak = 7 consecutive active days. Streaks improve level and rank progression."
           tone="yellow"
         />
 
@@ -566,99 +528,70 @@ export default async function DashboardPage() {
         />
       </section>
 
+      <OsoGlassSurface hover={false} className="p-6 sm:p-8">
+        <OsoSectionHeader
+          eyebrow="Ranking"
+          title="All your ranking visibility, in one place."
+          description="National, zone/district, state and institute rank signals are centralized here so ranking is easy to understand and never repeated elsewhere on the dashboard."
+          icon={<LineChart className="h-5 w-5" />}
+        />
+
+        <div className="mt-7 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          <EnhancedRankBox
+            label="National Rank"
+            value={`#${nationalRank}`}
+            helper="India-wide position"
+          />
+          <EnhancedRankBox
+            label="Zone / District Rank"
+            value={districtRank ? `#${districtRank}` : "Pending"}
+            helper={
+              districtRank
+                ? "Local competitive standing"
+                : "Add district to unlock zone rank"
+            }
+          />
+          <EnhancedRankBox
+            label="State Rank"
+            value={stateRank ? `#${stateRank}` : "Pending"}
+            helper={
+              stateRank ? "State-level visibility" : "Add state to unlock state rank"
+            }
+          />
+          <EnhancedRankBox
+            label="Institute Rank"
+            value={collegeRank ? `#${collegeRank}` : "Pending"}
+            helper={
+              collegeRank
+                ? "College / institute position"
+                : "Add college to unlock institute rank"
+            }
+          />
+        </div>
+      </OsoGlassSurface>
+
       <DashboardSmartMissionPlanner
         completedChallenges={completedChallenges}
         totalChallenges={totalChallenges}
         siliconPoints={siliconPoints}
-        accuracy={averageAccuracy}
-        streak={user.streak ?? 0}
         skillsCount={user.skills.length}
         careerInterestsCount={user.careerInterests.length}
-        currentStage={vibgyorProgress.currentStage}
-        currentTier={tierProgress.currentTier}
       />
 
       <OsoGlassSurface hover={false} className="p-6 sm:p-8">
         <OsoSectionHeader
           eyebrow="Growth Loop"
           title="OMNI journey support required."
-          description="This journey explains how OMNI should support a student from learning and lab practice to competitions, recognition, internships, hiring and leadership. Hover over any stage to understand it clearly."
+          description="The journey is shown as compact electronics-inspired nodes instead of bulky repeated cards. Hover or click any node to understand the support layer."
           icon={<Route className="h-5 w-5" />}
         />
 
-        <div className="mt-7 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {journeySupportSteps.map((step, index) => {
-            const active = index <= currentGrowthIndex;
-
-            return (
-              <article
-                key={step.label}
-                title={step.description}
-                className={`group rounded-[1.45rem] border p-5 shadow-sm transition duration-200 ${
-                  active
-                    ? "border-blue-200 bg-blue-50/80 text-blue-800 hover:border-blue-300"
-                    : "border-slate-200 bg-white/78 text-slate-600 hover:border-slate-300"
-                }`}
-              >
-                <div className="flex items-center justify-between gap-3">
-                  <p className="text-base font-black sm:text-lg">{step.label}</p>
-
-                  <span
-                    className={`rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-[0.16em] ${
-                      active
-                        ? "border border-blue-200 bg-white text-blue-700"
-                        : "border border-slate-200 bg-slate-50 text-slate-500"
-                    }`}
-                  >
-                    {active ? "Active" : "Upcoming"}
-                  </span>
-                </div>
-
-                <p className="mt-3 text-sm font-semibold leading-7 text-slate-600">
-                  {step.description}
-                </p>
-
-                <p className="mt-4 text-xs font-black uppercase tracking-[0.16em] text-blue-700 opacity-0 transition duration-200 group-hover:opacity-100">
-                  Hover support enabled
-                </p>
-              </article>
-            );
-          })}
-        </div>
-      </OsoGlassSurface>
-
-      <OsoGlassSurface hover={false} className="p-6 sm:p-8">
-        <OsoSectionHeader
-          eyebrow="WorldSkills Direction"
-          title="Your pathway beyond campus."
-          description="OMNI should guide students from institution level toward district, state, national and WorldSkills readiness."
-          icon={<GraduationCap className="h-5 w-5" />}
-          action={
-            <Link
-              href="/worldskills"
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-blue-600 px-5 py-3 text-sm font-black uppercase tracking-[0.14em] text-white transition hover:-translate-y-0.5 hover:bg-blue-700"
-            >
-              Explore WorldSkills Hub
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          }
+        <OmniJourneySupportStrip
+          steps={journeySupportSteps}
+          activeIndex={currentGrowthIndex}
         />
-
-        <div className="mt-7 flex flex-wrap gap-2">
-          {worldSkillsPathway.map((step, index) => (
-            <span
-              key={step}
-              className={
-                index <= 1
-                  ? "rounded-full border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-black uppercase tracking-[0.1em] text-emerald-700"
-                  : "rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-black uppercase tracking-[0.1em] text-slate-500"
-              }
-            >
-              {step}
-            </span>
-          ))}
-        </div>
       </OsoGlassSurface>
+      <CompetitionBridgeShowcase />
 
       <OsoGlassSurface hover={false} className="p-6 sm:p-8">
         <OsoSectionHeader
@@ -723,6 +656,19 @@ export default async function DashboardPage() {
   );
 }
 
+function HighlightIdentity({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-[1.35rem] border border-blue-200 bg-blue-50/86 p-4 shadow-sm">
+      <p className="text-[10px] font-black uppercase tracking-[0.18em] text-blue-700">
+        {label}
+      </p>
+      <p className="mt-2 text-lg font-black leading-tight text-slate-950">
+        {value}
+      </p>
+    </div>
+  );
+}
+
 function MiniSignal({
   icon,
   label,
@@ -781,7 +727,9 @@ function PassportTrack({
   );
 }
 
-function RankBox({
+
+
+function EnhancedRankBox({
   label,
   value,
   helper,
@@ -790,18 +738,143 @@ function RankBox({
   value: string;
   helper: string;
 }) {
+  const meta = label.includes("National")
+    ? {
+        chip: "National",
+        chipClass: "border-blue-200 bg-blue-50 text-blue-700",
+        line: "from-blue-600 via-indigo-500 to-cyan-400",
+        glow: "bg-[radial-gradient(circle_at_top_left,rgba(37,99,235,0.16),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(14,165,233,0.08),transparent_36%)]",
+        icon: <Trophy className="h-5 w-5" />,
+      }
+    : label.includes("State")
+      ? {
+          chip: "State",
+          chipClass: "border-emerald-200 bg-emerald-50 text-emerald-700",
+          line: "from-emerald-500 via-teal-400 to-cyan-400",
+          glow: "bg-[radial-gradient(circle_at_top_left,rgba(16,185,129,0.16),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(14,165,233,0.07),transparent_36%)]",
+          icon: <GraduationCap className="h-5 w-5" />,
+        }
+      : label.includes("Institute")
+        ? {
+            chip: "Institute",
+            chipClass: "border-yellow-200 bg-yellow-50 text-yellow-700",
+            line: "from-yellow-400 via-amber-400 to-orange-400",
+            glow: "bg-[radial-gradient(circle_at_top_left,rgba(250,204,21,0.18),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(245,158,11,0.08),transparent_36%)]",
+            icon: <Medal className="h-5 w-5" />,
+          }
+        : {
+            chip: "Zone / District",
+            chipClass: "border-cyan-200 bg-cyan-50 text-cyan-700",
+            line: "from-cyan-500 via-sky-400 to-blue-400",
+            glow: "bg-[radial-gradient(circle_at_top_left,rgba(14,165,233,0.16),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(37,99,235,0.07),transparent_36%)]",
+            icon: <LineChart className="h-5 w-5" />,
+          };
+
   return (
-    <div className="rounded-[1.35rem] border border-slate-200 bg-white/82 p-5 text-center shadow-sm">
-      <p className="text-xs font-black uppercase tracking-[0.18em] text-slate-500">
+    <div className="group relative isolate overflow-hidden rounded-[1.8rem] border border-slate-200 bg-white/90 p-5 text-center shadow-[0_18px_52px_rgba(15,23,42,0.07)] transition duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-[0_28px_68px_rgba(15,23,42,0.11)]">
+      <div
+        aria-hidden="true"
+        className={`pointer-events-none absolute inset-0 -z-10 ${meta.glow}`}
+      />
+
+      <div
+        aria-hidden="true"
+        className={`absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r ${meta.line}`}
+      />
+
+      <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl border border-slate-200 bg-white shadow-sm text-slate-700">
+        {meta.icon}
+      </div>
+
+      <p className="mt-4 text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">
         {label}
       </p>
-      <p className="oso-heading mt-3 text-3xl font-black text-slate-950">
+
+      <p className="oso-heading mt-3 text-4xl font-black leading-none text-slate-950">
         {value}
       </p>
-      <p className="mt-2 text-sm font-semibold leading-6 text-slate-500">
+
+      <div className="mt-3 flex justify-center">
+        <span className={`inline-flex rounded-full border px-3 py-1 text-[10px] font-black uppercase tracking-[0.12em] ${meta.chipClass}`}>
+          {meta.chip}
+        </span>
+      </div>
+
+      <p className="mt-4 text-sm font-semibold leading-6 text-slate-500">
         {helper}
       </p>
     </div>
+  );
+}
+
+
+function PlatformBridgeCard({
+  platform,
+}: {
+  platform: {
+    title: string;
+    label: string;
+    href: string;
+    description: string;
+    tone: "blue" | "emerald" | "cyan";
+  };
+}) {
+  const tone =
+    platform.tone === "emerald"
+      ? {
+          chip: "border-emerald-200 bg-emerald-50 text-emerald-700",
+          top: "from-emerald-500 via-teal-400 to-cyan-300",
+        }
+      : platform.tone === "cyan"
+        ? {
+            chip: "border-cyan-200 bg-cyan-50 text-cyan-700",
+            top: "from-cyan-500 via-sky-400 to-blue-300",
+          }
+        : {
+            chip: "border-blue-200 bg-blue-50 text-blue-700",
+            top: "from-blue-600 via-indigo-400 to-cyan-300",
+          };
+
+  return (
+    <a
+      href={platform.href}
+      target="_blank"
+      rel="noreferrer"
+      className="group grid overflow-hidden rounded-[1.65rem] border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-[0_20px_56px_rgba(15,23,42,0.10)] sm:grid-cols-[190px_1fr]"
+    >
+      <div
+        className={`relative min-h-[150px] bg-gradient-to-br ${tone.top}`}
+      >
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-[radial-gradient(circle_at_30%_28%,rgba(255,255,255,0.72),transparent_17%),radial-gradient(circle_at_74%_70%,rgba(255,255,255,0.38),transparent_22%)]"
+        />
+        <div className="absolute bottom-4 left-4 rounded-2xl border border-white/35 bg-white/25 px-4 py-3 text-white backdrop-blur-xl">
+          <Trophy className="h-6 w-6" />
+        </div>
+      </div>
+
+      <div className="p-5">
+        <span
+          className={`inline-flex rounded-full border px-3 py-1 text-[10px] font-black uppercase tracking-[0.12em] ${tone.chip}`}
+        >
+          {platform.label}
+        </span>
+
+        <h3 className="mt-3 text-xl font-black text-slate-950">
+          {platform.title}
+        </h3>
+
+        <p className="mt-2 text-sm font-semibold leading-6 text-slate-600">
+          {platform.description}
+        </p>
+
+        <div className="mt-4 inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.12em] text-blue-700">
+          Visit Platform
+          <ExternalLink className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" />
+        </div>
+      </div>
+    </a>
   );
 }
 
@@ -869,7 +942,7 @@ function getNextAction({
   profileCompletion: number;
 }) {
   if (profileCompletion < 70) {
-    return "Complete your Skill Passport first by adding missing academic details, bio, skills and career interests.";
+    return "Complete your Skill Passport by adding missing academic details, bio, skills and career interests.";
   }
 
   if (completedChallenges === 0) {

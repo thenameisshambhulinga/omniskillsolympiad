@@ -72,7 +72,7 @@ export default function CompetitionNavbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 shadow-[0_10px_35px_rgba(15,23,42,0.04)] backdrop-blur-xl">
+      <header className="sticky top-0 z-[100] border-b border-slate-200 bg-white/95 shadow-[0_10px_35px_rgba(15,23,42,0.04)] backdrop-blur-xl">
         <div className="mx-auto flex min-h-[92px] w-full max-w-[1600px] items-center justify-between gap-5 px-4 sm:px-6 lg:px-8">
           <Link
             href="/"

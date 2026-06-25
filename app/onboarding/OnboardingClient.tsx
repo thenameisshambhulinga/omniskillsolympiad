@@ -1,8 +1,17 @@
 "use client";
 
 import RegistrationWizard from "@/components/onboarding/RegistrationWizard";
+import type { RegistrationFormData } from "@/types/onboarding";
 
-export default function OnboardingClient() {
+type OnboardingClientProps = {
+  editMode?: boolean;
+  initialData?: RegistrationFormData;
+};
+
+export default function OnboardingClient({
+  editMode = false,
+  initialData,
+}: OnboardingClientProps) {
   return (
     <main className="relative min-h-screen overflow-hidden bg-slate-950 text-white">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
@@ -13,7 +22,7 @@ export default function OnboardingClient() {
       </div>
 
       <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1600px] items-start px-4 py-5 sm:px-6 lg:px-8 lg:py-8">
-        <RegistrationWizard />
+        <RegistrationWizard editMode={editMode} initialData={initialData} />
       </div>
     </main>
   );
