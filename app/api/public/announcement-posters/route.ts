@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 import { getPublishedAnnouncementPosters } from "@/lib/announcement-posters";
 
+export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function GET() {

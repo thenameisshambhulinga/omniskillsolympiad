@@ -1,89 +1,134 @@
-import { NextResponse } from "next/server";
-
 import { getServerSession } from "next-auth";
 
 import { authOptions } from "@/lib/auth";
-
+import { generateOmniId } from "@/lib/omni-id";
 import { prisma } from "@/lib/prisma";
+import { guardMutationRequest, jsonError, jsonOk } from "@/lib/server/route-hardening";
 
-export async function POST(req: Request) {
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
+const DEFAULT_SKILLS = ["Embedded Systems", "ARM Programming", "PCB Design"];
+
+function cleanString(value: unknown, maxLength = 500) {
+  if (typeof value !== "string" && typeof value !== "number") {
+    return undefined;
+  }
+
+  const clean = String(value).trim().replace(/\s+/g, " ").slice(0, maxLength);
+  return clean || undefined;
+}
+
+function cleanStringArray(value: unknown, maxItems = 20, maxLength = 80) {
+  if (!Array.isArray(value)) {
+    return undefined;
+  }
+
+  return value
+    .map((item) => cleanString(item, maxLength))
+    .filter((item): item is string => Boolean(item))
+    .slice(0, maxItems);
+}
+
+export async function POST(request: Request) {
+  const guarded = guardMutationRequest(request, {
+    key: "onboarding-legacy",
+    limit: 20,
+    maxBytes: 512 * 1024,
+  });
+
+  if (guarded) return guarded;
+
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user?.email) {
+    return jsonError("Unauthorized", 401);
+  }
+
+  let body: Record<string, unknown>;
+
   try {
-    const session = await getServerSession(authOptions);
+    body = (await request.json()) as Record<string, unknown>;
+  } catch {
+    return jsonError("Invalid JSON body.", 400);
+  }
 
-    if (!session?.user?.email) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+  const existingUser = await prisma.user.findUnique({
+    where: {
+      email: session.user.email,
+    },
+    select: {
+      id: true,
+      omniId: true,
+      skills: true,
+    },
+  });
 
-    const body = await req.json();
+  if (!existingUser) {
+    return jsonError("User not found.", 404);
+  }
 
-    const updatedUser = await prisma.user.update({
+  const omniId = existingUser.omniId || (await generateOmniId());
+
+  const updatedUser = await prisma.$transaction(async (tx) => {
+    const updated = await tx.user.update({
       where: {
-        email: session.user.email,
+        email: session.user.email!,
       },
-
       data: {
-        fullName: body.fullName,
-        college: body.college,
-        branch: body.branch,
-        year: body.year,
-        bio: body.bio,
-        skills: body.skills,
-
+        fullName: cleanString(body.fullName, 120),
+        college: cleanString(body.college, 180),
+        branch: cleanString(body.branch, 120),
+        year: cleanString(body.year, 40),
+        bio: cleanString(body.bio, 280),
+        skills: cleanStringArray(body.skills, 24, 80) ?? existingUser.skills,
+        omniId,
+        isOnboarded: true,
+      },
+      select: {
+        id: true,
+        email: true,
+        fullName: true,
+        omniId: true,
         isOnboarded: true,
       },
     });
 
-    const existingProgress = await prisma.skillProgress.findMany({
+    const existingProgress = await tx.skillProgress.findMany({
       where: {
-        userId: updatedUser.id,
+        userId: updated.id,
       },
+      select: {
+        id: true,
+      },
+      take: 1,
     });
 
     if (existingProgress.length === 0) {
-      await prisma.skillProgress.createMany({
-        data: [
-          {
-            userId: updatedUser.id,
-            skill: "Embedded Systems",
-            progress: 0,
-          },
-
-          {
-            userId: updatedUser.id,
-            skill: "ARM Programming",
-            progress: 0,
-          },
-
-          {
-            userId: updatedUser.id,
-            skill: "PCB Design",
-            progress: 0,
-          },
-        ],
+      await tx.skillProgress.createMany({
+        data: DEFAULT_SKILLS.map((skill) => ({
+          userId: updated.id,
+          skill,
+          progress: 0,
+        })),
       });
     }
 
-    const existingSeason = await prisma.seasonProgress.findUnique({
+    await tx.seasonProgress.upsert({
       where: {
-        userId: updatedUser.id,
+        userId: updated.id,
       },
+      create: {
+        userId: updated.id,
+      },
+      update: {},
     });
 
-    if (!existingSeason) {
-      await prisma.seasonProgress.create({
-        data: {
-          userId: updatedUser.id,
-        },
-      });
-    }
+    return updated;
+  });
 
-    return NextResponse.json(updatedUser);
-  } catch (error) {
-    console.log(error);
-
-    return NextResponse.json(
-      { error: "Something went wrong" },
-      { status: 500 },
-    );
-  }
+  return jsonOk({
+    user: updatedUser,
+    redirectTo: "/onboarding/success",
+  });
 }

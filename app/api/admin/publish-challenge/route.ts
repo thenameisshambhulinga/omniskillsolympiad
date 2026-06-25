@@ -1,54 +1,195 @@
 import { NextResponse } from "next/server";
+
 import { prisma } from "@/lib/prisma";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { requireApiAdmin } from "@/lib/server/api-auth";
+import { guardMutationRequest } from "@/lib/server/route-hardening";
 
-export async function POST(req: Request) {
-  try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email)
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+type PublishAction = "publish" | "unpublish";
 
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-    });
-    if (!user || (user as any).role !== "ADMIN")
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
-    let challengeId: string | undefined;
-    let action: string | undefined;
+export async function POST(request: Request) {
+  const guarded = guardMutationRequest(request, {
+    key: "admin-publish-daily-challenge",
+    limit: 80,
+  });
 
-    const contentType = req.headers.get("content-type") || "";
+  if (guarded) return guarded;
 
-    if (contentType.includes("application/json")) {
-      const body = await req.json();
-      challengeId = body.challengeId;
-      action = body.action;
-    } else {
-      const form = await req.formData();
-      challengeId = form.get("challengeId") as string | undefined;
-      action = form.get("action") as string | undefined;
-    }
+  const auth = await requireApiAdmin();
 
-    if (!challengeId || !action)
-      return NextResponse.json({ error: "Missing fields" }, { status: 400 });
-
-    const isPublish = action === "publish";
-
-    await prisma.dailyChallenge.update({
-      where: { id: challengeId },
-      data: { isPublished: isPublish },
-    });
-
-    if (!contentType.includes("application/json")) {
-      return NextResponse.redirect(
-        new URL(`/admin/challenge/${challengeId}`, req.url),
-      );
-    }
-
-    return NextResponse.json({ success: true });
-  } catch (err) {
-    console.error(err);
-    return NextResponse.json({ error: "Internal" }, { status: 500 });
+  if (auth.response) {
+    return auth.response;
   }
+
+  try {
+    const contentType = request.headers.get("content-type") || "";
+    const { challengeId, action } = await readPublishPayload(request, contentType);
+
+    if (!challengeId || !isPublishAction(action)) {
+      return handleResponse({
+        contentType,
+        request,
+        challengeId,
+        status: 400,
+        json: {
+          success: false,
+          ok: false,
+          error: "Challenge ID and valid action are required.",
+        },
+        redirectStatus: "invalid-request",
+      });
+    }
+
+    const challenge = await prisma.dailyChallenge.findUnique({
+      where: {
+        id: challengeId,
+      },
+      select: {
+        id: true,
+        questions: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+
+    if (!challenge) {
+      return handleResponse({
+        contentType,
+        request,
+        challengeId,
+        status: 404,
+        json: {
+          success: false,
+          ok: false,
+          error: "Challenge not found.",
+        },
+        redirectStatus: "not-found",
+      });
+    }
+
+    const isPublishing = action === "publish";
+
+    if (isPublishing && challenge.questions.length === 0) {
+      return handleResponse({
+        contentType,
+        request,
+        challengeId,
+        status: 400,
+        json: {
+          success: false,
+          ok: false,
+          error: "Add at least one question before publishing.",
+        },
+        redirectStatus: "publish-needs-question",
+      });
+    }
+
+    const updatedChallenge = await prisma.dailyChallenge.update({
+      where: {
+        id: challengeId,
+      },
+      data: {
+        isPublished: isPublishing,
+      },
+      select: {
+        id: true,
+        isPublished: true,
+      },
+    });
+
+    return handleResponse({
+      contentType,
+      request,
+      challengeId,
+      status: 200,
+      json: {
+        success: true,
+        ok: true,
+        challenge: updatedChallenge,
+        updatedBy: auth.user.email,
+      },
+      redirectStatus: isPublishing ? "published" : "unpublished",
+    });
+  } catch (error) {
+    console.error("PUBLISH DAILY CHALLENGE ERROR:", error);
+
+    return NextResponse.json(
+      {
+        success: false,
+        ok: false,
+        error: "Failed to update challenge publish status.",
+      },
+      {
+        status: 500,
+        headers: {
+          "Cache-Control": "no-store",
+        },
+      },
+    );
+  }
+}
+
+async function readPublishPayload(request: Request, contentType: string) {
+  if (contentType.includes("application/json")) {
+    const body = (await request.json()) as {
+      challengeId?: unknown;
+      action?: unknown;
+    };
+
+    return {
+      challengeId: typeof body.challengeId === "string" ? body.challengeId.trim() : "",
+      action: typeof body.action === "string" ? body.action.trim() : "",
+    };
+  }
+
+  const form = await request.formData();
+  const challengeIdValue = form.get("challengeId");
+  const actionValue = form.get("action");
+
+  return {
+    challengeId:
+      typeof challengeIdValue === "string" ? challengeIdValue.trim() : "",
+    action: typeof actionValue === "string" ? actionValue.trim() : "",
+  };
+}
+
+function isPublishAction(value: string): value is PublishAction {
+  return value === "publish" || value === "unpublish";
+}
+
+function handleResponse({
+  contentType,
+  request,
+  challengeId,
+  status,
+  json,
+  redirectStatus,
+}: {
+  contentType: string;
+  request: Request;
+  challengeId: string;
+  status: number;
+  json: Record<string, unknown>;
+  redirectStatus: string;
+}) {
+  if (contentType.includes("application/json")) {
+    return NextResponse.json(json, {
+      status,
+      headers: {
+        "Cache-Control": "no-store",
+      },
+    });
+  }
+
+  const targetPath = challengeId
+    ? `/admin/challenge/${challengeId}?status=${encodeURIComponent(redirectStatus)}`
+    : `/admin/manage-challenges?status=${encodeURIComponent(redirectStatus)}`;
+
+  return NextResponse.redirect(new URL(targetPath, request.url), {
+    status: 303,
+  });
 }

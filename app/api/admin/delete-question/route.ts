@@ -1,51 +1,97 @@
 import { NextResponse } from "next/server";
+
 import { prisma } from "@/lib/prisma";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { requireApiAdmin } from "@/lib/server/api-auth";
+import { guardMutationRequest, jsonError, jsonOk } from "@/lib/server/route-hardening";
 
-export async function POST(req: Request) {
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
+function cleanString(value: unknown, maxLength = 200) {
+  if (typeof value !== "string" && typeof value !== "number") {
+    return "";
+  }
+
+  return String(value).trim().slice(0, maxLength);
+}
+
+async function readPayload(request: Request) {
+  const contentType = request.headers.get("content-type") || "";
+
+  if (contentType.includes("application/json")) {
+    const body = (await request.json()) as Record<string, unknown>;
+    return {
+      contentType,
+      questionId: cleanString(body.questionId),
+      challengeId: cleanString(body.challengeId),
+    };
+  }
+
+  const form = await request.formData();
+
+  return {
+    contentType,
+    questionId: cleanString(form.get("questionId")),
+    challengeId: cleanString(form.get("challengeId")),
+  };
+}
+
+export async function POST(request: Request) {
+  const guarded = guardMutationRequest(request, {
+    key: "admin-delete-daily-question",
+    limit: 80,
+  });
+
+  if (guarded) return guarded;
+
+  const auth = await requireApiAdmin();
+
+  if (auth.response) {
+    return auth.response;
+  }
+
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email)
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const { contentType, questionId, challengeId } = await readPayload(request);
 
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
+    if (!questionId || !challengeId) {
+      return jsonError("Missing questionId or challengeId.", 400);
+    }
+
+    const question = await prisma.dailyQuestion.findUnique({
+      where: {
+        id: questionId,
+      },
+      select: {
+        id: true,
+        challengeId: true,
+      },
     });
-    if (!user || (user as any).role !== "ADMIN")
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
-    let questionId: string | undefined;
-    let challengeId: string | undefined;
-    const ct = req.headers.get("content-type") || "";
-
-    if (ct.includes("application/json")) {
-      const body = await req.json();
-      questionId = body.questionId;
-      challengeId = body.challengeId;
-    } else {
-      const form = await req.formData();
-      questionId = form.get("questionId") as string | undefined;
-      challengeId = form.get("challengeId") as string | undefined;
+    if (!question) {
+      return jsonError("Question not found.", 404);
     }
 
-    if (!questionId || !challengeId)
-      return NextResponse.json(
-        { error: "Missing questionId or challengeId" },
-        { status: 400 },
-      );
-
-    await prisma.dailyQuestion.delete({ where: { id: questionId } });
-
-    if (!ct.includes("application/json")) {
-      return NextResponse.redirect(
-        new URL(`/admin/challenge/${challengeId}`, req.url),
-      );
+    if (question.challengeId !== challengeId) {
+      return jsonError("Question does not belong to the supplied challenge.", 409);
     }
 
-    return NextResponse.json({ success: true });
-  } catch (err) {
-    console.error(err);
-    return NextResponse.json({ error: "Internal" }, { status: 500 });
+    await prisma.dailyQuestion.delete({
+      where: {
+        id: questionId,
+      },
+    });
+
+    if (!contentType.includes("application/json")) {
+      return NextResponse.redirect(new URL(`/admin/challenge/${challengeId}`, request.url), {
+        status: 303,
+      });
+    }
+
+    return jsonOk({
+      deletedBy: auth.user.email,
+    });
+  } catch (error) {
+    console.error("ADMIN DELETE DAILY QUESTION ERROR:", error);
+    return jsonError("Failed to delete question.", 500);
   }
 }

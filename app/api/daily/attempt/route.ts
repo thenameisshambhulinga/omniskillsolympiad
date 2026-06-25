@@ -11,14 +11,33 @@ import {
   cleanString,
   readJsonObject,
 } from "@/lib/server/api-response";
+import { guardMutationRequest } from "@/lib/server/route-hardening";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 const POINTS_PER_CORRECT_ANSWER = 10;
 const SUBMISSION_GRACE_MS = 5000;
+const MAX_DAILY_SECURITY_VIOLATIONS = 5;
+
+function normalizeSecurityCount(value: unknown) {
+  const parsed = Number(value);
+
+  if (!Number.isFinite(parsed)) {
+    return 0;
+  }
+
+  return Math.max(0, Math.min(50, Math.round(parsed)));
+}
 
 export async function POST(request: Request) {
+  const guarded = guardMutationRequest(request, {
+    key: "daily-submit",
+    limit: 35,
+  });
+
+  if (guarded) return guarded;
+
   try {
     const auth = await requireApiUser();
 
@@ -51,9 +70,8 @@ export async function POST(request: Request) {
     }
 
     const challengeId = cleanString(parsed.data.challengeId, 200);
-    const answers = Array.isArray(parsed.data.answers)
-      ? parsed.data.answers
-      : null;
+    const answers = Array.isArray(parsed.data.answers) ? parsed.data.answers : null;
+    const tabSwitchCount = normalizeSecurityCount(parsed.data.tabSwitchCount);
 
     if (!challengeId || !answers) {
       return apiError(
@@ -96,10 +114,12 @@ export async function POST(request: Request) {
       );
     }
 
-    const existingAttempt = await prisma.dailyAttempt.findFirst({
+    const existingAttempt = await prisma.dailyAttempt.findUnique({
       where: {
-        userId: user.id,
-        challengeId,
+        userId_challengeId: {
+          userId: user.id,
+          challengeId,
+        },
       },
       select: {
         id: true,
@@ -137,8 +157,10 @@ export async function POST(request: Request) {
     const latestAllowedSubmission = new Date(
       expiresAt.getTime() + SUBMISSION_GRACE_MS,
     );
+    const expired = now > latestAllowedSubmission;
+    const suspicious = tabSwitchCount >= MAX_DAILY_SECURITY_VIOLATIONS;
 
-    if (now > latestAllowedSubmission) {
+    if (expired) {
       return apiError("Challenge time expired.", 400, "TIME_EXPIRED");
     }
 
@@ -147,7 +169,9 @@ export async function POST(request: Request) {
       answers,
     });
 
-    const earnedPoints = scoreResult.score * POINTS_PER_CORRECT_ANSWER;
+    const earnedPoints = suspicious
+      ? 0
+      : scoreResult.score * POINTS_PER_CORRECT_ANSWER;
 
     await prisma.$transaction(async (tx) => {
       const finalizedAttempt = await tx.dailyAttempt.updateMany({
@@ -161,6 +185,8 @@ export async function POST(request: Request) {
           percentage: scoreResult.percentage,
           completed: true,
           submittedAt: now,
+          suspicious,
+          tabSwitchCount,
         },
       });
 
@@ -178,17 +204,14 @@ export async function POST(request: Request) {
       const previousAccuracy = currentProgress?.averageAccuracy ?? 0;
       const previousConsistency = currentProgress?.consistencyScore ?? 100;
       const previousTotalPoints = currentProgress?.totalPoints ?? 0;
-
       const completedDays = previousCompletedDays + 1;
-
       const averageAccuracy =
         (previousAccuracy * previousCompletedDays + scoreResult.percentage) /
         completedDays;
-
-      const consistencyScore = Math.min(100, previousConsistency + 0.5);
-
+      const consistencyScore = suspicious
+        ? Math.max(0, previousConsistency - 3)
+        : Math.min(100, previousConsistency + 0.5);
       const totalPoints = previousTotalPoints + earnedPoints;
-
       const omniScore = calculateOmniScore({
         averageAccuracy,
         consistencyScore,
@@ -196,19 +219,21 @@ export async function POST(request: Request) {
         totalPoints,
       });
 
-      await tx.user.update({
-        where: {
-          id: user.id,
-        },
-        data: {
-          siliconPoints: {
-            increment: earnedPoints,
+      if (!suspicious) {
+        await tx.user.update({
+          where: {
+            id: user.id,
           },
-          streak: {
-            increment: 1,
+          data: {
+            siliconPoints: {
+              increment: earnedPoints,
+            },
+            streak: {
+              increment: 1,
+            },
           },
-        },
-      });
+        });
+      }
 
       if (!currentProgress) {
         await tx.seasonProgress.create({
@@ -249,12 +274,14 @@ export async function POST(request: Request) {
       total: scoreResult.total,
       percentage: scoreResult.percentage,
       earnedPoints,
+      suspicious,
       meta: {
         answeredCount: scoreResult.answeredCount,
         unansweredCount: scoreResult.unansweredCount,
         duplicateAnswerCount: scoreResult.duplicateAnswerCount,
         unknownQuestionCount: scoreResult.unknownQuestionCount,
         invalidAnswerCount: scoreResult.invalidAnswerCount,
+        tabSwitchCount,
       },
     });
   } catch (error) {

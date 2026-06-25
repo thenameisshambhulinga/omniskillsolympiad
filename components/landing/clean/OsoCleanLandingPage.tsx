@@ -144,7 +144,7 @@ const competitionCards: CompetitionCard[] = [
     provider: "Omni Skills Olympiad",
     deadline: "This Week",
     category: "Embedded",
-    imageUrl: "/event-img/embedded-systems.jpg",
+    imageUrl: "/illustrations/oso/benchmark-environment.png",
     description:
       "Solve microcontroller, firmware and debugging missions designed for practical engineering growth.",
     prize: "Omni Score + Silicon Points",
@@ -160,7 +160,7 @@ const competitionCards: CompetitionCard[] = [
     provider: "OSO Hardware Arena",
     deadline: "This Month",
     category: "PCB Design",
-    imageUrl: "/event-img/pcb-innovation.jpg",
+    imageUrl: "/illustrations/oso/competitions-winner.png",
     description:
       "Move from schematic thinking to board-level reasoning with structured design tasks.",
     prize: "Recognition + Ranking",
@@ -176,7 +176,7 @@ const competitionCards: CompetitionCard[] = [
     provider: "OSO Competition Track",
     deadline: "Upcoming",
     category: "Robotics",
-    imageUrl: "/event-img/ai-robotics.jpg",
+    imageUrl: "/illustrations/oso/laptop-exploerer.png",
     description:
       "Attempt automation, sensors, control and intelligent systems challenges for future-ready skills.",
     prize: "Badge + Leaderboard Rank",

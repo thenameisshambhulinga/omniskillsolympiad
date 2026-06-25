@@ -3,11 +3,7 @@
 import { useState } from "react";
 import { ImageOff } from "lucide-react";
 
-const MOUNTAIN_ASSET_PATHS = [
-  "/illustrations/oso/kaggle-mountain-climb.png",
-  "/illustrations/kaggle-mountain-climb.png",
-  "/illustrations/kaggle-mountain-climb-transparent-clean.png",
-];
+const MOUNTAIN_ASSET_PATHS = ["/illustrations/oso/kaggle-mountain-climb.png"];
 
 type OsoJourneyIllustrationProps = {
   alt?: string;

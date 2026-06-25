@@ -1,18 +1,29 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+export const runtime = "nodejs";
 export default async function DailyQuizzesPage() {
   const challenges = await prisma.dailyChallenge.findMany({
     where: {
       isPublished: true,
     },
-    include: {
-      questions: true,
-      attempts: true,
+    select: {
+      id: true,
+      dayNumber: true,
+      title: true,
+      description: true,
+      _count: {
+        select: {
+          questions: true,
+        },
+      },
     },
     orderBy: {
       dayNumber: "asc",
     },
+    take: 60,
   });
 
   return (
@@ -47,7 +58,7 @@ export default async function DailyQuizzesPage() {
                   </span>
 
                   <span className="text-sm text-zinc-400">
-                    {challenge.questions.length} Questions
+                    {challenge._count.questions} Questions
                   </span>
                 </div>
 

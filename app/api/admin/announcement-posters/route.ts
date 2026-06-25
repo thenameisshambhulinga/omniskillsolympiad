@@ -4,6 +4,25 @@ import { requireAdmin } from "@/lib/admin-auth";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
+type PosterPayload = {
+  title: string;
+  subtitle: string;
+  category: string;
+  status: string;
+  imageUrl: string;
+  mobileImageUrl: string | null;
+  ctaLabel: string;
+  ctaHref: string;
+  placement: string;
+  priority: number;
+  isHero: boolean;
+  isPublished: boolean;
+  publishAt: Date;
+  expiresAt: Date | null;
+  highlights: string;
+};
 
 function cleanText(value: unknown) {
   return String(value ?? "").trim();
@@ -11,20 +30,33 @@ function cleanText(value: unknown) {
 
 function cleanOptionalText(value: unknown) {
   const text = cleanText(value);
-  return text.length ? text : null;
+  return text.length > 0 ? text : null;
 }
 
 function cleanNumber(value: unknown) {
-  const numberValue = Number(value);
-  return Number.isFinite(numberValue) ? Math.round(numberValue) : 0;
+  const valueAsNumber = Number(value);
+
+  if (!Number.isFinite(valueAsNumber)) {
+    return 0;
+  }
+
+  return Math.max(-999, Math.min(999, Math.round(valueAsNumber)));
 }
 
 function cleanDate(value: unknown) {
   const text = cleanText(value);
-  if (!text) return null;
+
+  if (!text) {
+    return null;
+  }
 
   const date = new Date(text);
-  return Number.isNaN(date.getTime()) ? null : date;
+
+  if (Number.isNaN(date.getTime())) {
+    return null;
+  }
+
+  return date;
 }
 
 function isValidUrlOrPath(value: string) {
@@ -35,42 +67,58 @@ function isValidUrlOrPath(value: string) {
   );
 }
 
-function validatePosterPayload(body: Record<string, unknown>) {
+function normalizePlacement(value: unknown) {
+  const placement = cleanText(value).toUpperCase();
+
+  return placement || "LOGIN_HERO";
+}
+
+function validatePosterPayload(body: Record<string, unknown>):
+  | {
+      ok: true;
+      data: PosterPayload;
+    }
+  | {
+      ok: false;
+      error: string;
+    } {
   const title = cleanText(body.title);
   const subtitle = cleanText(body.subtitle);
   const category = cleanText(body.category);
   const status = cleanText(body.status);
   const imageUrl = cleanText(body.imageUrl);
+  const mobileImageUrl = cleanOptionalText(body.mobileImageUrl);
   const ctaLabel = cleanText(body.ctaLabel);
   const ctaHref = cleanText(body.ctaHref);
+  const placement = normalizePlacement(body.placement);
+  const highlights = cleanText(body.highlights);
 
-  if (
-    !title ||
-    !subtitle ||
-    !category ||
-    !status ||
-    !imageUrl ||
-    !ctaLabel ||
-    !ctaHref
-  ) {
-    return {
-      error:
-        "Title, subtitle, category, status, image URL, CTA label and CTA link are required.",
-      data: null,
-    };
-  }
+  if (!title) return { ok: false, error: "Title is required." };
+  if (!subtitle) return { ok: false, error: "Subtitle is required." };
+  if (!category) return { ok: false, error: "Category is required." };
+  if (!status) return { ok: false, error: "Status is required." };
+  if (!imageUrl) return { ok: false, error: "Image URL is required." };
+  if (!ctaLabel) return { ok: false, error: "CTA label is required." };
+  if (!ctaHref) return { ok: false, error: "CTA link is required." };
 
   if (!isValidUrlOrPath(imageUrl)) {
     return {
+      ok: false,
       error: "Image URL must start with /, http://, or https://",
-      data: null,
+    };
+  }
+
+  if (mobileImageUrl && !isValidUrlOrPath(mobileImageUrl)) {
+    return {
+      ok: false,
+      error: "Mobile image URL must start with /, http://, or https://",
     };
   }
 
   if (!isValidUrlOrPath(ctaHref)) {
     return {
+      ok: false,
       error: "CTA link must start with /, http://, or https://",
-      data: null,
     };
   }
 
@@ -79,30 +127,72 @@ function validatePosterPayload(body: Record<string, unknown>) {
 
   if (expiresAt && expiresAt <= publishAt) {
     return {
+      ok: false,
       error: "Expiry date must be after publish date.",
-      data: null,
     };
   }
 
   return {
-    error: "",
+    ok: true,
     data: {
       title,
       subtitle,
       category,
       status,
       imageUrl,
-      mobileImageUrl: cleanOptionalText(body.mobileImageUrl),
+      mobileImageUrl,
       ctaLabel,
       ctaHref,
-      placement: cleanText(body.placement) || "LOGIN_HERO",
+      placement,
       priority: cleanNumber(body.priority),
       isHero: Boolean(body.isHero),
       isPublished: Boolean(body.isPublished),
       publishAt,
       expiresAt,
-      highlights: cleanText(body.highlights),
+      highlights,
     },
+  };
+}
+
+function serializePoster(poster: {
+  id: string;
+  title: string;
+  subtitle: string;
+  category: string;
+  status: string;
+  imageUrl: string;
+  mobileImageUrl: string | null;
+  ctaLabel: string;
+  ctaHref: string;
+  placement: string;
+  priority: number;
+  isHero: boolean;
+  isPublished: boolean;
+  publishAt: Date;
+  expiresAt: Date | null;
+  highlights: string;
+  createdAt: Date;
+  updatedAt: Date;
+}) {
+  return {
+    id: poster.id,
+    title: poster.title,
+    subtitle: poster.subtitle,
+    category: poster.category,
+    status: poster.status,
+    imageUrl: poster.imageUrl,
+    mobileImageUrl: poster.mobileImageUrl,
+    ctaLabel: poster.ctaLabel,
+    ctaHref: poster.ctaHref,
+    placement: poster.placement,
+    priority: poster.priority,
+    isHero: poster.isHero,
+    isPublished: poster.isPublished,
+    publishAt: poster.publishAt.toISOString(),
+    expiresAt: poster.expiresAt?.toISOString() ?? null,
+    highlights: poster.highlights,
+    createdAt: poster.createdAt.toISOString(),
+    updatedAt: poster.updatedAt.toISOString(),
   };
 }
 
@@ -110,29 +200,60 @@ export async function GET() {
   await requireAdmin();
 
   const posters = await prisma.announcementPoster.findMany({
-    orderBy: [{ priority: "desc" }, { createdAt: "desc" }],
+    orderBy: [
+      {
+        isHero: "desc",
+      },
+      {
+        isPublished: "desc",
+      },
+      {
+        priority: "desc",
+      },
+      {
+        createdAt: "desc",
+      },
+    ],
   });
 
-  return NextResponse.json({
-    posters: posters.map((poster) => ({
-      ...poster,
-      publishAt: poster.publishAt.toISOString(),
-      expiresAt: poster.expiresAt?.toISOString() ?? null,
-      createdAt: poster.createdAt.toISOString(),
-      updatedAt: poster.updatedAt.toISOString(),
-    })),
-  });
+  return NextResponse.json(
+    {
+      ok: true,
+      posters: posters.map(serializePoster),
+    },
+    {
+      headers: {
+        "Cache-Control": "no-store",
+      },
+    },
+  );
 }
 
 export async function POST(request: Request) {
   const admin = await requireAdmin();
-  const body = await request.json();
+
+  let body: Record<string, unknown>;
+
+  try {
+    body = (await request.json()) as Record<string, unknown>;
+  } catch {
+    return NextResponse.json(
+      {
+        ok: false,
+        error: "Invalid JSON body.",
+      },
+      {
+        status: 400,
+      },
+    );
+  }
 
   const validation = validatePosterPayload(body);
 
-  if (!validation.data) {
+  if (!validation.ok) {
     return NextResponse.json(
       {
+        ok: false,
         error: validation.error,
       },
       {
@@ -141,32 +262,40 @@ export async function POST(request: Request) {
     );
   }
 
-  const poster = await prisma.announcementPoster.create({
-    data: validation.data,
-  });
-
-  if (poster.isHero && poster.isPublished) {
-    await prisma.announcementPoster.updateMany({
-      where: {
-        id: {
-          not: poster.id,
-        },
-        isHero: true,
-      },
-      data: {
-        isHero: false,
-      },
+  const poster = await prisma.$transaction(async (tx) => {
+    const createdPoster = await tx.announcementPoster.create({
+      data: validation.data,
     });
-  }
 
-  return NextResponse.json({
-    poster: {
-      ...poster,
-      publishAt: poster.publishAt.toISOString(),
-      expiresAt: poster.expiresAt?.toISOString() ?? null,
-      createdAt: poster.createdAt.toISOString(),
-      updatedAt: poster.updatedAt.toISOString(),
-    },
-    createdBy: admin.email,
+    if (createdPoster.isHero && createdPoster.isPublished) {
+      await tx.announcementPoster.updateMany({
+        where: {
+          id: {
+            not: createdPoster.id,
+          },
+          isHero: true,
+          placement: createdPoster.placement,
+        },
+        data: {
+          isHero: false,
+        },
+      });
+    }
+
+    return createdPoster;
   });
+
+  return NextResponse.json(
+    {
+      ok: true,
+      poster: serializePoster(poster),
+      createdBy: admin.email,
+    },
+    {
+      status: 201,
+      headers: {
+        "Cache-Control": "no-store",
+      },
+    },
+  );
 }

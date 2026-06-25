@@ -254,6 +254,9 @@ import PublicProfileHero from "@/components/profile/public/PublicProfileHero";
 import PublicProfileSkills from "@/components/profile/public/PublicProfileSkills";
 import PublicProfileStats from "@/components/profile/public/PublicProfileStats";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+export const runtime = "nodejs";
 type PageProps = {
   params: Promise<{
     omniId: string;

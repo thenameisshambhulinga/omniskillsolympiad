@@ -1,63 +1,93 @@
-import { NextResponse } from "next/server";
-
-import { getServerSession } from "next-auth";
-
-import { authOptions } from "@/lib/auth";
-import { isAdminEmail } from "@/lib/admin";
-
 import { prisma } from "@/lib/prisma";
+import { requireApiAdmin } from "@/lib/server/api-auth";
+import { guardMutationRequest, jsonError, jsonOk } from "@/lib/server/route-hardening";
 
-export async function POST(req: Request) {
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
+function cleanText(value: unknown, maxLength = 200) {
+  if (typeof value !== "string" && typeof value !== "number") {
+    return "";
+  }
+
+  return String(value).trim().replace(/\s+/g, " ").slice(0, maxLength);
+}
+
+function normalizeDuration(value: unknown) {
+  const parsed = Number(value);
+
+  if (!Number.isFinite(parsed)) {
+    return null;
+  }
+
+  return Math.max(1, Math.min(180, Math.round(parsed)));
+}
+
+export async function POST(request: Request) {
+  const guarded = guardMutationRequest(request, {
+    key: "admin-create-quiz",
+    limit: 40,
+  });
+
+  if (guarded) return guarded;
+
+  const auth = await requireApiAdmin();
+
+  if (auth.response) {
+    return auth.response;
+  }
+
+  let body: Record<string, unknown>;
+
   try {
-    const session = await getServerSession(authOptions);
+    body = (await request.json()) as Record<string, unknown>;
+  } catch {
+    return jsonError("Invalid JSON body.", 400);
+  }
 
-    if (!session?.user?.email || !isAdminEmail(session.user.email)) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+  const title = cleanText(body.title, 180);
+  const description = cleanText(body.description, 1200) || null;
+  const category = cleanText(body.category, 120);
+  const difficulty = cleanText(body.difficulty, 60).toLowerCase();
+  const duration = normalizeDuration(body.duration);
 
-    const body = await req.json();
+  if (!title || !category || !difficulty || !duration) {
+    return jsonError("Title, category, difficulty and duration are required.", 400);
+  }
 
-    const {
+  const created = await prisma.quiz.create({
+    data: {
       title,
       description,
       category,
       difficulty,
       duration,
-    }: {
-      title?: string;
-      description?: string | null;
-      category?: string;
-      difficulty?: string;
-      duration?: number;
-    } = body ?? {};
+      totalPoints: 0,
+      isActive: true,
+    },
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      category: true,
+      difficulty: true,
+      duration: true,
+      totalPoints: true,
+      isActive: true,
+      createdAt: true,
+    },
+  });
 
-    if (!title || !category || !difficulty || !duration) {
-      return NextResponse.json(
-        { error: "Missing required fields" },
-        { status: 400 },
-      );
-    }
-
-    const created = await prisma.quiz.create({
-      data: {
-        title,
-        description: description ?? null,
-        category,
-        difficulty,
-        duration: Number(duration),
-        // Ensure backwards compatibility with existing schema usage
-        totalPoints: 0,
-        isActive: true,
+  return jsonOk(
+    {
+      quiz: {
+        ...created,
+        createdAt: created.createdAt.toISOString(),
       },
-    });
-
-    return NextResponse.json({ success: true, quiz: created });
-  } catch (error) {
-    console.error(error);
-
-    return NextResponse.json(
-      { error: "Failed to create quiz" },
-      { status: 500 },
-    );
-  }
+      createdBy: auth.user.email,
+    },
+    {
+      status: 201,
+    },
+  );
 }

@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
@@ -53,14 +54,32 @@ model OmniCounter {
 }
 
 model QuizAttempt {
-  id         String   @id @default(cuid())
-  score      Int
-  total      Int
-  category   String
-  createdAt  DateTime @default(now())
-  userId     String
-  percentage Float
-  user       User     @relation(fields: [userId], references: [id])
+  id              String    @id @default(cuid())
+  score           Int       @default(0)
+  total           Int       @default(0)
+  category        String
+  createdAt       DateTime  @default(now())
+  userId          String
+  quizId          String?
+  percentage      Float     @default(0)
+  startedAt       DateTime  @default(now())
+  expiresAt       DateTime?
+  submittedAt     DateTime?
+  completed       Boolean   @default(false)
+  suspicious      Boolean   @default(false)
+  tabSwitchCount  Int       @default(0)
+  durationMinutes Int       @default(30)
+  answersJson     String?
+  selectionStatus String    @default("PENDING")
+  selectionRank   Int?
+  selectionEvaluatedAt DateTime?
+  quiz            Quiz?     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  user            User      @relation(fields: [userId], references: [id])
+
+  @@unique([userId, quizId])
+  @@index([userId])
+  @@index([quizId])
+  @@index([completed])
 }
 
 model SkillProgress {
@@ -81,8 +100,14 @@ model Quiz {
   createdAt   DateTime     @default(now())
   isActive    Boolean      @default(true)
   totalPoints Int
+  isSelectionTest                 Boolean @default(false)
+  selectionMinimumPercentage      Float   @default(60)
+  selectionMaxTabSwitches         Int     @default(4)
+  selectionRequireNonSuspicious   Boolean @default(true)
+  selectionShortlistLimit         Int?
   questions   Question[]
   submissions Submission[]
+    attempts    QuizAttempt[]
 }
 
 model Question {

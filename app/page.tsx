@@ -3,6 +3,9 @@ import type { TopPerformerItem } from "@/components/landing/clean/OsoTopPerforme
 import { getPublishedAnnouncementPosters } from "@/lib/announcement-posters";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+export const runtime = "nodejs";
 export default async function Home() {
   const [posters, topPerformers] = await Promise.all([
     getPublishedAnnouncementPosters(),

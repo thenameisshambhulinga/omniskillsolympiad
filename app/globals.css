@@ -31,10 +31,10 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  --font-sans: var(--font-body);
-  --font-heading: var(--font-body);
-  --font-body: var(--font-body);
-  --font-mono: var(--font-mono);
+  --font-sans: var(--font-apple);
+  --font-heading: var(--font-apple);
+  --font-body: var(--font-apple);
+  --font-mono: "SF Mono", monospace;
 
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
@@ -45,15 +45,12 @@
 }
 
 :root {
-  --font-body:
-    -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
-    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-apple: "SF Pro", "SF Pro Text", "SF Pro Display", "SF Pro Rounded", sans-serif;
+  --font-display: var(--font-apple);
+  --font-body: var(--font-apple);
+  --font-mono: "SF Mono", monospace;
 
-  --font-mono:
-    "SF Mono", "Cascadia Code", "Roboto Mono", Consolas, "Courier New",
-    monospace;
-
-  --background: #f8f9fa;
+--background: #f8f9fa;
   --foreground: #30343b;
 
   --card: #ffffff;
@@ -564,7 +561,7 @@
 
 /* =========================================================
    ONLY RESTYLE UPPERCASE + LETTER-SPACED MICRO TEXT
-   Apple/system font is preserved. This only removes the harsh
+   Apple SF Pro font is preserved. This only removes the harsh
    wide-spaced look and makes labels cleaner.
    ========================================================= */
 
@@ -1044,7 +1041,7 @@ button[class*="rounded-full"]:focus-visible {
 /* =========================================================
    OSO STABLE CTA UTILITIES
    Use these classes for important text CTAs.
-   They preserve Apple system fonts and avoid icon-only button conflicts.
+   They preserve Apple SF Pro fonts and avoid icon-only button conflicts.
    ========================================================= */
 
 .oso-cta-primary {
@@ -1255,3 +1252,50 @@ button[class*="rounded-full"]:focus-visible {
   color: currentColor;
   stroke: currentColor;
 }
+
+/* =========================================================
+   OSO APPLE FONT ONLY
+   Uses Apple SF font family names only.
+   No -apple-system or BlinkMacSystemFont.
+   ========================================================= */
+
+html,
+body,
+button,
+input,
+textarea,
+select {
+  font-family: var(--font-apple) !important;
+  font-feature-settings:
+    "kern" 1,
+    "liga" 1,
+    "calt" 1;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.oso-heading,
+.oso-title,
+.oso-section-title,
+.oso-page-title,
+.oso-card-title {
+  font-family: var(--font-apple) !important;
+  font-feature-settings:
+    "kern" 1,
+    "liga" 1,
+    "calt" 1;
+}
+
+code,
+pre,
+kbd,
+samp,
+.font-mono {
+  font-family: var(--font-mono) !important;
+}
+

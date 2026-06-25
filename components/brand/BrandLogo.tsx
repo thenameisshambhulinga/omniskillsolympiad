@@ -6,7 +6,7 @@ export default function BrandLogo({ compact = false }: { compact?: boolean }) {
     <Link href="/" className="group inline-flex items-center gap-3">
       <div className="relative grid h-12 w-12 place-items-center overflow-hidden rounded-2xl border border-cyan-400/25 bg-white/[0.06] shadow-[0_0_28px_rgba(34,211,238,0.16)]">
         <Image
-          src="/brand/logo.png"
+          src="/brand/omni-logo-new.jpeg"
           alt="SIMS Skillathon logo"
           width={40}
           height={40}

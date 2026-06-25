@@ -2,19 +2,28 @@
   "name": "silicon-skillathon",
   "version": "0.1.0",
   "private": true,
- 
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && next build",
     "start": "next start",
-    "lint": "next lint",
-    "postinstall": "prisma generate"
+    "lint": "eslint .",
+    "postinstall": "prisma generate",
+    "preflight:hosting": "node scripts/hosting-audit.mjs && node scripts/integrity-audit.mjs",
+    "build:hosting": "npm run preflight:hosting && prisma generate && next build",
+    "prisma:generate": "prisma generate",
+    "prisma:deploy": "prisma migrate deploy",
+    "prisma:push": "prisma db push",
+    "clean": "node -e \"require('fs').rmSync('.next',{recursive:true,force:true})\"",
+    "typecheck": "tsc --noEmit",
+    "audit:integrity": "node scripts/integrity-audit.mjs",
+    "admin:promote": "node scripts/promote-admins.mjs"
   },
   "dependencies": {
     "@auth/core": "^0.34.3",
     "@auth/prisma-adapter": "^2.11.2",
     "@prisma/client": "^5.22.0",
     "@radix-ui/react-dialog": "^1.1.15",
+    "@supabase/supabase-js": "^2.108.2",
     "bcrypt": "^6.0.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
