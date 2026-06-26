@@ -18,14 +18,14 @@ export function isAcademicStepValid(formData: RegistrationFormData): boolean {
 
   return Boolean(
     academic.collegeName.trim() &&
-    academic.university.trim() &&
-    academic.usn.trim() &&
-    academic.course.trim() &&
-    academic.branch.trim() &&
-    academic.semester.trim() &&
-    academic.state.trim() &&
-    academic.district.trim() &&
-    academic.pincode.trim(),
+      academic.university.trim() &&
+      academic.usn.trim() &&
+      academic.course.trim() &&
+      academic.branch.trim() &&
+      academic.semester.trim() &&
+      academic.state.trim() &&
+      academic.district.trim() &&
+      academic.pincode.trim(),
   );
 }
 
@@ -53,11 +53,11 @@ export default function StepAcademicInfo({
     <motion.div
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
       className="grid gap-4 md:grid-cols-2"
     >
       <Field
-        icon={<School className="h-4 w-4 text-cyan-200" />}
+        icon={<School className="h-4 w-4 text-sky-600" />}
         label="College Name"
         value={formData.academic.collegeName}
         onChange={(value) => updateAcademic("collegeName", value)}
@@ -66,7 +66,7 @@ export default function StepAcademicInfo({
       />
 
       <Field
-        icon={<GraduationCap className="h-4 w-4 text-purple-200" />}
+        icon={<GraduationCap className="h-4 w-4 text-violet-600" />}
         label="University"
         value={formData.academic.university}
         onChange={(value) => updateAcademic("university", value)}
@@ -75,7 +75,7 @@ export default function StepAcademicInfo({
       />
 
       <Field
-        icon={<BookOpen className="h-4 w-4 text-emerald-200" />}
+        icon={<BookOpen className="h-4 w-4 text-emerald-600" />}
         label="USN"
         value={formData.academic.usn}
         onChange={(value) => updateAcademic("usn", value)}
@@ -84,7 +84,7 @@ export default function StepAcademicInfo({
       />
 
       <Field
-        icon={<Layers3 className="h-4 w-4 text-amber-200" />}
+        icon={<Layers3 className="h-4 w-4 text-amber-600" />}
         label="Course"
         value={formData.academic.course}
         onChange={(value) => updateAcademic("course", value)}
@@ -93,7 +93,7 @@ export default function StepAcademicInfo({
       />
 
       <Field
-        icon={<BookOpen className="h-4 w-4 text-blue-200" />}
+        icon={<BookOpen className="h-4 w-4 text-blue-600" />}
         label="Branch"
         value={formData.academic.branch}
         onChange={(value) => updateAcademic("branch", value)}
@@ -102,7 +102,7 @@ export default function StepAcademicInfo({
       />
 
       <Field
-        icon={<Layers3 className="h-4 w-4 text-pink-200" />}
+        icon={<Layers3 className="h-4 w-4 text-pink-600" />}
         label="Semester"
         value={formData.academic.semester}
         onChange={(value) => updateAcademic("semester", value)}
@@ -116,7 +116,7 @@ export default function StepAcademicInfo({
       />
 
       <Field
-        icon={<MapPin className="h-4 w-4 text-red-300" />}
+        icon={<MapPin className="h-4 w-4 text-rose-600" />}
         label="District"
         value={formData.academic.district}
         onChange={(value) => updateAcademic("district", value)}
@@ -125,7 +125,7 @@ export default function StepAcademicInfo({
       />
 
       <Field
-        icon={<Building2 className="h-4 w-4 text-indigo-200" />}
+        icon={<Building2 className="h-4 w-4 text-indigo-600" />}
         label="Pincode"
         value={formData.academic.pincode}
         onChange={(value) => updateAcademic("pincode", value)}
@@ -144,11 +144,11 @@ function StateSelect({
   onChange: (value: string) => void;
 }) {
   return (
-    <label className="block rounded-[1.5rem] border border-white/10 bg-black/25 p-4 backdrop-blur-xl transition focus-within:border-cyan-400/35 focus-within:bg-cyan-400/[0.045]">
-      <span className="mb-3 flex items-center gap-2 text-xs font-black uppercase tracking-[0.2em] text-white/45">
-        <MapPin className="h-4 w-4 text-red-200" />
+    <label className="block rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm transition focus-within:border-sky-200 focus-within:shadow-[0_0_0_4px_rgba(56,189,248,0.08)]">
+      <span className="mb-3 flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em] text-slate-500">
+        <MapPin className="h-4 w-4 text-rose-600" />
         State / Union Territory
-        <span className="text-cyan-300">*</span>
+        <span className="text-sky-600">*</span>
       </span>
 
       <input
@@ -156,7 +156,7 @@ function StateSelect({
         value={value}
         onChange={(event) => onChange(event.target.value)}
         placeholder="Search and select state"
-        className="w-full border-none bg-transparent text-sm font-semibold text-white outline-none placeholder:text-slate-400"
+        className="w-full border-none bg-transparent text-[15px] font-semibold text-slate-800 outline-none placeholder:text-slate-400"
       />
 
       <datalist id="indian-states">
@@ -186,11 +186,11 @@ function Field({
   required?: boolean;
 }) {
   return (
-    <label className="block rounded-[1.5rem] border border-white/10 bg-black/25 p-4 backdrop-blur-xl transition focus-within:border-cyan-400/35 focus-within:bg-cyan-400/[0.045]">
-      <span className="mb-3 flex items-center gap-2 text-xs font-black uppercase tracking-[0.2em] text-white/45">
+    <label className="block rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm transition focus-within:border-sky-200 focus-within:shadow-[0_0_0_4px_rgba(56,189,248,0.08)]">
+      <span className="mb-3 flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em] text-slate-500">
         {icon}
         {label}
-        {required && <span className="text-cyan-300">*</span>}
+        {required && <span className="text-sky-600">*</span>}
       </span>
 
       <input
@@ -198,7 +198,7 @@ function Field({
         value={value}
         onChange={(event) => onChange(event.target.value)}
         placeholder={placeholder}
-        className="w-full border-none bg-transparent text-sm font-semibold text-white outline-none placeholder:text-white/25"
+        className="w-full border-none bg-transparent text-[15px] font-semibold text-slate-800 outline-none placeholder:text-slate-400"
       />
     </label>
   );

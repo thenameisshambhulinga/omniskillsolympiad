@@ -16,11 +16,13 @@
     "clean": "node -e \"require('fs').rmSync('.next',{recursive:true,force:true})\"",
     "typecheck": "tsc --noEmit",
     "audit:integrity": "node scripts/integrity-audit.mjs",
-    "admin:promote": "node scripts/promote-admins.mjs"
+    "admin:promote": "node scripts/promote-admins.mjs",
+    "audit:passport-flow": "node scripts/passport-flow-audit.mjs"
   },
   "dependencies": {
     "@auth/core": "^0.34.3",
     "@auth/prisma-adapter": "^2.11.2",
+    "@fontsource/inter": "^5.2.8",
     "@prisma/client": "^5.22.0",
     "@radix-ui/react-dialog": "^1.1.15",
     "@supabase/supabase-js": "^2.108.2",

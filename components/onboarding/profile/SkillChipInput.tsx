@@ -20,9 +20,7 @@ export default function SkillChipInput({
     setError("");
   }, [input]);
 
-  const normalizeSkill = (skill: string): string => {
-    return skill.trim().toLowerCase();
-  };
+  const normalizeSkill = (skill: string): string => skill.trim().toLowerCase();
 
   const addSkill = () => {
     const normalized = normalizeSkill(input);
@@ -62,80 +60,78 @@ export default function SkillChipInput({
   };
 
   return (
-    <div>
-      <div className="rounded-[1.5rem] border border-white/10 bg-black/25 p-4 backdrop-blur-xl transition focus-within:border-cyan-400/35 focus-within:bg-cyan-400/4.5">
-        <label className="mb-3 flex items-center gap-2 text-xs font-black uppercase tracking-[0.2em] text-white/45">
-          <span className="h-4 w-4 rounded-full bg-linear-to-br from-cyan-300 to-blue-300" />
-          Technical Skills
-          <span className="text-cyan-300">*</span>
-        </label>
+    <div className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm transition focus-within:border-sky-200 focus-within:shadow-[0_0_0_4px_rgba(56,189,248,0.08)]">
+      <label className="mb-3 flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em] text-slate-500">
+        <span className="h-4 w-4 rounded-full bg-gradient-to-br from-sky-400 to-blue-500" />
+        Technical Skills
+        <span className="text-sky-600">*</span>
+      </label>
 
-        <div className="space-y-3">
-          {skills.length > 0 && (
-            <div className="flex flex-wrap gap-2">
-              <AnimatePresence mode="popLayout">
-                {skills.map((skill, index) => (
-                  <motion.div
-                    key={`${skill}-${index}`}
-                    initial={{ opacity: 0, scale: 0.8, y: 8 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.8 }}
-                    transition={{ duration: 0.2 }}
-                    className="inline-flex items-center gap-2 rounded-full bg-linear-to-r from-cyan-500/20 to-blue-500/20 px-3 py-1 text-xs font-semibold text-cyan-100 border border-cyan-400/30"
+      <div className="space-y-3">
+        {skills.length > 0 && (
+          <div className="flex flex-wrap gap-2">
+            <AnimatePresence mode="popLayout">
+              {skills.map((skill, index) => (
+                <motion.div
+                  key={`${skill}-${index}`}
+                  initial={{ opacity: 0, scale: 0.8, y: 8 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{ duration: 0.2 }}
+                  className="inline-flex items-center gap-2 rounded-full border border-sky-200 bg-sky-50 px-3 py-1.5 text-xs font-semibold text-sky-800"
+                >
+                  {skill}
+                  <button
+                    type="button"
+                    onClick={() => removeSkill(index)}
+                    className="ml-1 rounded-full p-0.5 transition hover:bg-sky-100"
                   >
-                    {skill}
-                    <button
-                      type="button"
-                      onClick={() => removeSkill(index)}
-                      className="ml-1 rounded-full p-0.5 hover:bg-cyan-400/20 transition"
-                    >
-                      <X className="h-3 w-3" />
-                    </button>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-            </div>
-          )}
-
-          <div className="flex gap-2">
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder={
-                skills.length === 0
-                  ? "Press Enter to add skill"
-                  : "Add another skill"
-              }
-              className="flex-1 border-none bg-transparent text-sm font-semibold text-white outline-none placeholder:text-white/25"
-            />
-
-            <button
-              type="button"
-              onClick={addSkill}
-              className="rounded-full bg-linear-to-r from-cyan-400/20 to-blue-400/20 px-4 py-2 text-xs font-bold uppercase text-cyan-200 border border-cyan-400/30 hover:border-cyan-400/60 hover:bg-cyan-400/30 transition"
-            >
-              Add
-            </button>
+                    <X className="h-3 w-3" />
+                  </button>
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </div>
+        )}
 
-          {error && (
-            <motion.p
-              initial={{ opacity: 0, y: -4 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-xs font-medium text-red-400"
-            >
-              {error}
-            </motion.p>
-          )}
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder={
+              skills.length === 0
+                ? "Press Enter to add skill"
+                : "Add another skill"
+            }
+            className="flex-1 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-800 outline-none placeholder:text-slate-400 focus:border-sky-200 focus:bg-white"
+          />
 
-          {skills.length === 0 && !error && (
-            <p className="text-xs font-medium text-white/35">
-              Add at least one technical skill
-            </p>
-          )}
+          <button
+            type="button"
+            onClick={addSkill}
+            className="rounded-2xl border border-sky-200 bg-sky-50 px-4 py-3 text-xs font-bold uppercase tracking-[0.12em] text-sky-700 transition hover:bg-sky-100"
+          >
+            Add
+          </button>
         </div>
+
+        {error && (
+          <motion.p
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-xs font-medium text-red-600"
+          >
+            {error}
+          </motion.p>
+        )}
+
+        {skills.length === 0 && !error && (
+          <p className="text-xs font-medium text-slate-500">
+            Add at least one technical skill
+          </p>
+        )}
       </div>
     </div>
   );

@@ -2,15 +2,50 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import { LogOut, PenLine, Settings, User } from "lucide-react";
 
+type SessionPayload = {
+  user?: {
+    name?: string | null;
+    email?: string | null;
+    image?: string | null;
+  } | null;
+} | null;
+
 export default function ProfileDropdown() {
-  const { data: session } = useSession();
   const [open, setOpen] = useState(false);
+  const [profileImage, setProfileImage] = useState("");
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const image = session?.user?.image || "";
+  useEffect(() => {
+    const controller = new AbortController();
+
+    async function loadSession() {
+      try {
+        const response = await fetch("/api/auth/session", {
+          cache: "no-store",
+          credentials: "same-origin",
+          signal: controller.signal,
+        });
+
+        if (!response.ok) return;
+
+        const session = (await response.json()) as SessionPayload;
+        setProfileImage(session?.user?.image || "");
+      } catch {
+        if (!controller.signal.aborted) {
+          setProfileImage("");
+        }
+      }
+    }
+
+    loadSession();
+
+    return () => {
+      controller.abort();
+    };
+  }, []);
 
   useEffect(() => {
     function handleOutsideClick(event: MouseEvent) {
@@ -46,9 +81,9 @@ export default function ProfileDropdown() {
         aria-label="Open account menu"
         className="group relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-cyan-400 via-blue-500 to-violet-500 shadow-[0_16px_34px_rgba(37,99,235,0.22)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_22px_44px_rgba(37,99,235,0.28)] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
       >
-        {image ? (
+        {profileImage ? (
           <img
-            src={image}
+            src={profileImage}
             alt="Profile"
             className="relative z-10 h-full w-full object-cover"
             referrerPolicy="no-referrer"
@@ -65,9 +100,9 @@ export default function ProfileDropdown() {
           <div className="border-b border-slate-200 p-4">
             <div className="flex items-center gap-3">
               <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-blue-200 bg-blue-50 text-blue-700">
-                {image ? (
+                {profileImage ? (
                   <img
-                    src={image}
+                    src={profileImage}
                     alt="Profile"
                     className="h-full w-full object-cover"
                     referrerPolicy="no-referrer"

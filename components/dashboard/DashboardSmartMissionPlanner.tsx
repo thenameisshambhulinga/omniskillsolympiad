@@ -243,7 +243,7 @@ function buildSmartMissions({
       title: "Add at least 3 verified skills",
       description:
         "Skills make your passport more useful for mentors, institutions, internships and industry-facing opportunities.",
-      href: "/profile",
+      href: "/onboarding?edit=passport",
       actionLabel: "Add Skills",
       priority: "medium",
       icon: <BookOpenCheck className="h-5 w-5" />,

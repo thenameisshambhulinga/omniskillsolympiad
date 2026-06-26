@@ -71,11 +71,6 @@ export default async function OnboardingPage({
     redirect("/login");
   }
 
-  /**
-   * Critical rule:
-   * Normal onboarding can still route admins to admin.
-   * Passport edit mode must never push the user into /admin.
-   */
   if (user.role === "ADMIN" && !isPassportEditMode) {
     redirect("/admin");
   }

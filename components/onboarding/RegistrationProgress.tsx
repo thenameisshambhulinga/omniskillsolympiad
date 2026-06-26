@@ -8,8 +8,8 @@ import type { OnboardingStep } from "@/types/onboarding";
 const compactStepLabels: Record<string, string> = {
   personal: "Identity & Photo",
   academic: "Education Details",
-  professional: "Skills & Tagline",
-  review: "Final Verification",
+  professional: "Skills & Links",
+  review: "Final Review",
 };
 
 export default function RegistrationProgress({
@@ -25,39 +25,53 @@ export default function RegistrationProgress({
     steps.length <= 1 ? 0 : (currentStepIndex / (steps.length - 1)) * 100;
 
   return (
-    <aside className="relative h-fit overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.045] p-4 shadow-[0_24px_100px_rgba(0,0,0,0.38)] backdrop-blur-2xl xl:sticky xl:top-8">
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.14),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(168,85,247,0.1),transparent_34%)]"
-      />
-
+    <aside className="relative h-fit overflow-hidden rounded-[2rem] border border-slate-200/90 bg-white/88 p-4 shadow-[0_20px_60px_rgba(15,23,42,0.08)] backdrop-blur-xl xl:sticky xl:top-8">
       <div className="relative z-10">
-        <p className="text-[10px] font-black uppercase tracking-[0.24em] text-cyan-300">
-          Onboarding
-        </p>
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <p className="text-[10px] font-black uppercase tracking-[0.16em] text-sky-500">
+              Passport Flow
+            </p>
+            <h2 className="mt-2 text-[1.7rem] font-black tracking-tight text-slate-800">
+              Profile Setup
+            </h2>
+          </div>
 
-        <h2 className="mt-2 text-xl font-black text-white">Profile Setup</h2>
+          <div className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-black text-slate-500">
+            {Math.round(progressPercent)}%
+          </div>
+        </div>
 
-        <div className="relative mt-8">
-          <div className="absolute left-[19px] top-5 bottom-5 w-[2px] bg-white/10 rounded-full" />
+        <div className="mt-5 rounded-[1.35rem] border border-slate-200 bg-slate-50 p-3">
+          <div className="mb-2 flex items-center justify-between text-[11px] font-black uppercase tracking-[0.12em] text-slate-500">
+            <span>Progress</span>
+            <span>{Math.round(progressPercent)}%</span>
+          </div>
+
+          <div className="h-2.5 overflow-hidden rounded-full bg-slate-200">
+            <motion.div
+              initial={{ width: 0 }}
+              animate={{ width: `${progressPercent}%` }}
+              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+              className="h-full rounded-full bg-gradient-to-r from-blue-600 via-cyan-400 to-violet-500"
+            />
+          </div>
+        </div>
+
+        <div className="relative mt-6">
+          <div className="absolute left-[19px] top-8 bottom-8 w-[2px] rounded-full bg-slate-200" />
 
           <motion.div
             initial={{ height: 0 }}
-            animate={{
-              height: `${progressPercent}%`,
-            }}
-            transition={{
-              duration: 0.6,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-            className="absolute left-[19px] top-5 w-[2px] rounded-full bg-linear-to-b from-cyan-300 via-blue-400 to-purple-400 shadow-[0_0_20px_rgba(34,211,238,0.7)]"
+            animate={{ height: `${progressPercent}%` }}
+            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+            className="absolute left-[19px] top-8 w-[2px] rounded-full bg-gradient-to-b from-blue-600 via-cyan-400 to-violet-500"
           />
 
-          <div className="space-y-1">
+          <div className="space-y-3">
             {steps.map((step, index) => {
               const isActive = index === currentStepIndex;
               const isComplete = index < currentStepIndex;
-
               const compactLabel = compactStepLabels[step.id] ?? step.title;
 
               return (
@@ -65,52 +79,35 @@ export default function RegistrationProgress({
                   key={step.id}
                   type="button"
                   onClick={() => onStepSelect(index)}
-                  className="group relative flex w-full items-center gap-4 rounded-2xl px-2 py-3 text-left transition"
+                  className={`group relative flex w-full items-center gap-4 rounded-[1.55rem] border p-3 text-left transition ${
+                    isActive
+                      ? "border-sky-200 bg-sky-50 shadow-[0_12px_30px_rgba(56,189,248,0.1)]"
+                      : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50"
+                  }`}
                 >
-                  <div className="relative z-10 flex-shrink-0">
+                  <div className="relative z-10 shrink-0">
                     {isComplete ? (
-                      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-500 text-white shadow-[0_0_18px_rgba(16,185,129,0.45)]">
+                      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-500 text-white shadow-[0_0_0_6px_rgba(16,185,129,0.12)]">
                         <BadgeCheck className="h-4 w-4" />
                       </div>
                     ) : (
                       <div
                         className={
                           isActive
-                            ? "relative flex h-9 w-9 items-center justify-center rounded-full border border-cyan-300/40 bg-cyan-400/15 text-cyan-200 shadow-[0_0_28px_rgba(34,211,238,0.45)]"
-                            : "flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-black/30 text-white/45"
+                            ? "relative flex h-9 w-9 items-center justify-center rounded-full border border-sky-200 bg-white font-black text-sky-700 shadow-[0_0_0_6px_rgba(56,189,248,0.1)]"
+                            : "flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white font-black text-slate-500"
                         }
                       >
                         {index + 1}
-
-                        {isActive && (
-                          <motion.div
-                            animate={{
-                              scale: [1, 1.4, 1],
-                              opacity: [0.4, 0, 0.4],
-                            }}
-                            transition={{
-                              duration: 2,
-                              repeat: Infinity,
-                            }}
-                            className="absolute inset-0 rounded-full border border-cyan-300/40"
-                          />
-                        )}
                       </div>
                     )}
                   </div>
 
                   <div className="min-w-0">
-                    <p
-                      className={
-                        isActive
-                          ? "text-sm font-black text-white"
-                          : "text-sm font-bold text-white/75"
-                      }
-                    >
+                    <p className={isActive ? "text-sm font-black text-slate-900" : "text-sm font-bold text-slate-700"}>
                       {step.title}
                     </p>
-
-                    <p className="mt-0.5 text-xs text-white/40">
+                    <p className="mt-0.5 text-xs font-medium text-slate-500">
                       {compactLabel}
                     </p>
                   </div>

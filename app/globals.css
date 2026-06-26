@@ -45,12 +45,13 @@
 }
 
 :root {
-  --font-apple: "SF Pro", "SF Pro Text", "SF Pro Display", "SF Pro Rounded", sans-serif;
+  --font-apple:
+    "SF Pro", "SF Pro Text", "SF Pro Display", "SF Pro Rounded", sans-serif;
   --font-display: var(--font-apple);
   --font-body: var(--font-apple);
   --font-mono: "SF Mono", monospace;
 
---background: #f8f9fa;
+  --background: #f8f9fa;
   --foreground: #30343b;
 
   --card: #ffffff;
@@ -109,11 +110,9 @@
   --oso-cta-mid: rgba(14, 165, 233, 0.92);
   --oso-cta-end: rgba(34, 211, 238, 0.9);
   --oso-cta-shadow:
-    0 18px 42px rgba(37, 99, 235, 0.22),
-    inset 0 1px 0 rgba(255, 255, 255, 0.34);
+    0 18px 42px rgba(37, 99, 235, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.34);
   --oso-cta-hover-shadow:
-    0 24px 58px rgba(37, 99, 235, 0.3),
-    0 0 34px rgba(34, 211, 238, 0.22),
+    0 24px 58px rgba(37, 99, 235, 0.3), 0 0 34px rgba(34, 211, 238, 0.22),
     inset 0 1px 0 rgba(255, 255, 255, 0.42);
 }
 
@@ -238,12 +237,11 @@
 
   .oso-glass-panel {
     border: 1px solid rgba(226, 232, 240, 0.9);
-    background:
-      linear-gradient(
-        180deg,
-        rgba(255, 255, 255, 0.88),
-        rgba(248, 250, 252, 0.76)
-      );
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.88),
+      rgba(248, 250, 252, 0.76)
+    );
     box-shadow: 0 24px 70px rgba(15, 23, 42, 0.08);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
@@ -251,12 +249,11 @@
 
   .oso-glass-card {
     border: 1px solid rgba(226, 232, 240, 0.9);
-    background:
-      linear-gradient(
-        180deg,
-        rgba(102, 196, 236, 0.9),
-        rgba(144, 227, 175, 0.76)
-      );
+    background: linear-gradient(
+      180deg,
+      rgba(102, 196, 236, 0.9),
+      rgba(144, 227, 175, 0.76)
+    );
     box-shadow: 0 22px 64px rgba(15, 23, 42, 0.075);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
@@ -611,13 +608,12 @@ button[class*="rounded-full"][class*="uppercase"][class*="bg-slate-900"] {
   overflow: hidden;
   border-radius: 999px;
   border: 1px solid var(--oso-cta-border) !important;
-  background:
-    linear-gradient(
-      135deg,
-      var(--oso-cta-start) 0%,
-      var(--oso-cta-mid) 52%,
-      var(--oso-cta-end) 100%
-    ) !important;
+  background: linear-gradient(
+    135deg,
+    var(--oso-cta-start) 0%,
+    var(--oso-cta-mid) 52%,
+    var(--oso-cta-end) 100%
+  ) !important;
   color: #ffffff !important;
   font-family: var(--font-body) !important;
   font-size: 0.875rem;
@@ -648,13 +644,12 @@ button[class*="rounded-full"][class*="uppercase"][class*="bg-slate-900"]::before
   inset: 1px;
   z-index: -1;
   border-radius: inherit;
-  background:
-    linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.34),
-      rgba(255, 255, 255, 0.08) 42%,
-      rgba(255, 255, 255, 0.2)
-    );
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.34),
+    rgba(255, 255, 255, 0.08) 42%,
+    rgba(255, 255, 255, 0.2)
+  );
   opacity: 0.72;
   pointer-events: none;
 }
@@ -730,13 +725,12 @@ button[class*="rounded-full"][class*="uppercase"][class*="border-slate"][class*=
   overflow: hidden;
   border-radius: 999px;
   border: 1px solid rgba(148, 163, 184, 0.34) !important;
-  background:
-    linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.86),
-      rgba(239, 246, 255, 0.72),
-      rgba(224, 242, 254, 0.74)
-    ) !important;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.86),
+    rgba(239, 246, 255, 0.72),
+    rgba(224, 242, 254, 0.74)
+  ) !important;
   color: #0f172a !important;
   font-family: var(--font-body) !important;
   font-size: 0.875rem;
@@ -889,12 +883,11 @@ footer button[aria-label][class*="rounded-full"]:has(svg) {
   padding: 0 !important;
   border-radius: 999px !important;
   color: #0f172a !important;
-  background:
-    linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.82),
-      rgba(226, 232, 240, 0.72)
-    ) !important;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.82),
+    rgba(226, 232, 240, 0.72)
+  ) !important;
   border: 1px solid rgba(255, 255, 255, 0.72) !important;
   box-shadow:
     0 14px 32px rgba(15, 23, 42, 0.18),
@@ -1057,13 +1050,12 @@ button[class*="rounded-full"]:focus-visible {
   overflow: hidden;
   border-radius: 999px;
   border: 1px solid rgba(37, 99, 235, 0.28);
-  background:
-    linear-gradient(
-      135deg,
-      rgba(37, 99, 235, 0.96),
-      rgba(14, 165, 233, 0.94),
-      rgba(34, 211, 238, 0.9)
-    );
+  background: linear-gradient(
+    135deg,
+    rgba(37, 99, 235, 0.96),
+    rgba(14, 165, 233, 0.94),
+    rgba(34, 211, 238, 0.9)
+  );
   padding: 0.95rem 1.75rem;
   color: #ffffff;
   font-family: var(--font-body);
@@ -1092,13 +1084,12 @@ button[class*="rounded-full"]:focus-visible {
   inset: 1px;
   z-index: -1;
   border-radius: inherit;
-  background:
-    linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.34),
-      rgba(255, 255, 255, 0.08) 42%,
-      rgba(255, 255, 255, 0.2)
-    );
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.34),
+    rgba(255, 255, 255, 0.08) 42%,
+    rgba(255, 255, 255, 0.2)
+  );
   opacity: 0.72;
   pointer-events: none;
 }
@@ -1153,13 +1144,12 @@ button[class*="rounded-full"]:focus-visible {
   overflow: hidden;
   border-radius: 999px;
   border: 1px solid rgba(148, 163, 184, 0.38);
-  background:
-    linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.9),
-      rgba(239, 246, 255, 0.76),
-      rgba(224, 242, 254, 0.78)
-    );
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.9),
+    rgba(239, 246, 255, 0.76),
+    rgba(224, 242, 254, 0.78)
+  );
   padding: 0.95rem 1.75rem;
   color: #0f172a;
   font-family: var(--font-body);
@@ -1218,12 +1208,11 @@ button[class*="rounded-full"]:focus-visible {
   justify-content: center;
   border-radius: 999px;
   border: 1px solid rgba(203, 213, 225, 0.78);
-  background:
-    linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.88),
-      rgba(239, 246, 255, 0.78)
-    );
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.88),
+    rgba(239, 246, 255, 0.78)
+  );
   color: #0f172a;
   box-shadow:
     0 12px 28px rgba(15, 23, 42, 0.1),
@@ -1299,24 +1288,6 @@ samp,
   font-family: var(--font-mono) !important;
 }
 
-/* =========================================================
-   OSO FONT SYSTEM - SF PRO BASED
-   Source: user-provided OSO global CSS font direction.
-   Keeps body, headings, controls and UI text consistent.
-   ========================================================= */
-
-:root {
-  --font-apple: "SF Pro", "SF Pro Text", "SF Pro Display", "SF Pro Rounded", sans-serif;
-  --font-display: var(--font-apple);
-  --font-body: var(--font-apple);
-  --font-heading: var(--font-apple);
-  --font-mono: "SF Mono", monospace;
-
-  --oso-heading-color: #6d6e6f;
-  --oso-ink: #111827;
-  --oso-muted: #64748b;
-}
-
 html,
 body,
 button,
@@ -1379,4 +1350,374 @@ samp,
   letter-spacing: 0.035em !important;
   text-rendering: geometricPrecision;
   -webkit-font-smoothing: antialiased;
+}
+
+/* =========================================================
+   FINAL OMNI / KAGGLE-LIKE TYPOGRAPHY + PASSPORT VISIBILITY
+   Stable font: Inter everywhere.
+   ========================================================= */
+
+:root {
+  --font-kaggle: "Inter", Arial, Helvetica, sans-serif;
+  --font-heading: "Inter", Arial, Helvetica, sans-serif;
+  --font-body: "Inter", Arial, Helvetica, sans-serif;
+
+  --oso-heading-color: #454648;
+  --oso-soft-heading-color: #5f6368;
+  --oso-body-color: #3c4043;
+  --oso-muted-color: #64748b;
+}
+
+html,
+body,
+body
+  *:not(svg):not(path):not(circle):not(rect):not(line):not(polyline):not(
+    polygon
+  ) {
+  font-family: var(--font-body) !important;
+  font-feature-settings:
+    "kern" 1,
+    "liga" 1,
+    "calt" 1;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  color: var(--oso-body-color);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.oso-heading,
+.oso-title,
+.oso-section-title,
+.oso-page-title,
+.oso-card-title,
+.font-heading,
+.oso-kaggle-heading {
+  font-family: var(--font-heading) !important;
+  color: var(--oso-heading-color);
+  font-weight: 800 !important;
+  letter-spacing: -0.018em !important;
+  line-height: 1.08 !important;
+}
+
+p,
+li {
+  font-weight: 500;
+  letter-spacing: -0.004em;
+}
+
+button,
+a,
+input,
+textarea,
+select {
+  font-family: var(--font-body) !important;
+}
+
+[class*="uppercase"][class*="font-black"],
+[class*="uppercase"][class*="font-bold"] {
+  font-weight: 700 !important;
+  letter-spacing: 0.032em !important;
+}
+
+.oso-soft-active,
+.oso-soft-active:active,
+.oso-soft-active:focus-visible,
+.oso-header-control:active,
+.oso-header-control[data-active="true"] {
+  background:
+    radial-gradient(
+      circle at 16% 12%,
+      rgba(34, 211, 238, 0.22),
+      transparent 32%
+    ),
+    linear-gradient(135deg, #eff6ff 0%, #ecfeff 55%, #ffffff 100%) !important;
+  color: #1d4ed8 !important;
+  border-color: rgba(147, 197, 253, 0.95) !important;
+  box-shadow:
+    0 12px 30px rgba(37, 99, 235, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95) !important;
+}
+
+.oso-passport-studio {
+  color: #475569 !important;
+}
+
+.oso-passport-studio h1,
+.oso-passport-studio h2,
+.oso-passport-studio h3,
+.oso-passport-studio .oso-kaggle-heading {
+  color: #5f6368 !important;
+}
+
+.oso-passport-studio .text-white,
+.oso-passport-studio [class*="text-white"] {
+  color: #202124 !important;
+}
+
+.oso-passport-studio [class*="text-white/"],
+.oso-passport-studio [class*="text-white["] {
+  color: #475569 !important;
+}
+
+.oso-passport-studio [class*="bg-black/"],
+.oso-passport-studio [class*="bg-black["],
+.oso-passport-studio [class*="bg-white/5"],
+.oso-passport-studio [class*="bg-white/["] {
+  background-color: rgba(255, 255, 255, 0.92) !important;
+}
+
+.oso-passport-studio [class*="border-white/"],
+.oso-passport-studio [class*="border-white["] {
+  border-color: rgba(203, 213, 225, 0.95) !important;
+}
+
+.oso-passport-studio input,
+.oso-passport-studio textarea,
+.oso-passport-studio select {
+  background: rgba(255, 255, 255, 0.96) !important;
+  border-color: rgba(203, 213, 225, 0.95) !important;
+  color: #0f172a !important;
+}
+
+.oso-passport-studio input::placeholder,
+.oso-passport-studio textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+.oso-passport-studio button.bg-blue-600,
+.oso-passport-studio button.bg-blue-700,
+.oso-passport-studio a.bg-blue-600,
+.oso-passport-studio a.bg-blue-700,
+.oso-passport-studio button.bg-blue-600 *,
+.oso-passport-studio button.bg-blue-700 *,
+.oso-passport-studio a.bg-blue-600 *,
+.oso-passport-studio a.bg-blue-700 * {
+  color: #ffffff !important;
+}
+
+.oso-passport-studio input[type="range"] {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  width: 100%;
+  height: 18px;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  cursor: pointer;
+}
+
+.oso-passport-studio input[type="range"]::-webkit-slider-runnable-track {
+  height: 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(37, 99, 235, 0.14);
+  background: linear-gradient(90deg, #22d3ee 0%, #2563eb 52%, #8b5cf6 100%);
+}
+
+.oso-passport-studio input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  margin-top: -6px;
+  height: 20px;
+  width: 20px;
+  border-radius: 999px;
+  border: 4px solid #ffffff;
+  background: #2563eb;
+  box-shadow:
+    0 8px 18px rgba(37, 99, 235, 0.3),
+    0 0 0 1px rgba(37, 99, 235, 0.25);
+}
+
+/* =========================================================
+   FINAL OMNI / KAGGLE-LIKE TYPOGRAPHY + PASSPORT VISIBILITY
+   Stable font: Inter everywhere.
+   ========================================================= */
+
+:root {
+  --font-kaggle: "Inter", Arial, Helvetica, sans-serif;
+  --font-heading: "Inter", Arial, Helvetica, sans-serif;
+  --font-body: "Inter", Arial, Helvetica, sans-serif;
+
+  --oso-heading-color: #666666;
+  --oso-soft-heading-color: #5f6368;
+  --oso-body-color: #3c4043;
+  --oso-muted-color: #64748b;
+}
+
+html,
+body,
+body
+  *:not(svg):not(path):not(circle):not(rect):not(line):not(polyline):not(
+    polygon
+  ) {
+  font-family: var(--font-body) !important;
+  font-feature-settings:
+    "kern" 1,
+    "liga" 1,
+    "calt" 1;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  color: var(--oso-body-color);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.oso-heading,
+.oso-title,
+.oso-section-title,
+.oso-page-title,
+.oso-card-title,
+.font-heading,
+.oso-kaggle-heading {
+  font-family: var(--font-heading) !important;
+  color: var(--oso-heading-color);
+  font-weight: 800 !important;
+  letter-spacing: -0.018em !important;
+  line-height: 1.08 !important;
+}
+
+p,
+li {
+  font-weight: 500;
+  letter-spacing: -0.004em;
+}
+
+button,
+a,
+input,
+textarea,
+select {
+  font-family: var(--font-body) !important;
+}
+
+[class*="uppercase"][class*="font-black"],
+[class*="uppercase"][class*="font-bold"] {
+  font-weight: 700 !important;
+  letter-spacing: 0.032em !important;
+}
+
+.oso-soft-active,
+.oso-soft-active:active,
+.oso-soft-active:focus-visible,
+.oso-header-control:active,
+.oso-header-control[data-active="true"] {
+  background:
+    radial-gradient(
+      circle at 16% 12%,
+      rgba(34, 211, 238, 0.22),
+      transparent 32%
+    ),
+    linear-gradient(135deg, #eff6ff 0%, #ecfeff 55%, #ffffff 100%) !important;
+  color: #1d4ed8 !important;
+  border-color: rgba(147, 197, 253, 0.95) !important;
+  box-shadow:
+    0 12px 30px rgba(37, 99, 235, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95) !important;
+}
+
+.oso-passport-studio {
+  color: #475569 !important;
+}
+
+.oso-passport-studio h1,
+.oso-passport-studio h2,
+.oso-passport-studio h3,
+.oso-passport-studio .oso-kaggle-heading {
+  color: #5f6368 !important;
+}
+
+.oso-passport-studio .text-white,
+.oso-passport-studio [class*="text-white"] {
+  color: #202124 !important;
+}
+
+.oso-passport-studio [class*="text-white/"],
+.oso-passport-studio [class*="text-white["] {
+  color: #475569 !important;
+}
+
+.oso-passport-studio [class*="bg-black/"],
+.oso-passport-studio [class*="bg-black["],
+.oso-passport-studio [class*="bg-white/5"],
+.oso-passport-studio [class*="bg-white/["] {
+  background-color: rgba(255, 255, 255, 0.92) !important;
+}
+
+.oso-passport-studio [class*="border-white/"],
+.oso-passport-studio [class*="border-white["] {
+  border-color: rgba(203, 213, 225, 0.95) !important;
+}
+
+.oso-passport-studio input,
+.oso-passport-studio textarea,
+.oso-passport-studio select {
+  background: rgba(255, 255, 255, 0.96) !important;
+  border-color: rgba(203, 213, 225, 0.95) !important;
+  color: #0f172a !important;
+}
+
+.oso-passport-studio input::placeholder,
+.oso-passport-studio textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+.oso-passport-studio button.bg-blue-600,
+.oso-passport-studio button.bg-blue-700,
+.oso-passport-studio a.bg-blue-600,
+.oso-passport-studio a.bg-blue-700,
+.oso-passport-studio button.bg-blue-600 *,
+.oso-passport-studio button.bg-blue-700 *,
+.oso-passport-studio a.bg-blue-600 *,
+.oso-passport-studio a.bg-blue-700 * {
+  color: #ffffff !important;
+}
+
+.oso-passport-studio input[type="range"] {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  width: 100%;
+  height: 18px;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  cursor: pointer;
+}
+
+.oso-passport-studio input[type="range"]::-webkit-slider-runnable-track {
+  height: 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(37, 99, 235, 0.14);
+  background: linear-gradient(90deg, #22d3ee 0%, #2563eb 52%, #8b5cf6 100%);
+}
+
+.oso-passport-studio input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  margin-top: -6px;
+  height: 20px;
+  width: 20px;
+  border-radius: 999px;
+  border: 4px solid #ffffff;
+  background: #2563eb;
+  box-shadow:
+    0 8px 18px rgba(37, 99, 235, 0.3),
+    0 0 0 1px rgba(37, 99, 235, 0.25);
 }
