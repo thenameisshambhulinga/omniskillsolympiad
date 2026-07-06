@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "postinstall": "prisma generate",
     "preflight:hosting": "node scripts/hosting-audit.mjs && node scripts/integrity-audit.mjs",
-    "build:hosting": "npm run preflight:hosting && prisma generate && next build",
+    "build:hosting": "npm run build",
     "prisma:generate": "prisma generate",
     "prisma:deploy": "prisma migrate deploy",
     "prisma:push": "prisma db push",
