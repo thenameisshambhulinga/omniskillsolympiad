@@ -77,13 +77,16 @@ export default function LoginClient({ posters }: LoginClientProps) {
     }
 
     const timer = window.setInterval(() => {
-      setActivePosterIndex((current) => (current + 1) % publishedPosters.length);
+      setActivePosterIndex(
+        (current) => (current + 1) % publishedPosters.length,
+      );
     }, 5200);
 
     return () => window.clearInterval(timer);
   }, [publishedPosters.length]);
 
-  const activePoster = publishedPosters[activePosterIndex] ?? publishedPosters[0];
+  const activePoster =
+    publishedPosters[activePosterIndex] ?? publishedPosters[0];
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#05091f] px-4 py-6 text-white sm:px-6 lg:px-8">
@@ -201,11 +204,11 @@ export default function LoginClient({ posters }: LoginClientProps) {
 
             <button
               type="button"
-             onClick={() =>
-  signIn("google", {
-    callbackUrl: getSafeLoginCallbackUrl(),
-  })
-}
+              onClick={() =>
+                signIn("google", {
+                  callbackUrl: getSafeLoginCallbackUrl(),
+                })
+              }
               className="group/google relative mt-9 inline-flex min-h-16 w-full items-center justify-center gap-3 overflow-hidden rounded-[1.35rem] border border-slate-200 bg-white px-6 py-4 text-sm font-black uppercase tracking-[0.12em] text-slate-950 shadow-[0_18px_54px_rgba(15,23,42,0.10)] outline-none transition hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-[0_22px_70px_rgba(37,99,235,0.16)] focus-visible:ring-4 focus-visible:ring-blue-100"
             >
               <span className="absolute inset-0 rounded-[1.35rem] bg-[linear-gradient(90deg,#4285F4,#34A853,#FBBC05,#EA4335,#4285F4)] opacity-0 transition duration-500 group-hover/google:opacity-12" />
@@ -256,26 +259,12 @@ export default function LoginClient({ posters }: LoginClientProps) {
 
 function BrandMark() {
   return (
-    <div className="flex items-center gap-4">
-      <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-[1.6rem] border border-cyan-300/25 bg-white shadow-[0_0_55px_rgba(34,211,238,0.18)]">
-        <img
-          src="/brand/omni-logo-new.jpeg"
-          alt="Omni Skills Olympiad"
-          className="h-full w-full object-contain p-2"
-        />
-      </div>
-
-      <div>
-        <p className="text-2xl font-black uppercase tracking-[0.28em] text-white">
-          Omni Skills
-        </p>
-        <p className="text-2xl font-black uppercase tracking-[0.28em] text-white">
-          Olympiad
-        </p>
-        <p className="mt-2 text-xs font-black uppercase tracking-[0.28em] text-cyan-300">
-          Build • Solve • Lead
-        </p>
-      </div>
+    <div className="flex justify-start">
+      <img
+        src="/brand/Login-logo.png"
+        alt="Omni Skills Olympiad"
+        className="h-24 w-auto object-contain sm:h-70 lg:h-70"
+      />
     </div>
   );
 }
@@ -348,7 +337,9 @@ function LivePosterHero({
             <div className="absolute inset-x-0 bottom-0 p-5">
               <div className="mb-3 flex flex-wrap gap-2">
                 <PosterBadge>{safeText(poster.status, "Live")}</PosterBadge>
-                <PosterBadge>{safeText(poster.category, "Announcement")}</PosterBadge>
+                <PosterBadge>
+                  {safeText(poster.category, "Announcement")}
+                </PosterBadge>
               </div>
 
               <h2 className="max-w-3xl text-3xl font-black text-white sm:text-4xl">
@@ -385,8 +376,7 @@ function EmptyPosterHero() {
             No Live Posters Yet
           </h2>
           <p className="mt-2 max-w-2xl text-sm font-semibold leading-6 text-white/56">
-            Admin can publish posters from Announcement Center. No manual or
-            mock poster data is shown here.
+            Click here to Know the Event
           </p>
         </div>
 
@@ -579,11 +569,7 @@ function FloatingEcosystemCard({
   };
   index: number;
 }) {
-  const positions = [
-    "right-10 top-16",
-    "right-0 top-48",
-    "right-16 bottom-16",
-  ];
+  const positions = ["right-10 top-16", "right-0 top-48", "right-16 bottom-16"];
 
   const toneClass =
     mission.tone === "cyan"

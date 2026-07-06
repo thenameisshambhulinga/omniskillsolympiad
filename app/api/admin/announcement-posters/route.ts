@@ -1,3 +1,6 @@
+//app/api/admin/announcement-posters/route.ts
+import { randomUUID } from "node:crypto";
+
 import { NextResponse } from "next/server";
 
 import { requireAdmin } from "@/lib/admin-auth";
@@ -71,6 +74,18 @@ function normalizePlacement(value: unknown) {
   const placement = cleanText(value).toUpperCase();
 
   return placement || "LOGIN_HERO";
+}
+
+function createPosterSlug(title: string) {
+  const normalizedTitle = title
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 70);
+
+  return `${normalizedTitle || "announcement"}-${randomUUID().slice(0, 8)}`;
 }
 
 function validatePosterPayload(body: Record<string, unknown>):
@@ -264,7 +279,10 @@ export async function POST(request: Request) {
 
   const poster = await prisma.$transaction(async (tx) => {
     const createdPoster = await tx.announcementPoster.create({
-      data: validation.data,
+      data: {
+        ...validation.data,
+        slug: createPosterSlug(validation.data.title),
+      },
     });
 
     if (createdPoster.isHero && createdPoster.isPublished) {

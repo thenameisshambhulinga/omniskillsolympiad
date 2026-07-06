@@ -2,13 +2,22 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
 import OsoCompetitionBenchmarkSummary from "@/components/competition/OsoCompetitionBenchmarkSummary";
-import OsoCompetitionCalendar from "@/components/competition/OsoCompetitionCalendar";
+import OsoCompetitionCommandCenter from "@/components/competition/OsoCompetitionCommandCenter";
 import OsoCompetitionEssentials from "@/components/competition/OsoCompetitionEssentials";
 import OsoCompetitionFocusHero from "@/components/competition/OsoCompetitionFocusHero";
+import OsoCompetitionLiveArena from "@/components/competition/OsoCompetitionLiveArena";
 import OsoCompetitionPageBackdrop from "@/components/competition/OsoCompetitionPageBackdrop";
 import OsoCompetitionProgressiveDetails from "@/components/competition/OsoCompetitionProgressiveDetails";
 import OsoPageShell from "@/components/oso/OsoPageShell";
 import { authOptions } from "@/lib/auth";
+import {
+  buildCompetitionLiveArena,
+  getRecommendedLiveArena,
+} from "@/lib/competition/competition-live-arena";
+import {
+  publicDailyChallengeWhere,
+  studentDailyChallengeOrderBy,
+} from "@/lib/daily-challenge/public-challenge-visibility";
 import { prisma } from "@/lib/prisma";
 import {
   getAssessmentHistory,
@@ -152,6 +161,53 @@ export default async function CompetitionPage() {
     assessmentTrend,
   });
 
+  const liveDailyChallenges = await prisma.dailyChallenge.findMany({
+    where: publicDailyChallengeWhere,
+    orderBy: studentDailyChallengeOrderBy,
+    take: 6,
+    select: {
+      id: true,
+      dayNumber: true,
+      title: true,
+      description: true,
+      createdAt: true,
+      questions: {
+        select: {
+          difficulty: true,
+        },
+      },
+      attempts: {
+        where: {
+          userId: user.id,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+        take: 1,
+        select: {
+          completed: true,
+          percentage: true,
+          score: true,
+          total: true,
+          createdAt: true,
+          submittedAt: true,
+          expiresAt: true,
+        },
+      },
+      _count: {
+        select: {
+          attempts: true,
+        },
+      },
+    },
+  });
+
+  const liveArenas = liveDailyChallenges.map((challenge) =>
+    buildCompetitionLiveArena(challenge),
+  );
+
+  const nextLiveArena = getRecommendedLiveArena(liveArenas);
+
   const currentTierName = getDisplayValue(
     roadmapSnapshot.currentTier,
     "name",
@@ -186,7 +242,17 @@ return (
             totalSteps={totalSteps}
           />
 
-          <OsoCompetitionCalendar />
+          <OsoCompetitionCommandCenter
+            readinessScore={engineeringReadiness.score}
+            siliconPoints={siliconPoints}
+            completedSteps={completedSteps}
+            totalSteps={totalSteps}
+            currentTier={currentTierName}
+            liveArenaCount={liveArenas.length}
+            recommendedArena={nextLiveArena}
+          />
+
+          <OsoCompetitionLiveArena arenas={liveArenas} />
 
           <OsoCompetitionEssentials
             currentStage={currentStageName}

@@ -182,7 +182,7 @@ export const worldSkillsPathway = [
 
 export const primaryNavigation: OmniLink[] = [
   { label: "Dashboard", href: "/dashboard" },
-  { label: "Challenges", href: "/daily-challenges" },
+  { label: "Daily-Challenges", href: "/daily-challenges" },
   { label: "Competitions", href: "/competition" },
   { label: "Leaderboard", href: "/daily-leaderboard" },
   { label: "WorldSkills", href: "/worldskills" },

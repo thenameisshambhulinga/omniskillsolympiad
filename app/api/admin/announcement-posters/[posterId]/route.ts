@@ -1,3 +1,4 @@
+//app/api/admin/announcement-posters/[posterId]/route.ts
 import { NextResponse } from "next/server";
 
 import { requireAdmin } from "@/lib/admin-auth";

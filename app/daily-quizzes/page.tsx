@@ -1,14 +1,16 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+import {
+  publicDailyChallengeWhere,
+  studentDailyChallengeOrderBy,
+} from "@/lib/daily-challenge/public-challenge-visibility";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 export const runtime = "nodejs";
 export default async function DailyQuizzesPage() {
   const challenges = await prisma.dailyChallenge.findMany({
-    where: {
-      isPublished: true,
-    },
+    where: publicDailyChallengeWhere,
     select: {
       id: true,
       dayNumber: true,
@@ -20,9 +22,7 @@ export default async function DailyQuizzesPage() {
         },
       },
     },
-    orderBy: {
-      dayNumber: "asc",
-    },
+    orderBy: studentDailyChallengeOrderBy,
     take: 60,
   });
 

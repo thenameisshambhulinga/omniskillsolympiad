@@ -69,6 +69,7 @@ export default function SelectionAnnouncementTicker() {
   const [loading, setLoading] = useState(true);
 
   const shouldHide =
+    pathname === "/" ||
     pathname.startsWith("/admin") ||
     pathname.startsWith("/api") ||
     pathname.startsWith("/login") ||
@@ -79,7 +80,6 @@ export default function SelectionAnnouncementTicker() {
 
   useEffect(() => {
     if (shouldHide) {
-      setLoading(false);
       return;
     }
 

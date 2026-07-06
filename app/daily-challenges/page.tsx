@@ -6,6 +6,10 @@ import DailyChallengeMissionBrowser, {
 } from "@/components/daily-challenges/DailyChallengeMissionBrowser";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import {
+  publicDailyChallengeWhere,
+  studentDailyChallengeOrderBy,
+} from "@/lib/daily-challenge/public-challenge-visibility";
 import { withDatabaseResult } from "@/lib/server/database-guard";
 
 export const dynamic = "force-dynamic";
@@ -32,17 +36,8 @@ export default async function DailyChallengesPage() {
         : null;
 
       const challenges = await prisma.dailyChallenge.findMany({
-        where: {
-          isPublished: true,
-        },
-        orderBy: [
-          {
-            dayNumber: "asc",
-          },
-          {
-            createdAt: "desc",
-          },
-        ],
+        where: publicDailyChallengeWhere,
+        orderBy: studentDailyChallengeOrderBy,
         select: {
           id: true,
           dayNumber: true,

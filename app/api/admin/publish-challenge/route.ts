@@ -1,5 +1,7 @@
+import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
+import { getStudentDailyChallengePath } from "@/lib/daily-challenge/public-challenge-visibility";
 import { prisma } from "@/lib/prisma";
 import { requireApiAdmin } from "@/lib/server/api-auth";
 import { guardMutationRequest } from "@/lib/server/route-hardening";
@@ -48,6 +50,9 @@ export async function POST(request: Request) {
       },
       select: {
         id: true,
+        dayNumber: true,
+        title: true,
+        isPublished: true,
         questions: {
           select: {
             id: true,
@@ -97,9 +102,23 @@ export async function POST(request: Request) {
       },
       select: {
         id: true,
+        dayNumber: true,
+        title: true,
         isPublished: true,
+        _count: {
+          select: {
+            questions: true,
+            attempts: true,
+          },
+        },
       },
     });
+
+    revalidateChallengeVisibility(challengeId);
+
+    const studentPath = getStudentDailyChallengePath(challengeId);
+    const studentVisible =
+      updatedChallenge.isPublished && updatedChallenge._count.questions > 0;
 
     return handleResponse({
       contentType,
@@ -111,8 +130,17 @@ export async function POST(request: Request) {
         ok: true,
         challenge: updatedChallenge,
         updatedBy: auth.user.email,
+        studentVisible,
+        studentPath,
+        message: studentVisible
+          ? "Challenge is now live in Daily-Challenges."
+          : "Challenge visibility was updated.",
       },
-      redirectStatus: isPublishing ? "published" : "unpublished",
+      redirectStatus: isPublishing
+        ? studentVisible
+          ? "published-visible"
+          : "published"
+        : "unpublished",
     });
   } catch (error) {
     console.error("PUBLISH DAILY CHALLENGE ERROR:", error);
@@ -159,6 +187,21 @@ async function readPublishPayload(request: Request, contentType: string) {
 
 function isPublishAction(value: string): value is PublishAction {
   return value === "publish" || value === "unpublish";
+}
+
+function revalidateChallengeVisibility(challengeId: string) {
+  const paths = [
+    "/daily-challenges",
+    "/daily-quizzes",
+    getStudentDailyChallengePath(challengeId),
+    "/admin/manage-challenges",
+    `/admin/challenge/${challengeId}`,
+    "/dashboard",
+  ];
+
+  for (const path of paths) {
+    revalidatePath(path);
+  }
 }
 
 function handleResponse({

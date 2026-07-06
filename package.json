@@ -17,7 +17,15 @@
     "typecheck": "tsc --noEmit",
     "audit:integrity": "node scripts/integrity-audit.mjs",
     "admin:promote": "node scripts/promote-admins.mjs",
-    "audit:passport-flow": "node scripts/passport-flow-audit.mjs"
+    "audit:passport-flow": "node scripts/passport-flow-audit.mjs",
+    "audit:e2e-flow": "node scripts/end-to-end-flow-audit.mjs",
+    "audit:git-safety": "node scripts/git-safety-audit.mjs",
+    "audit:phase-one": "npm run audit:git-safety && npm run audit:e2e-flow && npm run preflight:hosting",
+    "audit:runtime-hardening": "node scripts/runtime-hardening-audit.mjs",
+    "audit:phase-two": "npm run audit:git-safety && npm run audit:e2e-flow && npm run audit:runtime-hardening && npm run preflight:hosting",
+    "audit:daily-visibility": "node scripts/daily-challenge-visibility-audit.mjs",
+    "audit:competition-experience": "node scripts/competition-page-experience-audit.mjs",
+    "preflight:connectivity": "node --env-file=.env.local scripts/connectivity-preflight.mjs"
   },
   "dependencies": {
     "@auth/core": "^0.34.3",

@@ -3,11 +3,7 @@ type LoginUserState = {
   isOnboarded: boolean | null;
 };
 
-export function getPostLoginRedirect(user: LoginUserState | null) {
-  if (!user) {
-    return "/login";
-  }
-
+export function getPostLoginRedirect(user: LoginUserState) {
   if (user.role === "ADMIN") {
     return "/admin";
   }

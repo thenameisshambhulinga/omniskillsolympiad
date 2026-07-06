@@ -1,3 +1,4 @@
+//file location -- app/admin/announcements/page.tsx
 import { requireAdmin } from "@/lib/admin-auth";
 import { prisma } from "@/lib/prisma";
 import AnnouncementPosterManager, {

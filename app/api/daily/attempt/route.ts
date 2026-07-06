@@ -1,5 +1,6 @@
 import { calculateOmniScore } from "@/lib/engineering-system";
 import { prisma } from "@/lib/prisma";
+import { publicDailyChallengeWhere } from "@/lib/daily-challenge/public-challenge-visibility";
 import {
   scoreDailyAnswers,
   type DailyScoringQuestion,
@@ -81,9 +82,10 @@ export async function POST(request: Request) {
       );
     }
 
-    const challenge = await prisma.dailyChallenge.findUnique({
+    const challenge = await prisma.dailyChallenge.findFirst({
       where: {
         id: challengeId,
+        ...publicDailyChallengeWhere,
       },
       select: {
         id: true,
@@ -102,16 +104,8 @@ export async function POST(request: Request) {
       },
     });
 
-    if (!challenge || !challenge.isPublished) {
+    if (!challenge) {
       return apiError("Challenge unavailable.", 404, "CHALLENGE_UNAVAILABLE");
-    }
-
-    if (challenge.questions.length === 0) {
-      return apiError(
-        "Challenge has no questions.",
-        400,
-        "EMPTY_CHALLENGE",
-      );
     }
 
     const existingAttempt = await prisma.dailyAttempt.findUnique({

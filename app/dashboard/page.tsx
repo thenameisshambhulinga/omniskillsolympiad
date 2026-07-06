@@ -352,8 +352,8 @@ export default async function DashboardPage() {
 
             <p className="mt-5 max-w-4xl text-lg font-medium leading-9 text-slate-600">
               Your dashboard is now arranged in a simple one-by-one flow:
-              passport proof, performance signals, rankings, planner,
-              journey support and competition bridges.
+              passport proof, performance signals, rankings, planner, journey
+              support and competition bridges.
             </p>
 
             <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
@@ -407,7 +407,8 @@ export default async function DashboardPage() {
 
                 <p className="mt-4 max-w-2xl text-base font-semibold leading-8 text-slate-600">
                   OMNI ID, profile completion, readiness, skill signals and
-                  academic identity are now connected in one digestible snapshot.
+                  academic identity are now connected in one digestible
+                  snapshot.
                 </p>
 
                 <div className="mt-5 grid gap-3 sm:grid-cols-2">
@@ -538,9 +539,13 @@ export default async function DashboardPage() {
 
         <div className="mt-7 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           <EnhancedRankBox
-            label="National Rank"
-            value={`#${nationalRank}`}
-            helper="India-wide position"
+            label="Institute Rank"
+            value={collegeRank ? `#${collegeRank}` : "Pending"}
+            helper={
+              collegeRank
+                ? "College / institute position"
+                : "Add college to unlock institute rank"
+            }
           />
           <EnhancedRankBox
             label="Zone / District Rank"
@@ -551,21 +556,20 @@ export default async function DashboardPage() {
                 : "Add district to unlock zone rank"
             }
           />
+
           <EnhancedRankBox
             label="State Rank"
             value={stateRank ? `#${stateRank}` : "Pending"}
             helper={
-              stateRank ? "State-level visibility" : "Add state to unlock state rank"
+              stateRank
+                ? "State-level visibility"
+                : "Add state to unlock state rank"
             }
           />
           <EnhancedRankBox
-            label="Institute Rank"
-            value={collegeRank ? `#${collegeRank}` : "Pending"}
-            helper={
-              collegeRank
-                ? "College / institute position"
-                : "Add college to unlock institute rank"
-            }
+            label="National Rank"
+            value={`#${nationalRank}`}
+            helper="India-wide position"
           />
         </div>
       </OsoGlassSurface>
@@ -642,9 +646,7 @@ export default async function DashboardPage() {
           ) : (
             <div className="rounded-[1.5rem] border border-dashed border-slate-300 bg-white/70 p-8 text-center">
               <CalendarDays className="mx-auto h-8 w-8 text-blue-600" />
-              <p className="mt-3 font-black text-slate-700">
-                No activity yet.
-              </p>
+              <p className="mt-3 font-black text-slate-700">No activity yet.</p>
               <p className="mt-2 text-sm font-medium text-slate-500">
                 Complete challenges to start building your engineering timeline.
               </p>
@@ -727,8 +729,6 @@ function PassportTrack({
   );
 }
 
-
-
 function EnhancedRankBox({
   label,
   value,
@@ -795,7 +795,9 @@ function EnhancedRankBox({
       </p>
 
       <div className="mt-3 flex justify-center">
-        <span className={`inline-flex rounded-full border px-3 py-1 text-[10px] font-black uppercase tracking-[0.12em] ${meta.chipClass}`}>
+        <span
+          className={`inline-flex rounded-full border px-3 py-1 text-[10px] font-black uppercase tracking-[0.12em] ${meta.chipClass}`}
+        >
           {meta.chip}
         </span>
       </div>
@@ -806,7 +808,6 @@ function EnhancedRankBox({
     </div>
   );
 }
-
 
 function PlatformBridgeCard({
   platform,
@@ -842,9 +843,7 @@ function PlatformBridgeCard({
       rel="noreferrer"
       className="group grid overflow-hidden rounded-[1.65rem] border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-[0_20px_56px_rgba(15,23,42,0.10)] sm:grid-cols-[190px_1fr]"
     >
-      <div
-        className={`relative min-h-[150px] bg-gradient-to-br ${tone.top}`}
-      >
+      <div className={`relative min-h-[150px] bg-gradient-to-br ${tone.top}`}>
         <div
           aria-hidden="true"
           className="absolute inset-0 bg-[radial-gradient(circle_at_30%_28%,rgba(255,255,255,0.72),transparent_17%),radial-gradient(circle_at_74%_70%,rgba(255,255,255,0.38),transparent_22%)]"

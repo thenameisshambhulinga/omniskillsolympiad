@@ -1,0 +1,446 @@
+.section {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-block: 1px solid rgba(15, 23, 42, 0.08);
+  background:
+    radial-gradient(circle at 4% 20%, rgba(37, 99, 235, 0.08), transparent 20rem),
+    radial-gradient(circle at 95% 76%, rgba(8, 145, 178, 0.08), transparent 22rem),
+    linear-gradient(180deg, #f7faff 0%, #eef5ff 52%, #f8fbff 100%);
+}
+
+.section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.34;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.55) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.55) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: linear-gradient(180deg, black, rgba(0, 0, 0, 0.72) 76%, transparent);
+}
+
+.container {
+  width: 100%;
+  max-width: 1600px;
+  margin-inline: auto;
+  padding: 4.5rem 1.25rem;
+}
+
+.experienceGrid {
+  display: grid;
+  grid-template-columns: minmax(19rem, 20.5rem) minmax(0, 1fr);
+  align-items: stretch;
+  gap: clamp(1.5rem, 2.4vw, 2.6rem);
+  margin-top: 2.4rem;
+}
+
+.capabilityPanel {
+  --capability-color: #2563eb;
+  --capability-soft: #eff6ff;
+  --capability-glow: rgba(37, 99, 235, 0.28);
+  position: relative;
+  display: flex;
+  min-height: 36rem;
+  overflow: hidden;
+  flex-direction: column;
+  border: 1px solid color-mix(in srgb, var(--capability-color) 18%, rgba(15, 23, 42, 0.1));
+  border-radius: 1.75rem;
+  padding: 1.4rem 1.35rem 1.25rem;
+  background:
+    radial-gradient(circle at 50% 35%, var(--capability-glow), transparent 15rem),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 251, 255, 0.94));
+  box-shadow:
+    0 26px 68px rgba(15, 23, 42, 0.08),
+    0 1px 0 rgba(255, 255, 255, 0.96) inset;
+  backdrop-filter: blur(16px);
+  transition:
+    border-color 260ms ease,
+    background 260ms ease,
+    box-shadow 260ms ease;
+}
+
+.capabilityPanel::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 9.5rem;
+  width: 13rem;
+  height: 13rem;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: radial-gradient(circle, var(--capability-glow), transparent 68%);
+  filter: blur(12px);
+  opacity: 0.58;
+  pointer-events: none;
+}
+
+.capabilityPanel::after {
+  content: "";
+  position: absolute;
+  left: 1.25rem;
+  right: 1.25rem;
+  bottom: 0;
+  height: 0.42rem;
+  border-radius: 999px 999px 0 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--capability-color) 54%, white) 16%,
+    var(--capability-color) 50%,
+    color-mix(in srgb, var(--capability-color) 54%, white) 84%,
+    transparent
+  );
+  box-shadow: 0 -8px 24px var(--capability-glow);
+  pointer-events: none;
+}
+
+.stageMetaRow {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.22);
+  padding-bottom: 0.75rem;
+  color: #64748b;
+  font-size: 0.64rem;
+  font-weight: 900;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.stageMetaRow strong {
+  color: var(--capability-color);
+  font-size: 0.72rem;
+}
+
+.capabilityHeader {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.capabilityHeading {
+  width: 100%;
+}
+
+.activeIcon {
+  position: relative;
+  display: inline-flex;
+  width: 5.15rem;
+  height: 5.15rem;
+  margin-top: 1.25rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid color-mix(in srgb, var(--capability-color) 28%, white);
+  border-radius: 1.55rem;
+  background: color-mix(in srgb, var(--capability-soft) 78%, white);
+  color: var(--capability-color);
+  box-shadow:
+    0 22px 46px var(--capability-glow),
+    0 0 0 0.65rem color-mix(in srgb, var(--capability-soft) 56%, transparent),
+    0 1px 0 rgba(255, 255, 255, 0.96) inset;
+  transition:
+    color 260ms ease,
+    background 260ms ease,
+    box-shadow 260ms ease;
+}
+
+.activeIcon::before {
+  content: "";
+  position: absolute;
+  inset: -0.72rem;
+  border: 1px dashed color-mix(in srgb, var(--capability-color) 38%, transparent);
+  border-radius: 1.95rem;
+  animation: capabilityOrbit 18s linear infinite;
+}
+
+.activeIcon::after {
+  content: "";
+  position: absolute;
+  right: -0.35rem;
+  top: 0.55rem;
+  width: 0.68rem;
+  height: 0.68rem;
+  border: 3px solid #ffffff;
+  border-radius: 999px;
+  background: var(--capability-color);
+  box-shadow: 0 0 16px var(--capability-glow);
+}
+
+.capabilityEyebrow {
+  color: var(--capability-color);
+  font-size: 0.67rem;
+  font-weight: 900;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.capabilityTitle {
+  margin-top: 0.38rem;
+  color: #0f172a;
+  font-size: clamp(1.45rem, 1.8vw, 1.8rem);
+  font-weight: 900;
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+}
+
+.capabilityBody {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  justify-items: center;
+  text-align: center;
+}
+
+.capabilityDescription {
+  position: relative;
+  z-index: 2;
+  max-width: 17rem;
+  margin-top: 1.55rem;
+  color: #475569;
+  font-size: 0.94rem;
+  font-weight: 600;
+  line-height: 1.65;
+}
+
+.evidenceBlock {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  margin-top: 1.1rem;
+  border: 1px solid color-mix(in srgb, var(--capability-color) 18%, rgba(148, 163, 184, 0.25));
+  border-radius: 1rem;
+  padding: 0.85rem 0.9rem;
+  background: color-mix(in srgb, var(--capability-soft) 58%, rgba(255, 255, 255, 0.82));
+  text-align: left;
+}
+
+.evidenceBlock span {
+  color: var(--capability-color);
+  font-size: 0.62rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.evidenceBlock p {
+  margin-top: 0.28rem;
+  color: #64748b;
+  font-size: 0.77rem;
+  font-weight: 700;
+  line-height: 1.55;
+}
+
+.stageProgress {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.35rem;
+  margin-top: auto;
+  padding-top: 1.5rem;
+}
+
+.stageProgress span {
+  height: 0.28rem;
+  border-radius: 999px;
+  opacity: 0.14;
+  transform: scaleX(0.72);
+  transition:
+    opacity 220ms ease,
+    transform 220ms ease;
+}
+
+.stageProgress span[data-reached="true"] {
+  opacity: 0.48;
+  transform: scaleX(1);
+}
+
+.stageProgress span[data-active="true"] {
+  opacity: 1;
+  box-shadow: 0 0 14px var(--capability-glow);
+}
+
+.stageControls {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+  margin-top: 0.9rem;
+}
+
+.stageControls button {
+  display: inline-flex;
+  min-height: 2.65rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  border-radius: 0.82rem;
+  background: rgba(248, 250, 252, 0.92);
+  color: #475569;
+  font-size: 0.7rem;
+  font-weight: 900;
+  cursor: pointer;
+  transition:
+    border-color 180ms ease,
+    background 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.stageControls button:hover,
+.stageControls button:focus-visible {
+  border-color: rgba(37, 99, 235, 0.32);
+  background: #eff6ff;
+  color: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.stageControls button:focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.16);
+  outline-offset: 2px;
+}
+
+.programmeGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.programmeCard {
+  border: 1px solid rgba(15, 23, 42, 0.09);
+  border-radius: 1.25rem;
+  padding: 1.2rem;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 14px 38px rgba(15, 23, 42, 0.05);
+}
+
+.programmeCard h3 {
+  margin-top: 0.45rem;
+  color: #0f172a;
+  font-size: 1.2rem;
+  font-weight: 900;
+  letter-spacing: -0.035em;
+}
+
+.programmeCard > p:last-child {
+  margin-top: 0.55rem;
+  color: #64748b;
+  font-size: 0.84rem;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.programmeEyebrowBlue,
+.programmeEyebrowCyan {
+  font-size: 0.64rem;
+  font-weight: 900;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.programmeEyebrowBlue {
+  color: #1d4ed8;
+}
+
+.programmeEyebrowCyan {
+  color: #0e7490;
+}
+
+
+@keyframes capabilityOrbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (min-width: 640px) {
+  .container {
+    padding-inline: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding: 5rem 2.5rem;
+  }
+}
+
+@media (max-width: 1180px) {
+  .experienceGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .capabilityPanel {
+    min-height: 34rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .capabilityPanel {
+    min-height: 0;
+  }
+
+  .programmeGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .section::before {
+    background-size: 48px 48px;
+  }
+
+  .container {
+    padding-block: 3.75rem;
+  }
+
+  .experienceGrid {
+    margin-top: 2rem;
+  }
+
+  .capabilityPanel,
+  .programmeCard {
+    border-radius: 1.25rem;
+  }
+
+  .stageControls {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .activeIcon::before {
+    animation: none;
+  }
+
+  .stageProgress span,
+  .stageControls button,
+  .activeIcon {
+    transition-duration: 0.01ms;
+  }
+}
+
+/* OSO CAPABILITY PANEL COMPOSITION FIX */
+@media (max-width: 640px) {
+  .activeIcon {
+    width: 4.6rem;
+    height: 4.6rem;
+  }
+
+  .capabilityDescription {
+    max-width: none;
+  }
+}

@@ -1,3 +1,4 @@
+//file location -- components/landing/clean/OsoLivePosterBoard.tsx
 "use client";
 
 import type { ReactNode } from "react";
@@ -404,7 +405,7 @@ function getFallbackPosters(): LivePosterItem[] {
         "Discover current student opportunities, competition updates and live ecosystem announcements.",
       ctaHref: "/competition",
       ctaLabel: "Explore",
-      tag: "Silicon Skillathon",
+      tag: "Omni Skills Olympiad",
     },
   ];
 }

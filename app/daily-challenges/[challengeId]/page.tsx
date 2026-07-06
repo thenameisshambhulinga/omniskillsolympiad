@@ -4,6 +4,7 @@ import DailyChallengeClient from "./DailyChallengeClient";
 
 import OfflineState from "@/components/system/OfflineState";
 import { prisma } from "@/lib/prisma";
+import { publicDailyChallengeWhere } from "@/lib/daily-challenge/public-challenge-visibility";
 import { withDatabaseResult } from "@/lib/server/database-guard";
 
 type ChallengePageProps = {
@@ -22,9 +23,10 @@ export default async function ChallengePage({ params }: ChallengePageProps) {
   const challengeResult = await withDatabaseResult({
     label: "ChallengePage.getDailyChallenge",
     action: async () => {
-      return prisma.dailyChallenge.findUnique({
+      return prisma.dailyChallenge.findFirst({
         where: {
           id: challengeId,
+          ...publicDailyChallengeWhere,
         },
         select: {
           id: true,

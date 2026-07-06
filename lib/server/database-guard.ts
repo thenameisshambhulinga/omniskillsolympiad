@@ -4,11 +4,12 @@
 
   return (
     name.includes("prismaclientinitializationerror") ||
-    name.includes("prismaclientknownrequesterror") ||
     message.includes("can't reach database server") ||
     message.includes("cannot reach database server") ||
     message.includes("database server") ||
     message.includes("p1001") ||
+    message.includes("p1002") ||
+    message.includes("p1017") ||
     message.includes("connection refused") ||
     message.includes("connection terminated") ||
     message.includes("connection timeout") ||

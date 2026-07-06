@@ -1,6 +1,7 @@
 import { Prisma } from "@prisma/client";
 
 import { prisma } from "@/lib/prisma";
+import { publicDailyChallengeWhere } from "@/lib/daily-challenge/public-challenge-visibility";
 import { requireApiUser } from "@/lib/server/api-auth";
 import {
   apiError,
@@ -60,9 +61,10 @@ export async function POST(request: Request) {
       return apiError("Challenge ID is required.", 400, "CHALLENGE_ID_REQUIRED");
     }
 
-    const challenge = await prisma.dailyChallenge.findUnique({
+    const challenge = await prisma.dailyChallenge.findFirst({
       where: {
         id: challengeId,
+        ...publicDailyChallengeWhere,
       },
       select: {
         id: true,
@@ -78,19 +80,11 @@ export async function POST(request: Request) {
     });
 
     if (!challenge) {
-      return apiError("Challenge not found.", 404, "CHALLENGE_NOT_FOUND");
-    }
-
-    if (!challenge.isPublished) {
       return apiError(
-        "Challenge is not published.",
-        403,
-        "CHALLENGE_NOT_PUBLISHED",
+        "Challenge is not available for students yet.",
+        404,
+        "CHALLENGE_NOT_AVAILABLE",
       );
-    }
-
-    if (challenge.questions.length === 0) {
-      return apiError("Challenge has no questions.", 400, "EMPTY_CHALLENGE");
     }
 
     const existingAttempt = await prisma.dailyAttempt.findUnique({

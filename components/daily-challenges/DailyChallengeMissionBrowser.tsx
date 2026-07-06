@@ -49,7 +49,7 @@ export type DailyChallengeMission = {
 };
 
 type DayFilter = "all" | "0-25" | "26-50" | "51-75" | "76-100" | "100+";
-type StatusFilter = "all" | "unattempted" | "completed" | "in-progress";
+type StatusFilter = "all" | "unattempted" | "completed" | "in-progress" | "expired";
 
 type DailyChallengeMissionBrowserProps = {
   challenges: DailyChallengeMission[];
@@ -78,6 +78,7 @@ const statusFilters: Array<{
   { id: "unattempted", label: "Yet to take" },
   { id: "in-progress", label: "Resume" },
   { id: "completed", label: "Completed" },
+  { id: "expired", label: "Expired" },
 ];
 
 export default function DailyChallengeMissionBrowser({
@@ -114,7 +115,7 @@ export default function DailyChallengeMissionBrowser({
   const filteredChallenges = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
 
-    return challenges.filter((challenge) => {
+    return [...challenges].sort(sortStudentVisibleFirst).filter((challenge) => {
       const matchesSearch =
         normalizedQuery.length === 0 ||
         challenge.title.toLowerCase().includes(normalizedQuery) ||
@@ -810,6 +811,28 @@ function isWithinDayFilter(dayNumber: number, filter: DayFilter) {
   if (filter === "76-100") return dayNumber >= 76 && dayNumber <= 100;
 
   return dayNumber > 100;
+}
+
+
+function sortStudentVisibleFirst(
+  first: DailyChallengeMission,
+  second: DailyChallengeMission,
+) {
+  const priority: Record<DailyChallengeStatus, number> = {
+    "in-progress": 0,
+    unattempted: 1,
+    expired: 2,
+    completed: 3,
+  };
+
+  const firstPriority = priority[first.status];
+  const secondPriority = priority[second.status];
+
+  if (firstPriority !== secondPriority) {
+    return firstPriority - secondPriority;
+  }
+
+  return sortLatestFirst(first, second);
 }
 
 function sortLatestFirst(

@@ -1,3 +1,4 @@
+// file location - components/admin/announcements/AnnouncementPosterManager.tsx
 "use client";
 
 import type { ReactNode } from "react";
@@ -275,9 +276,7 @@ export default function AnnouncementPosterManager({
       setNotice({
         type: "error",
         text:
-          error instanceof Error
-            ? error.message
-            : "Unable to refresh posters.",
+          error instanceof Error ? error.message : "Unable to refresh posters.",
       });
     } finally {
       setLoadingPosters(false);
@@ -443,10 +442,7 @@ export default function AnnouncementPosterManager({
     } catch (error) {
       setNotice({
         type: "error",
-        text:
-          error instanceof Error
-            ? error.message
-            : "Publish toggle failed.",
+        text: error instanceof Error ? error.message : "Publish toggle failed.",
       });
     }
   }
@@ -531,7 +527,8 @@ export default function AnnouncementPosterManager({
         </h1>
 
         <p className="mt-5 max-w-3xl text-sm font-semibold leading-7 text-slate-600 sm:text-base">
-          No manual project file paths. Images are uploaded to Supabase Storage and linked automatically.
+          No manual project file paths. Images are uploaded to Supabase Storage
+          and linked automatically.
         </p>
 
         <div className="mt-7 flex flex-wrap gap-3">
@@ -602,7 +599,9 @@ export default function AnnouncementPosterManager({
             <Field label="Subtitle">
               <textarea
                 value={form.subtitle}
-                onChange={(event) => updateField("subtitle", event.target.value)}
+                onChange={(event) =>
+                  updateField("subtitle", event.target.value)
+                }
                 rows={3}
                 className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold outline-none focus:border-blue-400"
                 placeholder="Short announcement shown to students"
@@ -623,7 +622,9 @@ export default function AnnouncementPosterManager({
               <Field label="Status">
                 <input
                   value={form.status}
-                  onChange={(event) => updateField("status", event.target.value)}
+                  onChange={(event) =>
+                    updateField("status", event.target.value)
+                  }
                   className="h-12 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm font-bold outline-none focus:border-blue-400"
                   placeholder="LIVE / UPCOMING / RESULT"
                 />
@@ -693,7 +694,9 @@ export default function AnnouncementPosterManager({
               <Field label="CTA link">
                 <input
                   value={form.ctaHref}
-                  onChange={(event) => updateField("ctaHref", event.target.value)}
+                  onChange={(event) =>
+                    updateField("ctaHref", event.target.value)
+                  }
                   className="h-12 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm font-bold outline-none focus:border-blue-400"
                   placeholder="/quiz"
                 />
@@ -719,7 +722,9 @@ export default function AnnouncementPosterManager({
               <Field label="Priority">
                 <input
                   value={form.priority}
-                  onChange={(event) => updateField("priority", event.target.value)}
+                  onChange={(event) =>
+                    updateField("priority", event.target.value)
+                  }
                   type="number"
                   className="h-12 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm font-bold outline-none focus:border-blue-400"
                 />
@@ -758,7 +763,9 @@ export default function AnnouncementPosterManager({
                 }
                 rows={4}
                 className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold outline-none focus:border-blue-400"
-                placeholder={"One highlight per line\nTest is live\nResults announced"}
+                placeholder={
+                  "One highlight per line\nTest is live\nResults announced"
+                }
               />
             </Field>
 
@@ -1114,13 +1121,7 @@ function AssetUploader({
   );
 }
 
-function Field({
-  label,
-  children,
-}: {
-  label: string;
-  children: ReactNode;
-}) {
+function Field({ label, children }: { label: string; children: ReactNode }) {
   return (
     <label className="block">
       <span className="mb-2 block text-xs font-black uppercase tracking-[0.14em] text-slate-500">

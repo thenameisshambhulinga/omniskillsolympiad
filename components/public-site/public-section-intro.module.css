@@ -1,0 +1,81 @@
+.root {
+  position: relative;
+  z-index: 2;
+  display: grid;
+}
+
+.left {
+  max-width: 64rem;
+  text-align: left;
+}
+
+.center {
+  max-width: 64rem;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.eyebrow {
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.light .eyebrow { color: #1d4ed8; }
+.dark .eyebrow { color: #a5f3fc; }
+
+.title {
+  margin-top: 0.875rem;
+  max-width: 24ch;
+  font-size: clamp(2.5rem, 3.05vw, 2.5rem);
+  font-weight: 900;
+  line-height: 1.06;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+
+.light .title { color: #0f172a; }
+.dark .title { color: #ffffff; }
+
+.description {
+  margin-top: 1rem;
+  max-width: 48rem;
+  font-size: 1.0625rem;
+  font-weight: 500;
+  line-height: 1.65;
+  letter-spacing: -0.01em;
+  text-wrap: pretty;
+}
+
+.center .description { margin-inline: auto; }
+.light .description { color: #475569; }
+.dark .description { color: rgba(255, 255, 255, 0.7); }
+
+@media (max-width: 1023px) {
+  .title {
+    max-width: 22ch;
+    font-size: 2rem;
+    line-height: 1.08;
+  }
+
+  .description {
+    font-size: 1rem;
+    line-height: 1.62;
+  }
+}
+
+@media (max-width: 640px) {
+  .title {
+    max-width: 18ch;
+    font-size: 1.75rem;
+    line-height: 1.1;
+    letter-spacing: -0.035em;
+  }
+
+  .description {
+    margin-top: 0.875rem;
+    font-size: 0.975rem;
+    line-height: 1.62;
+  }
+}
