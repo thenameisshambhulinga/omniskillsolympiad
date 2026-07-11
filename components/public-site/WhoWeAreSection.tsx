@@ -1,118 +1,171 @@
-"use client";
+import {
+  ArrowUpRight,
+  BarChart3,
+  Lightbulb,
+  Sparkles,
+  Target,
+  Users,
+  Wrench,
+} from "lucide-react";
 
-import { useState } from "react";
+import styles from "@/components/public-site/about-why-oso.module.css";
 
-import SectionBackgroundStorytelling from "@/components/public-site/SectionBackgroundStorytelling";
-import storyStyles from "@/components/public-site/section-background-storytelling.module.css";
-import styles from "@/components/public-site/public-site.module.css";
-import { identityContent } from "@/data/public-site";
-import { whoWeAreStoryConfig } from "@/data/section-storytelling";
-
-type StoryFocus = "ecosystem" | "vision" | "mission";
-
-function VisionGlyph() {
-  return (
-    <svg width="31" height="31" viewBox="0 0 31 31" fill="none" aria-hidden="true">
-      <circle cx="15.5" cy="15.5" r="10.5" stroke="#8B5CF6" strokeWidth="2" />
-      <circle cx="15.5" cy="15.5" r="4" fill="#F6B73C" />
-      <path d="M15.5 1.5V6M15.5 25V29.5M1.5 15.5H6M25 15.5H29.5" stroke="#091E42" strokeWidth="1.8" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function MissionGlyph() {
-  return (
-    <svg width="32" height="31" viewBox="0 0 32 31" fill="none" aria-hidden="true">
-      <circle cx="6" cy="16" r="4" fill="#20B8D4" />
-      <circle cx="26" cy="7" r="4" fill="#42B883" />
-      <circle cx="25" cy="25" r="4" fill="#8B5CF6" />
-      <path d="M10 14L22 8.5M10 18L21 23" stroke="#091E42" strokeWidth="2" strokeLinecap="round" />
-    </svg>
-  );
-}
+const aboutFeatures = [
+  {
+    title: "Practical Skills",
+    description:
+      "Real-world challenges that build hands-on capability, creativity, teamwork, innovation, and problem-solving.",
+    icon: Wrench,
+    tone: "violet",
+  },
+  {
+    title: "Equal Opportunity",
+    description:
+      "A meaningful platform for learners across educational backgrounds, disciplines, and skill levels.",
+    icon: Users,
+    tone: "indigo",
+  },
+  {
+    title: "Connected Growth",
+    description:
+      "Learn, build, compete, innovate, gain recognition, and progress through one connected ecosystem.",
+    icon: BarChart3,
+    tone: "orange",
+  },
+] as const;
 
 export default function WhoWeAreSection() {
-  const [activeFocus, setActiveFocus] = useState<StoryFocus>("ecosystem");
-
   return (
     <section
-      id="who-we-are"
-      className={`${styles.section} ${storyStyles.sectionSurface} scroll-mt-24`}
-      onPointerLeave={() => setActiveFocus("ecosystem")}
+      id="about"
+      className={styles.aboutSection}
+      aria-labelledby="about-oso-title"
     >
-      <SectionBackgroundStorytelling config={whoWeAreStoryConfig} activeTarget={activeFocus} />
+      <div className={styles.aboutTexture} aria-hidden="true" />
+      <div className={styles.sectionContainer}>
+        <header className={styles.aboutHeader}>
+          <span className={styles.sectionEyebrow}>
+            <Sparkles aria-hidden="true" />
+            About OSO
+          </span>
 
-      <div className={`${storyStyles.contentLayer} mx-auto w-full max-w-[1600px] px-5 py-20 sm:px-8 lg:px-10 lg:py-24`}>
-        <div className="grid gap-12 lg:grid-cols-[0.92fr_1.08fr] lg:items-center xl:gap-20">
-          <div
-            className={storyStyles.introduction}
-            tabIndex={0}
-            onPointerEnter={() => setActiveFocus("ecosystem")}
-            onFocus={() => setActiveFocus("ecosystem")}
-            aria-label="About OMNI Skills Olympiad"
-          >
-            <p className="text-xs font-black uppercase tracking-[0.14em] text-blue-800">
-              {identityContent.eyebrow}
-            </p>
+          <h2 id="about-oso-title" className={styles.aboutTitle}>
+            What is the{" "}
+            <span>OMNI Skills Olympiad?</span>
+          </h2>
+        </header>
 
-            <h2 className={storyStyles.sectionTitle}>{identityContent.title}</h2>
-
-            <p className="mt-5 max-w-xl text-[17px] font-medium leading-7 text-slate-600">
-              {identityContent.introduction}
-            </p>
-
-            <p className="mt-3 max-w-xl text-[15.5px] font-medium leading-7 text-slate-600">
-              {identityContent.supporting}
-            </p>
-
-            <blockquote className={storyStyles.motto}>
-              <p className="text-xl font-black leading-tight tracking-[-0.03em] text-slate-950 sm:text-2xl">
-                “{identityContent.motto}”
+        <div className={styles.aboutLayout}>
+          <div className={styles.aboutEditorial}>
+            <div className={styles.aboutCopy}>
+              <p className={styles.aboutLead}>
+                The OMNI Skills Olympiad is a national multidisciplinary
+                skills competition designed to identify, nurture, and
+                celebrate talent across diverse domains.
               </p>
-              <footer className="mt-2 text-xs font-bold uppercase tracking-[0.1em] text-slate-500">
-                OMNI Skills Olympiad motto
-              </footer>
-            </blockquote>
+
+              <p>
+                Unlike traditional competitions that primarily assess
+                theoretical knowledge, OSO focuses on practical skills,
+                creativity, problem-solving, innovation, teamwork, and
+                real-world application.
+              </p>
+
+              <p>
+                It brings together learners from different educational
+                backgrounds and disciplines, providing equal opportunities
+                to learn, compete, grow, and excel.
+              </p>
+
+              <p>
+                Whether you are passionate about creating, solving complex
+                problems, making or fixing things, using technology,
+                collaborating, leading, communicating ideas, or building
+                innovations, OSO provides a platform to learn, build,
+                compete, innovate, and unlock infinite opportunities.
+              </p>
+            </div>
+
+            <div
+              className={styles.aboutImageStage}
+              role="img"
+              aria-label="Students collaborating on a practical engineering and robotics project"
+            >
+              <span className={styles.imageDots} aria-hidden="true" />
+              <span className={styles.imageArc} aria-hidden="true" />
+              <span className={styles.aboutStudentsImage} aria-hidden="true" />
+            </div>
           </div>
 
-          <div className={storyStyles.storyColumn}>
-            <article
-              className={`${storyStyles.storyCard} ${storyStyles.visionCard}`}
-              data-active={activeFocus === "vision"}
-              tabIndex={0}
-              onPointerEnter={() => setActiveFocus("vision")}
-              onFocus={() => setActiveFocus("vision")}
-              onClick={() => setActiveFocus("vision")}
-              aria-label="OMNI Skills Olympiad vision"
-            >
-              <div className={storyStyles.cardGlyph}><VisionGlyph /></div>
-              <p className="relative z-10 text-xs font-black uppercase tracking-[0.14em] text-violet-700">Vision</p>
-              <h3 className="relative z-10 mt-3 max-w-[24ch] pr-0 text-[22px] font-black leading-[1.15] tracking-[-0.03em] text-slate-950 sm:pr-16 sm:text-2xl">
-                Technical excellence, innovation, and future-ready capability.
-              </h3>
-              <p className="relative z-10 mt-4 max-w-3xl text-[15.5px] font-medium leading-7 text-slate-600">
-                {identityContent.vision}
-              </p>
-            </article>
+          <div className={styles.aboutFeatureColumn}>
+            {aboutFeatures.map((feature, index) => {
+              const Icon = feature.icon;
 
-            <article
-              className={`${storyStyles.storyCard} ${storyStyles.missionCard}`}
-              data-active={activeFocus === "mission"}
-              tabIndex={0}
-              onPointerEnter={() => setActiveFocus("mission")}
-              onFocus={() => setActiveFocus("mission")}
-              onClick={() => setActiveFocus("mission")}
-              aria-label="OMNI Skills Olympiad mission"
-            >
-              <div className={storyStyles.cardGlyph}><MissionGlyph /></div>
-              <p className="relative z-10 text-xs font-black uppercase tracking-[0.14em] text-cyan-700">Mission</p>
-              <h3 className="relative z-10 mt-3 max-w-[25ch] pr-0 text-[22px] font-black leading-[1.15] tracking-[-0.03em] text-slate-950 sm:pr-16 sm:text-2xl">
-                Turn academic knowledge into practical, measurable engineering progress.
-              </h3>
-              <p className="relative z-10 mt-4 max-w-3xl text-[15.5px] font-medium leading-7 text-slate-600">
-                {identityContent.mission}
-              </p>
-            </article>
+              return (
+                <article
+                  key={feature.title}
+                  className={styles.aboutFeature}
+                  data-tone={feature.tone}
+                >
+                  <span className={styles.featureIcon}>
+                    <Icon aria-hidden="true" />
+                  </span>
+
+                  <div className={styles.featureContent}>
+                    <span className={styles.featureNumber}>
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+
+                    <h3>{feature.title}</h3>
+                    <p>{feature.description}</p>
+                  </div>
+
+                  <ArrowUpRight
+                    className={styles.featureArrow}
+                    aria-hidden="true"
+                  />
+                </article>
+              );
+            })}
+
+            <blockquote className={styles.aboutQuote}>
+              <span className={styles.quoteMark} aria-hidden="true">
+                “
+              </span>
+
+              <div>
+                <strong>
+                  Infinite <span>Opportunities.</span>
+                </strong>
+
+                <p>
+                  A platform where every learner can discover, demonstrate,
+                  and strengthen their potential.
+                </p>
+              </div>
+
+              <Lightbulb aria-hidden="true" />
+            </blockquote>
+          </div>
+        </div>
+
+        <div className={styles.aboutFooterStrip}>
+          <span className={styles.footerStripIcon}>
+            <Target aria-hidden="true" />
+          </span>
+
+          <div>
+            <small>Built for diverse talent</small>
+            <strong>There is more than one way to be skilled.</strong>
+          </div>
+
+          <div className={styles.aboutKeywords}>
+            <span>Creating and building</span>
+            <span>Solving complex problems</span>
+            <span>Technology and tools</span>
+            <span>Teamwork and leadership</span>
+            <span>Communicating ideas</span>
+            <span>Innovation and exploration</span>
           </div>
         </div>
       </div>

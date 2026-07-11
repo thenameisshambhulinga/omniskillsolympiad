@@ -1,0 +1,1177 @@
+.sectionContainer {
+  position: relative;
+  z-index: 2;
+  width: min(100% - 2rem, 1320px);
+  margin-inline: auto;
+}
+
+.aboutSection,
+.whySection {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  color: #0b1738;
+}
+
+.aboutSection {
+  padding: clamp(4rem, 6vw, 6.5rem) 0;
+  background:
+    radial-gradient(
+      circle at 3% 86%,
+      rgba(124, 58, 237, 0.08),
+      transparent 22rem
+    ),
+    radial-gradient(
+      circle at 95% 8%,
+      rgba(249, 115, 22, 0.06),
+      transparent 20rem
+    ),
+    #ffffff;
+}
+
+.whySection {
+  padding: clamp(4rem, 6vw, 6.5rem) 0;
+  background:
+    radial-gradient(
+      circle at 18% 25%,
+      rgba(99, 102, 241, 0.09),
+      transparent 26rem
+    ),
+    radial-gradient(
+      circle at 87% 78%,
+      rgba(168, 85, 247, 0.07),
+      transparent 24rem
+    ),
+    linear-gradient(180deg, #fafbff 0%, #f5f7ff 100%);
+}
+
+.aboutTexture,
+.whyTexture {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(
+      circle,
+      rgba(124, 58, 237, 0.12) 1px,
+      transparent 1.5px
+    );
+  background-size: 22px 22px;
+  opacity: 0.24;
+  mask-image:
+    linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(0, 0, 0, 0.15) 12%,
+      rgba(0, 0, 0, 0.04) 50%,
+      rgba(0, 0, 0, 0.15) 88%,
+      transparent 100%
+    );
+}
+
+.aboutHeader,
+.whyHeader {
+  position: relative;
+  z-index: 2;
+}
+
+.sectionEyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #5b21b6;
+  font-size: 0.72rem;
+  font-weight: 950;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.sectionEyebrow::after {
+  content: "";
+  width: 2.6rem;
+  height: 2px;
+  margin-left: 0.25rem;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #6d28d9, #f97316);
+}
+
+.sectionEyebrow svg {
+  width: 0.95rem;
+  height: 0.95rem;
+}
+
+.aboutTitle,
+.whyTitle {
+  margin: 0.85rem 0 0;
+  color: #081633;
+  font-size: clamp(2.2rem, 4.4vw, 4.55rem);
+  font-weight: 1000;
+  line-height: 0.98;
+  letter-spacing: -0.062em;
+  white-space: nowrap;
+}
+
+.aboutTitle span,
+.whyTitle span {
+  background:
+    linear-gradient(95deg, #5b21b6 0%, #7c3aed 55%, #4338ca 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.aboutLayout {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1.04fr)
+    minmax(24rem, 0.96fr);
+  gap: clamp(1.5rem, 3vw, 3.2rem);
+  align-items: stretch;
+  margin-top: clamp(2rem, 4vw, 3.4rem);
+}
+
+.aboutEditorial {
+  display: grid;
+  grid-template-rows: auto minmax(15rem, 1fr);
+  min-width: 0;
+}
+
+.aboutCopy {
+  max-width: 46rem;
+}
+
+.aboutCopy p {
+  margin: 0;
+  color: #4b5872;
+  font-size: clamp(0.88rem, 1.08vw, 1rem);
+  font-weight: 560;
+  line-height: 1.72;
+}
+
+.aboutCopy p + p {
+  margin-top: 0.85rem;
+}
+
+.aboutCopy .aboutLead {
+  color: #15264a;
+  font-size: clamp(0.98rem, 1.25vw, 1.12rem);
+  font-weight: 760;
+}
+
+.aboutImageStage,
+.whyImageStage {
+  position: relative;
+  min-height: 19rem;
+  overflow: visible;
+}
+
+.aboutStudentsImage,
+.whyStudentsImage {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background-repeat: no-repeat;
+  background-size: contain;
+  pointer-events: none;
+}
+
+.aboutStudentsImage {
+  background-image:
+    url("/illustrations/oso/about-oso-students.png");
+  background-position: left bottom;
+}
+
+.whyStudentsImage {
+  background-image:
+    url("/illustrations/oso/why-oso-students.png");
+  background-position: center bottom;
+}
+
+.imageDots,
+.whyImageDots {
+  position: absolute;
+  z-index: 0;
+  width: 8rem;
+  height: 6rem;
+  background-image:
+    radial-gradient(
+      circle,
+      rgba(124, 58, 237, 0.42) 2px,
+      transparent 2.5px
+    );
+  background-size: 14px 14px;
+  opacity: 0.5;
+}
+
+.imageDots {
+  left: 0.5rem;
+  bottom: 3rem;
+}
+
+.whyImageDots {
+  left: 12%;
+  top: 18%;
+}
+
+.imageArc,
+.whyImageArc {
+  position: absolute;
+  z-index: 1;
+  width: 8rem;
+  height: 8rem;
+  border-top: 2px solid rgba(249, 115, 22, 0.7);
+  border-right: 2px solid rgba(249, 115, 22, 0.7);
+  border-radius: 50%;
+}
+
+.imageArc {
+  right: 5%;
+  top: 8%;
+  transform: rotate(-12deg);
+}
+
+.whyImageArc {
+  right: 8%;
+  top: 8%;
+  transform: rotate(16deg);
+}
+
+.aboutFeatureColumn {
+  display: grid;
+  align-content: start;
+  gap: 0.9rem;
+}
+
+.aboutFeature {
+  --accent: #6d28d9;
+  --soft: #f2edff;
+
+  display: grid;
+  grid-template-columns:
+    auto
+    minmax(0, 1fr)
+    auto;
+  align-items: center;
+  gap: 1rem;
+  min-height: 7.4rem;
+  padding: 1.1rem 1.15rem;
+  border: 1px solid rgba(148, 163, 184, 0.23);
+  border-radius: 1.2rem;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow:
+    0 14px 38px rgba(35, 35, 82, 0.07);
+  transition:
+    transform 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.aboutFeature[data-tone="indigo"] {
+  --accent: #4f46e5;
+  --soft: #eef2ff;
+}
+
+.aboutFeature[data-tone="orange"] {
+  --accent: #ea580c;
+  --soft: #fff3e8;
+}
+
+.aboutFeature:hover {
+  transform: translateY(-4px);
+  border-color:
+    color-mix(in srgb, var(--accent) 30%, transparent);
+  box-shadow:
+    0 21px 48px rgba(35, 35, 82, 0.11);
+}
+
+.featureIcon {
+  display: grid;
+  width: 4rem;
+  height: 4rem;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--soft);
+  color: var(--accent);
+}
+
+.featureIcon svg {
+  width: 1.9rem;
+  height: 1.9rem;
+}
+
+.featureContent {
+  min-width: 0;
+}
+
+.featureNumber {
+  color: var(--accent);
+  font-size: 0.6rem;
+  font-weight: 950;
+  letter-spacing: 0.11em;
+}
+
+.aboutFeature h3 {
+  margin: 0.25rem 0 0;
+  color: #121f43;
+  font-size: 1.05rem;
+  font-weight: 950;
+}
+
+.aboutFeature p {
+  margin: 0.34rem 0 0;
+  color: #58647b;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.featureArrow {
+  width: 1rem;
+  height: 1rem;
+  color: var(--accent);
+  opacity: 0.65;
+}
+
+.aboutQuote {
+  position: relative;
+  display: grid;
+  grid-template-columns:
+    auto
+    minmax(0, 1fr)
+    auto;
+  align-items: center;
+  gap: 0.9rem;
+  min-height: 8rem;
+  margin: 0;
+  padding: 1.2rem 1.35rem;
+  overflow: hidden;
+  border: 1px solid rgba(249, 115, 22, 0.15);
+  border-radius: 1.2rem;
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(249, 115, 22, 0.08),
+      transparent 10rem
+    ),
+    linear-gradient(100deg, #fffaf2, #ffffff);
+}
+
+.quoteMark {
+  color: #fdba74;
+  font-family: Georgia, serif;
+  font-size: 4.4rem;
+  line-height: 0.7;
+}
+
+.aboutQuote strong {
+  color: #122044;
+  font-size: clamp(1.15rem, 1.8vw, 1.55rem);
+  font-weight: 1000;
+}
+
+.aboutQuote strong span {
+  color: #6d28d9;
+}
+
+.aboutQuote p {
+  margin: 0.35rem 0 0;
+  color: #657087;
+  font-size: 0.76rem;
+  line-height: 1.5;
+}
+
+.aboutQuote > svg {
+  width: 1.4rem;
+  height: 1.4rem;
+  color: #f59e0b;
+}
+
+.aboutFooterStrip {
+  display: grid;
+  grid-template-columns:
+    auto
+    minmax(14rem, 0.7fr)
+    minmax(0, 1.3fr);
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.35rem;
+  padding: 0.95rem 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 1.15rem;
+  background: rgba(248, 250, 252, 0.92);
+}
+
+.footerStripIcon {
+  display: grid;
+  width: 2.8rem;
+  height: 2.8rem;
+  place-items: center;
+  border-radius: 0.9rem;
+  background: #fff2e8;
+  color: #ea580c;
+}
+
+.footerStripIcon svg {
+  width: 1.3rem;
+  height: 1.3rem;
+}
+
+.aboutFooterStrip small {
+  display: block;
+  color: #64748b;
+  font-size: 0.58rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.aboutFooterStrip strong {
+  display: block;
+  margin-top: 0.2rem;
+  color: #15213d;
+  font-size: 0.88rem;
+  font-weight: 900;
+}
+
+.aboutKeywords {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.4rem;
+}
+
+.aboutKeywords span {
+  padding: 0.38rem 0.58rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #536078;
+  font-size: 0.62rem;
+  font-weight: 760;
+}
+
+.whyHeader {
+  max-width: 74rem;
+}
+
+.whyHeader > p {
+  margin: 0.75rem 0 0;
+  color: #667085;
+  font-size: clamp(0.9rem, 1.25vw, 1.08rem);
+  font-weight: 650;
+}
+
+.whyLayout {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(25rem, 0.88fr);
+  gap: clamp(1.5rem, 3vw, 3rem);
+  align-items: stretch;
+  margin-top: clamp(2rem, 4vw, 3.3rem);
+}
+
+.progressionColumn {
+  display: grid;
+  grid-template-columns:
+    minmax(18rem, 0.78fr)
+    minmax(16rem, 1.22fr);
+  gap: 1rem;
+  align-items: end;
+}
+
+.progressionList {
+  display: grid;
+  gap: 0.72rem;
+}
+
+.progressionCard {
+  --accent: #ea580c;
+  --soft: #fff2e8;
+
+  display: grid;
+  grid-template-columns:
+    auto
+    auto
+    minmax(0, 1fr);
+  align-items: center;
+  gap: 0.8rem;
+  min-height: 6.1rem;
+  padding: 0.9rem;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 1.15rem;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow:
+    0 12px 34px rgba(35, 35, 82, 0.06);
+}
+
+.progressionCard[data-tone="blue"] {
+  --accent: #2563eb;
+  --soft: #ebf3ff;
+}
+
+.progressionCard[data-tone="violet"] {
+  --accent: #6d28d9;
+  --soft: #f2edff;
+}
+
+.progressionStep {
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #ffffff;
+  font-size: 0.62rem;
+  font-weight: 950;
+}
+
+.progressionIcon {
+  display: grid;
+  width: 3rem;
+  height: 3rem;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--soft);
+  color: var(--accent);
+}
+
+.progressionIcon svg {
+  width: 1.35rem;
+  height: 1.35rem;
+}
+
+.progressionCard h3,
+.opportunityCard h3 {
+  margin: 0;
+  color: #172348;
+  font-size: 0.98rem;
+  font-weight: 950;
+}
+
+.progressionCard p,
+.opportunityCard p {
+  margin: 0.26rem 0 0;
+  color: #627087;
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+
+.opportunityCard {
+  display: grid;
+  grid-template-columns:
+    auto
+    minmax(0, 1fr);
+  align-items: center;
+  gap: 1rem;
+  min-height: 7.4rem;
+  padding: 1rem;
+  border: 1px solid rgba(249, 115, 22, 0.2);
+  border-radius: 1.15rem;
+  background:
+    linear-gradient(100deg, #fff5e7, #ffffff);
+  box-shadow:
+    0 15px 40px rgba(249, 115, 22, 0.08);
+}
+
+.opportunityIcon {
+  display: grid;
+  width: 4rem;
+  height: 4rem;
+  place-items: center;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  border-radius: 999px;
+  background: #ffffff;
+  color: #6d28d9;
+  box-shadow:
+    0 0 0 6px rgba(124, 58, 237, 0.07);
+}
+
+.opportunityIcon svg {
+  width: 1.8rem;
+  height: 1.8rem;
+}
+
+.whyImageStage {
+  min-height: 25rem;
+}
+
+.benefitsPanel {
+  padding: 1.25rem;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 1.4rem;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow:
+    0 18px 48px rgba(35, 35, 82, 0.08);
+}
+
+.benefitsPanelHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+}
+
+.benefitsPanelHeader > span {
+  display: grid;
+  width: 3.2rem;
+  height: 3.2rem;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 999px;
+  background: #f1ecff;
+  color: #6d28d9;
+}
+
+.benefitsPanelHeader svg {
+  width: 1.45rem;
+  height: 1.45rem;
+}
+
+.benefitsPanelHeader h3 {
+  max-width: 29rem;
+  margin: 0.2rem 0 0;
+  color: #121f43;
+  font-size: clamp(1.15rem, 1.9vw, 1.55rem);
+  font-weight: 1000;
+  line-height: 1.2;
+  letter-spacing: -0.035em;
+}
+
+.benefitsList {
+  display: grid;
+  gap: 0;
+  margin-top: 1rem;
+}
+
+.benefitRow {
+  display: grid;
+  grid-template-columns:
+    auto
+    minmax(0, 1fr)
+    auto;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 4.35rem;
+  border-bottom: 1px solid #e8eaf0;
+}
+
+.benefitRow:last-child {
+  border-bottom: 0;
+}
+
+.benefitRow > span {
+  display: grid;
+  width: 2.7rem;
+  height: 2.7rem;
+  place-items: center;
+  border-radius: 999px;
+  background: #f3efff;
+  color: #6d28d9;
+}
+
+.benefitRow > span svg {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.benefitRow strong {
+  color: #273451;
+  font-size: 0.8rem;
+  font-weight: 850;
+  line-height: 1.35;
+}
+
+.benefitRow > svg {
+  width: 0.95rem;
+  height: 0.95rem;
+  color: #22c55e;
+}
+
+.philosophyStrip {
+  display: grid;
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+  margin-top: 1.3rem;
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow:
+    0 14px 38px rgba(35, 35, 82, 0.06);
+}
+
+.philosophyItem {
+  display: grid;
+  grid-template-columns:
+    auto
+    minmax(0, 1fr);
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 6.8rem;
+  padding: 1rem;
+  border-right: 1px solid #e7e9ef;
+}
+
+.philosophyItem:last-child {
+  border-right: 0;
+}
+
+.philosophyItem > span {
+  display: grid;
+  width: 3.2rem;
+  height: 3.2rem;
+  place-items: center;
+  border-radius: 999px;
+  background: #f1ecff;
+  color: #6d28d9;
+}
+
+.philosophyItem svg {
+  width: 1.45rem;
+  height: 1.45rem;
+}
+
+.philosophyItem p {
+  margin: 0;
+  color: #35415d;
+  font-size: 0.78rem;
+  font-weight: 760;
+  line-height: 1.5;
+}
+
+.whyClosing {
+  display: flex;
+  width: fit-content;
+  max-width: 100%;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1rem auto 0;
+  padding: 0.72rem 1rem;
+  border: 1px solid rgba(124, 58, 237, 0.16);
+  border-radius: 999px;
+  background: #ffffff;
+  color: #303b55;
+  box-shadow:
+    0 12px 30px rgba(35, 35, 82, 0.06);
+}
+
+.whyClosing svg {
+  width: 0.95rem;
+  height: 0.95rem;
+  color: #f59e0b;
+}
+
+.whyClosing strong {
+  font-size: 0.75rem;
+  font-weight: 820;
+}
+
+@media (max-width: 1120px) {
+  .aboutTitle,
+  .whyTitle {
+    white-space: normal;
+    text-wrap: balance;
+  }
+
+  .aboutLayout,
+  .whyLayout {
+    grid-template-columns: 1fr;
+  }
+
+  .aboutEditorial {
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(18rem, 0.75fr);
+    grid-template-rows: auto;
+    gap: 1rem;
+  }
+
+  .aboutImageStage {
+    min-height: 20rem;
+  }
+
+  .aboutFeatureColumn {
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+  }
+
+  .aboutQuote {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 860px) {
+  .aboutEditorial,
+  .progressionColumn {
+    grid-template-columns: 1fr;
+  }
+
+  .aboutFeatureColumn {
+    grid-template-columns: 1fr;
+  }
+
+  .philosophyStrip {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .philosophyItem:nth-child(2) {
+    border-right: 0;
+  }
+
+  .philosophyItem:nth-child(-n + 2) {
+    border-bottom: 1px solid #e7e9ef;
+  }
+
+  .aboutFooterStrip {
+    grid-template-columns:
+      auto
+      minmax(0, 1fr);
+  }
+
+  .aboutKeywords {
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+  }
+
+  .whyImageStage {
+    min-height: 22rem;
+  }
+}
+
+@media (max-width: 620px) {
+  .sectionContainer {
+    width: min(100% - 1.2rem, 1320px);
+  }
+
+  .aboutSection,
+  .whySection {
+    padding-block: 3.5rem;
+  }
+
+  .aboutTitle,
+  .whyTitle {
+    font-size: clamp(2rem, 10vw, 3rem);
+    white-space: normal;
+  }
+
+  .aboutFeature {
+    grid-template-columns:
+      auto
+      minmax(0, 1fr);
+  }
+
+  .featureArrow {
+    display: none;
+  }
+
+  .aboutQuote {
+    grid-template-columns:
+      auto
+      minmax(0, 1fr);
+  }
+
+  .aboutQuote > svg {
+    display: none;
+  }
+
+  .aboutImageStage,
+  .whyImageStage {
+    min-height: 17rem;
+  }
+
+  .philosophyStrip {
+    grid-template-columns: 1fr;
+  }
+
+  .philosophyItem,
+  .philosophyItem:nth-child(2) {
+    border-right: 0;
+    border-bottom: 1px solid #e7e9ef;
+  }
+
+  .philosophyItem:last-child {
+    border-bottom: 0;
+  }
+
+  .whyClosing {
+    border-radius: 1rem;
+    text-align: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aboutFeature,
+  .pillarCard,
+  .benefitRow {
+    transition: none;
+  }
+
+  .aboutFeature:hover {
+    transform: none;
+  }
+}
+/* =========================================================
+   OSO ABOUT + WHY IMAGE POSITIONING CORRECTION
+   ========================================================= */
+
+/* Remove decorative circles that currently look disconnected */
+.imageArc,
+.whyImageArc {
+  display: none !important;
+}
+
+/* Keep decorative dots subtle and close to the illustrations */
+.imageDots {
+  left: 0 !important;
+  bottom: 1.5rem !important;
+  width: 5.5rem !important;
+  height: 4.5rem !important;
+  opacity: 0.3 !important;
+}
+
+.whyImageDots {
+  left: 4% !important;
+  top: 10% !important;
+  width: 5rem !important;
+  height: 4rem !important;
+  opacity: 0.28 !important;
+}
+
+/* =========================================================
+   ABOUT OSO IMAGE
+   ========================================================= */
+
+.aboutEditorial {
+  grid-template-rows: auto auto !important;
+  align-content: start !important;
+  gap: 1rem !important;
+}
+
+.aboutImageStage {
+  position: relative !important;
+  width: 100% !important;
+  min-height: clamp(19rem, 28vw, 25rem) !important;
+  margin-top: 0.25rem !important;
+  overflow: hidden !important;
+}
+
+/*
+  Increase illustration scale and anchor it to the bottom-left.
+  This eliminates the unused white area visible around the artwork.
+*/
+.aboutStudentsImage {
+  position: absolute !important;
+  inset: -4% -8% -7% -5% !important;
+
+  background-image:
+    url("/illustrations/oso/about-oso-students.png") !important;
+  background-repeat: no-repeat !important;
+  background-position: left bottom !important;
+  background-size: min(112%, 48rem) auto !important;
+
+  transform: scale(1.06) !important;
+  transform-origin: left bottom !important;
+
+  pointer-events: none !important;
+  filter:
+    saturate(1.05)
+    contrast(1.025)
+    drop-shadow(0 24px 34px rgba(49, 46, 129, 0.16)) !important;
+}
+
+/* Prevent the left content area from becoming taller than required */
+.aboutCopy {
+  max-width: 45rem !important;
+}
+
+.aboutCopy p {
+  line-height: 1.65 !important;
+}
+
+.aboutLayout {
+  align-items: start !important;
+}
+
+/* =========================================================
+   WHY OSO IMAGE
+   ========================================================= */
+
+/*
+  Give more horizontal area to the illustration and less to
+  the progression cards, while preserving readable card width.
+*/
+.progressionColumn {
+  grid-template-columns:
+    minmax(17rem, 0.68fr)
+    minmax(20rem, 1.32fr) !important;
+
+  align-items: stretch !important;
+  gap: 0.9rem !important;
+}
+
+.whyImageStage {
+  position: relative !important;
+  width: 100% !important;
+  min-height: clamp(27rem, 35vw, 34rem) !important;
+  align-self: stretch !important;
+  overflow: hidden !important;
+}
+
+/*
+  Scale the progression illustration substantially and move it
+  into the available blank area beside the Education/Experience cards.
+*/
+.whyStudentsImage {
+  position: absolute !important;
+  inset: -8% -16% -9% -13% !important;
+
+  background-image:
+    url("/illustrations/oso/why-oso-students.png") !important;
+  background-repeat: no-repeat !important;
+  background-position: center bottom !important;
+  background-size: min(132%, 50rem) auto !important;
+
+  transform: scale(1.08) !important;
+  transform-origin: center bottom !important;
+
+  pointer-events: none !important;
+  filter:
+    saturate(1.06)
+    contrast(1.03)
+    drop-shadow(0 25px 38px rgba(99, 102, 241, 0.17)) !important;
+}
+
+/* Keep cards vertically compact so they align with the illustration */
+.progressionList {
+  align-content: center !important;
+  gap: 0.7rem !important;
+}
+
+.progressionCard {
+  min-height: 5.6rem !important;
+}
+
+.opportunityCard {
+  min-height: 6.6rem !important;
+}
+
+/* Keep the benefits panel aligned with the progression block */
+.whyLayout {
+  align-items: stretch !important;
+}
+
+.benefitsPanel {
+  height: 100% !important;
+}
+
+.benefitsList {
+  align-content: start !important;
+}
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1120px) {
+  .aboutEditorial {
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(19rem, 0.85fr) !important;
+    grid-template-rows: auto !important;
+    align-items: end !important;
+  }
+
+  .aboutImageStage {
+    min-height: 22rem !important;
+    margin-top: 0 !important;
+  }
+
+  .aboutStudentsImage {
+    inset: -5% -18% -5% -8% !important;
+    background-size: 125% auto !important;
+  }
+
+  .progressionColumn {
+    grid-template-columns:
+      minmax(17rem, 0.72fr)
+      minmax(19rem, 1.28fr) !important;
+  }
+
+  .whyImageStage {
+    min-height: 28rem !important;
+  }
+
+  .whyStudentsImage {
+    inset: -8% -18% -7% -15% !important;
+    background-size: 138% auto !important;
+  }
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 860px) {
+  .aboutEditorial,
+  .progressionColumn {
+    grid-template-columns: 1fr !important;
+  }
+
+  .aboutImageStage {
+    min-height: clamp(19rem, 68vw, 27rem) !important;
+  }
+
+  .aboutStudentsImage {
+    inset: -3% -8% -4% -8% !important;
+    background-position: center bottom !important;
+    background-size: min(118%, 40rem) auto !important;
+    transform: scale(1.02) !important;
+  }
+
+  .whyImageStage {
+    min-height: clamp(23rem, 78vw, 31rem) !important;
+    order: -1;
+  }
+
+  .whyStudentsImage {
+    inset: -6% -13% -6% -13% !important;
+    background-position: center bottom !important;
+    background-size: min(132%, 42rem) auto !important;
+    transform: scale(1.03) !important;
+  }
+
+  .progressionList {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    align-content: initial !important;
+  }
+
+  .opportunityCard {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 560px) {
+  .aboutImageStage {
+    min-height: 18rem !important;
+  }
+
+  .aboutStudentsImage {
+    inset: -2% -18% -3% -18% !important;
+    background-size: 138% auto !important;
+  }
+
+  .whyImageStage {
+    min-height: 21rem !important;
+  }
+
+  .whyStudentsImage {
+    inset: -4% -22% -4% -22% !important;
+    background-size: 150% auto !important;
+  }
+
+  .progressionList {
+    grid-template-columns: 1fr !important;
+  }
+}

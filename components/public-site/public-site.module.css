@@ -1,4 +1,4 @@
-.page {
+﻿.page {
   --public-ink: #101828;
   --public-muted: #526071;
   --public-line: rgba(15, 23, 42, 0.11);
@@ -445,3 +445,3508 @@
   }
 }
 /* HERO NARRATIVE LAYOUT END */
+/* OSO PHASE 1 HERO START */
+.phaseOneHero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: calc(100vh - 5rem);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+  background:
+    radial-gradient(circle at 78% 18%, rgba(56, 189, 248, 0.22), transparent 28rem),
+    radial-gradient(circle at 88% 75%, rgba(139, 92, 246, 0.23), transparent 28rem),
+    radial-gradient(circle at 14% 88%, rgba(37, 99, 235, 0.18), transparent 24rem),
+    linear-gradient(135deg, #061124 0%, #0b1738 48%, #130c32 100%);
+  color: #ffffff;
+}
+
+.phaseOneHero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  opacity: 0.28;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(circle at 70% 42%, black, transparent 76%);
+}
+
+.phaseOneHero::after {
+  content: "";
+  position: absolute;
+  right: -15rem;
+  top: -10rem;
+  z-index: -1;
+  width: 42rem;
+  height: 42rem;
+  border: 1px solid rgba(125, 211, 252, 0.16);
+  border-radius: 999px;
+  box-shadow:
+    0 0 0 5rem rgba(59, 130, 246, 0.028),
+    0 0 0 10rem rgba(139, 92, 246, 0.022);
+}
+
+.phaseOneHeroShell {
+  width: min(100%, 1600px);
+  margin-inline: auto;
+  padding: clamp(4rem, 7vw, 7rem) clamp(1.25rem, 4vw, 4rem);
+}
+
+.phaseOneHeroGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(35rem, 1.1fr);
+  align-items: center;
+  gap: clamp(2rem, 5vw, 6rem);
+}
+
+.phaseOneHeroContent {
+  position: relative;
+  z-index: 2;
+  max-width: 45rem;
+}
+
+.phaseOneEyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: #fde047;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.phaseOneEyebrow svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.phaseOneTitle {
+  display: grid;
+  margin-top: 1rem;
+  color: #ffffff !important;
+  font-size: clamp(3.2rem, 6.1vw, 7rem);
+  font-weight: 950;
+  line-height: 0.93;
+  letter-spacing: -0.075em;
+  text-wrap: balance;
+}
+
+.phaseOneTitleAccent {
+  width: fit-content;
+  background: linear-gradient(90deg, #ffffff 0%, #8dd4ff 45%, #b69cff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.phaseOneDescription {
+  max-width: 41rem;
+  margin-top: 1.45rem;
+  color: rgba(226, 232, 240, 0.9);
+  font-size: clamp(1rem, 1.3vw, 1.22rem);
+  font-weight: 600;
+  line-height: 1.7;
+}
+
+.phaseOneCapabilityGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+  margin-top: 2rem;
+}
+
+.phaseOneCapabilityCard {
+  display: flex;
+  min-height: 7.2rem;
+  align-items: flex-start;
+  gap: 0.85rem;
+  padding: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.055);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(18px);
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    background 180ms ease;
+}
+
+.phaseOneCapabilityCard:hover {
+  transform: translateY(-3px);
+  border-color: rgba(125, 211, 252, 0.4);
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.phaseOneCapabilityIcon {
+  display: grid;
+  flex: 0 0 auto;
+  width: 2.75rem;
+  height: 2.75rem;
+  place-items: center;
+  border-radius: 0.95rem;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.94), rgba(124, 58, 237, 0.94));
+  box-shadow: 0 13px 28px rgba(37, 99, 235, 0.25);
+}
+
+.phaseOneCapabilityIcon svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.phaseOneCapabilityCopy {
+  display: grid;
+  gap: 0.38rem;
+}
+
+.phaseOneCapabilityCopy strong {
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 900;
+  line-height: 1.25;
+}
+
+.phaseOneCapabilityCopy small {
+  color: rgba(203, 213, 225, 0.8);
+  font-size: 0.76rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.phaseOneActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.phaseOnePrimaryAction,
+.phaseOneSecondaryAction,
+.phaseOnePlatformAction {
+  display: inline-flex;
+  min-height: 3.25rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  padding: 0.82rem 1.25rem;
+  border-radius: 999px;
+  font-size: 0.86rem;
+  font-weight: 900;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    border-color 180ms ease;
+}
+
+.phaseOnePrimaryAction,
+.phaseOnePlatformAction {
+  background: linear-gradient(135deg, #6d28d9, #2563eb);
+  color: #ffffff;
+  box-shadow: 0 17px 36px rgba(37, 99, 235, 0.28);
+}
+
+.phaseOneSecondaryAction {
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+}
+
+.phaseOnePrimaryAction:hover,
+.phaseOneSecondaryAction:hover,
+.phaseOnePlatformAction:hover {
+  transform: translateY(-2px);
+}
+
+.phaseOnePrimaryAction svg,
+.phaseOneSecondaryAction svg,
+.phaseOnePlatformAction svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.phaseOneAccessNote {
+  display: flex;
+  max-width: 40rem;
+  align-items: flex-start;
+  gap: 0.55rem;
+  margin-top: 1rem;
+  color: rgba(203, 213, 225, 0.72);
+  font-size: 0.76rem;
+  font-weight: 650;
+  line-height: 1.55;
+}
+
+.phaseOneAccessNote svg {
+  flex: 0 0 auto;
+  width: 0.95rem;
+  height: 0.95rem;
+  margin-top: 0.12rem;
+  color: #86efac;
+}
+
+.phaseOneVisualColumn {
+  position: relative;
+  overflow: hidden;
+  padding: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 2rem;
+  background:
+    linear-gradient(145deg, rgba(15, 23, 42, 0.68), rgba(30, 41, 59, 0.28)),
+    rgba(255, 255, 255, 0.055);
+  box-shadow:
+    0 40px 100px rgba(0, 0, 0, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.09);
+  backdrop-filter: blur(22px);
+}
+
+.phaseOneVisualColumn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 48% 44%, rgba(56, 189, 248, 0.13), transparent 36%),
+    radial-gradient(circle at 75% 60%, rgba(139, 92, 246, 0.14), transparent 40%);
+}
+
+.phaseOneVisualHeader,
+.phaseOneVisualFooter {
+  position: relative;
+  z-index: 2;
+}
+
+.phaseOneVisualHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem 0.65rem 1rem;
+}
+
+.phaseOneVisualHeader > div {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.phaseOneVisualHeader span {
+  color: rgba(191, 219, 254, 0.82);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.phaseOneVisualHeader strong {
+  color: #ffffff;
+  font-size: clamp(1.05rem, 1.5vw, 1.32rem);
+  font-weight: 900;
+}
+
+.phaseOneLiveBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.phaseOneLiveBadge > span {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: #4ade80;
+  box-shadow: 0 0 16px rgba(74, 222, 128, 0.85);
+}
+
+.phaseOneFlowFrame {
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+  min-height: 34rem;
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: 1.45rem;
+  background:
+    radial-gradient(circle at center, rgba(37, 99, 235, 0.13), transparent 52%),
+    rgba(2, 6, 23, 0.38);
+}
+
+.phaseOneFlowFrame :global(*) {
+  box-sizing: border-box;
+}
+
+.phaseOneVisualFooter {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.6rem;
+  padding-top: 0.85rem;
+}
+
+.phaseOneVisualFooter span {
+  min-height: 3.1rem;
+  display: grid;
+  place-items: center;
+  padding: 0.7rem;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 0.95rem;
+  background: rgba(255, 255, 255, 0.035);
+  color: rgba(226, 232, 240, 0.76);
+  font-size: 0.7rem;
+  font-weight: 750;
+  line-height: 1.35;
+  text-align: center;
+}
+
+@media (max-width: 1180px) {
+  .phaseOneHeroGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .phaseOneHeroContent {
+    max-width: 55rem;
+  }
+
+  .phaseOneVisualColumn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 720px) {
+  .phaseOneHeroShell {
+    padding-top: 3.4rem;
+  }
+
+  .phaseOneTitle {
+    font-size: clamp(3rem, 15vw, 4.7rem);
+  }
+
+  .phaseOneCapabilityGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .phaseOneActions {
+    width: 100%;
+  }
+
+  .phaseOnePrimaryAction,
+  .phaseOneSecondaryAction,
+  .phaseOnePlatformAction {
+    width: 100%;
+  }
+
+  .phaseOneVisualColumn {
+    padding: 0.7rem;
+    border-radius: 1.4rem;
+  }
+
+  .phaseOneVisualHeader {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .phaseOneFlowFrame {
+    min-height: 30rem;
+    border-radius: 1rem;
+  }
+
+  .phaseOneVisualFooter {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .phaseOneCapabilityCard,
+  .phaseOnePrimaryAction,
+  .phaseOneSecondaryAction,
+  .phaseOnePlatformAction {
+    transition: none;
+  }
+}
+/* OSO PHASE 1 HERO END */
+
+/* OSO FULL PUBLIC REDESIGN START */
+.osoRedesign {
+  background:
+    radial-gradient(circle at 10% 16%, rgba(124, 58, 237, 0.08), transparent 18rem),
+    radial-gradient(circle at 90% 12%, rgba(14, 165, 233, 0.08), transparent 20rem),
+    #f8fbff;
+  color: #0f172a;
+}
+
+.osoRedesign * {
+  box-sizing: border-box;
+}
+
+.osoEyebrow,
+.osoEyebrowCenter {
+  margin: 0 0 0.75rem;
+  color: #4f00ff;
+  font-size: 0.78rem;
+  font-weight: 950;
+  letter-spacing: 0.12em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.osoEyebrowCenter {
+  text-align: center;
+}
+
+.osoHero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(34rem, 1.15fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: center;
+  min-height: 47rem;
+  padding: clamp(3.5rem, 7vw, 5.5rem) clamp(1.25rem, 5vw, 4rem);
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 76% 28%, rgba(56, 189, 248, 0.34), transparent 24rem),
+    radial-gradient(circle at 88% 72%, rgba(124, 58, 237, 0.42), transparent 26rem),
+    linear-gradient(135deg, #050b1d 0%, #071538 52%, #12072d 100%);
+  color: white;
+}
+
+.osoHero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.28;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px);
+  background-size: 52px 52px;
+}
+
+.osoHeroContent {
+  position: relative;
+  z-index: 2;
+  max-width: 46rem;
+}
+
+.osoHero h1 {
+  margin: 0;
+  color: white;
+  font-size: clamp(3.2rem, 6vw, 6.7rem);
+  font-weight: 950;
+  letter-spacing: -0.075em;
+  line-height: 0.95;
+}
+
+.osoHero h1 span {
+  display: block;
+  background: linear-gradient(90deg, #b894ff, #1fb6ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.osoHeroContent > p:not(.osoEyebrow) {
+  max-width: 38rem;
+  margin: 1.25rem 0 0;
+  color: rgba(255,255,255,0.9);
+  font-size: 1.15rem;
+  font-weight: 650;
+  line-height: 1.7;
+}
+
+.osoHeroCapabilities {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.osoHeroCapabilities div {
+  display: grid;
+  min-height: 6.8rem;
+  place-items: center;
+  padding: 1rem 0.6rem;
+  border-right: 1px solid rgba(255,255,255,0.18);
+  text-align: center;
+}
+
+.osoHeroCapabilities div:last-child {
+  border-right: 0;
+}
+
+.osoHeroCapabilities svg {
+  width: 2.2rem;
+  height: 2.2rem;
+  color: #06b6d4;
+  filter: drop-shadow(0 0 18px rgba(34, 211, 238, 0.55));
+}
+
+.osoHeroCapabilities span {
+  max-width: 6rem;
+  color: white;
+  font-size: 0.83rem;
+  font-weight: 850;
+  line-height: 1.25;
+}
+
+.osoHeroActions,
+.osoFinalCta > div:last-child {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 1.8rem;
+}
+
+.osoPrimaryBtn,
+.osoSecondaryBtn,
+.osoOutlineBtn {
+  display: inline-flex;
+  min-height: 3.15rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  border-radius: 0.9rem;
+  padding: 0.85rem 1.35rem;
+  font-size: 0.88rem;
+  font-weight: 900;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.osoPrimaryBtn {
+  border: 0;
+  background: linear-gradient(135deg, #8b5cf6, #4f00ff);
+  color: white;
+  box-shadow: 0 18px 36px rgba(79, 0, 255, 0.28);
+}
+
+.osoSecondaryBtn {
+  border: 1px solid rgba(255,255,255,0.32);
+  background: rgba(255,255,255,0.08);
+  color: white;
+}
+
+.osoPrimaryBtn:hover,
+.osoSecondaryBtn:hover,
+.osoOutlineBtn:hover {
+  transform: translateY(-2px);
+}
+
+.osoPrimaryBtn svg,
+.osoSecondaryBtn svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.osoHeroVisual {
+  position: relative;
+  z-index: 2;
+  min-height: 34rem;
+}
+
+.osoHeroGlow {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle, rgba(59,130,246,0.44), transparent 58%),
+    radial-gradient(circle at 60% 60%, rgba(168,85,247,0.52), transparent 62%);
+  filter: blur(14px);
+}
+
+.osoStudentGroup {
+  position: absolute;
+  inset: 3rem 4rem 10rem;
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  gap: 0;
+}
+
+.osoStudentGroup div {
+  width: 9.5rem;
+  height: 17.5rem;
+  border-radius: 999px 999px 2rem 2rem;
+  background:
+    radial-gradient(circle at 50% 15%, #f6c29f 0 14%, transparent 15%),
+    linear-gradient(160deg, #111827 0%, #1e3a8a 100%);
+  box-shadow: 0 28px 70px rgba(0,0,0,0.42);
+}
+
+.osoStudentGroup div:nth-child(1) {
+  transform: rotate(-8deg) translateX(2rem);
+  background:
+    radial-gradient(circle at 50% 15%, #ddb08e 0 14%, transparent 15%),
+    linear-gradient(160deg, #111827 0%, #0f766e 100%);
+}
+
+.osoStudentGroup div:nth-child(2) {
+  z-index: 2;
+  height: 20rem;
+}
+
+.osoStudentGroup div:nth-child(3) {
+  transform: rotate(8deg) translateX(-2rem);
+  background:
+    radial-gradient(circle at 50% 15%, #e8b58e 0 14%, transparent 15%),
+    linear-gradient(160deg, #111827 0%, #581c87 100%);
+}
+
+.osoLaptop {
+  position: absolute;
+  right: 11%;
+  bottom: 7.5rem;
+  z-index: 4;
+  display: grid;
+  width: 19rem;
+  height: 8rem;
+  place-items: center;
+  border-radius: 1.2rem;
+  background:
+    radial-gradient(circle, rgba(14,165,233,0.45), transparent 55%),
+    linear-gradient(135deg, #0f172a, #1e1b4b);
+  color: #c084fc;
+  font-size: 3rem;
+  font-weight: 950;
+  box-shadow: 0 28px 80px rgba(0,0,0,0.42);
+}
+
+.osoHeroStats {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 8%;
+  z-index: 5;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.22);
+  border-radius: 1.25rem;
+  background: rgba(15,23,42,0.72);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 24px 80px rgba(0,0,0,0.35);
+}
+
+.osoHeroStats span {
+  display: grid;
+  min-height: 5.3rem;
+  place-items: center;
+  padding: 0.75rem;
+  border-right: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.78);
+  font-size: 0.78rem;
+  font-weight: 750;
+  text-align: center;
+}
+
+.osoHeroStats span:last-child {
+  border-right: 0;
+}
+
+.osoHeroStats strong {
+  display: block;
+  color: white;
+  font-size: 1.65rem;
+  font-weight: 950;
+}
+
+.osoWhy,
+.osoDifferent,
+.osoPrograms,
+.osoJourney,
+.osoConnected,
+.osoAssociations,
+.osoFinalCta {
+  width: min(100% - 2rem, 1400px);
+  margin-inline: auto;
+}
+
+.osoWhy {
+  display: grid;
+  grid-template-columns: 0.68fr 1.32fr;
+  gap: clamp(2rem, 5vw, 5rem);
+  padding: 4.5rem 0 2.5rem;
+}
+
+.osoSectionIntroSide h2,
+.osoSectionIntro h2,
+.osoDifferent h2,
+.osoPrograms h2,
+.osoJourney h2,
+.osoAssociations h2,
+.osoFinalCta h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: clamp(2rem, 3.4vw, 3.25rem);
+  font-weight: 950;
+  letter-spacing: -0.055em;
+  line-height: 1.03;
+}
+
+.osoSectionIntroSide > p:last-child,
+.osoSectionIntro > p,
+.osoWhyCards p,
+.osoProgramGrid p,
+.osoJourneyLine p,
+.osoConnected p {
+  color: #334155;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.65;
+}
+
+.osoWhyCards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.4rem;
+}
+
+.osoWhyCards article,
+.osoProgramGrid article,
+.osoCompareGrid article,
+.osoCompareGrid aside,
+.osoConnected,
+.osoAssociations {
+  border: 1px solid rgba(148,163,184,0.28);
+  border-radius: 1.4rem;
+  background: rgba(255,255,255,0.86);
+  box-shadow: 0 22px 60px rgba(15,23,42,0.08);
+}
+
+.osoWhyCards article {
+  min-height: 16rem;
+  padding: 2rem;
+}
+
+.osoWhyCards span {
+  display: grid;
+  width: 4.3rem;
+  height: 4.3rem;
+  place-items: center;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  box-shadow: 0 18px 34px rgba(34,197,94,0.22);
+}
+
+.osoWhyCards article:nth-child(2) span {
+  background: linear-gradient(135deg, #2563eb, #0ea5e9);
+}
+
+.osoWhyCards article:nth-child(3) span {
+  background: linear-gradient(135deg, #7c3aed, #a855f7);
+}
+
+.osoWhyCards svg {
+  width: 2rem;
+  height: 2rem;
+}
+
+.osoWhyCards h3,
+.osoProgramGrid h3,
+.osoCompareGrid h3,
+.osoJourneyLine h3,
+.osoPerksGrid h3,
+.osoEcosystemFlow h3 {
+  margin: 1.2rem 0 0.65rem;
+  color: #0f172a;
+  font-size: 1.25rem;
+  font-weight: 950;
+  letter-spacing: -0.035em;
+}
+
+.osoDifferent,
+.osoPrograms,
+.osoJourney {
+  padding: 2.5rem 0;
+  text-align: center;
+}
+
+.osoCompareGrid {
+  display: grid;
+  grid-template-columns: 1fr auto 1.1fr 1fr;
+  align-items: center;
+  gap: 1.2rem;
+  margin-top: 1.6rem;
+}
+
+.osoCompareGrid article,
+.osoCompareGrid aside {
+  min-height: 17rem;
+  padding: 1.5rem;
+  text-align: left;
+}
+
+.osoCompareGrid article h3 {
+  display: grid;
+  min-height: 2.3rem;
+  place-items: center;
+  margin-top: 0;
+  border-radius: 0.65rem;
+  background: #eef2ff;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.osoCompareStrong h3 {
+  background: linear-gradient(135deg, #7c3aed, #4f00ff) !important;
+  color: white;
+}
+
+.osoCompareGrid p {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0.65rem 0;
+  color: #334155;
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.osoCompareGrid p svg {
+  width: 1rem;
+  height: 1rem;
+  color: #4f00ff;
+}
+
+.osoVs {
+  display: grid;
+  width: 3.25rem;
+  height: 3.25rem;
+  place-items: center;
+  border-radius: 999px;
+  background: #020617;
+  color: white;
+  font-weight: 950;
+  box-shadow: 0 14px 30px rgba(15,23,42,0.25);
+}
+
+.osoCompareGrid aside {
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 80% 75%, rgba(124,58,237,0.48), transparent 42%),
+    linear-gradient(135deg, #050b1d, #15072f);
+  color: white;
+}
+
+.osoCompareGrid aside p {
+  color: #facc15;
+  font-size: 0.84rem;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.osoCompareGrid aside h3 {
+  color: white;
+  font-size: 1.25rem;
+  line-height: 1.45;
+}
+
+.osoCompareGrid aside svg {
+  float: right;
+  width: 6rem;
+  height: 6rem;
+  margin-top: 1.2rem;
+  color: #38bdf8;
+  filter: drop-shadow(0 0 30px rgba(56,189,248,0.45));
+}
+
+.osoProgramGrid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1.75rem;
+}
+
+.osoProgramGrid article {
+  min-height: 16rem;
+  padding: 1.35rem 1rem;
+  text-align: center;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.osoProgramGrid article:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 30px 70px rgba(15,23,42,0.12);
+}
+
+.osoProgramGrid svg {
+  width: 3.7rem;
+  height: 3.7rem;
+  margin-bottom: 0.6rem;
+  padding: 0.85rem;
+  border-radius: 1rem;
+  background: #eef2ff;
+  color: #4f00ff;
+}
+
+.osoProgramGrid article[data-tone="green"] svg { background: #dcfce7; color: #16a34a; }
+.osoProgramGrid article[data-tone="blue"] svg { background: #dbeafe; color: #2563eb; }
+.osoProgramGrid article[data-tone="orange"] svg { background: #ffedd5; color: #ea580c; }
+.osoProgramGrid article[data-tone="purple"] svg { background: #ede9fe; color: #7c3aed; }
+.osoProgramGrid article[data-tone="amber"] svg { background: #fef3c7; color: #d97706; }
+.osoProgramGrid article[data-tone="cyan"] svg { background: #cffafe; color: #0891b2; }
+
+.osoProgramGrid h3 {
+  margin-top: 0;
+  font-size: 1rem;
+}
+
+.osoProgramGrid strong {
+  display: block;
+  color: #64748b;
+  font-size: 0.78rem;
+  font-weight: 850;
+}
+
+.osoProgramGrid p {
+  min-height: 4.5rem;
+  font-size: 0.76rem;
+}
+
+.osoProgramGrid span {
+  color: #4f00ff;
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.osoOutlineBtn {
+  margin-top: 1.5rem;
+  border: 1px solid #7c3aed;
+  background: white;
+  color: #4f00ff;
+}
+
+.osoJourneyLine {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.8rem;
+  margin-top: 2rem;
+}
+
+.osoJourneyLine::before {
+  content: "";
+  position: absolute;
+  top: 3.15rem;
+  right: 4rem;
+  left: 4rem;
+  height: 3px;
+  background: linear-gradient(90deg, #22c55e, #2563eb, #7c3aed, #f97316, #ec4899, #06b6d4, #8b5cf6);
+}
+
+.osoJourneyLine article {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  padding-top: 0.2rem;
+}
+
+.osoJourneyIcon {
+  display: grid;
+  width: 5.2rem;
+  height: 5.2rem;
+  place-items: center;
+  border: 6px solid white;
+  border-radius: 999px;
+  background: #dcfce7;
+  color: #16a34a;
+  box-shadow: 0 18px 40px rgba(15,23,42,0.12);
+}
+
+.osoJourneyLine article[data-tone="blue"] .osoJourneyIcon { background: #dbeafe; color: #2563eb; }
+.osoJourneyLine article[data-tone="purple"] .osoJourneyIcon { background: #ede9fe; color: #7c3aed; }
+.osoJourneyLine article[data-tone="orange"] .osoJourneyIcon { background: #ffedd5; color: #ea580c; }
+.osoJourneyLine article[data-tone="rose"] .osoJourneyIcon { background: #fce7f3; color: #db2777; }
+.osoJourneyLine article[data-tone="cyan"] .osoJourneyIcon { background: #cffafe; color: #0891b2; }
+.osoJourneyLine article[data-tone="violet"] .osoJourneyIcon { background: #ede9fe; color: #7c3aed; }
+
+.osoJourneyIcon svg {
+  width: 2.1rem;
+  height: 2.1rem;
+}
+
+.osoJourneyLine small {
+  display: grid;
+  width: 1.5rem;
+  height: 1.5rem;
+  place-items: center;
+  margin-top: -0.5rem;
+  border-radius: 999px;
+  background: #22c55e;
+  color: white;
+  font-weight: 950;
+}
+
+.osoJourneyLine h3 {
+  max-width: 8.5rem;
+  margin: 0.8rem 0 0.4rem;
+  font-size: 0.88rem;
+  line-height: 1.28;
+  text-align: center;
+}
+
+.osoJourneyLine p {
+  max-width: 8.5rem;
+  margin: 0;
+  font-size: 0.72rem;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.osoPerks {
+  display: grid;
+  grid-template-columns: 0.9fr 1.6fr;
+  gap: 1rem;
+  width: min(100% - 2rem, 1460px);
+  margin: 2.5rem auto;
+  padding: 1.8rem;
+  border-radius: 1.5rem;
+  background:
+    radial-gradient(circle at 25% 20%, rgba(124,58,237,0.48), transparent 18rem),
+    linear-gradient(135deg, #050b1d, #12072f);
+  color: white;
+  box-shadow: 0 28px 80px rgba(15,23,42,0.24);
+}
+
+.osoPerks h2 {
+  margin: 0;
+  color: white;
+  font-size: clamp(1.8rem, 3vw, 3rem);
+  font-weight: 950;
+  letter-spacing: -0.05em;
+  line-height: 1.06;
+}
+
+.osoPerksIntro p:not(.osoEyebrow) {
+  color: rgba(255,255,255,0.82);
+  line-height: 1.65;
+}
+
+.osoPerksGrid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.osoPerksGrid article {
+  min-height: 14rem;
+  padding: 1rem;
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 1rem;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(56,189,248,0.22), transparent 9rem),
+    rgba(255,255,255,0.055);
+}
+
+.osoPerksGrid svg {
+  width: 2.3rem;
+  height: 2.3rem;
+  color: #93c5fd;
+}
+
+.osoPerksGrid h3 {
+  color: white;
+  font-size: 1rem;
+}
+
+.osoPerksGrid p {
+  color: rgba(255,255,255,0.76);
+  font-size: 0.8rem;
+  line-height: 1.55;
+}
+
+.osoPerkHighlight {
+  border-color: rgba(250,204,21,0.86) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(250,204,21,0.2),
+    0 0 35px rgba(250,204,21,0.24);
+}
+
+.osoPerkHighlight svg,
+.osoPerkHighlight h3 {
+  color: #facc15;
+}
+
+.osoConnected {
+  margin-top: 2.5rem;
+  padding: 1.5rem;
+  background:
+    radial-gradient(circle at 70% 50%, rgba(59,130,246,0.12), transparent 24rem),
+    white;
+}
+
+.osoSectionIntro {
+  max-width: 44rem;
+}
+
+.osoEcosystemFlow {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.osoEcosystemFlow article {
+  min-height: 12rem;
+  padding: 1rem;
+  border: 1px solid rgba(148,163,184,0.26);
+  border-radius: 1rem;
+  background: rgba(255,255,255,0.9);
+  box-shadow: 0 18px 40px rgba(37,99,235,0.08);
+}
+
+.osoEcosystemFlow span {
+  color: #2563eb;
+  font-size: 0.85rem;
+  font-weight: 950;
+}
+
+.osoEcosystemFlow h3 {
+  font-size: 1rem;
+}
+
+.osoEcosystemFlow p {
+  font-size: 0.78rem;
+}
+
+.osoAssociations {
+  margin-top: 1rem;
+  padding: 1.5rem;
+  background: white;
+}
+
+.osoAssociations div {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 0.8rem;
+  margin-top: 1.2rem;
+}
+
+.osoAssociations span {
+  display: grid;
+  min-height: 4.5rem;
+  place-items: center;
+  border: 1px solid rgba(148,163,184,0.24);
+  border-radius: 0.8rem;
+  background: #ffffff;
+  color: #0f172a;
+  font-size: 0.84rem;
+  font-weight: 900;
+  text-align: center;
+}
+
+.osoFinalCta {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 2rem;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  padding: 2rem;
+  border-radius: 1.5rem;
+  background:
+    radial-gradient(circle at 82% 36%, rgba(249,115,22,0.34), transparent 18rem),
+    linear-gradient(135deg, #4f00ff, #1e1b4b);
+  color: white;
+}
+
+.osoFinalCta h2 {
+  color: white;
+  max-width: 42rem;
+}
+
+.osoFinalCta .osoSecondaryBtn {
+  background: white;
+  color: #4f00ff;
+}
+
+@media (max-width: 1180px) {
+  .osoHero,
+  .osoWhy,
+  .osoPerks,
+  .osoFinalCta {
+    grid-template-columns: 1fr;
+  }
+
+  .osoProgramGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .osoCompareGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .osoVs {
+    margin-inline: auto;
+  }
+
+  .osoJourneyLine,
+  .osoEcosystemFlow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .osoJourneyLine::before {
+    display: none;
+  }
+
+  .osoAssociations div {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .osoPerksGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .osoHero {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .osoHeroCapabilities,
+  .osoHeroStats,
+  .osoWhyCards,
+  .osoProgramGrid,
+  .osoJourneyLine,
+  .osoEcosystemFlow,
+  .osoPerksGrid,
+  .osoAssociations div {
+    grid-template-columns: 1fr;
+  }
+
+  .osoHeroVisual {
+    min-height: 29rem;
+  }
+
+  .osoStudentGroup {
+    inset-inline: 1rem;
+  }
+
+  .osoLaptop {
+    right: 1rem;
+    left: 1rem;
+    width: auto;
+  }
+
+  .osoHeroStats {
+    left: 0;
+  }
+
+  .osoFinalCta > div:last-child {
+    width: 100%;
+  }
+
+  .osoFinalCta a {
+    width: 100%;
+  }
+}
+/* OSO FULL PUBLIC REDESIGN END */
+
+/* OSO FULL PUBLIC REDESIGN START */
+.osoRedesign {
+  background:
+    radial-gradient(circle at 10% 16%, rgba(124, 58, 237, 0.08), transparent 18rem),
+    radial-gradient(circle at 90% 12%, rgba(14, 165, 233, 0.08), transparent 20rem),
+    #f8fbff;
+  color: #0f172a;
+}
+
+.osoRedesign * {
+  box-sizing: border-box;
+}
+
+.osoEyebrow,
+.osoEyebrowCenter {
+  margin: 0 0 0.75rem;
+  color: #4f00ff;
+  font-size: 0.78rem;
+  font-weight: 950;
+  letter-spacing: 0.12em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.osoEyebrowCenter {
+  text-align: center;
+}
+
+.osoHero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(34rem, 1.15fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: center;
+  min-height: 47rem;
+  padding: clamp(3.5rem, 7vw, 5.5rem) clamp(1.25rem, 5vw, 4rem);
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 76% 28%, rgba(56, 189, 248, 0.34), transparent 24rem),
+    radial-gradient(circle at 88% 72%, rgba(124, 58, 237, 0.42), transparent 26rem),
+    linear-gradient(135deg, #050b1d 0%, #071538 52%, #12072d 100%);
+  color: white;
+}
+
+.osoHero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.28;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px);
+  background-size: 52px 52px;
+}
+
+.osoHeroContent {
+  position: relative;
+  z-index: 2;
+  max-width: 46rem;
+}
+
+.osoHero h1 {
+  margin: 0;
+  color: white;
+  font-size: clamp(3.2rem, 6vw, 6.7rem);
+  font-weight: 950;
+  letter-spacing: -0.075em;
+  line-height: 0.95;
+}
+
+.osoHero h1 span {
+  display: block;
+  background: linear-gradient(90deg, #b894ff, #1fb6ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.osoHeroContent > p:not(.osoEyebrow) {
+  max-width: 38rem;
+  margin: 1.25rem 0 0;
+  color: rgba(255,255,255,0.9);
+  font-size: 1.15rem;
+  font-weight: 650;
+  line-height: 1.7;
+}
+
+.osoHeroCapabilities {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.osoHeroCapabilities div {
+  display: grid;
+  min-height: 6.8rem;
+  place-items: center;
+  padding: 1rem 0.6rem;
+  border-right: 1px solid rgba(255,255,255,0.18);
+  text-align: center;
+}
+
+.osoHeroCapabilities div:last-child {
+  border-right: 0;
+}
+
+.osoHeroCapabilities svg {
+  width: 2.2rem;
+  height: 2.2rem;
+  color: #06b6d4;
+  filter: drop-shadow(0 0 18px rgba(34, 211, 238, 0.55));
+}
+
+.osoHeroCapabilities span {
+  max-width: 6rem;
+  color: white;
+  font-size: 0.83rem;
+  font-weight: 850;
+  line-height: 1.25;
+}
+
+.osoHeroActions,
+.osoFinalCta > div:last-child {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 1.8rem;
+}
+
+.osoPrimaryBtn,
+.osoSecondaryBtn,
+.osoOutlineBtn {
+  display: inline-flex;
+  min-height: 3.15rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  border-radius: 0.9rem;
+  padding: 0.85rem 1.35rem;
+  font-size: 0.88rem;
+  font-weight: 900;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.osoPrimaryBtn {
+  border: 0;
+  background: linear-gradient(135deg, #8b5cf6, #4f00ff);
+  color: white;
+  box-shadow: 0 18px 36px rgba(79, 0, 255, 0.28);
+}
+
+.osoSecondaryBtn {
+  border: 1px solid rgba(255,255,255,0.32);
+  background: rgba(255,255,255,0.08);
+  color: white;
+}
+
+.osoPrimaryBtn:hover,
+.osoSecondaryBtn:hover,
+.osoOutlineBtn:hover {
+  transform: translateY(-2px);
+}
+
+.osoPrimaryBtn svg,
+.osoSecondaryBtn svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.osoHeroVisual {
+  position: relative;
+  z-index: 2;
+  min-height: 34rem;
+}
+
+.osoHeroGlow {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle, rgba(59,130,246,0.44), transparent 58%),
+    radial-gradient(circle at 60% 60%, rgba(168,85,247,0.52), transparent 62%);
+  filter: blur(14px);
+}
+
+.osoStudentGroup {
+  position: absolute;
+  inset: 3rem 4rem 10rem;
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  gap: 0;
+}
+
+.osoStudentGroup div {
+  width: 9.5rem;
+  height: 17.5rem;
+  border-radius: 999px 999px 2rem 2rem;
+  background:
+    radial-gradient(circle at 50% 15%, #f6c29f 0 14%, transparent 15%),
+    linear-gradient(160deg, #111827 0%, #1e3a8a 100%);
+  box-shadow: 0 28px 70px rgba(0,0,0,0.42);
+}
+
+.osoStudentGroup div:nth-child(1) {
+  transform: rotate(-8deg) translateX(2rem);
+  background:
+    radial-gradient(circle at 50% 15%, #ddb08e 0 14%, transparent 15%),
+    linear-gradient(160deg, #111827 0%, #0f766e 100%);
+}
+
+.osoStudentGroup div:nth-child(2) {
+  z-index: 2;
+  height: 20rem;
+}
+
+.osoStudentGroup div:nth-child(3) {
+  transform: rotate(8deg) translateX(-2rem);
+  background:
+    radial-gradient(circle at 50% 15%, #e8b58e 0 14%, transparent 15%),
+    linear-gradient(160deg, #111827 0%, #581c87 100%);
+}
+
+.osoLaptop {
+  position: absolute;
+  right: 11%;
+  bottom: 7.5rem;
+  z-index: 4;
+  display: grid;
+  width: 19rem;
+  height: 8rem;
+  place-items: center;
+  border-radius: 1.2rem;
+  background:
+    radial-gradient(circle, rgba(14,165,233,0.45), transparent 55%),
+    linear-gradient(135deg, #0f172a, #1e1b4b);
+  color: #c084fc;
+  font-size: 3rem;
+  font-weight: 950;
+  box-shadow: 0 28px 80px rgba(0,0,0,0.42);
+}
+
+.osoHeroStats {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 8%;
+  z-index: 5;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.22);
+  border-radius: 1.25rem;
+  background: rgba(15,23,42,0.72);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 24px 80px rgba(0,0,0,0.35);
+}
+
+.osoHeroStats span {
+  display: grid;
+  min-height: 5.3rem;
+  place-items: center;
+  padding: 0.75rem;
+  border-right: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.78);
+  font-size: 0.78rem;
+  font-weight: 750;
+  text-align: center;
+}
+
+.osoHeroStats span:last-child {
+  border-right: 0;
+}
+
+.osoHeroStats strong {
+  display: block;
+  color: white;
+  font-size: 1.65rem;
+  font-weight: 950;
+}
+
+.osoWhy,
+.osoDifferent,
+.osoPrograms,
+.osoJourney,
+.osoConnected,
+.osoAssociations,
+.osoFinalCta {
+  width: min(100% - 2rem, 1400px);
+  margin-inline: auto;
+}
+
+.osoWhy {
+  display: grid;
+  grid-template-columns: 0.68fr 1.32fr;
+  gap: clamp(2rem, 5vw, 5rem);
+  padding: 4.5rem 0 2.5rem;
+}
+
+.osoSectionIntroSide h2,
+.osoSectionIntro h2,
+.osoDifferent h2,
+.osoPrograms h2,
+.osoJourney h2,
+.osoAssociations h2,
+.osoFinalCta h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: clamp(2rem, 3.4vw, 3.25rem);
+  font-weight: 950;
+  letter-spacing: -0.055em;
+  line-height: 1.03;
+}
+
+.osoSectionIntroSide > p:last-child,
+.osoSectionIntro > p,
+.osoWhyCards p,
+.osoProgramGrid p,
+.osoJourneyLine p,
+.osoConnected p {
+  color: #334155;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.65;
+}
+
+.osoWhyCards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.4rem;
+}
+
+.osoWhyCards article,
+.osoProgramGrid article,
+.osoCompareGrid article,
+.osoCompareGrid aside,
+.osoConnected,
+.osoAssociations {
+  border: 1px solid rgba(148,163,184,0.28);
+  border-radius: 1.4rem;
+  background: rgba(255,255,255,0.86);
+  box-shadow: 0 22px 60px rgba(15,23,42,0.08);
+}
+
+.osoWhyCards article {
+  min-height: 16rem;
+  padding: 2rem;
+}
+
+.osoWhyCards span {
+  display: grid;
+  width: 4.3rem;
+  height: 4.3rem;
+  place-items: center;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  box-shadow: 0 18px 34px rgba(34,197,94,0.22);
+}
+
+.osoWhyCards article:nth-child(2) span {
+  background: linear-gradient(135deg, #2563eb, #0ea5e9);
+}
+
+.osoWhyCards article:nth-child(3) span {
+  background: linear-gradient(135deg, #7c3aed, #a855f7);
+}
+
+.osoWhyCards svg {
+  width: 2rem;
+  height: 2rem;
+}
+
+.osoWhyCards h3,
+.osoProgramGrid h3,
+.osoCompareGrid h3,
+.osoJourneyLine h3,
+.osoPerksGrid h3,
+.osoEcosystemFlow h3 {
+  margin: 1.2rem 0 0.65rem;
+  color: #0f172a;
+  font-size: 1.25rem;
+  font-weight: 950;
+  letter-spacing: -0.035em;
+}
+
+.osoDifferent,
+.osoPrograms,
+.osoJourney {
+  padding: 2.5rem 0;
+  text-align: center;
+}
+
+.osoCompareGrid {
+  display: grid;
+  grid-template-columns: 1fr auto 1.1fr 1fr;
+  align-items: center;
+  gap: 1.2rem;
+  margin-top: 1.6rem;
+}
+
+.osoCompareGrid article,
+.osoCompareGrid aside {
+  min-height: 17rem;
+  padding: 1.5rem;
+  text-align: left;
+}
+
+.osoCompareGrid article h3 {
+  display: grid;
+  min-height: 2.3rem;
+  place-items: center;
+  margin-top: 0;
+  border-radius: 0.65rem;
+  background: #eef2ff;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.osoCompareStrong h3 {
+  background: linear-gradient(135deg, #7c3aed, #4f00ff) !important;
+  color: white;
+}
+
+.osoCompareGrid p {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0.65rem 0;
+  color: #334155;
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.osoCompareGrid p svg {
+  width: 1rem;
+  height: 1rem;
+  color: #4f00ff;
+}
+
+.osoVs {
+  display: grid;
+  width: 3.25rem;
+  height: 3.25rem;
+  place-items: center;
+  border-radius: 999px;
+  background: #020617;
+  color: white;
+  font-weight: 950;
+  box-shadow: 0 14px 30px rgba(15,23,42,0.25);
+}
+
+.osoCompareGrid aside {
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 80% 75%, rgba(124,58,237,0.48), transparent 42%),
+    linear-gradient(135deg, #050b1d, #15072f);
+  color: white;
+}
+
+.osoCompareGrid aside p {
+  color: #facc15;
+  font-size: 0.84rem;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.osoCompareGrid aside h3 {
+  color: white;
+  font-size: 1.25rem;
+  line-height: 1.45;
+}
+
+.osoCompareGrid aside svg {
+  float: right;
+  width: 6rem;
+  height: 6rem;
+  margin-top: 1.2rem;
+  color: #38bdf8;
+  filter: drop-shadow(0 0 30px rgba(56,189,248,0.45));
+}
+
+.osoProgramGrid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1.75rem;
+}
+
+.osoProgramGrid article {
+  min-height: 16rem;
+  padding: 1.35rem 1rem;
+  text-align: center;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.osoProgramGrid article:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 30px 70px rgba(15,23,42,0.12);
+}
+
+.osoProgramGrid svg {
+  width: 3.7rem;
+  height: 3.7rem;
+  margin-bottom: 0.6rem;
+  padding: 0.85rem;
+  border-radius: 1rem;
+  background: #eef2ff;
+  color: #4f00ff;
+}
+
+.osoProgramGrid article[data-tone="green"] svg { background: #dcfce7; color: #16a34a; }
+.osoProgramGrid article[data-tone="blue"] svg { background: #dbeafe; color: #2563eb; }
+.osoProgramGrid article[data-tone="orange"] svg { background: #ffedd5; color: #ea580c; }
+.osoProgramGrid article[data-tone="purple"] svg { background: #ede9fe; color: #7c3aed; }
+.osoProgramGrid article[data-tone="amber"] svg { background: #fef3c7; color: #d97706; }
+.osoProgramGrid article[data-tone="cyan"] svg { background: #cffafe; color: #0891b2; }
+
+.osoProgramGrid h3 {
+  margin-top: 0;
+  font-size: 1rem;
+}
+
+.osoProgramGrid strong {
+  display: block;
+  color: #64748b;
+  font-size: 0.78rem;
+  font-weight: 850;
+}
+
+.osoProgramGrid p {
+  min-height: 4.5rem;
+  font-size: 0.76rem;
+}
+
+.osoProgramGrid span {
+  color: #4f00ff;
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.osoOutlineBtn {
+  margin-top: 1.5rem;
+  border: 1px solid #7c3aed;
+  background: white;
+  color: #4f00ff;
+}
+
+.osoJourneyLine {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.8rem;
+  margin-top: 2rem;
+}
+
+.osoJourneyLine::before {
+  content: "";
+  position: absolute;
+  top: 3.15rem;
+  right: 4rem;
+  left: 4rem;
+  height: 3px;
+  background: linear-gradient(90deg, #22c55e, #2563eb, #7c3aed, #f97316, #ec4899, #06b6d4, #8b5cf6);
+}
+
+.osoJourneyLine article {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  padding-top: 0.2rem;
+}
+
+.osoJourneyIcon {
+  display: grid;
+  width: 5.2rem;
+  height: 5.2rem;
+  place-items: center;
+  border: 6px solid white;
+  border-radius: 999px;
+  background: #dcfce7;
+  color: #16a34a;
+  box-shadow: 0 18px 40px rgba(15,23,42,0.12);
+}
+
+.osoJourneyLine article[data-tone="blue"] .osoJourneyIcon { background: #dbeafe; color: #2563eb; }
+.osoJourneyLine article[data-tone="purple"] .osoJourneyIcon { background: #ede9fe; color: #7c3aed; }
+.osoJourneyLine article[data-tone="orange"] .osoJourneyIcon { background: #ffedd5; color: #ea580c; }
+.osoJourneyLine article[data-tone="rose"] .osoJourneyIcon { background: #fce7f3; color: #db2777; }
+.osoJourneyLine article[data-tone="cyan"] .osoJourneyIcon { background: #cffafe; color: #0891b2; }
+.osoJourneyLine article[data-tone="violet"] .osoJourneyIcon { background: #ede9fe; color: #7c3aed; }
+
+.osoJourneyIcon svg {
+  width: 2.1rem;
+  height: 2.1rem;
+}
+
+.osoJourneyLine small {
+  display: grid;
+  width: 1.5rem;
+  height: 1.5rem;
+  place-items: center;
+  margin-top: -0.5rem;
+  border-radius: 999px;
+  background: #22c55e;
+  color: white;
+  font-weight: 950;
+}
+
+.osoJourneyLine h3 {
+  max-width: 8.5rem;
+  margin: 0.8rem 0 0.4rem;
+  font-size: 0.88rem;
+  line-height: 1.28;
+  text-align: center;
+}
+
+.osoJourneyLine p {
+  max-width: 8.5rem;
+  margin: 0;
+  font-size: 0.72rem;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.osoPerks {
+  display: grid;
+  grid-template-columns: 0.9fr 1.6fr;
+  gap: 1rem;
+  width: min(100% - 2rem, 1460px);
+  margin: 2.5rem auto;
+  padding: 1.8rem;
+  border-radius: 1.5rem;
+  background:
+    radial-gradient(circle at 25% 20%, rgba(124,58,237,0.48), transparent 18rem),
+    linear-gradient(135deg, #050b1d, #12072f);
+  color: white;
+  box-shadow: 0 28px 80px rgba(15,23,42,0.24);
+}
+
+.osoPerks h2 {
+  margin: 0;
+  color: white;
+  font-size: clamp(1.8rem, 3vw, 3rem);
+  font-weight: 950;
+  letter-spacing: -0.05em;
+  line-height: 1.06;
+}
+
+.osoPerksIntro p:not(.osoEyebrow) {
+  color: rgba(255,255,255,0.82);
+  line-height: 1.65;
+}
+
+.osoPerksGrid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.osoPerksGrid article {
+  min-height: 14rem;
+  padding: 1rem;
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 1rem;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(56,189,248,0.22), transparent 9rem),
+    rgba(255,255,255,0.055);
+}
+
+.osoPerksGrid svg {
+  width: 2.3rem;
+  height: 2.3rem;
+  color: #93c5fd;
+}
+
+.osoPerksGrid h3 {
+  color: white;
+  font-size: 1rem;
+}
+
+.osoPerksGrid p {
+  color: rgba(255,255,255,0.76);
+  font-size: 0.8rem;
+  line-height: 1.55;
+}
+
+.osoPerkHighlight {
+  border-color: rgba(250,204,21,0.86) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(250,204,21,0.2),
+    0 0 35px rgba(250,204,21,0.24);
+}
+
+.osoPerkHighlight svg,
+.osoPerkHighlight h3 {
+  color: #facc15;
+}
+
+.osoConnected {
+  margin-top: 2.5rem;
+  padding: 1.5rem;
+  background:
+    radial-gradient(circle at 70% 50%, rgba(59,130,246,0.12), transparent 24rem),
+    white;
+}
+
+.osoSectionIntro {
+  max-width: 44rem;
+}
+
+.osoEcosystemFlow {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.osoEcosystemFlow article {
+  min-height: 12rem;
+  padding: 1rem;
+  border: 1px solid rgba(148,163,184,0.26);
+  border-radius: 1rem;
+  background: rgba(255,255,255,0.9);
+  box-shadow: 0 18px 40px rgba(37,99,235,0.08);
+}
+
+.osoEcosystemFlow span {
+  color: #2563eb;
+  font-size: 0.85rem;
+  font-weight: 950;
+}
+
+.osoEcosystemFlow h3 {
+  font-size: 1rem;
+}
+
+.osoEcosystemFlow p {
+  font-size: 0.78rem;
+}
+
+.osoAssociations {
+  margin-top: 1rem;
+  padding: 1.5rem;
+  background: white;
+}
+
+.osoAssociations div {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 0.8rem;
+  margin-top: 1.2rem;
+}
+
+.osoAssociations span {
+  display: grid;
+  min-height: 4.5rem;
+  place-items: center;
+  border: 1px solid rgba(148,163,184,0.24);
+  border-radius: 0.8rem;
+  background: #ffffff;
+  color: #0f172a;
+  font-size: 0.84rem;
+  font-weight: 900;
+  text-align: center;
+}
+
+.osoFinalCta {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 2rem;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  padding: 2rem;
+  border-radius: 1.5rem;
+  background:
+    radial-gradient(circle at 82% 36%, rgba(249,115,22,0.34), transparent 18rem),
+    linear-gradient(135deg, #4f00ff, #1e1b4b);
+  color: white;
+}
+
+.osoFinalCta h2 {
+  color: white;
+  max-width: 42rem;
+}
+
+.osoFinalCta .osoSecondaryBtn {
+  background: white;
+  color: #4f00ff;
+}
+
+@media (max-width: 1180px) {
+  .osoHero,
+  .osoWhy,
+  .osoPerks,
+  .osoFinalCta {
+    grid-template-columns: 1fr;
+  }
+
+  .osoProgramGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .osoCompareGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .osoVs {
+    margin-inline: auto;
+  }
+
+  .osoJourneyLine,
+  .osoEcosystemFlow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .osoJourneyLine::before {
+    display: none;
+  }
+
+  .osoAssociations div {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .osoPerksGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .osoHero {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .osoHeroCapabilities,
+  .osoHeroStats,
+  .osoWhyCards,
+  .osoProgramGrid,
+  .osoJourneyLine,
+  .osoEcosystemFlow,
+  .osoPerksGrid,
+  .osoAssociations div {
+    grid-template-columns: 1fr;
+  }
+
+  .osoHeroVisual {
+    min-height: 29rem;
+  }
+
+  .osoStudentGroup {
+    inset-inline: 1rem;
+  }
+
+  .osoLaptop {
+    right: 1rem;
+    left: 1rem;
+    width: auto;
+  }
+
+  .osoHeroStats {
+    left: 0;
+  }
+
+  .osoFinalCta > div:last-child {
+    width: 100%;
+  }
+
+  .osoFinalCta a {
+    width: 100%;
+  }
+}
+/* OSO FULL PUBLIC REDESIGN END */
+
+/* OSO_TARGETED_PUBLIC_FIX_START */
+.osoRedesign {
+  overflow: clip;
+  background: #f8fbff;
+}
+
+.osoHero {
+  position: relative !important;
+  isolation: isolate !important;
+  display: block !important;
+  overflow: hidden !important;
+  min-height: clamp(760px, 96svh, 930px) !important;
+  padding: clamp(2.7rem, 4.5vw, 4.4rem) clamp(1rem, 4vw, 4rem) clamp(1.25rem, 2.5vw, 2.1rem) !important;
+  background:
+    radial-gradient(circle at 62% 25%, rgba(37, 99, 235, 0.44), transparent 28rem),
+    radial-gradient(circle at 85% 62%, rgba(168, 85, 247, 0.44), transparent 34rem),
+    radial-gradient(circle at 18% 86%, rgba(34, 211, 238, 0.16), transparent 24rem),
+    linear-gradient(135deg, #030716 0%, #07152f 48%, #120625 100%) !important;
+  color: #ffffff !important;
+}
+
+.osoHero::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  opacity: 0.24 !important;
+  pointer-events: none !important;
+  background-image:
+    linear-gradient(rgba(147, 197, 253, 0.13) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(147, 197, 253, 0.13) 1px, transparent 1px) !important;
+  background-size: 58px 58px !important;
+  mask-image: radial-gradient(circle at 64% 45%, black 0%, rgba(0, 0, 0, 0.74) 54%, transparent 88%) !important;
+}
+
+.osoHero::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: auto 0 0 !important;
+  z-index: 5 !important;
+  height: 13rem !important;
+  pointer-events: none !important;
+  background: linear-gradient(180deg, transparent, rgba(3, 7, 22, 0.94)) !important;
+}
+
+.osoHeroBackgroundArt {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  user-select: none;
+}
+
+.osoHeroBackgroundImage {
+  object-fit: cover;
+  object-position: 64% 50%;
+  opacity: 0.96;
+  transform: scale(1.06);
+  filter: saturate(1.42) contrast(1.1) brightness(1.12);
+  -webkit-mask-image:
+    linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(0, 0, 0, 0.14) 14%,
+      rgba(0, 0, 0, 0.9) 34%,
+      black 50%,
+      black 100%
+    ),
+    radial-gradient(
+      circle at 66% 48%,
+      black 0%,
+      black 56%,
+      rgba(0, 0, 0, 0.78) 76%,
+      transparent 98%
+    );
+  mask-image:
+    linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(0, 0, 0, 0.14) 14%,
+      rgba(0, 0, 0, 0.9) 34%,
+      black 50%,
+      black 100%
+    ),
+    radial-gradient(
+      circle at 66% 48%,
+      black 0%,
+      black 56%,
+      rgba(0, 0, 0, 0.78) 76%,
+      transparent 98%
+    );
+}
+
+.osoHeroReadabilityLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(3, 7, 22, 0.97) 0%,
+      rgba(3, 7, 22, 0.91) 31%,
+      rgba(3, 7, 22, 0.48) 47%,
+      rgba(3, 7, 22, 0.08) 70%,
+      rgba(3, 7, 22, 0.23) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(3, 7, 22, 0.18) 0%,
+      rgba(3, 7, 22, 0.03) 45%,
+      rgba(3, 7, 22, 0.82) 100%
+    );
+}
+
+.osoHeroShell {
+  position: relative;
+  z-index: 8;
+  display: grid;
+  width: min(100%, 1480px);
+  min-height: calc(clamp(760px, 96svh, 930px) - clamp(4rem, 7vw, 6rem));
+  grid-template-rows: auto minmax(14rem, 1fr) auto;
+  margin-inline: auto;
+}
+
+.osoHeroContent {
+  position: relative !important;
+  z-index: 10 !important;
+  max-width: min(100%, 37.5rem) !important;
+  padding: 0.1rem 0 0 !important;
+}
+
+.osoHeroContent::before {
+  content: "";
+  position: absolute;
+  inset: -0.9rem -1rem -1rem;
+  z-index: -1;
+  border: 1px solid rgba(147, 197, 253, 0.1);
+  border-radius: 1.35rem;
+  background:
+    linear-gradient(90deg, rgba(3, 7, 22, 0.76), rgba(3, 7, 22, 0.36) 72%, transparent),
+    radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.1), transparent 14rem);
+  backdrop-filter: blur(8px);
+}
+
+.osoHero h1 {
+  max-width: 13.4ch !important;
+  margin: 0.86rem 0 0 !important;
+  color: #ffffff !important;
+  font-size: clamp(2.35rem, 4vw, 4.05rem) !important;
+  font-weight: 1000 !important;
+  line-height: 0.95 !important;
+  letter-spacing: -0.065em !important;
+  text-wrap: balance !important;
+  text-shadow: 0 18px 42px rgba(0, 0, 0, 0.42) !important;
+}
+
+.osoHeroTagline {
+  max-width: 13.5ch !important;
+  margin: 0.62rem 0 0 !important;
+  background: linear-gradient(90deg, #fde047 0%, #a3e635 18%, #22d3ee 47%, #60a5fa 72%, #c084fc 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  font-size: clamp(1.35rem, 2.45vw, 2.28rem) !important;
+  font-weight: 1000 !important;
+  line-height: 1.04 !important;
+  letter-spacing: -0.055em !important;
+}
+
+.osoHeroCopyBlock {
+  display: grid;
+  gap: 0.62rem;
+  max-width: 34.5rem;
+  margin-top: 1rem;
+}
+
+.osoHeroCopyBlock p,
+.osoHeroContent > p:not(.osoEyebrow):not(.osoHeroTagline) {
+  margin: 0 !important;
+  color: rgba(226, 232, 240, 0.9) !important;
+  font-size: clamp(0.86rem, 0.98vw, 0.98rem) !important;
+  font-weight: 680 !important;
+  line-height: 1.58 !important;
+}
+
+.osoHeroCopyBlock p + p {
+  color: rgba(203, 213, 225, 0.78) !important;
+  font-size: clamp(0.8rem, 0.9vw, 0.9rem) !important;
+}
+
+.osoHeroVisualSpace {
+  min-height: clamp(16rem, 31vh, 23rem);
+}
+
+.osoHeroBottomDock {
+  position: relative;
+  z-index: 12;
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+}
+
+.osoHeroActions {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  gap: 0.9rem !important;
+  margin: 0 !important;
+}
+
+.unifiedHeroStats {
+  position: relative !important;
+  z-index: 12 !important;
+  display: grid !important;
+  width: min(100%, 960px) !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 0.68rem !important;
+  margin: 0 auto !important;
+  padding: 0.7rem !important;
+  border: 1px solid rgba(147, 197, 253, 0.24) !important;
+  border-radius: 1.35rem !important;
+  background:
+    linear-gradient(90deg, rgba(5, 13, 31, 0.92), rgba(8, 24, 53, 0.78)),
+    radial-gradient(circle at 10% 0%, rgba(250, 204, 21, 0.1), transparent 16rem) !important;
+  box-shadow:
+    0 24px 64px rgba(0, 0, 0, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+  backdrop-filter: blur(16px) !important;
+  overflow: hidden !important;
+}
+
+.unifiedHeroStat {
+  position: relative !important;
+  display: grid !important;
+  gap: 0.22rem !important;
+  min-height: 4.1rem !important;
+  place-items: center !important;
+  border-radius: 1rem !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  text-align: center !important;
+}
+
+.unifiedHeroStat strong {
+  background: linear-gradient(90deg, #facc15, #22d3ee, #c084fc) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  font-size: clamp(1.16rem, 1.8vw, 1.75rem) !important;
+  font-weight: 1000 !important;
+  line-height: 1 !important;
+}
+
+.unifiedHeroStat small {
+  color: rgba(226, 232, 240, 0.78) !important;
+  font-size: 0.66rem !important;
+  font-weight: 850 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+}
+
+.osoPrimaryBtn,
+.osoSecondaryBtn,
+.osoOutlineBtn {
+  text-decoration: none;
+}
+
+.osoAssociations {
+  position: relative !important;
+  overflow: hidden !important;
+  margin-top: 1.5rem !important;
+  padding: clamp(1.6rem, 4vw, 2.8rem) clamp(1rem, 3vw, 2rem) !important;
+  border: 1px solid rgba(148, 163, 184, 0.18) !important;
+  border-radius: 1.6rem !important;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(79, 70, 229, 0.08), transparent 18rem),
+    radial-gradient(circle at 92% 100%, rgba(14, 165, 233, 0.08), transparent 18rem),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(248, 251, 255, 0.92)) !important;
+  box-shadow: 0 22px 70px rgba(15, 23, 42, 0.07) !important;
+}
+
+.osoAssociationIntro {
+  max-width: 48rem;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.osoAssociationIntro h2 {
+  margin: 0.4rem 0 0;
+  color: #0f172a;
+  font-size: clamp(1.65rem, 3vw, 2.35rem);
+  font-weight: 950;
+  line-height: 1.08;
+  letter-spacing: -0.045em;
+}
+
+.osoAssociationIntro p:last-child {
+  margin: 0.85rem auto 0;
+  max-width: 42rem;
+  color: #64748b;
+  font-size: 0.95rem;
+  font-weight: 650;
+  line-height: 1.65;
+}
+
+.osoAssociationLogoStrip {
+  display: flex !important;
+  grid-template-columns: none !important;
+  align-items: center;
+  gap: clamp(0.8rem, 1.4vw, 1.2rem);
+  margin-top: 1.6rem !important;
+  overflow-x: auto;
+  padding: 0.5rem 0.2rem 0.9rem;
+  scrollbar-width: thin;
+  mask-image: linear-gradient(90deg, transparent, black 6%, black 94%, transparent);
+}
+
+.osoAssociationLogoItem {
+  display: grid !important;
+  flex: 0 0 clamp(8.5rem, 13vw, 12.5rem);
+  min-height: 5.1rem !important;
+  place-items: center !important;
+  border: 1px solid rgba(148, 163, 184, 0.18) !important;
+  border-radius: 1.05rem !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(241, 245, 249, 0.74)) !important;
+  box-shadow: 0 12px 34px rgba(15, 23, 42, 0.06) !important;
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease,
+    border-color 220ms ease,
+    background 220ms ease !important;
+}
+
+.osoAssociationLogo {
+  width: auto;
+  max-width: 82%;
+  height: 2.8rem;
+  object-fit: contain;
+  opacity: 0.46;
+  filter: grayscale(1) saturate(0.1);
+  transition:
+    opacity 220ms ease,
+    filter 220ms ease,
+    transform 220ms ease;
+}
+
+.osoAssociationLogoItem:hover,
+.osoAssociationLogoItem:focus-within {
+  transform: translateY(-5px);
+  border-color: rgba(37, 99, 235, 0.28) !important;
+  background: #ffffff !important;
+  box-shadow: 0 22px 52px rgba(37, 99, 235, 0.12) !important;
+}
+
+.osoAssociationLogoItem:hover .osoAssociationLogo,
+.osoAssociationLogoItem:focus-within .osoAssociationLogo {
+  opacity: 1;
+  filter: none;
+  transform: scale(1.04);
+}
+
+@media (max-width: 1180px) {
+  .osoHero {
+    min-height: auto !important;
+  }
+
+  .osoHeroReadabilityLayer {
+    background:
+      linear-gradient(180deg, rgba(3, 7, 22, 0.94), rgba(3, 7, 22, 0.56) 45%, rgba(3, 7, 22, 0.92)),
+      linear-gradient(90deg, rgba(3, 7, 22, 0.92), rgba(3, 7, 22, 0.2), rgba(3, 7, 22, 0.82));
+  }
+
+  .osoHeroShell {
+    min-height: auto;
+  }
+
+  .osoHeroContent {
+    max-width: min(100%, 42rem) !important;
+  }
+
+  .osoHeroBackgroundImage {
+    object-position: 58% 54%;
+    transform: scale(1.04);
+    opacity: 0.74;
+    -webkit-mask-image:
+      linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.86) 9%, black 42%, rgba(0, 0, 0, 0.78) 78%, transparent 100%),
+      radial-gradient(circle at 56% 54%, black 0%, rgba(0, 0, 0, 0.74) 64%, transparent 94%);
+    mask-image:
+      linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.86) 9%, black 42%, rgba(0, 0, 0, 0.78) 78%, transparent 100%),
+      radial-gradient(circle at 56% 54%, black 0%, rgba(0, 0, 0, 0.74) 64%, transparent 94%);
+  }
+
+  .osoHeroVisualSpace {
+    min-height: clamp(23rem, 47vw, 35rem);
+  }
+}
+
+@media (max-width: 760px) {
+  .osoHero {
+    padding: 2.75rem 1rem 1.35rem !important;
+  }
+
+  .osoHeroContent {
+    margin-inline: auto;
+  }
+
+  .osoHeroContent::before {
+    inset: -0.74rem -0.75rem -0.9rem;
+    border-radius: 1.15rem;
+    background:
+      linear-gradient(180deg, rgba(3, 7, 22, 0.76), rgba(3, 7, 22, 0.5)),
+      radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.12), transparent 13rem);
+  }
+
+  .osoHero h1 {
+    max-width: 12.6ch !important;
+    font-size: clamp(2rem, 9vw, 3.1rem) !important;
+  }
+
+  .osoHeroTagline {
+    font-size: clamp(1.24rem, 6vw, 1.86rem) !important;
+  }
+
+  .osoHeroCopyBlock p {
+    font-size: 0.84rem !important;
+    line-height: 1.56 !important;
+  }
+
+  .osoHeroBackgroundImage {
+    object-position: 60% 56%;
+    transform: scale(1);
+    opacity: 0.6;
+  }
+
+  .osoHeroVisualSpace {
+    min-height: clamp(17.5rem, 73vw, 27rem);
+  }
+
+  .unifiedHeroStats {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 0.55rem !important;
+    padding: 0.56rem !important;
+  }
+
+  .unifiedHeroStat {
+    min-height: 3.8rem !important;
+  }
+
+  .osoHeroActions {
+    flex-direction: column;
+    width: min(100%, 24rem);
+  }
+
+  .osoHeroActions a {
+    width: 100%;
+  }
+}
+
+@media (max-width: 430px) {
+  .osoHeroVisualSpace {
+    min-height: 16.4rem;
+  }
+
+  .unifiedHeroStat small {
+    font-size: 0.58rem !important;
+  }
+}
+/* OSO_TARGETED_PUBLIC_FIX_END */
+
+/* OSO_VISUAL_API_TARGETED_FIX_START */
+
+/* HERO: show the generated PNG properly, including left-side feature panels. */
+.osoHero {
+  min-height: clamp(760px, 96svh, 930px) !important;
+}
+
+.osoHeroBackgroundArt {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 1 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+}
+
+.osoHeroBackgroundImage {
+  object-fit: cover !important;
+  object-position: 52% 50% !important;
+  opacity: 0.98 !important;
+  transform: scale(1.01) !important;
+  filter: saturate(1.22) contrast(1.04) brightness(0.98) !important;
+  mix-blend-mode: normal !important;
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+}
+
+.osoHeroReadabilityLayer {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 3 !important;
+  pointer-events: none !important;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(3, 7, 22, 0.98) 0%,
+      rgba(3, 7, 22, 0.9) 24%,
+      rgba(3, 7, 22, 0.46) 40%,
+      rgba(3, 7, 22, 0.1) 63%,
+      rgba(3, 7, 22, 0.08) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(3, 7, 22, 0.1) 0%,
+      rgba(3, 7, 22, 0.06) 52%,
+      rgba(3, 7, 22, 0.68) 100%
+    ) !important;
+}
+
+.osoHeroContent {
+  max-width: min(100%, 34.5rem) !important;
+}
+
+.osoHeroContent::before {
+  inset: -0.85rem -0.9rem -0.95rem !important;
+  border-color: rgba(147, 197, 253, 0.12) !important;
+  background:
+    linear-gradient(90deg, rgba(3, 7, 22, 0.72), rgba(3, 7, 22, 0.35) 72%, transparent),
+    radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.09), transparent 13rem) !important;
+  backdrop-filter: blur(6px) !important;
+}
+
+.osoHero h1 {
+  font-size: clamp(2.25rem, 3.65vw, 3.7rem) !important;
+  line-height: 0.96 !important;
+}
+
+.osoHeroTagline {
+  font-size: clamp(1.28rem, 2.28vw, 2.1rem) !important;
+}
+
+.osoHeroCopyBlock p {
+  font-size: clamp(0.82rem, 0.92vw, 0.94rem) !important;
+  line-height: 1.55 !important;
+}
+
+.osoHeroVisualSpace {
+  min-height: clamp(17rem, 33vh, 24rem) !important;
+}
+
+.osoHeroBottomDock {
+  transform: translateY(-0.15rem) !important;
+}
+
+/* ASSOCIATIONS: stop title/paragraph overlap and restore horizontal floating logo strip. */
+.osoAssociations {
+  display: block !important;
+  position: relative !important;
+  overflow: hidden !important;
+  width: min(100% - 2rem, 1320px) !important;
+  margin: clamp(3.5rem, 6vw, 5rem) auto !important;
+  padding: clamp(2.2rem, 4vw, 3.2rem) clamp(1rem, 3vw, 2rem) !important;
+  border: 1px solid rgba(148, 163, 184, 0.18) !important;
+  border-radius: 1.6rem !important;
+  background:
+    radial-gradient(circle at 8% 0%, rgba(79, 70, 229, 0.08), transparent 18rem),
+    radial-gradient(circle at 94% 100%, rgba(14, 165, 233, 0.08), transparent 18rem),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 251, 255, 0.94)) !important;
+  box-shadow: 0 22px 70px rgba(15, 23, 42, 0.07) !important;
+}
+
+.osoAssociationIntro {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  justify-items: center !important;
+  gap: 0.7rem !important;
+  width: min(100%, 48rem) !important;
+  max-width: 48rem !important;
+  margin: 0 auto !important;
+  text-align: center !important;
+}
+
+.osoAssociationIntro .osoEyebrow,
+.osoAssociations .osoEyebrow {
+  display: inline-flex !important;
+  width: auto !important;
+  margin: 0 !important;
+  color: #4f46e5 !important;
+  font-size: 0.72rem !important;
+  font-weight: 950 !important;
+  letter-spacing: 0.13em !important;
+  line-height: 1.1 !important;
+  text-align: center !important;
+  text-transform: uppercase !important;
+  white-space: normal !important;
+}
+
+.osoAssociationIntro h2 {
+  display: block !important;
+  width: auto !important;
+  max-width: 44rem !important;
+  margin: 0 !important;
+  color: #0f172a !important;
+  font-size: clamp(1.85rem, 3.1vw, 2.55rem) !important;
+  font-weight: 950 !important;
+  line-height: 1.08 !important;
+  letter-spacing: -0.045em !important;
+  text-align: center !important;
+  white-space: normal !important;
+}
+
+.osoAssociationIntro p:last-child {
+  display: block !important;
+  width: min(100%, 42rem) !important;
+  max-width: 42rem !important;
+  margin: 0 !important;
+  color: #64748b !important;
+  font-size: 0.94rem !important;
+  font-weight: 650 !important;
+  line-height: 1.62 !important;
+  text-align: center !important;
+  white-space: normal !important;
+}
+
+.osoAssociationLogoStrip {
+  display: flex !important;
+  grid-template-columns: none !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: clamp(0.85rem, 1.4vw, 1.25rem) !important;
+  width: 100% !important;
+  margin: 1.85rem auto 0 !important;
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+  padding: 0.55rem 0.25rem 0.95rem !important;
+  scrollbar-width: thin !important;
+  mask-image: linear-gradient(90deg, transparent, black 5%, black 95%, transparent) !important;
+}
+
+.osoAssociationLogoItem {
+  display: grid !important;
+  flex: 0 0 clamp(9.2rem, 13vw, 12.5rem) !important;
+  min-width: clamp(9.2rem, 13vw, 12.5rem) !important;
+  min-height: 5.1rem !important;
+  place-items: center !important;
+  border: 1px solid rgba(148, 163, 184, 0.18) !important;
+  border-radius: 1.05rem !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(241, 245, 249, 0.78)) !important;
+  box-shadow: 0 12px 34px rgba(15, 23, 42, 0.06) !important;
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease,
+    border-color 220ms ease,
+    background 220ms ease !important;
+}
+
+.osoAssociationLogo {
+  display: block !important;
+  width: auto !important;
+  max-width: 82% !important;
+  height: 2.8rem !important;
+  object-fit: contain !important;
+  opacity: 0.48 !important;
+  filter: grayscale(1) saturate(0.1) !important;
+  transition:
+    opacity 220ms ease,
+    filter 220ms ease,
+    transform 220ms ease !important;
+}
+
+.osoAssociationLogoItem:hover,
+.osoAssociationLogoItem:focus-within {
+  transform: translateY(-5px) !important;
+  border-color: rgba(37, 99, 235, 0.28) !important;
+  background: #ffffff !important;
+  box-shadow: 0 22px 52px rgba(37, 99, 235, 0.12) !important;
+}
+
+.osoAssociationLogoItem:hover .osoAssociationLogo,
+.osoAssociationLogoItem:focus-within .osoAssociationLogo {
+  opacity: 1 !important;
+  filter: none !important;
+  transform: scale(1.04) !important;
+}
+
+@media (max-width: 1180px) {
+  .osoHeroBackgroundImage {
+    object-position: 55% 52% !important;
+    opacity: 0.82 !important;
+  }
+
+  .osoHeroReadabilityLayer {
+    background:
+      linear-gradient(180deg, rgba(3, 7, 22, 0.92), rgba(3, 7, 22, 0.52) 45%, rgba(3, 7, 22, 0.88)),
+      linear-gradient(90deg, rgba(3, 7, 22, 0.92), rgba(3, 7, 22, 0.18), rgba(3, 7, 22, 0.38)) !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .osoHeroContent {
+    max-width: min(100%, 35rem) !important;
+  }
+
+  .osoHeroBackgroundImage {
+    object-position: 58% 56% !important;
+    opacity: 0.58 !important;
+  }
+
+  .osoHeroVisualSpace {
+    min-height: clamp(18rem, 74vw, 28rem) !important;
+  }
+
+  .osoAssociationIntro {
+    gap: 0.62rem !important;
+  }
+
+  .osoAssociationIntro h2 {
+    font-size: clamp(1.7rem, 8vw, 2.25rem) !important;
+  }
+
+  .osoAssociationIntro p:last-child {
+    font-size: 0.88rem !important;
+  }
+}
+/* OSO_VISUAL_API_TARGETED_FIX_END */
+
+/* OSO_HERO_ASSOCIATION_POSITION_FINAL_START */
+
+/* HERO FIX:
+   Content must live only in the top-left empty zone.
+   Left PNG feature cards must remain visible below the content.
+*/
+.osoHero {
+  min-height: clamp(760px, 96svh, 930px) !important;
+  padding: clamp(2rem, 3.4vw, 3rem) clamp(1rem, 3.6vw, 3.4rem) clamp(1rem, 2vw, 1.6rem) !important;
+}
+
+.osoHeroBackgroundArt {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 1 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+}
+
+.osoHeroBackgroundImage {
+  object-fit: cover !important;
+  object-position: 50% 50% !important;
+  opacity: 0.98 !important;
+  transform: scale(1) !important;
+  filter: saturate(1.14) contrast(1.02) brightness(0.98) !important;
+  mix-blend-mode: normal !important;
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+}
+
+/* Only protect the text area and bottom dock.
+   Do not darken the entire left side because the PNG feature cards live there. */
+.osoHeroReadabilityLayer {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 3 !important;
+  pointer-events: none !important;
+  background:
+    radial-gradient(
+      ellipse at 20% 17%,
+      rgba(3, 7, 22, 0.98) 0%,
+      rgba(3, 7, 22, 0.88) 20%,
+      rgba(3, 7, 22, 0.46) 36%,
+      rgba(3, 7, 22, 0.08) 52%,
+      transparent 68%
+    ),
+    linear-gradient(
+      180deg,
+      transparent 0%,
+      transparent 58%,
+      rgba(3, 7, 22, 0.72) 100%
+    ) !important;
+}
+
+.osoHeroShell {
+  position: relative !important;
+  z-index: 8 !important;
+  display: grid !important;
+  width: min(100%, 1480px) !important;
+  min-height: calc(clamp(760px, 96svh, 930px) - 3.5rem) !important;
+  grid-template-rows: auto 1fr auto !important;
+  margin-inline: auto !important;
+}
+
+.osoHeroContent {
+  position: relative !important;
+  z-index: 10 !important;
+  width: min(100%, 30rem) !important;
+  max-width: 30rem !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Compact glass panel so it does not cover Daily Challenges / Proctored / Competition cards. */
+.osoHeroContent::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: -0.7rem -0.75rem -0.78rem !important;
+  z-index: -1 !important;
+  border: 1px solid rgba(147, 197, 253, 0.14) !important;
+  border-radius: 1.15rem !important;
+  background:
+    linear-gradient(90deg, rgba(3, 7, 22, 0.78), rgba(3, 7, 22, 0.42) 74%, rgba(3, 7, 22, 0.16)),
+    radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.1), transparent 12rem) !important;
+  box-shadow: 0 18px 56px rgba(0, 0, 0, 0.18) !important;
+  backdrop-filter: blur(7px) !important;
+}
+
+.osoHero .osoEyebrow {
+  margin: 0 !important;
+  color: #7c3aed !important;
+  font-size: clamp(0.58rem, 0.72vw, 0.68rem) !important;
+  font-weight: 1000 !important;
+  letter-spacing: 0.13em !important;
+  line-height: 1.1 !important;
+}
+
+.osoHero h1 {
+  max-width: 12.2ch !important;
+  margin: 0.62rem 0 0 !important;
+  color: #ffffff !important;
+  font-size: clamp(2rem, 3.25vw, 3.2rem) !important;
+  font-weight: 1000 !important;
+  line-height: 0.94 !important;
+  letter-spacing: -0.065em !important;
+  text-wrap: balance !important;
+  text-shadow: 0 16px 38px rgba(0, 0, 0, 0.46) !important;
+}
+
+.osoHeroTagline {
+  max-width: 12.5ch !important;
+  margin: 0.5rem 0 0 !important;
+  background: linear-gradient(90deg, #f4ff35 0%, #70e7b6 30%, #18d2ff 68%, #9a7cff 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  font-size: clamp(1.08rem, 2vw, 1.72rem) !important;
+  font-weight: 1000 !important;
+  line-height: 1.02 !important;
+  letter-spacing: -0.055em !important;
+}
+
+.osoHeroCopyBlock {
+  display: grid !important;
+  gap: 0.48rem !important;
+  max-width: 28.5rem !important;
+  margin-top: 0.72rem !important;
+}
+
+.osoHeroCopyBlock p {
+  margin: 0 !important;
+  color: rgba(226, 232, 240, 0.9) !important;
+  font-size: clamp(0.72rem, 0.82vw, 0.82rem) !important;
+  font-weight: 720 !important;
+  line-height: 1.48 !important;
+}
+
+.osoHeroCopyBlock p + p {
+  color: rgba(203, 213, 225, 0.78) !important;
+  font-size: clamp(0.7rem, 0.78vw, 0.78rem) !important;
+}
+
+/* This space allows the PNG feature tiles to show under the compact content. */
+.osoHeroVisualSpace {
+  min-height: clamp(19rem, 39vh, 28rem) !important;
+}
+
+.osoHeroBottomDock {
+  position: relative !important;
+  z-index: 12 !important;
+  display: grid !important;
+  justify-items: center !important;
+  gap: 0.9rem !important;
+  transform: none !important;
+}
+
+.osoHeroActions {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  gap: 0.85rem !important;
+  margin: 0 !important;
+}
+
+/* ASSOCIATIONS FIX:
+   No text overlap. Continuous horizontal motion. Faded logos become colored on hover.
+*/
+.osoAssociations {
+  display: block !important;
+  position: relative !important;
+  overflow: hidden !important;
+  width: min(100% - 2rem, 1320px) !important;
+  margin: clamp(3.5rem, 6vw, 5rem) auto !important;
+  padding: clamp(2.2rem, 4vw, 3.2rem) clamp(1rem, 3vw, 2rem) !important;
+  border: 1px solid rgba(148, 163, 184, 0.18) !important;
+  border-radius: 1.6rem !important;
+  background:
+    radial-gradient(circle at 8% 0%, rgba(79, 70, 229, 0.08), transparent 18rem),
+    radial-gradient(circle at 94% 100%, rgba(14, 165, 233, 0.08), transparent 18rem),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 251, 255, 0.94)) !important;
+  box-shadow: 0 22px 70px rgba(15, 23, 42, 0.07) !important;
+}
+
+.osoAssociationIntro {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  justify-items: center !important;
+  gap: 0.7rem !important;
+  width: min(100%, 48rem) !important;
+  max-width: 48rem !important;
+  margin: 0 auto !important;
+  text-align: center !important;
+}
+
+.osoAssociationIntro .osoEyebrow,
+.osoAssociations .osoEyebrow {
+  display: inline-flex !important;
+  width: auto !important;
+  margin: 0 !important;
+  color: #4f46e5 !important;
+  font-size: 0.72rem !important;
+  font-weight: 950 !important;
+  letter-spacing: 0.13em !important;
+  line-height: 1.1 !important;
+  text-align: center !important;
+  text-transform: uppercase !important;
+  white-space: normal !important;
+}
+
+.osoAssociationIntro h2 {
+  display: block !important;
+  width: auto !important;
+  max-width: 44rem !important;
+  margin: 0 !important;
+  color: #0f172a !important;
+  font-size: clamp(1.85rem, 3.1vw, 2.55rem) !important;
+  font-weight: 950 !important;
+  line-height: 1.08 !important;
+  letter-spacing: -0.045em !important;
+  text-align: center !important;
+  white-space: normal !important;
+}
+
+.osoAssociationIntro p:last-child {
+  display: block !important;
+  width: min(100%, 42rem) !important;
+  max-width: 42rem !important;
+  margin: 0 !important;
+  color: #64748b !important;
+  font-size: 0.94rem !important;
+  font-weight: 650 !important;
+  line-height: 1.62 !important;
+  text-align: center !important;
+  white-space: normal !important;
+}
+
+.osoAssociationLogoStrip {
+  position: relative !important;
+  display: block !important;
+  width: 100% !important;
+  margin: 1.9rem auto 0 !important;
+  overflow: hidden !important;
+  padding: 0.65rem 0 !important;
+  mask-image: linear-gradient(90deg, transparent, black 7%, black 93%, transparent) !important;
+}
+
+.osoAssociationLogoTrack {
+  display: flex !important;
+  width: max-content !important;
+  align-items: center !important;
+  gap: clamp(0.85rem, 1.4vw, 1.25rem) !important;
+  animation: osoAssociationMarquee 24s linear infinite !important;
+  will-change: transform !important;
+}
+
+.osoAssociationLogoStrip:hover .osoAssociationLogoTrack {
+  animation-play-state: paused !important;
+}
+
+.osoAssociationLogoItem {
+  display: grid !important;
+  flex: 0 0 clamp(9.2rem, 13vw, 12.5rem) !important;
+  min-width: clamp(9.2rem, 13vw, 12.5rem) !important;
+  min-height: 5.1rem !important;
+  place-items: center !important;
+  border: 1px solid rgba(148, 163, 184, 0.18) !important;
+  border-radius: 1.05rem !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(241, 245, 249, 0.78)) !important;
+  box-shadow: 0 12px 34px rgba(15, 23, 42, 0.06) !important;
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease,
+    border-color 220ms ease,
+    background 220ms ease !important;
+}
+
+.osoAssociationLogo {
+  display: block !important;
+  width: auto !important;
+  max-width: 82% !important;
+  height: 2.8rem !important;
+  object-fit: contain !important;
+  opacity: 0.46 !important;
+  filter: grayscale(1) saturate(0.1) !important;
+  transition:
+    opacity 220ms ease,
+    filter 220ms ease,
+    transform 220ms ease !important;
+}
+
+.osoAssociationLogoItem:hover {
+  transform: translateY(-5px) !important;
+  border-color: rgba(37, 99, 235, 0.28) !important;
+  background: #ffffff !important;
+  box-shadow: 0 22px 52px rgba(37, 99, 235, 0.12) !important;
+}
+
+.osoAssociationLogoItem:hover .osoAssociationLogo {
+  opacity: 1 !important;
+  filter: none !important;
+  transform: scale(1.04) !important;
+}
+
+@keyframes osoAssociationMarquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(calc(-50% - 0.625rem));
+  }
+}
+
+@media (max-width: 1180px) {
+  .osoHeroBackgroundImage {
+    object-position: 53% 52% !important;
+    opacity: 0.84 !important;
+  }
+
+  .osoHeroReadabilityLayer {
+    background:
+      radial-gradient(
+        ellipse at 24% 16%,
+        rgba(3, 7, 22, 0.96) 0%,
+        rgba(3, 7, 22, 0.82) 22%,
+        rgba(3, 7, 22, 0.38) 42%,
+        transparent 68%
+      ),
+      linear-gradient(180deg, transparent 48%, rgba(3, 7, 22, 0.8) 100%) !important;
+  }
+
+  .osoHeroContent {
+    max-width: min(100%, 31rem) !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .osoHero {
+    padding: 2.4rem 1rem 1.25rem !important;
+  }
+
+  .osoHeroContent {
+    max-width: min(100%, 34rem) !important;
+  }
+
+  .osoHeroBackgroundImage {
+    object-position: 58% 56% !important;
+    opacity: 0.58 !important;
+  }
+
+  .osoHeroReadabilityLayer {
+    background:
+      linear-gradient(180deg, rgba(3, 7, 22, 0.92), rgba(3, 7, 22, 0.46) 44%, rgba(3, 7, 22, 0.88) 100%) !important;
+  }
+
+  .osoHero h1 {
+    font-size: clamp(2rem, 9vw, 3.05rem) !important;
+  }
+
+  .osoHeroVisualSpace {
+    min-height: clamp(18rem, 74vw, 28rem) !important;
+  }
+
+  .osoAssociationIntro h2 {
+    font-size: clamp(1.7rem, 8vw, 2.25rem) !important;
+  }
+
+  .osoAssociationLogoTrack {
+    animation-duration: 18s !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .osoAssociationLogoTrack {
+    animation: none !important;
+  }
+}
+/* OSO_HERO_ASSOCIATION_POSITION_FINAL_END */
+
+/* OSO_HERO_CONTENT_PLACEMENT_FINAL_START */
+
+/* Main hero section */
+.osoHero {
+  position: relative !important;
+  overflow: hidden !important;
+  min-height: clamp(760px, 96svh, 920px) !important;
+  padding: clamp(2rem, 3.2vw, 2.8rem) clamp(1rem, 3vw, 3rem) clamp(1rem, 2vw, 1.4rem) !important;
+}
+
+/* Background image should stay fully visible and bright */
+.osoHeroBackgroundArt {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 1 !important;
+  pointer-events: none !important;
+}
+
+.osoHeroBackgroundImage {
+  object-fit: cover !important;
+  object-position: 50% 50% !important;
+  opacity: 1 !important;
+  transform: scale(1) !important;
+  filter: saturate(1.12) contrast(1.03) brightness(1.02) !important;
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+}
+
+/* Only a soft readability veil in top-left, not a separate card look */
+.osoHeroReadabilityLayer {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 3 !important;
+  pointer-events: none !important;
+  background:
+    radial-gradient(
+      ellipse at 18% 14%,
+      rgba(3, 7, 22, 0.72) 0%,
+      rgba(3, 7, 22, 0.52) 24%,
+      rgba(3, 7, 22, 0.18) 42%,
+      transparent 62%
+    ),
+    linear-gradient(
+      180deg,
+      transparent 0%,
+      transparent 68%,
+      rgba(3, 7, 22, 0.66) 100%
+    ) !important;
+}
+
+.osoHeroShell {
+  position: relative !important;
+  z-index: 8 !important;
+  display: grid !important;
+  width: min(100%, 1440px) !important;
+  min-height: calc(clamp(760px, 96svh, 920px) - 3rem) !important;
+  grid-template-rows: auto 1fr auto !important;
+  margin-inline: auto !important;
+}
+
+/* Content sits cleanly in the top-left corner area */
+.osoHeroContent {
+  position: relative !important;
+  z-index: 10 !important;
+  width: min(100%, 27.5rem) !important;
+  max-width: 27.5rem !important;
+  margin: 0 !important;
+  padding: 0.15rem 0 0 !important;
+}
+
+/* Remove mounted/glass-card feel */
+.osoHeroContent::before {
+  content: none !important;
+}
+
+.osoHero h1 {
+  max-width: 11.2ch !important;
+  margin: 0 !important;
+  color: #ffffff !important;
+  font-size: clamp(2.1rem, 3.45vw, 3.35rem) !important;
+  font-weight: 1000 !important;
+  line-height: 0.94 !important;
+  letter-spacing: -0.065em !important;
+  text-wrap: balance !important;
+  text-shadow:
+    0 10px 28px rgba(0, 0, 0, 0.42),
+    0 0 18px rgba(10, 30, 80, 0.15) !important;
+}
+
+.osoHeroTagline {
+  max-width: 12ch !important;
+  margin: 0.6rem 0 0 !important;
+  background: linear-gradient(
+    90deg,
+    #f4ff35 0%,
+    #72e6b7 28%,
+    #22d3ee 62%,
+    #7c8cff 100%
+  ) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  font-size: clamp(1.12rem, 1.95vw, 1.78rem) !important;
+  font-weight: 1000 !important;
+  line-height: 1.02 !important;
+  letter-spacing: -0.05em !important;
+  text-shadow: none !important;
+}
+
+.osoHeroCopyBlock {
+  display: grid !important;
+  gap: 0.52rem !important;
+  max-width: 26rem !important;
+  margin-top: 0.8rem !important;
+}
+
+.osoHeroCopyBlock p {
+  margin: 0 !important;
+  color: rgba(232, 240, 255, 0.94) !important;
+  font-size: clamp(0.74rem, 0.82vw, 0.86rem) !important;
+  font-weight: 700 !important;
+  line-height: 1.52 !important;
+  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.28) !important;
+}
+
+.osoHeroCopyBlock p + p {
+  color: rgba(215, 226, 243, 0.84) !important;
+  font-size: clamp(0.7rem, 0.78vw, 0.8rem) !important;
+}
+
+/* Leave enough room so the content ends before the feature tiles area */
+.osoHeroVisualSpace {
+  min-height: clamp(20rem, 41vh, 29rem) !important;
+}
+
+.osoHeroBottomDock {
+  position: relative !important;
+  z-index: 12 !important;
+  display: grid !important;
+  justify-items: center !important;
+  gap: 0.9rem !important;
+}
+
+.osoHeroActions {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  gap: 0.85rem !important;
+  margin: 0 !important;
+}
+
+/* Responsive */
+@media (max-width: 1180px) {
+  .osoHeroBackgroundImage {
+    object-position: 53% 52% !important;
+  }
+
+  .osoHeroReadabilityLayer {
+    background:
+      radial-gradient(
+        ellipse at 20% 15%,
+        rgba(3, 7, 22, 0.8) 0%,
+        rgba(3, 7, 22, 0.56) 26%,
+        rgba(3, 7, 22, 0.2) 44%,
+        transparent 64%
+      ),
+      linear-gradient(180deg, transparent 62%, rgba(3, 7, 22, 0.76) 100%) !important;
+  }
+
+  .osoHeroContent {
+    width: min(100%, 28.5rem) !important;
+    max-width: 28.5rem !important;
+  }
+
+  .osoHeroVisualSpace {
+    min-height: clamp(21rem, 45vw, 31rem) !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .osoHero {
+    padding: 2.25rem 1rem 1.25rem !important;
+  }
+
+  .osoHeroBackgroundImage {
+    object-position: 58% 56% !important;
+    opacity: 0.58 !important;
+  }
+
+  .osoHeroReadabilityLayer {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(3, 7, 22, 0.9) 0%,
+        rgba(3, 7, 22, 0.44) 44%,
+        rgba(3, 7, 22, 0.88) 100%
+      ) !important;
+  }
+
+  .osoHeroContent {
+    width: min(100%, 34rem) !important;
+    max-width: 34rem !important;
+  }
+
+  .osoHero h1 {
+    font-size: clamp(2rem, 8.8vw, 3rem) !important;
+  }
+
+  .osoHeroTagline {
+    font-size: clamp(1.15rem, 5.6vw, 1.7rem) !important;
+  }
+
+  .osoHeroCopyBlock p {
+    font-size: 0.8rem !important;
+    line-height: 1.5 !important;
+  }
+
+  .osoHeroVisualSpace {
+    min-height: clamp(18.5rem, 76vw, 28rem) !important;
+  }
+}
+/* OSO_HERO_CONTENT_PLACEMENT_FINAL_END */
+

@@ -464,7 +464,7 @@ export default function AssociationStoryRail({
                   type="button"
                   id={`association-tab-${item.id}`}
                   role="tab"
-                  aria-selected={selected}
+                  aria-selected={selected}  
                   aria-controls="association-active-panel"
                   tabIndex={selected ? 0 : -1}
                   className={styles.selectorItem}

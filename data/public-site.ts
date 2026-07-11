@@ -50,15 +50,15 @@ export const publicNavigation: readonly PublicNavigationItem[] = [
 ] as const;
 
 export const heroContent = {
-  eyebrow: "National multidisciplinary engineering skill ecosystem",
+  eyebrow: "Beyond classrooms",
   title: {
-    prefix: "The playground of",
-    accent: "Future Innovators.",
+    prefix: "The Playground of",
+    accent: "Future Innovators",
   },
   description:
-    "OMNI Skills Olympiad connects learning, practice, assessment, competition, and recognition into one visible engineering journey.",
+    "Practice every day. Prove your skills. Compete with purpose. Build a visible engineering journey through continuous learning, protected assessment, meaningful competition, and recognition.",
   publicNote:
-    "Explore the institutional website freely. Enter the authenticated OSO platform only when you are ready.",
+    "Explore the public ecosystem freely. Enter the existing OSO platform only when you are ready to participate.",
   primaryCta: {
     label: "Explore the ecosystem",
     href: "#ecosystem" as const,

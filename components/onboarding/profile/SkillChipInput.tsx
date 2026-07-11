@@ -1,8 +1,8 @@
-"use client";
+﻿"use client";
 
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 interface SkillChipInputProps {
   skills: string[];
@@ -15,10 +15,6 @@ export default function SkillChipInput({
 }: SkillChipInputProps) {
   const [input, setInput] = useState("");
   const [error, setError] = useState("");
-
-  useEffect(() => {
-    setError("");
-  }, [input]);
 
   const normalizeSkill = (skill: string): string => skill.trim().toLowerCase();
 
@@ -98,7 +94,13 @@ export default function SkillChipInput({
           <input
             type="text"
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={(e) => {
+              setInput(e.target.value);
+
+              if (error) {
+                setError("");
+              }
+            }}
             onKeyDown={handleKeyDown}
             placeholder={
               skills.length === 0
@@ -136,3 +138,4 @@ export default function SkillChipInput({
     </div>
   );
 }
+

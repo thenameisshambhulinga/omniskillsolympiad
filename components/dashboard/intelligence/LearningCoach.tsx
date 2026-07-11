@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
@@ -24,9 +24,12 @@ const slides = [
 export default function LearningCoach() {
   const [open, setOpen] = useState(false);
   const [slide, setSlide] = useState(0);
-
   useEffect(() => {
-    setOpen(!window.localStorage.getItem(STORAGE_KEY));
+    const openTimer = window.setTimeout(() => {
+      setOpen(!window.localStorage.getItem(STORAGE_KEY));
+    }, 0);
+
+    return () => window.clearTimeout(openTimer);
   }, []);
 
   const current = useMemo(() => slides[slide], [slide]);
@@ -118,3 +121,4 @@ export default function LearningCoach() {
     </AnimatePresence>
   );
 }
+

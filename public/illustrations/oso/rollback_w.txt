@@ -1,0 +1,19 @@
+$ProjectRoot = "C:\OmniSKillsOlympiad\Silicon-skillathon-git"
+$ExternalBackupRoot = "C:\OmniSKillsOlympiad\oso-safe-backups"
+
+cd $ProjectRoot
+
+$LatestBackup = Get-ChildItem $ExternalBackupRoot -Directory |
+  Where-Object { $_.Name -like "hero-content-fit-bottom-cta-*" } |
+  Sort-Object LastWriteTime -Descending |
+  Select-Object -First 1
+
+if (!$LatestBackup) {
+  throw "No hero-content-fit-bottom-cta backup found."
+}
+
+Copy-Item "$($LatestBackup.FullName)\next-gen-public-home.module.css" "components\public-site\next-gen-public-home.module.css" -Force
+
+npm run lint
+npm run typecheck
+npm run build

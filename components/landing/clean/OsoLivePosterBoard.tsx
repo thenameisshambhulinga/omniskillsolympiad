@@ -1,4 +1,4 @@
-//file location -- components/landing/clean/OsoLivePosterBoard.tsx
+﻿//file location -- components/landing/clean/OsoLivePosterBoard.tsx
 "use client";
 
 import type { ReactNode } from "react";
@@ -43,7 +43,7 @@ export default function OsoLivePosterBoard({
   posters = [],
   apiEndpoint = DEFAULT_API_ENDPOINT,
 }: OsoLivePosterBoardProps) {
-  const [livePosters, setLivePosters] = useState<LivePosterItem[]>(posters);
+  const [livePosters, setLivePosters] = useState<LivePosterItem[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const lastPayloadKeyRef = useRef("");
 
@@ -52,8 +52,12 @@ export default function OsoLivePosterBoard({
       return livePosters;
     }
 
+    if (posters.length > 0) {
+      return posters;
+    }
+
     return getFallbackPosters();
-  }, [livePosters]);
+  }, [livePosters, posters]);
 
   const ingestPosterPayload = useCallback((payload: unknown) => {
     const normalized = normalizeApiPayload(payload);
@@ -72,13 +76,6 @@ export default function OsoLivePosterBoard({
     setLivePosters(normalized);
     setActiveIndex(0);
   }, []);
-
-  useEffect(() => {
-    if (posters.length > 0) {
-      lastPayloadKeyRef.current = createPayloadKey(posters);
-      setLivePosters(posters);
-    }
-  }, [posters]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -121,14 +118,9 @@ export default function OsoLivePosterBoard({
 
     return () => window.clearInterval(timer);
   }, [safePosters.length]);
-
-  useEffect(() => {
-    if (activeIndex > safePosters.length - 1) {
-      setActiveIndex(0);
-    }
-  }, [activeIndex, safePosters.length]);
-
-  const activePoster = safePosters[activeIndex];
+  const currentActiveIndex =
+    safePosters.length > 0 && activeIndex < safePosters.length ? activeIndex : 0;
+  const activePoster = safePosters[currentActiveIndex];
 
   return (
     <section className="relative overflow-hidden rounded-[2rem] border border-slate-200 bg-[#f8f9fa] shadow-[0_24px_70px_rgba(15,23,42,0.08)]">
@@ -257,7 +249,7 @@ export default function OsoLivePosterBoard({
 
           <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
             {safePosters.slice(0, 4).map((item, index) => {
-              const active = index === activeIndex;
+              const active = index === currentActiveIndex;
 
               return (
                 <button
@@ -409,3 +401,4 @@ function getFallbackPosters(): LivePosterItem[] {
     },
   ];
 }
+

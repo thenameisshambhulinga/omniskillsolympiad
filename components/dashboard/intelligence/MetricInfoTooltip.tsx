@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
@@ -71,9 +71,12 @@ export default function MetricInfoTooltip({
       left: getSafeLeft(rect.left, rect.width),
     });
   };
-
   useEffect(() => {
-    setMounted(true);
+    const mountTimer = window.setTimeout(() => {
+      setMounted(true);
+    }, 0);
+
+    return () => window.clearTimeout(mountTimer);
   }, []);
 
   useEffect(() => {
@@ -166,3 +169,4 @@ export default function MetricInfoTooltip({
     </>
   );
 }
+

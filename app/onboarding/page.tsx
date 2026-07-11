@@ -14,19 +14,15 @@ export const revalidate = 0;
 export const runtime = "nodejs";
 
 type OnboardingPageProps = {
-  searchParams?:
-    | Promise<{
-        edit?: string;
-      }>
-    | {
-        edit?: string;
-      };
+  searchParams?: Promise<{
+    edit?: string;
+  }>;
 };
 
 export default async function OnboardingPage({
   searchParams,
 }: OnboardingPageProps) {
-  const resolvedSearchParams = searchParams ? await searchParams : {};
+  const resolvedSearchParams = (await searchParams) ?? {};
   const isPassportEditMode = resolvedSearchParams.edit === "passport";
 
   const session = await getServerSession(authOptions);

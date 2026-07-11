@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -162,7 +162,7 @@ export default function PublicNavbar() {
 
           <div className="ml-auto flex shrink-0 items-center gap-2 xl:ml-4">
             <Link
-              href="/auth/continue"
+              href="/login"
               className="group inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[#1959d1] px-4 py-2 text-sm font-extrabold text-white shadow-[0_12px_28px_rgba(25,89,209,0.2)] outline-none transition hover:-translate-y-0.5 hover:bg-[#1248b3] focus-visible:ring-2 focus-visible:ring-blue-700 focus-visible:ring-offset-2 sm:px-5"
             >
               <span className="sm:hidden">Enter</span>
@@ -275,7 +275,7 @@ export default function PublicNavbar() {
                     Continue through the established login, onboarding, and role-protected platform flow.
                   </p>
                   <Link
-                    href="/auth/continue"
+                    href="/login"
                     onClick={closeMenu}
                     className="mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-extrabold text-[#0b1730] outline-none transition hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-cyan-200"
                   >
@@ -291,3 +291,4 @@ export default function PublicNavbar() {
     </>
   );
 }
+

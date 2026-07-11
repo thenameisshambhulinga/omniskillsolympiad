@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { motion } from "framer-motion";
 import {
@@ -47,7 +47,7 @@ export default function CompetitionTimeline({
   // `timeline` is used by app/competition/page.tsx
   timeline,
 }: {
-  timeline: any;
+  timeline: unknown;
 }) {
   const status = timeline as unknown as
     | CompetitionControlStatus
@@ -195,3 +195,4 @@ export default function CompetitionTimeline({
     </motion.section>
   );
 }
+

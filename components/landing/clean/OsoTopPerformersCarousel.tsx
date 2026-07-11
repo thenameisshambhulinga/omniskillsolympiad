@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
@@ -41,21 +41,17 @@ export default function OsoTopPerformersCarousel({
   const safePerformers = useMemo(() => performers.slice(0, 10), [performers]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [paused, setPaused] = useState(false);
-
-  useEffect(() => {
-    if (safePerformers.length === 0) return;
-
-    setActiveIndex((current) =>
-      current >= safePerformers.length ? 0 : current,
-    );
-  }, [safePerformers.length]);
+  const activePerformerIndex =
+    safePerformers.length > 0 && activeIndex < safePerformers.length
+      ? activeIndex
+      : 0;
 
   useEffect(() => {
     if (paused || safePerformers.length <= 1) return;
 
     const timer = window.setInterval(() => {
       setActiveIndex((current) =>
-        current === safePerformers.length - 1 ? 0 : current + 1,
+        current >= safePerformers.length - 1 ? 0 : current + 1,
       );
     }, 4200);
 
@@ -64,13 +60,13 @@ export default function OsoTopPerformersCarousel({
 
   useEffect(() => {
     document
-      .getElementById(`oso-top-performer-${activeIndex}`)
+      .getElementById(`oso-top-performer-${activePerformerIndex}`)
       ?.scrollIntoView({
         behavior: "smooth",
         inline: "center",
         block: "nearest",
       });
-  }, [activeIndex]);
+  }, [activePerformerIndex]);
 
   const goPrevious = () => {
     setActiveIndex((current) =>
@@ -80,7 +76,7 @@ export default function OsoTopPerformersCarousel({
 
   const goNext = () => {
     setActiveIndex((current) =>
-      current === safePerformers.length - 1 ? 0 : current + 1,
+      current >= safePerformers.length - 1 ? 0 : current + 1,
     );
   };
 
@@ -155,8 +151,8 @@ export default function OsoTopPerformersCarousel({
 
                   <div className="flex snap-x snap-mandatory gap-6 overflow-x-auto pb-8 pt-5 [scrollbar-color:#22d3ee_transparent] [scrollbar-width:thin]">
                     {safePerformers.map((performer, index) => {
-                      const active = index === activeIndex;
-                      const distance = Math.abs(index - activeIndex);
+                      const active = index === activePerformerIndex;
+                      const distance = Math.abs(index - activePerformerIndex);
                       const tone = getRankTone(performer.rank);
 
                       return (

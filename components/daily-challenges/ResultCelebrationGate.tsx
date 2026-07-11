@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { AnimatePresence, motion } from "framer-motion";
 import { CheckCircle2, FastForward, Sparkles } from "lucide-react";
@@ -19,9 +19,12 @@ export default function ResultCelebrationGate({
   const [showIntro, setShowIntro] = useState(playIntro);
   const [videoReady, setVideoReady] = useState(false);
   const [videoFailed, setVideoFailed] = useState(false);
-
   useEffect(() => {
-    setShowIntro(playIntro);
+    const syncTimer = window.setTimeout(() => {
+      setShowIntro(playIntro);
+    }, 0);
+
+    return () => window.clearTimeout(syncTimer);
   }, [playIntro]);
 
   useEffect(() => {

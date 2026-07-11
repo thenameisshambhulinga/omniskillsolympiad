@@ -1,16 +1,25 @@
-"use client";
+﻿"use client";
 
 import { motion } from "framer-motion";
 import { Award, CheckCircle2, Clock, Lock } from "lucide-react";
 
 import type { CompetitionPassportMilestone } from "@/lib/profile/competition-passport";
 
-function getStatusIcon(status: CompetitionPassportMilestone["status"]) {
-  if (status === "COMPLETED") return CheckCircle2;
-  if (status === "IN_PROGRESS") return Clock;
-  return Lock;
-}
+function StatusBadgeIcon({
+  status,
+}: {
+  status: CompetitionPassportMilestone["status"];
+}) {
+  if (status === "COMPLETED") {
+    return <CheckCircle2 className="h-4 w-4" />;
+  }
 
+  if (status === "IN_PROGRESS") {
+    return <Clock className="h-4 w-4" />;
+  }
+
+  return <Lock className="h-4 w-4" />;
+}
 function getStatusClass(status: CompetitionPassportMilestone["status"]) {
   if (status === "COMPLETED") {
     return "border-emerald-400/25 bg-emerald-400/10 text-emerald-200";
@@ -27,10 +36,7 @@ export default function CompetitionMilestoneCard({
   milestone,
 }: {
   milestone: CompetitionPassportMilestone;
-}) {
-  const StatusIcon = getStatusIcon(milestone.status);
-
-  return (
+}) {return (
     <motion.article
       initial={{ opacity: 0, y: 16, scale: 0.98 }}
       whileInView={{ opacity: 1, y: 0, scale: 1 }}
@@ -57,7 +63,7 @@ export default function CompetitionMilestoneCard({
             milestone.status,
           )}`}
         >
-          <StatusIcon className="h-4 w-4" />
+          <StatusBadgeIcon status={milestone.status} />
           {milestone.status.replace("_", " ")}
         </div>
       </div>
@@ -87,3 +93,4 @@ export default function CompetitionMilestoneCard({
     </motion.article>
   );
 }
+

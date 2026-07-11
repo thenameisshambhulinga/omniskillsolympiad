@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useState } from "react";
 
@@ -39,12 +39,6 @@ export default function LoopTypewriter({
   const [displayText, setDisplayText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
-
-  useEffect(() => {
-    setDisplayText("");
-    setIsDeleting(false);
-    setHasStarted(false);
-  }, [cleanText]);
 
   useEffect(() => {
     if (!cleanText) {

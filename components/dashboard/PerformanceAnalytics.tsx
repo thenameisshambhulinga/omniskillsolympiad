@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import {
@@ -40,9 +40,12 @@ export default function PerformanceAnalytics({
   data,
 }: PerformanceAnalyticsProps) {
   const [isMounted, setIsMounted] = useState(false);
-
   useEffect(() => {
-    setIsMounted(true);
+    const mountTimer = window.setTimeout(() => {
+      setIsMounted(true);
+    }, 0);
+
+    return () => window.clearTimeout(mountTimer);
   }, []);
 
   const sanitizedData = useMemo<SanitizedAnalyticsPoint[]>(() => {
@@ -231,3 +234,4 @@ function PremiumTooltip({ active, payload, label }: CustomTooltipProps) {
     </div>
   );
 }
+

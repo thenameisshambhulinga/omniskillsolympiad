@@ -1,4 +1,4 @@
-import Image from "next/image";
+﻿import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
 
@@ -30,7 +30,7 @@ export default function PublicFooter() {
 
             <div className="mt-7 flex flex-wrap gap-3">
               <Link
-                href="/auth/continue"
+                href="/login"
                 className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#1959d1] px-6 py-3 text-sm font-extrabold text-white shadow-[0_14px_30px_rgba(25,89,209,0.18)] outline-none transition hover:-translate-y-0.5 hover:bg-[#1248b3] focus-visible:ring-2 focus-visible:ring-blue-700 focus-visible:ring-offset-2"
               >
                 Enter OSO platform
@@ -126,7 +126,7 @@ export default function PublicFooter() {
 
         <div className="mt-12 flex flex-col gap-5 border-t border-slate-200 pt-7 text-sm font-semibold text-slate-500 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <p>© {new Date().getFullYear()} OMNI Skills Olympiad. All rights reserved.</p>
+            <p>Â© {new Date().getFullYear()} OMNI Skills Olympiad. All rights reserved.</p>
             <p className="mt-1">{contactInformation.poweredBy}</p>
           </div>
 
@@ -144,3 +144,4 @@ export default function PublicFooter() {
     </footer>
   );
 }
+

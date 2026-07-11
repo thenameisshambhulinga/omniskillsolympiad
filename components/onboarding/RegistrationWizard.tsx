@@ -1,6 +1,6 @@
-"use client";
+﻿"use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import {
@@ -88,33 +88,22 @@ export default function RegistrationWizard({
 }) {
   const router = useRouter();
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
-  const [studentId, setStudentId] = useState("");
+  const [studentId] = useState(() => initialData?.studentId ?? generateStudentId());
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
 
-  const [formData, setFormData] = useState<RegistrationFormData>(() =>
-    initialData ?? createEmptyRegistrationFormData(),
-  );
+  const [formData, setFormData] = useState<RegistrationFormData>(() => {
+    const baseFormData = initialData ?? createEmptyRegistrationFormData();
 
-  useEffect(() => {
-    if (initialData?.studentId) {
-      setStudentId(initialData.studentId);
-      return;
+    if (baseFormData.studentId) {
+      return baseFormData;
     }
 
-    const nextId = generateStudentId();
-
-    setFormData((current) => {
-      if (current.studentId) return current;
-
-      return {
-        ...current,
-        studentId: nextId,
-      };
-    });
-
-    setStudentId(nextId);
-  }, [initialData?.studentId]);
+    return {
+      ...baseFormData,
+      studentId,
+    };
+  });
 
   const currentStep = steps[currentStepIndex];
   const isFirstStep = currentStepIndex === 0;
@@ -376,3 +365,4 @@ function StepHeader({
     </div>
   );
 }
+

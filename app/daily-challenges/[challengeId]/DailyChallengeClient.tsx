@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
@@ -122,7 +122,7 @@ export default function DailyChallengeClient({
   const autoSubmittedRef = useRef(false);
   const hasStartedRef = useRef(false);
   const lastViolationTimestampRef = useRef(0);
-  const initialDurationRef = useRef<number | null>(null);
+  const [initialDurationSeconds, setInitialDurationSeconds] = useState<number | null>(null);
   const fullscreenEnabledRef = useRef(false);
 
   useEffect(() => {
@@ -132,12 +132,6 @@ export default function DailyChallengeClient({
   useEffect(() => {
     preloadPerformanceCelebrationVideo();
   }, []);
-
-  useEffect(() => {
-    if (timeLeft !== null && initialDurationRef.current === null) {
-      initialDurationRef.current = Math.max(timeLeft, 1);
-    }
-  }, [timeLeft]);
 
   useEffect(() => {
     if (!attemptStarted || challengeEnded || challengeCompleted) {
@@ -392,7 +386,7 @@ export default function DailyChallengeClient({
 
       if (typeof data.remainingMs === "number") {
         const seconds = Math.max(0, Math.ceil(data.remainingMs / 1000));
-        initialDurationRef.current = Math.max(seconds, 1);
+        setInitialDurationSeconds(Math.max(seconds, 1));
         setTimeLeft(seconds);
       }
     } catch (error) {
@@ -477,7 +471,7 @@ export default function DailyChallengeClient({
           Math.min(
             100,
             (timeLeft /
-              (initialDurationRef.current ?? Math.max(timeLeft, 1))) *
+              (initialDurationSeconds ?? Math.max(timeLeft, 1))) *
               100,
           ),
         );
@@ -622,13 +616,7 @@ export default function DailyChallengeClient({
                 result={result}
                 answeredCount={answeredCount}
                 totalQuestions={totalQuestions}
-                submitting={submitting}
-                disabled={
-                  submitting ||
-                  challengeCompleted ||
-                  autoSubmittedRef.current ||
-                  submitLockRef.current
-                }
+                submitting={submitting}                disabled={submitting || challengeCompleted}
                 onSubmit={() => void handleSubmit()}
               />
             </>
