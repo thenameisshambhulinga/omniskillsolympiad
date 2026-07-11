@@ -135,51 +135,6 @@ export default function PublicHomePage() {
 
       <WhyOsoSection />
 
-<section className={styles.osoDifferent}>
-        <p className={styles.osoEyebrowCenter}>One place. Every possibility.</p>
-        <h2>What Makes OSO Different?</h2>
-
-        <div className={styles.osoCompareGrid}>
-          <article>
-            <h3>Most Competition Websites</h3>
-            {[
-              "One-time event",
-              "Registration to competition only",
-              "Static certificates",
-              "Single leaderboard",
-              "Limited feedback",
-              "One discipline",
-            ].map((item) => (
-              <p key={item}>— {item}</p>
-            ))}
-          </article>
-
-          <div className={styles.osoVs}>VS</div>
-
-          <article className={styles.osoCompareStrong}>
-            <h3>Omni Skills Olympiad (OSO)</h3>
-            {[
-              "Continuous learning journey",
-              "Practice → Assess → Compete → Improve",
-              "Continuous skill profile",
-              "Multi-level progression",
-              "Continuous analytics and feedback",
-              "Multi-disciplinary ecosystem",
-            ].map((item) => (
-              <p key={item}>
-                <CheckCircle2 aria-hidden="true" /> {item}
-              </p>
-            ))}
-          </article>
-
-          <aside>
-            <p>Compete with purpose</p>
-            <h3>Every challenge moves you closer to something bigger.</h3>
-            <Rocket aria-hidden="true" />
-          </aside>
-        </div>
-      </section>
-
     
       <OsoJourneyWorksSection />
 

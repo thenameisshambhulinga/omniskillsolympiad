@@ -1,4 +1,4 @@
-﻿.page {
+.page {
   --public-ink: #101828;
   --public-muted: #526071;
   --public-line: rgba(15, 23, 42, 0.11);
@@ -3949,4 +3949,34 @@
   }
 }
 /* OSO_HERO_CONTENT_PLACEMENT_FINAL_END */
+/* OSO PUBLIC GLOBAL TYPOGRAPHY STANDARD - START */
 
+/*
+  CSS Modules require a local class in every selector.
+  .osoRedesign is the local homepage root class.
+*/
+
+/* All public-site section h2 titles: 44px desktop */
+.osoRedesign section h2 {
+  font-size: 44px !important;
+  line-height: 1.05 !important;
+  letter-spacing: -0.045em !important;
+  text-wrap: balance;
+}
+
+/* Increase public-site eyebrow and kicker labels by approximately 2px */
+.osoRedesign [class*="eyebrow" i],
+.osoRedesign [class*="kicker" i],
+.osoRedesign [class*="sectionLabel" i] {
+  font-size: calc(0.72rem + 2px) !important;
+  line-height: 1.2 !important;
+}
+
+@media (max-width: 720px) {
+  .osoRedesign section h2 {
+    font-size: clamp(2rem, 9vw, 2.75rem) !important;
+    line-height: 1.07 !important;
+  }
+}
+
+/* OSO PUBLIC GLOBAL TYPOGRAPHY STANDARD - END */

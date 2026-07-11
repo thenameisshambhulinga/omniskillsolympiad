@@ -1,4 +1,4 @@
-.sectionContainer {
+﻿.sectionContainer {
   position: relative;
   z-index: 2;
   width: min(100% - 2rem, 1320px);
@@ -1175,3 +1175,883 @@
     grid-template-columns: 1fr !important;
   }
 }
+/* OSO ABOUT WHY FINAL VISUAL REFINEMENT - START */
+
+/* ---------- Shared section typography ---------- */
+
+.aboutTitle,
+.whyTitle {
+  max-width: 100%;
+  font-size: 44px !important;
+  line-height: 1.04 !important;
+  letter-spacing: -0.045em !important;
+  text-wrap: balance;
+}
+
+.sectionEyebrow {
+  font-size: calc(0.72rem + 2px) !important;
+  line-height: 1.2;
+}
+
+.aboutSection,
+.whySection {
+  scroll-margin-top: 5.5rem;
+}
+
+/* ---------- About OSO illustration correction ---------- */
+
+.aboutLayout {
+  align-items: start !important;
+}
+
+.aboutEditorial {
+  display: grid !important;
+  grid-template-rows: auto auto !important;
+  align-content: start !important;
+  gap: 1rem !important;
+}
+
+.aboutImageStage {
+  position: relative !important;
+  width: 100% !important;
+  min-height: clamp(20rem, 31vw, 27rem) !important;
+  margin-top: 0.35rem !important;
+  overflow: visible !important;
+  isolation: isolate;
+}
+
+.aboutStudentsImage {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 2 !important;
+
+  background-image:
+    url("/illustrations/oso/about-oso-students.png") !important;
+  background-repeat: no-repeat !important;
+  background-position: left center !important;
+  background-size: contain !important;
+
+  transform: none !important;
+  transform-origin: center !important;
+
+  filter:
+    saturate(1.035)
+    contrast(1.02)
+    drop-shadow(0 22px 34px rgba(79, 70, 229, 0.13)) !important;
+}
+
+.aboutImageStage::before {
+  content: "";
+  position: absolute;
+  inset: 15% 8% 8% 3%;
+  z-index: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      circle,
+      rgba(99, 102, 241, 0.12),
+      rgba(139, 92, 246, 0.045) 44%,
+      transparent 72%
+    );
+  filter: blur(18px);
+}
+
+.imageArc {
+  right: 3% !important;
+  top: 11% !important;
+  width: 6rem !important;
+  height: 6rem !important;
+  opacity: 0.38 !important;
+}
+
+.imageDots {
+  left: 1% !important;
+  bottom: 9% !important;
+  width: 5rem !important;
+  height: 4rem !important;
+  opacity: 0.22 !important;
+}
+
+/* ---------- Why OSO primary layout ---------- */
+
+.whyRefinedLayout {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1.12fr)
+    minmax(25rem, 0.88fr);
+  align-items: stretch;
+  gap: clamp(1.25rem, 2.6vw, 2.3rem);
+  margin-top: clamp(2rem, 3.7vw, 3rem);
+}
+
+.progressionVisual {
+  position: relative;
+  isolation: isolate;
+  min-height: clamp(31rem, 42vw, 38rem);
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.19);
+  border-radius: 1.65rem;
+  background:
+    radial-gradient(
+      circle at 72% 42%,
+      rgba(99, 102, 241, 0.09),
+      transparent 18rem
+    ),
+    radial-gradient(
+      circle at 30% 80%,
+      rgba(168, 85, 247, 0.08),
+      transparent 16rem
+    ),
+    rgba(255, 255, 255, 0.6);
+  box-shadow:
+    0 24px 60px rgba(30, 41, 59, 0.075),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92);
+}
+
+.progressionVisual::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.22;
+  background-image:
+    radial-gradient(
+      circle,
+      rgba(124, 58, 237, 0.23) 1px,
+      transparent 1.4px
+    );
+  background-size: 22px 22px;
+  mask-image:
+    radial-gradient(
+      circle at 52% 52%,
+      black,
+      transparent 78%
+    );
+}
+
+.progressionArtwork {
+  position: absolute;
+  inset: 3.5rem 1rem 1.5rem 9rem;
+  z-index: 1;
+
+  background-image:
+    url("/illustrations/oso/why-oso-students.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+
+  pointer-events: none;
+  filter:
+    saturate(1.045)
+    contrast(1.02)
+    drop-shadow(0 23px 34px rgba(99, 102, 241, 0.15));
+}
+
+.progressionLabels {
+  position: absolute;
+  inset: 1rem auto 1rem 1rem;
+  z-index: 3;
+  display: grid;
+  width: min(12.5rem, 31%);
+  align-content: center;
+  gap: 0.7rem;
+}
+
+.progressionLabel {
+  --label-accent: #f97316;
+  --label-soft: #fff3e8;
+
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.7rem;
+  min-height: 4.9rem;
+  padding: 0.72rem;
+  border: 1px solid rgba(148, 163, 184, 0.19);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.91);
+  box-shadow:
+    0 12px 30px rgba(15, 23, 42, 0.065);
+  backdrop-filter: blur(12px);
+  transition:
+    transform 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.progressionLabel[data-tone="blue"] {
+  --label-accent: #2563eb;
+  --label-soft: #edf4ff;
+}
+
+.progressionLabel[data-tone="violet"] {
+  --label-accent: #7c3aed;
+  --label-soft: #f3edff;
+}
+
+.progressionLabel[data-tone="gold"] {
+  --label-accent: #d97706;
+  --label-soft: #fff7df;
+}
+
+.progressionLabel:hover {
+  transform: translateX(4px);
+  border-color:
+    color-mix(
+      in srgb,
+      var(--label-accent) 28%,
+      transparent
+    );
+  box-shadow:
+    0 17px 36px rgba(15, 23, 42, 0.1);
+}
+
+.progressionLabelIcon {
+  display: grid;
+  width: 2.7rem;
+  height: 2.7rem;
+  place-items: center;
+  border-radius: 0.82rem;
+  background: var(--label-soft);
+  color: var(--label-accent);
+}
+
+.progressionLabelIcon svg {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.progressionLabelText {
+  display: block;
+  min-width: 0;
+}
+
+.progressionLabelText small {
+  display: block;
+  color: var(--label-accent);
+  font-size: 0.55rem;
+  font-style: normal;
+  font-weight: 950;
+  letter-spacing: 0.1em;
+}
+
+.progressionLabelText strong {
+  display: block;
+  margin-top: 0.12rem;
+  color: #12203f;
+  font-size: 0.82rem;
+  font-weight: 950;
+  line-height: 1.15;
+}
+
+.progressionLabelText em {
+  display: block;
+  margin-top: 0.12rem;
+  overflow: hidden;
+  color: #64748b;
+  font-size: 0.62rem;
+  font-style: normal;
+  font-weight: 650;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---------- Why OSO benefits ---------- */
+
+.refinedBenefitsPanel {
+  height: 100%;
+  padding: clamp(1.1rem, 2vw, 1.45rem);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 1.65rem;
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(124, 58, 237, 0.065),
+      transparent 14rem
+    ),
+    rgba(255, 255, 255, 0.95);
+  box-shadow:
+    0 24px 60px rgba(30, 41, 59, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92);
+}
+
+.refinedBenefitsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.65rem;
+  margin-top: 1.15rem;
+}
+
+.refinedBenefitItem {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 4.15rem;
+  padding: 0.7rem 0.78rem;
+
+  /* No horizontal separator and no tick/check icon */
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 0.95rem;
+  background:
+    linear-gradient(
+      110deg,
+      rgba(248, 250, 252, 0.94),
+      rgba(255, 255, 255, 0.98)
+    );
+  box-shadow:
+    0 9px 24px rgba(30, 41, 59, 0.04);
+  transition:
+    transform 200ms ease,
+    border-color 200ms ease,
+    box-shadow 200ms ease;
+}
+
+.refinedBenefitItem:hover {
+  transform: translateY(-2px);
+  border-color: rgba(124, 58, 237, 0.22);
+  box-shadow:
+    0 14px 30px rgba(79, 70, 229, 0.075);
+}
+
+.refinedBenefitItem > span {
+  display: grid;
+  width: 2.7rem;
+  height: 2.7rem;
+  place-items: center;
+  border-radius: 0.82rem;
+  background:
+    linear-gradient(
+      135deg,
+      #f3edff,
+      #eef2ff
+    );
+  color: #6d28d9;
+  box-shadow:
+    0 8px 20px rgba(99, 102, 241, 0.1);
+}
+
+.refinedBenefitItem > span svg {
+  width: 1.18rem;
+  height: 1.18rem;
+}
+
+.refinedBenefitItem strong {
+  color: #24324f;
+  font-size: 0.78rem;
+  font-weight: 850;
+  line-height: 1.35;
+}
+
+/* Hide obsolete layout only if old markup remains temporarily */
+.whySection .progressionColumn,
+.whySection .progressionList,
+.whySection .benefitList {
+  border-bottom: 0;
+}
+
+/* ---------- Tablet ---------- */
+
+@media (max-width: 1080px) {
+  .aboutTitle,
+  .whyTitle {
+    font-size: 44px !important;
+    white-space: normal !important;
+  }
+
+  .whyRefinedLayout {
+    grid-template-columns: 1fr;
+  }
+
+  .progressionVisual {
+    min-height: 35rem;
+  }
+
+  .progressionArtwork {
+    inset: 3rem 1rem 1rem 10rem;
+  }
+
+  .progressionLabels {
+    width: 12rem;
+  }
+
+  .refinedBenefitsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 720px) {
+  .aboutTitle,
+  .whyTitle {
+    font-size: clamp(2rem, 9vw, 2.75rem) !important;
+    line-height: 1.06 !important;
+  }
+
+  .sectionEyebrow {
+    font-size: 0.78rem !important;
+  }
+
+  .aboutImageStage {
+    min-height: clamp(18rem, 72vw, 24rem) !important;
+    overflow: visible !important;
+  }
+
+  .aboutStudentsImage {
+    background-position: center !important;
+    background-size: contain !important;
+  }
+
+  .progressionVisual {
+    min-height: auto;
+    padding: 1rem;
+  }
+
+  .progressionArtwork {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    min-height: clamp(21rem, 80vw, 29rem);
+    background-position: center;
+    background-size: contain;
+  }
+
+  .progressionLabels {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 0.75rem;
+  }
+
+  .progressionLabel {
+    min-height: 4.5rem;
+  }
+
+  .refinedBenefitsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 460px) {
+  .progressionLabels {
+    grid-template-columns: 1fr;
+  }
+
+  .progressionLabelText em {
+    white-space: normal;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .progressionLabel,
+  .refinedBenefitItem {
+    transition: none;
+  }
+
+  .progressionLabel:hover,
+  .refinedBenefitItem:hover {
+    transform: none;
+  }
+}
+
+/* OSO ABOUT WHY FINAL VISUAL REFINEMENT - END */
+
+/* WHY OSO CLEAN ILLUSTRATION REFINEMENT - START */
+
+/* ----------------------------------------------
+   Global consistency for About OSO + Why OSO
+---------------------------------------------- */
+
+.aboutSection,
+.whySection {
+  --oso-body-size: 16px;
+}
+
+.aboutTitle,
+.whyTitle {
+  font-size: 44px !important;
+  line-height: 1.04 !important;
+  letter-spacing: -0.045em !important;
+  text-wrap: balance;
+}
+
+.sectionEyebrow {
+  font-size: calc(0.72rem + 2px) !important;
+  line-height: 1.2 !important;
+}
+
+.aboutSection p,
+.whySection p,
+.aboutSection li,
+.whySection li {
+  font-size: var(--oso-body-size) !important;
+  line-height: 1.68 !important;
+}
+
+/* Keep About image clearly visible and properly fitted */
+.aboutImageStage {
+  min-height: clamp(20rem, 30vw, 27rem) !important;
+  overflow: visible !important;
+}
+
+.aboutStudentsImage {
+  inset: 0 !important;
+  background-position: left center !important;
+  background-size: contain !important;
+  transform: none !important;
+}
+
+/* ----------------------------------------------
+   Why OSO layout
+---------------------------------------------- */
+
+.whyRefinedLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.06fr) minmax(24rem, 0.94fr);
+  align-items: stretch;
+  gap: clamp(1.35rem, 2.8vw, 2.25rem);
+  margin-top: clamp(2rem, 3.5vw, 3rem);
+}
+
+.whyIllustrationSurface {
+  position: relative;
+  min-height: clamp(31rem, 41vw, 38rem);
+  overflow: hidden;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  isolation: isolate;
+}
+
+.whyIllustrationSurface::before {
+  content: "";
+  position: absolute;
+  inset: 3% 2% 4% 2%;
+  z-index: 0;
+  border-radius: 2rem;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 20% 70%, rgba(99, 102, 241, 0.08), transparent 26%),
+    radial-gradient(circle at 78% 26%, rgba(249, 115, 22, 0.08), transparent 22%),
+    linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0.02));
+}
+
+.whyIllustrationGlow {
+  position: absolute;
+  inset: 10% 6% 10% 6%;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 35% 72%, rgba(59, 130, 246, 0.14), transparent 22%),
+    radial-gradient(circle at 62% 55%, rgba(139, 92, 246, 0.12), transparent 20%),
+    radial-gradient(circle at 84% 22%, rgba(249, 115, 22, 0.14), transparent 18%);
+  filter: blur(28px);
+}
+
+.progressionArtwork {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background-image: url("/illustrations/oso/why-oso-students.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 100% auto;
+  pointer-events: none;
+  filter:
+    saturate(1.03)
+    contrast(1.02)
+    drop-shadow(0 18px 24px rgba(79, 70, 229, 0.08));
+}
+
+/* ----------------------------------------------
+   Why OSO benefits panel
+---------------------------------------------- */
+
+.refinedBenefitsPanel {
+  height: 100%;
+  padding: clamp(1.1rem, 2vw, 1.45rem);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 1.6rem;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(124, 58, 237, 0.05), transparent 14rem),
+    rgba(255, 255, 255, 0.94);
+  box-shadow:
+    0 24px 56px rgba(30, 41, 59, 0.075),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.benefitsPanelHeader h3 {
+  margin: 0;
+  color: #112349;
+  font-size: clamp(1.75rem, 2.4vw, 2.35rem);
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+}
+
+.refinedBenefitsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.8rem;
+  margin-top: 1.15rem;
+}
+
+.refinedBenefitItem {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.8rem;
+  min-height: 4.45rem;
+  padding: 0.82rem 0.9rem;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: 1rem;
+  background:
+    linear-gradient(120deg, rgba(248, 250, 252, 0.92), rgba(255, 255, 255, 0.98));
+  box-shadow:
+    0 10px 24px rgba(15, 23, 42, 0.04);
+  transition:
+    transform 200ms ease,
+    border-color 200ms ease,
+    box-shadow 200ms ease;
+}
+
+.refinedBenefitItem:hover {
+  transform: translateY(-2px);
+  border-color: rgba(124, 58, 237, 0.2);
+  box-shadow:
+    0 16px 30px rgba(79, 70, 229, 0.08);
+}
+
+.refinedBenefitItem > span {
+  display: grid;
+  width: 2.8rem;
+  height: 2.8rem;
+  place-items: center;
+  border-radius: 0.9rem;
+  background: linear-gradient(135deg, #f3edff, #eef2ff);
+  color: #6d28d9;
+  box-shadow: 0 8px 18px rgba(99, 102, 241, 0.08);
+}
+
+.refinedBenefitItem > span svg {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.refinedBenefitItem strong {
+  color: #1f3358;
+  font-size: 18px !important; /* +2px as requested */
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+/* ----------------------------------------------
+   Remove old floating card behavior if old styles remain
+---------------------------------------------- */
+
+.progressionLabels,
+.progressionLabel {
+  display: none !important;
+}
+
+/* ----------------------------------------------
+   Responsive
+---------------------------------------------- */
+
+@media (max-width: 1080px) {
+  .whyRefinedLayout {
+    grid-template-columns: 1fr;
+  }
+
+  .whyIllustrationSurface {
+    min-height: clamp(26rem, 62vw, 34rem);
+  }
+
+  .progressionArtwork {
+    background-size: contain;
+  }
+
+  .refinedBenefitsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .aboutTitle,
+  .whyTitle {
+    font-size: clamp(2rem, 9vw, 2.75rem) !important;
+  }
+
+  .sectionEyebrow {
+    font-size: 0.78rem !important;
+  }
+
+  .aboutSection,
+  .whySection {
+    --oso-body-size: 15px;
+  }
+
+  .whyIllustrationSurface {
+    min-height: clamp(19rem, 84vw, 28rem);
+  }
+
+  .progressionArtwork {
+    background-size: contain;
+    background-position: center center;
+  }
+
+  .benefitsPanelHeader h3 {
+    font-size: clamp(1.45rem, 6.6vw, 1.95rem);
+  }
+
+  .refinedBenefitsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .refinedBenefitItem strong {
+    font-size: 16px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .refinedBenefitItem {
+    transition: none;
+  }
+
+  .refinedBenefitItem:hover {
+    transform: none;
+  }
+}
+
+/* WHY OSO CLEAN ILLUSTRATION REFINEMENT - END */
+
+/* ABOUT OSO ILLUSTRATION FIT REFINEMENT - START */
+
+/*
+  Goal:
+  - make the About OSO illustration occupy the left visual area more evenly
+  - reduce awkward whitespace
+  - keep the image clean, centered, and properly scaled
+*/
+
+.aboutImageStage,
+.aboutIllustrationStage,
+.aboutVisualStage {
+  position: relative;
+  min-height: clamp(24rem, 36vw, 32rem) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: visible !important;
+  padding: 0 !important;
+}
+
+.aboutImageStage::before,
+.aboutIllustrationStage::before,
+.aboutVisualStage::before {
+  content: "";
+  position: absolute;
+  inset: 2% 2% 2% 2%;
+  border-radius: 1.75rem;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 20% 78%, rgba(99, 102, 241, 0.05), transparent 24%),
+    radial-gradient(circle at 84% 22%, rgba(56, 189, 248, 0.05), transparent 18%);
+  z-index: 0;
+}
+
+.aboutStudentsImage,
+.aboutIllustrationImage,
+.aboutSectionImage {
+  position: relative;
+  z-index: 1;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: clamp(23rem, 34vw, 30rem) !important;
+  max-width: 100% !important;
+  margin: 0 auto !important;
+  background-repeat: no-repeat !important;
+  background-position: center center !important;
+  background-size: contain !important;
+  transform: none !important;
+}
+
+/* If the illustration is rendered as an img or next/image element */
+.aboutImageStage img,
+.aboutIllustrationStage img,
+.aboutVisualStage img,
+.aboutStudentsImage img,
+.aboutIllustrationImage img,
+.aboutSectionImage img {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  min-height: clamp(23rem, 34vw, 30rem) !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  margin: 0 auto !important;
+}
+
+/* Better left-column alignment when image sits below body copy */
+.aboutMediaColumn,
+.aboutLeftColumn,
+.aboutPrimaryColumn {
+  display: flex;
+  flex-direction: column;
+}
+
+.aboutMediaColumn .aboutImageStage,
+.aboutLeftColumn .aboutImageStage,
+.aboutPrimaryColumn .aboutImageStage {
+  margin-top: 0.75rem !important;
+}
+
+/* Tablet */
+@media (max-width: 1080px) {
+  .aboutImageStage,
+  .aboutIllustrationStage,
+  .aboutVisualStage {
+    min-height: clamp(21rem, 50vw, 28rem) !important;
+  }
+
+  .aboutStudentsImage,
+  .aboutIllustrationImage,
+  .aboutSectionImage,
+  .aboutImageStage img,
+  .aboutIllustrationStage img,
+  .aboutVisualStage img,
+  .aboutStudentsImage img,
+  .aboutIllustrationImage img,
+  .aboutSectionImage img {
+    min-height: clamp(20rem, 48vw, 27rem) !important;
+  }
+}
+
+/* Mobile */
+@media (max-width: 720px) {
+  .aboutImageStage,
+  .aboutIllustrationStage,
+  .aboutVisualStage {
+    min-height: clamp(18rem, 76vw, 24rem) !important;
+  }
+
+  .aboutStudentsImage,
+  .aboutIllustrationImage,
+  .aboutSectionImage,
+  .aboutImageStage img,
+  .aboutIllustrationStage img,
+  .aboutVisualStage img,
+  .aboutStudentsImage img,
+  .aboutIllustrationImage img,
+  .aboutSectionImage img {
+    min-height: clamp(16rem, 70vw, 22rem) !important;
+  }
+}
+
+/* ABOUT OSO ILLUSTRATION FIT REFINEMENT - END */

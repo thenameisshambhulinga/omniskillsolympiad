@@ -1,92 +1,24 @@
-import {
+﻿import {
   Award,
   BookOpenCheck,
-  BriefcaseBusiness,
-  CheckCircle2,
-  GraduationCap,
   Lightbulb,
   Rocket,
   Sparkles,
   Target,
   Trophy,
-  Users,
   Wrench,
 } from "lucide-react";
 
 import styles from "@/components/public-site/about-why-oso.module.css";
 
-const progression = [
-  {
-    step: "01",
-    title: "Education",
-    description: "Education teaches concepts.",
-    icon: GraduationCap,
-    tone: "orange",
-  },
-  {
-    step: "02",
-    title: "Experience",
-    description: "Experience builds confidence.",
-    icon: BriefcaseBusiness,
-    tone: "blue",
-  },
-  {
-    step: "03",
-    title: "Skills",
-    description: "Skills create opportunities.",
-    icon: Target,
-    tone: "violet",
-  },
-] as const;
-
 const learnerBenefits = [
-  {
-    title: "Apply what they learn",
-    icon: BookOpenCheck,
-  },
-  {
-    title: "Build practical skills",
-    icon: Wrench,
-  },
-  {
-    title: "Solve real-world challenges",
-    icon: Target,
-  },
-  {
-    title: "Learn through hands-on experiences",
-    icon: Lightbulb,
-  },
-  {
-    title: "Showcase their talent",
-    icon: Trophy,
-  },
-  {
-    title: "Gain recognition",
-    icon: Award,
-  },
-  {
-    title: "Prepare for future opportunities",
-    icon: Rocket,
-  },
-] as const;
-
-const philosophyItems = [
-  {
-    title: "Every talent deserves an opportunity",
-    icon: Users,
-  },
-  {
-    title: "Every success starts with believing in yourself",
-    icon: Trophy,
-  },
-  {
-    title: "From curiosity to capability",
-    icon: Lightbulb,
-  },
-  {
-    title: "From learning to leadership",
-    icon: GraduationCap,
-  },
+  { title: "Apply what they learn", icon: BookOpenCheck },
+  { title: "Build practical skills", icon: Wrench },
+  { title: "Solve real-world challenges", icon: Target },
+  { title: "Learn through hands-on experiences", icon: Lightbulb },
+  { title: "Showcase their talent", icon: Trophy },
+  { title: "Gain recognition", icon: Award },
+  { title: "Prepare for future opportunities", icon: Rocket },
 ] as const;
 
 export default function WhyOsoSection() {
@@ -114,60 +46,17 @@ export default function WhyOsoSection() {
           </p>
         </header>
 
-        <div className={styles.whyLayout}>
-          <div className={styles.progressionColumn}>
-            <div className={styles.progressionList}>
-              {progression.map((item) => {
-                const Icon = item.icon;
-
-                return (
-                  <article
-                    key={item.step}
-                    className={styles.progressionCard}
-                    data-tone={item.tone}
-                  >
-                    <span className={styles.progressionStep}>
-                      {item.step}
-                    </span>
-
-                    <span className={styles.progressionIcon}>
-                      <Icon aria-hidden="true" />
-                    </span>
-
-                    <div>
-                      <h3>{item.title}</h3>
-                      <p>{item.description}</p>
-                    </div>
-                  </article>
-                );
-              })}
-
-              <article className={styles.opportunityCard}>
-                <span className={styles.opportunityIcon}>
-                  <Trophy aria-hidden="true" />
-                </span>
-
-                <div>
-                  <h3>Opportunities</h3>
-                  <p>
-                    Unlock your future with every achievement.
-                  </p>
-                </div>
-              </article>
-            </div>
-
+        <div className={styles.whyRefinedLayout}>
+          <div className={styles.whyIllustrationSurface} aria-hidden="true">
+            <div className={styles.whyIllustrationGlow} />
             <div
-              className={styles.whyImageStage}
+              className={styles.progressionArtwork}
               role="img"
-              aria-label="Learners preparing for practical skill development and future opportunities"
-            >
-              <span className={styles.whyImageDots} aria-hidden="true" />
-              <span className={styles.whyImageArc} aria-hidden="true" />
-              <span className={styles.whyStudentsImage} aria-hidden="true" />
-            </div>
+              aria-label="Education, experience, skills, and opportunities progression pathway"
+            />
           </div>
 
-          <article className={styles.benefitsPanel}>
+          <article className={styles.refinedBenefitsPanel}>
             <div className={styles.benefitsPanelHeader}>
               <span>
                 <Target aria-hidden="true" />
@@ -178,22 +67,20 @@ export default function WhyOsoSection() {
               </h3>
             </div>
 
-            <div className={styles.benefitsList}>
+            <div className={styles.refinedBenefitsGrid}>
               {learnerBenefits.map((benefit) => {
                 const Icon = benefit.icon;
 
                 return (
                   <div
                     key={benefit.title}
-                    className={styles.benefitRow}
+                    className={styles.refinedBenefitItem}
                   >
                     <span>
                       <Icon aria-hidden="true" />
                     </span>
 
                     <strong>{benefit.title}</strong>
-
-                    <CheckCircle2 aria-hidden="true" />
                   </div>
                 );
               })}
@@ -201,33 +88,11 @@ export default function WhyOsoSection() {
           </article>
         </div>
 
-        <div className={styles.philosophyStrip}>
-          {philosophyItems.map((item) => {
-            const Icon = item.icon;
-
-            return (
-              <article
-                key={item.title}
-                className={styles.philosophyItem}
-              >
-                <span>
-                  <Icon aria-hidden="true" />
-                </span>
-
-                <p>{item.title}</p>
-              </article>
-            );
-          })}
-        </div>
-
         <div className={styles.whyClosing}>
           <Sparkles aria-hidden="true" />
-
           <strong>
-            Because learning becomes meaningful when knowledge is put
-            into action.
+            Because learning becomes meaningful when knowledge is put into action.
           </strong>
-
           <Sparkles aria-hidden="true" />
         </div>
       </div>
