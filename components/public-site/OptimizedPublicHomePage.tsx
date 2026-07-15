@@ -749,6 +749,7 @@ export default function OptimizedPublicHomePage() {
                 aria-hidden={index >= partnerLogos.length}
               >
                 <Image
+      loading="eager"
                   src={logo.src}
                   alt={index < partnerLogos.length ? logo.alt : ""}
                   width={190}

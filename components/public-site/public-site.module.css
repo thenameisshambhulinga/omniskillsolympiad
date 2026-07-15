@@ -3980,3 +3980,384 @@
 }
 
 /* OSO PUBLIC GLOBAL TYPOGRAPHY STANDARD - END */
+
+
+
+
+
+/* OSO CLEAN ASSOCIATION MARQUEE - START */
+
+.osoAssociations {
+  overflow: hidden !important;
+  background: #ffffff !important;
+}
+
+/*
+  Clean marquee viewport:
+  no edge masks, gradients, blur overlays, or faded sides.
+*/
+.osoAssociationLogoStrip {
+  --association-marquee-gap: 1rem;
+
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  margin-top: clamp(1.5rem, 3vw, 2.25rem);
+
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+
+  background: #ffffff;
+  filter: none !important;
+  box-shadow: none !important;
+}
+
+/* Remove any inherited side-fade pseudo-elements. */
+.osoAssociationLogoStrip::before,
+.osoAssociationLogoStrip::after {
+  content: none !important;
+  display: none !important;
+}
+
+.osoAssociationLogoTrack {
+  display: flex;
+  width: max-content;
+  align-items: center;
+  gap: var(--association-marquee-gap);
+  animation:
+    osoAssociationMarquee
+    32s
+    linear
+    infinite;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+}
+
+/* Pause smoothly whenever the pointer is over the strip. */
+.osoAssociationLogoStrip:hover
+  .osoAssociationLogoTrack,
+.osoAssociationLogoStrip:focus-within
+  .osoAssociationLogoTrack {
+  animation-play-state: paused;
+}
+
+.osoAssociationLogoGroup {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: var(--association-marquee-gap);
+}
+
+.osoAssociationLogoItem {
+  display: grid;
+  flex: 0 0 clamp(10.5rem, 14vw, 12rem);
+  width: clamp(10.5rem, 14vw, 12rem);
+  height: clamp(4.8rem, 7vw, 5.5rem);
+  place-items: center;
+  padding: 0.7rem 1rem;
+
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  border-radius: 1rem;
+  background: #ffffff;
+
+  /*
+    Sharp and bright rather than blurred or faded.
+  */
+  opacity: 1 !important;
+  filter: none !important;
+  box-shadow:
+    0 5px 14px rgba(15, 23, 42, 0.045);
+
+  transition:
+    transform 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.osoAssociationLogoItem:hover {
+  transform: translateY(-3px);
+  border-color: rgba(79, 70, 229, 0.28);
+  box-shadow:
+    0 9px 20px rgba(15, 23, 42, 0.07);
+}
+
+.osoAssociationLogo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+
+  opacity: 0.82 !important;
+  filter: grayscale(100%) contrast(1.06) !important;
+
+  transition:
+    opacity 220ms ease,
+    filter 220ms ease,
+    transform 220ms ease;
+}
+
+.osoAssociationLogoItem:hover
+  .osoAssociationLogo {
+  opacity: 1 !important;
+  filter: grayscale(0%) contrast(1) !important;
+  transform: scale(1.035);
+}
+
+@keyframes osoAssociationMarquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(
+      calc(
+        -50% -
+        (
+          var(--association-marquee-gap) /
+          2
+        )
+      ),
+      0,
+      0
+    );
+  }
+}
+
+@media (max-width: 720px) {
+  .osoAssociationLogoStrip {
+    --association-marquee-gap: 0.7rem;
+  }
+
+  .osoAssociationLogoTrack {
+    animation-duration: 24s;
+  }
+
+  .osoAssociationLogoItem {
+    flex-basis: 9.5rem;
+    width: 9.5rem;
+    height: 4.7rem;
+    padding: 0.6rem 0.8rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .osoAssociationLogoStrip {
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+
+  .osoAssociationLogoTrack {
+    animation: none;
+    transform: none;
+  }
+
+  /*
+    The duplicate group is unnecessary when motion is disabled.
+  */
+  .osoAssociationLogoGroup[aria-hidden="true"] {
+    display: none;
+  }
+
+  .osoAssociationLogoItem,
+  .osoAssociationLogo {
+    transition: none;
+  }
+}
+
+/* OSO CLEAN ASSOCIATION MARQUEE - END */
+
+/* OSO ACTIVE ASSOCIATION MARQUEE FIX - START */
+
+/*
+  The JSX already renders two identical logo sets.
+  These final overrides convert the existing strip into a true
+  continuous marquee without rebuilding the section.
+*/
+
+.osoAssociations {
+  overflow: hidden !important;
+}
+
+.osoAssociationLogoStrip {
+  --oso-logo-gap: clamp(1rem, 1.6vw, 1.4rem);
+  --oso-logo-speed: 34s;
+
+  position: relative !important;
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+
+  margin-top: clamp(1.5rem, 3vw, 2.25rem) !important;
+  padding: 0.4rem 0 !important;
+
+  overflow: hidden !important;
+  overflow-x: hidden !important;
+  overflow-y: visible !important;
+
+  /*
+    Remove the old faded edges and shaded strip treatment.
+  */
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  filter: none !important;
+  scrollbar-width: none !important;
+}
+
+.osoAssociationLogoStrip::-webkit-scrollbar {
+  display: none !important;
+}
+
+.osoAssociationLogoStrip::before,
+.osoAssociationLogoStrip::after {
+  content: none !important;
+  display: none !important;
+}
+
+.osoAssociationLogoTrack {
+  display: flex !important;
+  width: max-content !important;
+  min-width: max-content !important;
+  align-items: center !important;
+  gap: var(--oso-logo-gap) !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  animation:
+    osoActiveAssociationMarquee
+    var(--oso-logo-speed)
+    linear
+    infinite !important;
+
+  animation-play-state: running !important;
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translate3d(0, 0, 0);
+}
+
+/*
+  Pause the existing animation anywhere over the marquee.
+*/
+.osoAssociationLogoStrip:hover
+  .osoAssociationLogoTrack,
+.osoAssociationLogoStrip:focus-within
+  .osoAssociationLogoTrack {
+  animation-play-state: paused !important;
+}
+
+/*
+  Clean, sharp logo holders:
+  no shaded cards, no blurred shadows, no faded opacity.
+*/
+.osoAssociationLogoItem {
+  display: grid !important;
+  flex: 0 0 clamp(10rem, 13vw, 12rem) !important;
+  width: clamp(10rem, 13vw, 12rem) !important;
+  min-width: clamp(10rem, 13vw, 12rem) !important;
+  height: clamp(4.6rem, 6vw, 5.2rem) !important;
+  min-height: 0 !important;
+
+  place-items: center !important;
+  padding: 0.55rem 0.8rem !important;
+
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  filter: none !important;
+  opacity: 1 !important;
+
+  transition:
+    transform 220ms ease !important;
+}
+
+.osoAssociationLogoItem:hover,
+.osoAssociationLogoItem:focus-within {
+  transform: translateY(-2px) !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/*
+  Logos remain fully visible and sharp at all times.
+  No grayscale, low opacity, blur, or shadow.
+*/
+.osoAssociationLogo {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 100% !important;
+
+  object-fit: contain !important;
+  object-position: center !important;
+
+  opacity: 1 !important;
+  filter: none !important;
+  box-shadow: none !important;
+
+  transition:
+    transform 220ms ease !important;
+}
+
+.osoAssociationLogoItem:hover
+  .osoAssociationLogo,
+.osoAssociationLogoItem:focus-within
+  .osoAssociationLogo {
+  opacity: 1 !important;
+  filter: none !important;
+  transform: scale(1.025) !important;
+}
+
+/*
+  The track contains exactly two repeated logo sets.
+  Moving slightly beyond half accounts for the central flex gap
+  and produces a seamless restart.
+*/
+@keyframes osoActiveAssociationMarquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(
+      calc(-50% - (var(--oso-logo-gap) / 2)),
+      0,
+      0
+    );
+  }
+}
+
+@media (max-width: 720px) {
+  .osoAssociationLogoStrip {
+    --oso-logo-gap: 0.8rem;
+    --oso-logo-speed: 26s;
+  }
+
+  .osoAssociationLogoItem {
+    flex-basis: 9rem !important;
+    width: 9rem !important;
+    min-width: 9rem !important;
+    height: 4.4rem !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .osoAssociationLogoTrack {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  .osoAssociationLogoStrip {
+    overflow-x: auto !important;
+  }
+
+  .osoAssociationLogoItem,
+  .osoAssociationLogo {
+    transition: none !important;
+  }
+}
+
+/* OSO ACTIVE ASSOCIATION MARQUEE FIX - END */

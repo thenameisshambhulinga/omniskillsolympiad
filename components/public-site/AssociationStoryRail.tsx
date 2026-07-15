@@ -475,6 +475,7 @@ export default function AssociationStoryRail({
                 >
                   <span className={styles.selectorLogoFrame}>
                     <Image
+      loading="eager"
                       src={item.logo.src}
                       alt=""
                       width={item.logo.width}

@@ -1,0 +1,1513 @@
+.storyContainer {
+  position: relative;
+  z-index: 2;
+  width: min(100%, 1240px);
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 3vw, 2rem);
+}
+
+.eyebrow {
+  margin: 0 0 0.85rem;
+  color: #5b21b6;
+  font-size: 0.82rem;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.sectionAmbient {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 8% 14%, rgba(59, 130, 246, 0.14), transparent 21rem),
+    radial-gradient(circle at 92% 74%, rgba(249, 115, 22, 0.11), transparent 20rem),
+    linear-gradient(rgba(100, 116, 139, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(100, 116, 139, 0.055) 1px, transparent 1px);
+  background-size: auto, auto, 54px 54px, 54px 54px;
+}
+
+/* PARTICIPATION */
+
+.participantsSection {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: clamp(4.5rem, 8vw, 7.5rem) 0;
+  background: #f7f9ff;
+  color: #081a3a;
+}
+
+.participantsHeader {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(22rem, 1.1fr);
+  gap: clamp(2rem, 6vw, 7rem);
+  align-items: end;
+}
+
+.participantsHeader h2,
+.philosophyHeader h2,
+.vmvHeader h2,
+.roadmapHeader h2,
+.faqHeader h2 {
+  margin: 0;
+  max-width: 18ch;
+  color: #081a3a;
+  font-size: 44px;
+  font-weight: 950;
+  letter-spacing: -0.055em;
+  line-height: 0.98;
+  text-wrap: balance;
+}
+
+.participantsIntro {
+  display: grid;
+  gap: 0.75rem;
+  max-width: 42rem;
+}
+
+.participantsIntro p {
+  margin: 0;
+  color: #475569;
+  font-size: 16px;
+  font-weight: 620;
+  line-height: 1.65;
+}
+
+.entryJourney {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(0.8rem, 2vw, 1.35rem);
+  margin-top: clamp(2.6rem, 6vw, 5.5rem);
+}
+
+.entryPath {
+  position: absolute;
+  left: 9%;
+  right: 9%;
+  top: 50%;
+  z-index: -1;
+  height: 2px;
+  transform: translateY(-50%);
+  background: linear-gradient(90deg, #2563eb, #7c3aed, #f97316, #22c55e);
+}
+
+.entryPath span {
+  position: absolute;
+  top: 50%;
+  width: 0.65rem;
+  height: 0.65rem;
+  border: 3px solid #ffffff;
+  border-radius: 999px;
+  background: #7c3aed;
+  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.14);
+  transform: translate(-50%, -50%);
+}
+
+.entryPath span:nth-child(1) { left: 25%; }
+.entryPath span:nth-child(2) { left: 50%; }
+.entryPath span:nth-child(3) { left: 75%; }
+
+.entryStop {
+  --tone: #2563eb;
+  --tone-soft: #eaf1ff;
+  position: relative;
+  display: grid;
+  grid-template-columns: auto auto 1fr auto;
+  gap: 0.65rem;
+  align-items: center;
+  min-height: 8.6rem;
+  padding: 1.1rem;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.93);
+  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.08);
+  backdrop-filter: blur(14px);
+  transition: transform 220ms ease, box-shadow 220ms ease;
+}
+
+.entryStop[data-tone="violet"] {
+  --tone: #7c3aed;
+  --tone-soft: #f2ebff;
+}
+
+.entryStop[data-tone="orange"] {
+  --tone: #ea580c;
+  --tone-soft: #fff0e7;
+}
+
+.entryStop[data-tone="green"] {
+  --tone: #16a34a;
+  --tone-soft: #e9f9ef;
+}
+
+.entryStop:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 25px 52px rgba(15, 23, 42, 0.13);
+}
+
+.entryNumber {
+  align-self: start;
+  color: var(--tone);
+  font-size: 0.62rem;
+  font-weight: 950;
+  letter-spacing: 0.12em;
+}
+
+.entryIcon {
+  display: grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  place-items: center;
+  border-radius: 0.9rem;
+  background: var(--tone-soft);
+  color: var(--tone);
+}
+
+.entryIcon svg,
+.entryStop > svg {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.entryStop h3 {
+  margin: 0;
+  color: #0f2348;
+  font-size: 1rem;
+  font-weight: 900;
+  line-height: 1.15;
+}
+
+.entryStop p {
+  margin: 0.35rem 0 0;
+  color: #64748b;
+  font-size: 0.78rem;
+  font-weight: 620;
+  line-height: 1.45;
+}
+
+.entryStop > svg {
+  color: var(--tone);
+}
+
+.participantsStatement {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.2rem;
+  padding: 1rem 1.25rem;
+  border-radius: 999px;
+  background: #081a3a;
+  color: #ffffff;
+}
+
+.participantsStatement span {
+  color: #93c5fd;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+}
+
+.participantsStatement strong {
+  font-size: 1rem;
+}
+
+/* PHILOSOPHY */
+
+.philosophySection {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(4.5rem, 8vw, 7.5rem) 0;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(124, 58, 237, 0.12), transparent 24rem),
+    #ffffff;
+  color: #081a3a;
+}
+
+.philosophyHeader {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+}
+
+.philosophyHeader h2 {
+  max-width: 22ch;
+}
+
+.philosophyHeader h2 span {
+  color: #6d28d9;
+}
+
+.philosophyHeader > p:last-child {
+  max-width: 42rem;
+  margin: 1rem auto 0;
+  color: #64748b;
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+.beliefJourney {
+  position: relative;
+  display: grid;
+  gap: 0.5rem;
+  margin-top: clamp(3rem, 7vw, 6.5rem);
+}
+
+.beliefLine {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  transform: translateX(-50%);
+  background:
+    linear-gradient(#2563eb, #7c3aed 28%, #f97316 52%, #06b6d4 74%, #22c55e);
+  border-radius: 999px;
+}
+
+.beliefStop {
+  --tone: #2563eb;
+  --tone-soft: #eaf1ff;
+  display: grid;
+  grid-template-columns: 1fr 6rem 1fr;
+  align-items: center;
+  min-height: 10rem;
+}
+
+.beliefStop[data-tone="violet"] {
+  --tone: #7c3aed;
+  --tone-soft: #f2ebff;
+}
+
+.beliefStop[data-tone="orange"] {
+  --tone: #ea580c;
+  --tone-soft: #fff0e7;
+}
+
+.beliefStop[data-tone="cyan"] {
+  --tone: #0891b2;
+  --tone-soft: #e6fafd;
+}
+
+.beliefStop[data-tone="green"] {
+  --tone: #16a34a;
+  --tone-soft: #e9f9ef;
+}
+
+.beliefNumber {
+  grid-column: 2;
+  display: grid;
+  width: 4.4rem;
+  height: 4.4rem;
+  place-items: center;
+  justify-self: center;
+  border: 8px solid #ffffff;
+  border-radius: 999px;
+  background: var(--tone);
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 950;
+  box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.22), 0 15px 30px rgba(15, 23, 42, 0.14);
+}
+
+.beliefContent {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 1rem;
+  align-items: center;
+  width: min(100%, 29rem);
+  padding: 1.2rem;
+  border-radius: 1.25rem;
+  background: #ffffff;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.09);
+}
+
+.beliefStop[data-side="left"] .beliefContent {
+  grid-column: 1;
+  justify-self: end;
+}
+
+.beliefStop[data-side="right"] .beliefContent {
+  grid-column: 3;
+  justify-self: start;
+}
+
+.beliefIcon {
+  display: grid;
+  width: 3rem;
+  height: 3rem;
+  place-items: center;
+  border-radius: 1rem;
+  background: var(--tone-soft);
+  color: var(--tone);
+}
+
+.beliefIcon svg {
+  width: 1.35rem;
+  height: 1.35rem;
+}
+
+.beliefContent h3 {
+  margin: 0;
+  color: #0f2348;
+  font-size: 1.05rem;
+  font-weight: 900;
+}
+
+.beliefContent p {
+  margin: 0.35rem 0 0;
+  color: #64748b;
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.beliefContent > svg {
+  width: 1.1rem;
+  height: 1.1rem;
+  color: var(--tone);
+}
+
+/* VISION MISSION VALUES */
+
+.vmvSection {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: clamp(4.75rem, 8vw, 8rem) 0;
+  background: #07142f;
+  color: #ffffff;
+}
+
+.vmvOrbit {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.vmvOrbit::before,
+.vmvOrbit::after {
+  content: "";
+  position: absolute;
+  border: 1px solid rgba(125, 211, 252, 0.14);
+  border-radius: 50%;
+}
+
+.vmvOrbit::before {
+  width: 44rem;
+  height: 44rem;
+  right: -13rem;
+  top: -16rem;
+}
+
+.vmvOrbit::after {
+  width: 28rem;
+  height: 28rem;
+  left: -9rem;
+  bottom: -12rem;
+}
+
+.vmvOrbit span {
+  position: absolute;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: #38bdf8;
+  box-shadow: 0 0 24px #38bdf8;
+  animation: orbitPulse 4s ease-in-out infinite;
+}
+
+.vmvOrbit span:nth-child(1) { left: 12%; top: 24%; }
+.vmvOrbit span:nth-child(2) { right: 18%; top: 40%; animation-delay: 1.2s; }
+.vmvOrbit span:nth-child(3) { left: 42%; bottom: 12%; animation-delay: 2.2s; }
+
+.vmvHeader {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2rem;
+  align-items: end;
+}
+
+.vmvHeader h2 {
+  color: #ffffff;
+  max-width: 19ch;
+}
+
+.vmvHeader .eyebrow {
+  color: #7dd3fc;
+}
+
+.vmvSeal {
+  display: grid;
+  grid-template-columns: auto repeat(3, auto);
+  gap: 0.45rem;
+  align-items: center;
+  padding: 0.8rem 1rem;
+  border: 1px solid rgba(125, 211, 252, 0.2);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.vmvSeal svg {
+  width: 1rem;
+  height: 1rem;
+  color: #facc15;
+}
+
+.vmvSeal span {
+  color: #cbd5e1;
+  font-size: 0.62rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+}
+
+.vmvChapters {
+  display: grid;
+  gap: 1rem;
+  margin-top: clamp(2.5rem, 6vw, 5rem);
+}
+
+.vmvChapter {
+  --tone: #38bdf8;
+  display: grid;
+  grid-template-columns: 5rem 4rem minmax(0, 1fr);
+  gap: 1.25rem;
+  align-items: start;
+  padding: clamp(1.2rem, 3vw, 2.25rem);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 1.5rem;
+  background:
+    linear-gradient(120deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.025));
+  transition: transform 230ms ease, border-color 230ms ease;
+}
+
+.vmvChapter[data-tone="mission"] { --tone: #a78bfa; }
+.vmvChapter[data-tone="values"] { --tone: #f59e0b; }
+
+.vmvChapter:hover {
+  transform: translateX(8px);
+  border-color: color-mix(in srgb, var(--tone) 45%, transparent);
+}
+
+.vmvChapterNumber {
+  color: var(--tone);
+  font-size: 2rem;
+  font-weight: 950;
+  letter-spacing: -0.06em;
+}
+
+.vmvChapterIcon {
+  display: grid;
+  width: 3.5rem;
+  height: 3.5rem;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--tone) 40%, transparent);
+  border-radius: 1.1rem;
+  color: var(--tone);
+}
+
+.vmvChapterIcon svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.vmvChapterContent > p {
+  margin: 0;
+  color: var(--tone);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.vmvChapterContent h3 {
+  margin: 0.45rem 0 0;
+  color: #ffffff;
+  font-size: clamp(1.35rem, 2.3vw, 2rem);
+  font-weight: 900;
+  letter-spacing: -0.035em;
+}
+
+.vmvRule {
+  width: 5rem;
+  height: 2px;
+  margin: 1rem 0;
+  background: var(--tone);
+}
+
+.vmvChapterContent > span {
+  display: block;
+  max-width: 66rem;
+  color: #cbd5e1;
+  font-size: 16px;
+  font-weight: 520;
+  line-height: 1.7;
+}
+
+/* ROADMAP */
+
+.roadmapSection {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: clamp(4.75rem, 8vw, 8rem) 0;
+  background: #fbfcff;
+  color: #081a3a;
+}
+
+.roadmapBackdrop {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 8% 12%, rgba(249, 115, 22, 0.11), transparent 20rem),
+    radial-gradient(circle at 92% 78%, rgba(124, 58, 237, 0.12), transparent 24rem),
+    linear-gradient(rgba(100, 116, 139, 0.05) 1px, transparent 1px);
+  background-size: auto, auto, 100% 74px;
+}
+
+.roadmapHeader {
+  display: grid;
+  grid-template-columns: minmax(20rem, 0.75fr) minmax(0, 1.25fr);
+  gap: clamp(2rem, 6vw, 6rem);
+  align-items: center;
+}
+
+.roadmapYear {
+  display: flex;
+  gap: 0.05em;
+  color: #081a3a;
+  font-size: clamp(5.8rem, 13vw, 11rem);
+  font-weight: 950;
+  letter-spacing: -0.12em;
+  line-height: 0.74;
+}
+
+.roadmapYear span:nth-child(2) { color: #f97316; }
+.roadmapYear span:nth-child(3) { color: #7c3aed; }
+.roadmapYear span:nth-child(4) { color: #0ea5e9; }
+
+.roadmapHeader > div:last-child > p:last-child {
+  max-width: 42rem;
+  margin: 1rem 0 0;
+  color: #64748b;
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+.roadmapJourney {
+  position: relative;
+  display: grid;
+  gap: 0;
+  margin-top: clamp(3.5rem, 8vw, 7rem);
+}
+
+.roadmapTrail {
+  position: absolute;
+  left: 50%;
+  top: 1rem;
+  bottom: 1rem;
+  width: 5px;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background:
+    linear-gradient(#f97316, #7c3aed 26%, #0ea5e9 48%, #ec4899 65%, #22c55e 84%, #4338ca);
+}
+
+.roadmapMilestone {
+  --tone: #f97316;
+  display: grid;
+  grid-template-columns: 1fr 6rem 1fr;
+  align-items: center;
+  min-height: 9rem;
+}
+
+.roadmapMilestone[data-tone="violet"] { --tone: #7c3aed; }
+.roadmapMilestone[data-tone="blue"] { --tone: #2563eb; }
+.roadmapMilestone[data-tone="pink"] { --tone: #db2777; }
+.roadmapMilestone[data-tone="cyan"] { --tone: #0891b2; }
+.roadmapMilestone[data-tone="yellow"] { --tone: #ca8a04; }
+.roadmapMilestone[data-tone="green"] { --tone: #16a34a; }
+.roadmapMilestone[data-tone="indigo"] { --tone: #4338ca; }
+
+.roadmapPoint {
+  grid-column: 2;
+  display: grid;
+  width: 4.25rem;
+  height: 4.25rem;
+  place-items: center;
+  justify-self: center;
+  border: 8px solid #fbfcff;
+  border-radius: 999px;
+  background: var(--tone);
+  color: #ffffff;
+  box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.24), 0 16px 28px rgba(15, 23, 42, 0.15);
+}
+
+.roadmapPoint svg {
+  width: 1.35rem;
+  height: 1.35rem;
+}
+
+.roadmapCard {
+  width: min(100%, 30rem);
+  padding: 1.2rem 1.35rem;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 1.2rem;
+  background: #ffffff;
+  box-shadow: 0 15px 38px rgba(15, 23, 42, 0.075);
+  transition: transform 220ms ease, box-shadow 220ms ease;
+}
+
+.roadmapMilestone[data-side="left"] .roadmapCard {
+  grid-column: 1;
+  justify-self: end;
+}
+
+.roadmapMilestone[data-side="right"] .roadmapCard {
+  grid-column: 3;
+  justify-self: start;
+}
+
+.roadmapCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 22px 48px rgba(15, 23, 42, 0.12);
+}
+
+.roadmapCard span {
+  color: var(--tone);
+  font-size: 0.66rem;
+  font-weight: 950;
+  letter-spacing: 0.14em;
+}
+
+.roadmapCard h3 {
+  margin: 0.45rem 0 0;
+  color: #0f2348;
+  font-size: 1.05rem;
+  font-weight: 900;
+  line-height: 1.25;
+}
+
+.roadmapDestination {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1rem;
+  align-items: center;
+  margin-top: 2rem;
+  padding: 1.15rem 1.35rem;
+  border-radius: 1.25rem;
+  background: #081a3a;
+  color: #ffffff;
+}
+
+.roadmapDestination svg {
+  width: 2rem;
+  height: 2rem;
+  color: #38bdf8;
+}
+
+.roadmapDestination span {
+  display: block;
+  color: #7dd3fc;
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+}
+
+.roadmapDestination strong {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 1rem;
+}
+
+/* FAQ */
+
+.faqSection {
+  position: relative;
+  padding: clamp(4.5rem, 8vw, 7rem) 0;
+  background: #ffffff;
+  color: #081a3a;
+}
+
+.faqHeader {
+  display: grid;
+  grid-template-columns: 1fr minmax(20rem, 0.75fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: end;
+}
+
+.faqIntro {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.85rem;
+  align-items: center;
+  padding: 1rem 1.15rem;
+  border-radius: 1.1rem;
+  background: #f3f0ff;
+  color: #5b21b6;
+}
+
+.faqIntro svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.faqIntro p {
+  margin: 0;
+  font-size: 0.86rem;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.faqGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+}
+
+.faqItem {
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 1.1rem;
+  background: #ffffff;
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.045);
+  overflow: hidden;
+}
+
+.faqItem summary {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0.8rem;
+  align-items: center;
+  min-height: 4.5rem;
+  padding: 0.95rem 1rem;
+  cursor: pointer;
+  list-style: none;
+}
+
+.faqItem summary::-webkit-details-marker {
+  display: none;
+}
+
+.faqItem summary span {
+  color: #7c3aed;
+  font-size: 0.62rem;
+  font-weight: 950;
+  letter-spacing: 0.1em;
+}
+
+.faqItem summary strong {
+  color: #0f2348;
+  font-size: 0.92rem;
+  line-height: 1.35;
+}
+
+.faqItem summary svg {
+  width: 1.15rem;
+  height: 1.15rem;
+  color: #7c3aed;
+  transition: transform 200ms ease;
+}
+
+.faqItem[open] summary svg {
+  transform: rotate(45deg);
+}
+
+.faqAnswer {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.8rem;
+  align-items: end;
+  padding: 0 1rem 1rem;
+}
+
+.faqAnswer p {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.84rem;
+  line-height: 1.65;
+}
+
+.faqAnswer svg {
+  width: 1rem;
+  height: 1rem;
+  color: #7c3aed;
+}
+
+@keyframes orbitPulse {
+  0%, 100% {
+    opacity: 0.35;
+    transform: scale(0.85);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+@media (max-width: 1020px) {
+  .participantsHeader,
+  .roadmapHeader,
+  .faqHeader,
+  .vmvHeader {
+    grid-template-columns: 1fr;
+  }
+
+  .entryJourney {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .entryPath {
+    display: none;
+  }
+
+  .vmvSeal {
+    width: fit-content;
+  }
+
+  .roadmapYear {
+    font-size: clamp(5rem, 20vw, 9rem);
+  }
+}
+
+@media (max-width: 760px) {
+  .participantsHeader h2,
+  .philosophyHeader h2,
+  .vmvHeader h2,
+  .roadmapHeader h2,
+  .faqHeader h2 {
+    font-size: clamp(2rem, 9vw, 2.75rem);
+  }
+
+  .entryJourney,
+  .faqGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .participantsStatement {
+    align-items: flex-start;
+    flex-direction: column;
+    border-radius: 1.1rem;
+  }
+
+  .beliefLine,
+  .roadmapTrail {
+    left: 2rem;
+  }
+
+  .beliefStop,
+  .roadmapMilestone {
+    grid-template-columns: 4rem minmax(0, 1fr);
+    min-height: auto;
+    margin-bottom: 1rem;
+  }
+
+  .beliefNumber,
+  .roadmapPoint {
+    grid-column: 1;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-width: 6px;
+  }
+
+  .beliefStop[data-side="left"] .beliefContent,
+  .beliefStop[data-side="right"] .beliefContent,
+  .roadmapMilestone[data-side="left"] .roadmapCard,
+  .roadmapMilestone[data-side="right"] .roadmapCard {
+    grid-column: 2;
+    justify-self: stretch;
+    width: 100%;
+  }
+
+  .beliefContent {
+    grid-template-columns: auto 1fr;
+  }
+
+  .beliefContent > svg {
+    display: none;
+  }
+
+  .vmvChapter {
+    grid-template-columns: auto 1fr;
+  }
+
+  .vmvChapterNumber {
+    grid-column: 1;
+  }
+
+  .vmvChapterIcon {
+    grid-column: 2;
+  }
+
+  .vmvChapterContent {
+    grid-column: 1 / -1;
+  }
+
+  .roadmapYear {
+    font-size: clamp(4.5rem, 24vw, 7rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .entryStop {
+    grid-template-columns: auto 1fr auto;
+  }
+
+  .entryNumber {
+    display: none;
+  }
+
+  .vmvSeal {
+    display: none;
+  }
+
+  .beliefContent {
+    padding: 0.9rem;
+  }
+
+  .faqItem summary {
+    min-height: 4rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .entryStop,
+  .vmvChapter,
+  .roadmapCard,
+  .faqItem summary svg {
+    transition: none;
+  }
+
+  .entryStop:hover,
+  .vmvChapter:hover,
+  .roadmapCard:hover {
+    transform: none;
+  }
+
+  .vmvOrbit span {
+    animation: none;
+  }
+}
+
+/* PARTICIPANTS HEADER COMPACT ALIGNMENT - START */
+
+/*
+  Remove the unnecessary empty area above the section content.
+*/
+.participantsSection {
+  padding:
+    clamp(2rem, 3.5vw, 3.25rem)
+    0
+    clamp(3.5rem, 6vw, 5.5rem) !important;
+}
+
+/*
+  Vertically align the title block and descriptive content
+  around the same visual centre.
+*/
+.participantsHeader {
+  display: grid !important;
+  grid-template-columns:
+    minmax(0, 0.92fr)
+    minmax(24rem, 1.08fr) !important;
+
+  align-items: center !important;
+  gap: clamp(2rem, 5vw, 5.5rem) !important;
+}
+
+/*
+  Keep the eyebrow and heading grouped tightly.
+*/
+.participantsHeader > div:first-child {
+  display: flex !important;
+  min-width: 0 !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-self: center !important;
+}
+
+.participantsHeader .eyebrow {
+  margin:
+    0
+    0
+    clamp(0.65rem, 1vw, 0.85rem) !important;
+}
+
+/*
+  Prevent the title block from creating extra vertical height.
+*/
+.participantsHeader h2 {
+  margin: 0 !important;
+  max-width: 16ch !important;
+  line-height: 1.02 !important;
+}
+
+/*
+  Align the right-side content with the vertical centre
+  of the eyebrow and heading combination.
+*/
+.participantsIntro {
+  display: flex !important;
+  max-width: 42rem !important;
+  min-width: 0 !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-self: center !important;
+  gap: 0.65rem !important;
+  padding-top: 0.3rem !important;
+}
+
+.participantsIntro p {
+  margin: 0 !important;
+  line-height: 1.55 !important;
+}
+
+/*
+  Bring the journey cards closer to the heading area,
+  reducing the total section height.
+*/
+.entryJourney {
+  margin-top:
+    clamp(2rem, 4vw, 3.5rem) !important;
+}
+
+@media (max-width: 1020px) {
+  .participantsSection {
+    padding:
+      2.5rem
+      0
+      4rem !important;
+  }
+
+  .participantsHeader {
+    grid-template-columns: 1fr !important;
+    align-items: start !important;
+    gap: 1.25rem !important;
+  }
+
+  .participantsHeader > div:first-child,
+  .participantsIntro {
+    align-self: stretch !important;
+  }
+
+  .participantsIntro {
+    max-width: 100% !important;
+    padding-top: 0 !important;
+  }
+
+  .entryJourney {
+    margin-top: 2rem !important;
+  }
+}
+
+@media (max-width: 620px) {
+  .participantsSection {
+    padding:
+      2.25rem
+      0
+      3.5rem !important;
+  }
+
+  .participantsHeader {
+    gap: 1rem !important;
+  }
+
+  .participantsHeader h2 {
+    max-width: 100% !important;
+  }
+
+  .participantsIntro {
+    gap: 0.55rem !important;
+  }
+
+  .entryJourney {
+    margin-top: 1.6rem !important;
+  }
+}
+
+/* PARTICIPANTS HEADER COMPACT ALIGNMENT - END */
+
+/* PARTICIPANTS FINAL WHITE THEME - START */
+
+.participantsSection {
+  position: relative !important;
+  isolation: isolate !important;
+  overflow: hidden !important;
+  padding:
+    clamp(3.25rem, 5vw, 4.75rem)
+    0
+    clamp(3.5rem, 5.5vw, 5rem) !important;
+  background: #ffffff !important;
+  color: #0b1b3b !important;
+}
+
+.sectionAmbient {
+  opacity: 0.22 !important;
+  background:
+    radial-gradient(
+      circle at 8% 14%,
+      rgba(59, 130, 246, 0.11),
+      transparent 21rem
+    ),
+    radial-gradient(
+      circle at 92% 74%,
+      rgba(249, 115, 22, 0.08),
+      transparent 20rem
+    ),
+    linear-gradient(
+      rgba(100, 116, 139, 0.045) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(100, 116, 139, 0.045) 1px,
+      transparent 1px
+    ) !important;
+  background-size:
+    auto,
+    auto,
+    54px 54px,
+    54px 54px !important;
+}
+
+.storyContainer {
+  width: min(100%, 1500px) !important;
+  padding-inline:
+    clamp(1rem, 3vw, 3rem) !important;
+}
+
+.participantsHeader {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  justify-items: center !important;
+  gap: 0 !important;
+  text-align: center !important;
+}
+
+.participantsHeader .eyebrow {
+  display: block !important;
+  margin: 0 !important;
+  color: #1d4ed8 !important;
+  font-size:
+    clamp(1rem, 1.1vw, 1.08rem) !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.12em !important;
+  line-height: 1.2 !important;
+  text-align: center !important;
+  text-transform: uppercase !important;
+}
+
+.participantsHeader .eyebrow::before,
+.participantsHeader .eyebrow::after,
+.participantsHeader .eyebrow svg {
+  display: none !important;
+  content: none !important;
+}
+
+.participantsHeader h2 {
+  margin:
+    clamp(0.65rem, 1vw, 0.85rem)
+    0
+    0 !important;
+  max-width: 100% !important;
+  color: #0b1b3b !important;
+  font-size:
+    clamp(2.35rem, 4vw, 3.65rem) !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.045em !important;
+  line-height: 1.04 !important;
+  text-align: center !important;
+  text-wrap: balance !important;
+}
+
+.participantsIntro {
+  display: none !important;
+}
+
+.entryJourney {
+  margin-top:
+    clamp(2rem, 3.5vw, 2.8rem) !important;
+}
+
+.entryStop {
+  min-height: 8.4rem !important;
+}
+
+.entryStop h3 {
+  font-size:
+    clamp(1rem, 1.12vw, 1.12rem) !important;
+}
+
+.entryStop p {
+  font-size:
+    clamp(0.82rem, 0.92vw, 0.94rem) !important;
+  line-height: 1.5 !important;
+  text-align: justify !important;
+  text-align-last: left !important;
+  text-justify: inter-word !important;
+}
+
+.participantsStatement {
+  border-radius: 0 !important;
+}
+
+@media (max-width: 900px) {
+  .entryJourney {
+    margin-top: 1.8rem !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .participantsSection {
+    padding:
+      2.75rem
+      0
+      3.25rem !important;
+  }
+
+  .participantsHeader h2 {
+    font-size:
+      clamp(2.05rem, 9vw, 2.75rem) !important;
+  }
+
+  .entryStop p {
+    text-align: left !important;
+  }
+
+  .participantsStatement {
+    align-items: flex-start !important;
+    flex-direction: column !important;
+  }
+}
+
+/* PARTICIPANTS FINAL WHITE THEME - END */
+
+/* PARTICIPANTS CLEAN CONTENT CARDS - START */
+
+.participantsSection {
+  position: relative !important;
+  isolation: isolate !important;
+  overflow: hidden !important;
+  padding:
+    clamp(3.25rem, 5vw, 4.75rem)
+    0
+    clamp(3.5rem, 5.5vw, 5rem) !important;
+  background: #ffffff !important;
+  color: #0b1b3b !important;
+}
+
+.storyContainer {
+  width: min(100%, 1500px) !important;
+  margin-inline: auto !important;
+  padding-inline:
+    clamp(1rem, 3vw, 3rem) !important;
+}
+
+.participantsHeader {
+  display: grid !important;
+  width: 100% !important;
+  grid-template-columns: 1fr !important;
+  justify-items: center !important;
+  gap: 0 !important;
+  margin: 0 !important;
+  text-align: center !important;
+}
+
+.participantsHeader .eyebrow {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin:
+    0
+    0
+    clamp(0.68rem, 1vw, 0.88rem) !important;
+  padding: 0 !important;
+  color: #1d4ed8 !important;
+  font-size:
+    clamp(1rem, 1.12vw, 1.125rem) !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.12em !important;
+  line-height: 1.2 !important;
+  text-align: center !important;
+  text-transform: uppercase !important;
+}
+
+.participantsHeader .eyebrow::before,
+.participantsHeader .eyebrow::after,
+.participantsHeader .eyebrow svg {
+  content: none !important;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  background: none !important;
+  -webkit-mask: none !important;
+  mask: none !important;
+}
+
+.participantsHeader h2 {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  color: #0b1b3b !important;
+  font-size:
+    clamp(2.35rem, 4vw, 3.65rem) !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.045em !important;
+  line-height: 1.04 !important;
+  text-align: center !important;
+  text-wrap: balance !important;
+}
+
+.participantsIntro,
+.entryPath,
+.entryNumber,
+.entryIcon,
+.entryStop > svg {
+  display: none !important;
+}
+
+.entryJourney {
+  position: relative !important;
+  display: grid !important;
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr)) !important;
+  align-items: stretch !important;
+  gap: clamp(0.85rem, 1.5vw, 1.25rem) !important;
+  margin-top:
+    clamp(2rem, 3.5vw, 2.8rem) !important;
+}
+
+.entryStop {
+  position: relative !important;
+  display: flex !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  height: auto !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding:
+    clamp(1.15rem, 1.8vw, 1.45rem) !important;
+  border:
+    1px solid rgba(148, 163, 184, 0.28) !important;
+  border-radius: 1rem !important;
+  background:
+    linear-gradient(
+      155deg,
+      rgba(255, 255, 255, 0.99),
+      rgba(248, 250, 252, 0.94)
+    ) !important;
+  box-shadow:
+    0 12px 28px rgba(15, 35, 72, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.94) !important;
+  text-align: center !important;
+}
+
+.entryStop::before,
+.entryStop::after {
+  content: none !important;
+  display: none !important;
+}
+
+.entryContent {
+  display: grid !important;
+  width: 100% !important;
+  gap: 0.45rem !important;
+  align-content: center !important;
+  justify-items: center !important;
+}
+
+.entryContent h3,
+.entryStop h3 {
+  width: 100% !important;
+  margin: 0 !important;
+  color: #102146 !important;
+  font-size:
+    clamp(1rem, 1.12vw, 1.15rem) !important;
+  font-weight: 750 !important;
+  letter-spacing: -0.025em !important;
+  line-height: 1.22 !important;
+  text-align: center !important;
+  text-wrap: balance !important;
+}
+
+.entryContent p,
+.entryStop p {
+  width: 100% !important;
+  margin: 0 !important;
+  color: #5b6982 !important;
+  font-size:
+    clamp(0.88rem, 0.96vw, 0.98rem) !important;
+  font-weight: 500 !important;
+  line-height: 1.48 !important;
+  text-align: center !important;
+  text-wrap: pretty !important;
+}
+
+.participantsStatement {
+  display: flex !important;
+  width: 100% !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 1rem !important;
+  margin-top:
+    clamp(1rem, 1.8vw, 1.4rem) !important;
+  padding:
+    clamp(1rem, 1.5vw, 1.25rem)
+    clamp(1.1rem, 2vw, 1.6rem) !important;
+  border-radius: 0 !important;
+  background: #0b1b3b !important;
+  color: #ffffff !important;
+}
+
+.participantsStatement span,
+.participantsStatement strong {
+  color: #ffffff !important;
+}
+
+@media (max-width: 1020px) {
+  .entryJourney {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .participantsSection {
+    padding:
+      2.75rem
+      0
+      3.25rem !important;
+  }
+
+  .participantsHeader h2 {
+    font-size:
+      clamp(2.05rem, 9vw, 2.75rem) !important;
+  }
+
+  .participantsHeader .eyebrow {
+    font-size:
+      clamp(0.96rem, 4.2vw, 1.05rem) !important;
+  }
+
+  .entryJourney {
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem !important;
+    margin-top: 1.65rem !important;
+  }
+
+  .entryStop {
+    padding: 1rem !important;
+  }
+
+  .participantsStatement {
+    align-items: flex-start !important;
+    flex-direction: column !important;
+  }
+}
+
+/* PARTICIPANTS CLEAN CONTENT CARDS - END */

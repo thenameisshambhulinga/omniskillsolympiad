@@ -1,12 +1,5 @@
 import type { Metadata } from "next";
 
-
-import "@fontsource/inter/400.css";
-import "@fontsource/inter/500.css";
-import "@fontsource/inter/600.css";
-import "@fontsource/inter/700.css";
-import "@fontsource/inter/800.css";
-import "@fontsource/inter/900.css";
 import "./globals.css";
 
 import ConditionalSiteFooter from "@/components/layout/ConditionalSiteFooter";
@@ -18,7 +11,7 @@ export const metadata: Metadata = {
     process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
   ),
   title: "Omni Skills Olympiad",
-  description: "India's Engineering Skills Competition Ecosystem",
+  description: "India's National Multidisciplinary Skills Ecosystem",
   openGraph: {
     title: "Omni Skills Olympiad",
     description: "Learn. Build. Compete. Get Ranked.",
@@ -27,7 +20,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Omni Skills Olympiad",
-    description: "India's Engineering Skills Competition Ecosystem",
+    description: "India's National Multidisciplinary Skills Ecosystem",
     images: ["/og-image.png"],
   },
 };
@@ -42,7 +35,7 @@ export default function RootLayout({
       <body className="min-h-screen bg-[#f8f9fa] antialiased">
         <ConditionalSiteNavbar />
 
-        <main className="relative min-h-screen overflow-x-clip">
+        <main id="main-content" tabIndex={-1} className="relative min-h-screen overflow-x-clip outline-none">
           <SelectionAnnouncementTicker />
           {children}
         </main>

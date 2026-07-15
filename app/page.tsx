@@ -4,9 +4,9 @@ import PublicHomePage from "@/components/public-site/PublicHomePage";
 import { contactInformation } from "@/data/public-site";
 
 export const metadata: Metadata = {
-  title: "OMNI Skills Olympiad | Practical Engineering Skill Ecosystem",
+  title: "OMNI Skills Olympiad | National Multidisciplinary Skills Ecosystem",
   description:
-    "Explore OMNI Skills Olympiad, a multidisciplinary engineering skill ecosystem for practical learning, assessment, competition, progression, innovation, and recognition.",
+    "Explore OMNI Skills Olympiad, a national multidisciplinary skills ecosystem for practical learning, competition, innovation, progression, and recognition across diverse domains.",
   alternates: {
     canonical: "/",
   },
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     url: "/",
     title: "OMNI Skills Olympiad",
     description:
-      "A multidisciplinary engineering skill ecosystem connecting practical learning, assessment, competition, progression, and recognition.",
+      "A national multidisciplinary skills ecosystem connecting practical learning, competition, innovation, progression, and recognition across diverse domains.",
     images: [
       {
         url: "/og-image.png",
@@ -51,7 +51,7 @@ export default function HomePage() {
     email: contactInformation.email,
     telephone: "+918123719555",
     description:
-      "A multidisciplinary engineering skill ecosystem for practical learning, competency development, competition, evaluation, innovation, and recognition.",
+      "A national multidisciplinary skills ecosystem for practical learning, competition, innovation, progression, and recognition across diverse domains.",
     address: {
       "@type": "PostalAddress",
       streetAddress:

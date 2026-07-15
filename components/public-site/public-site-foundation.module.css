@@ -1,0 +1,406 @@
+.foundationShell {
+  --oso-foundation-navy: #081a3a;
+  --oso-foundation-ink: #102146;
+  --oso-foundation-copy: #53627d;
+  --oso-foundation-blue: #2563eb;
+  --oso-foundation-violet: #6d28d9;
+  --oso-foundation-orange: #f97316;
+  --oso-foundation-cyan: #0891b2;
+  --oso-foundation-line: rgba(107, 124, 154, 0.18);
+  --oso-foundation-card-border: rgba(116, 133, 164, 0.22);
+  --oso-foundation-shadow:
+    0 18px 48px rgba(15, 35, 72, 0.085);
+  --oso-foundation-shadow-hover:
+    0 26px 64px rgba(15, 35, 72, 0.14);
+  --oso-foundation-section-top: 3.5rem;
+  --oso-foundation-section-bottom: 4.5rem;
+  --oso-foundation-header-gap: 2.25rem;
+  --oso-foundation-radius: 1.35rem;
+
+  position: relative;
+  isolation: isolate;
+  overflow-x: clip;
+  background: #f7f9fd;
+  color: var(--oso-foundation-ink);
+  font-synthesis: none;
+}
+
+.foundationShell ::selection {
+  background: rgba(109, 40, 217, 0.2);
+  color: #081a3a;
+}
+
+/*
+  Global public-site rhythm.
+  Hero and final CTA remain intentional exceptions.
+*/
+.foundationShell.foundationShell
+  > section:not([id="home"]):not([id="platform-entry"]) {
+  position: relative;
+  scroll-margin-top: 6.5rem;
+  padding-top: var(--oso-foundation-section-top) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(113, 132, 166, 0.11),
+    inset 0 -1px 0 rgba(113, 132, 166, 0.055);
+}
+
+/*
+  Consistent editorial heading scale without changing text.
+*/
+.foundationShell.foundationShell
+  > section:not([id="home"]):not([id="platform-entry"])
+  h2 {
+  margin-top: 0;
+  font-size: clamp(2.25rem, 3.4vw, 2.75rem) !important;
+  font-weight: 950;
+  letter-spacing: -0.052em;
+  line-height: 1.02;
+  text-wrap: balance;
+}
+
+.foundationShell.foundationShell
+  > section:not([id="home"]):not([id="platform-entry"])
+  h3 {
+  text-wrap: balance;
+}
+
+.foundationShell.foundationShell
+  > section:not([id="home"]):not([id="platform-entry"])
+  p {
+  text-wrap: pretty;
+}
+
+/*
+  Moz-inspired trust surfaces:
+  clear borders, restrained depth and strong readability.
+*/
+.foundationShell [id="participants"] article {
+  border-color: var(--oso-foundation-card-border) !important;
+  box-shadow: var(--oso-foundation-shadow) !important;
+}
+
+.foundationShell [id="philosophy"] article {
+  border-color: var(--oso-foundation-card-border) !important;
+  box-shadow: var(--oso-foundation-shadow) !important;
+}
+
+.foundationShell [id="ecosystem"] article {
+  border-color: var(--oso-foundation-card-border) !important;
+  box-shadow: var(--oso-foundation-shadow) !important;
+}
+
+.foundationShell [id="roadmap"] article {
+  border-color: var(--oso-foundation-card-border) !important;
+  box-shadow: var(--oso-foundation-shadow) !important;
+}
+
+.foundationShell [id="faq"] details {
+  border-color: var(--oso-foundation-card-border) !important;
+  box-shadow:
+    0 10px 30px rgba(15, 35, 72, 0.055) !important;
+}
+
+.foundationShell [id="outcomes"] article {
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  box-shadow:
+    0 18px 48px rgba(0, 0, 0, 0.2) !important;
+}
+
+.foundationShell [id="vision-mission-values"] article {
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  box-shadow:
+    0 18px 48px rgba(0, 0, 0, 0.22) !important;
+}
+
+/*
+  Fix the Who Can Participate header:
+  no oversized top void and both columns share one visual centre.
+*/
+.foundationShell [id="participants"] header {
+  display: grid !important;
+  grid-template-columns:
+    minmax(0, 0.92fr)
+    minmax(24rem, 1.08fr) !important;
+  align-items: center !important;
+  gap: clamp(2rem, 5vw, 5.5rem) !important;
+}
+
+.foundationShell [id="participants"] header > div {
+  min-width: 0;
+  align-self: center !important;
+}
+
+.foundationShell [id="participants"] header > div:first-child {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.foundationShell [id="participants"] header > div:last-child {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.65rem !important;
+  padding-top: 0 !important;
+}
+
+.foundationShell [id="participants"] header h2 {
+  margin-bottom: 0 !important;
+  max-width: 16ch;
+}
+
+.foundationShell [id="participants"] header p {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  line-height: 1.55 !important;
+}
+
+.foundationShell [id="participants"] header + div {
+  margin-top: var(--oso-foundation-header-gap) !important;
+}
+
+/*
+  Normalize heading-to-content distance in the new storytelling sections.
+*/
+.foundationShell [id="philosophy"] header + div {
+  margin-top: var(--oso-foundation-header-gap) !important;
+}
+
+.foundationShell [id="vision-mission-values"] header + div {
+  margin-top: var(--oso-foundation-header-gap) !important;
+}
+
+.foundationShell [id="roadmap"] header + div {
+  margin-top: var(--oso-foundation-header-gap) !important;
+}
+
+.foundationShell [id="faq"] header + div {
+  margin-top: var(--oso-foundation-header-gap) !important;
+}
+
+.foundationShell [id="outcomes"] header + div {
+  margin-top: var(--oso-foundation-header-gap) !important;
+}
+
+.foundationShell [id="ecosystem"] header + div {
+  margin-top: var(--oso-foundation-header-gap) !important;
+}
+
+/*
+  CTA hierarchy: strong, readable and tactile.
+  The hero PNG itself remains untouched.
+*/
+.foundationShell a[href="/login"] {
+  min-height: 3rem;
+  border-radius: 0.95rem;
+  box-shadow:
+    0 12px 30px rgba(91, 33, 182, 0.2);
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    filter 180ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.foundationShell a[href="/skill-championships"] {
+  min-height: 3rem;
+  border-radius: 0.95rem;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    background-color 180ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.foundationShell a:focus-visible {
+  outline: 3px solid rgba(14, 165, 233, 0.95) !important;
+  outline-offset: 4px !important;
+}
+
+.foundationShell button:focus-visible {
+  outline: 3px solid rgba(14, 165, 233, 0.95) !important;
+  outline-offset: 4px !important;
+}
+
+.foundationShell summary:focus-visible {
+  outline: 3px solid rgba(14, 165, 233, 0.95) !important;
+  outline-offset: 4px !important;
+  border-radius: 0.75rem;
+}
+
+/*
+  FAQ refinement while preserving every question and answer.
+*/
+.foundationShell [id="faq"] details {
+  overflow: clip;
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.foundationShell [id="faq"] details[open] {
+  border-color: rgba(109, 40, 217, 0.32) !important;
+  box-shadow:
+    0 18px 44px rgba(61, 35, 124, 0.1) !important;
+}
+
+.foundationShell [id="faq"] summary {
+  min-height: 4.5rem;
+}
+
+/*
+  Association logos become a cleaner trust band.
+  No logo or partner is removed.
+*/
+.foundationShell [id="associations"] img {
+  object-fit: contain;
+  filter: grayscale(0.1) saturate(0.88);
+  opacity: 0.92;
+  transition:
+    filter 180ms ease,
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+/*
+  Final CTA gets a cleaner conversion surface without changing its copy.
+*/
+.foundationShell [id="platform-entry"] {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(124, 58, 237, 0.16);
+  box-shadow:
+    0 28px 70px rgba(32, 20, 75, 0.18);
+}
+
+/*
+  Pointer-only enhancements.
+*/
+@media (hover: hover) and (pointer: fine) {
+  .foundationShell [id="participants"] article:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--oso-foundation-shadow-hover) !important;
+  }
+
+  .foundationShell [id="philosophy"] article:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--oso-foundation-shadow-hover) !important;
+  }
+
+  .foundationShell [id="ecosystem"] article:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--oso-foundation-shadow-hover) !important;
+  }
+
+  .foundationShell [id="roadmap"] article:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--oso-foundation-shadow-hover) !important;
+  }
+
+  .foundationShell a[href="/login"]:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 17px 38px rgba(91, 33, 182, 0.3);
+    filter: saturate(1.08);
+  }
+
+  .foundationShell a[href="/skill-championships"]:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 14px 32px rgba(37, 99, 235, 0.14);
+  }
+
+  .foundationShell [id="associations"] img:hover {
+    filter: grayscale(0) saturate(1);
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+}
+
+@media (max-width: 1020px) {
+  .foundationShell {
+    --oso-foundation-section-top: 2.75rem;
+    --oso-foundation-section-bottom: 3.5rem;
+    --oso-foundation-header-gap: 1.75rem;
+  }
+
+  .foundationShell.foundationShell
+    > section:not([id="home"]):not([id="platform-entry"])
+    h2 {
+    font-size: clamp(2.1rem, 5vw, 2.55rem) !important;
+  }
+
+  .foundationShell [id="participants"] header {
+    grid-template-columns: 1fr !important;
+    align-items: start !important;
+    gap: 1.25rem !important;
+  }
+
+  .foundationShell [id="participants"] header > div {
+    width: 100%;
+    align-self: stretch !important;
+  }
+
+  .foundationShell [id="participants"] header h2 {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .foundationShell {
+    --oso-foundation-section-top: 2.25rem;
+    --oso-foundation-section-bottom: 2.75rem;
+    --oso-foundation-header-gap: 1.4rem;
+  }
+
+  .foundationShell.foundationShell
+    > section:not([id="home"]):not([id="platform-entry"])
+    h2 {
+    font-size: clamp(1.95rem, 9vw, 2.25rem) !important;
+    line-height: 1.04;
+  }
+
+  .foundationShell [id="participants"] header {
+    gap: 1rem !important;
+  }
+
+  .foundationShell [id="participants"] header p {
+    line-height: 1.5 !important;
+  }
+
+  .foundationShell a[href="/login"] {
+    min-height: 2.85rem;
+  }
+
+  .foundationShell a[href="/skill-championships"] {
+    min-height: 2.85rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .foundationShell article,
+  .foundationShell a,
+  .foundationShell button,
+  .foundationShell details,
+  .foundationShell img {
+    scroll-behavior: auto !important;
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .foundationShell article:hover,
+  .foundationShell a:hover,
+  .foundationShell img:hover {
+    transform: none !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .foundationShell article,
+  .foundationShell details,
+  .foundationShell [id="platform-entry"] {
+    border: 1px solid CanvasText !important;
+    box-shadow: none !important;
+  }
+}

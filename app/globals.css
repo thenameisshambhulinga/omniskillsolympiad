@@ -31,10 +31,10 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  --font-sans: var(--font-apple);
-  --font-heading: var(--font-apple);
-  --font-body: var(--font-apple);
-  --font-mono: "SF Mono", monospace;
+  --font-sans: var(--font-roboto-slab);
+  --font-heading: var(--font-roboto-slab);
+  --font-body: var(--font-roboto-slab);
+  --font-mono: "SF Mono", "Cascadia Code", Consolas, monospace;
 
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
@@ -45,11 +45,12 @@
 }
 
 :root {
-  --font-apple:
-    "SF Pro", "SF Pro Text", "SF Pro Display", "SF Pro Rounded", sans-serif;
-  --font-display: var(--font-apple);
-  --font-body: var(--font-apple);
-  --font-mono: "SF Mono", monospace;
+  --font-roboto-slab: "Roboto Slab Variable", "Roboto Slab", Georgia, serif;
+  
+  
+  --font-display: var(--font-roboto-slab);
+  --font-body: var(--font-roboto-slab);
+  --font-mono: "SF Mono", "Cascadia Code", Consolas, monospace;
 
   --background: #f8f9fa;
   --foreground: #30343b;
@@ -133,6 +134,7 @@
     background: var(--background);
     color: var(--foreground);
     font-family: var(--font-body);
+    font-optical-sizing: auto;
     font-weight: 400;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
@@ -558,7 +560,7 @@
 
 /* =========================================================
    ONLY RESTYLE UPPERCASE + LETTER-SPACED MICRO TEXT
-   Apple SF Pro font is preserved. This only removes the harsh
+   The global application font is preserved. This only removes the harsh
    wide-spaced look and makes labels cleaner.
    ========================================================= */
 
@@ -1034,7 +1036,7 @@ button[class*="rounded-full"]:focus-visible {
 /* =========================================================
    OSO STABLE CTA UTILITIES
    Use these classes for important text CTAs.
-   They preserve Apple SF Pro fonts and avoid icon-only button conflicts.
+   They preserve the global application font and avoid icon-only button conflicts.
    ========================================================= */
 
 .oso-cta-primary {
@@ -1254,7 +1256,7 @@ button,
 input,
 textarea,
 select {
-  font-family: var(--font-apple) !important;
+  font-family: var(--font-roboto-slab) !important;
   font-feature-settings:
     "kern" 1,
     "liga" 1,
@@ -1273,7 +1275,7 @@ h6,
 .oso-section-title,
 .oso-page-title,
 .oso-card-title {
-  font-family: var(--font-apple) !important;
+  font-family: var(--font-roboto-slab) !important;
   font-feature-settings:
     "kern" 1,
     "liga" 1,
@@ -1294,7 +1296,7 @@ button,
 input,
 textarea,
 select {
-  font-family: var(--font-apple) !important;
+  font-family: var(--font-roboto-slab) !important;
   font-feature-settings:
     "kern" 1,
     "liga" 1,
@@ -1315,7 +1317,7 @@ h6,
 .oso-section-title,
 .oso-page-title,
 .oso-card-title {
-  font-family: var(--font-apple) !important;
+  font-family: var(--font-roboto-slab) !important;
   color: var(--oso-heading-color);
   letter-spacing: -0.035em;
   font-feature-settings:
@@ -1354,13 +1356,13 @@ samp,
 
 /* =========================================================
    FINAL OMNI / KAGGLE-LIKE TYPOGRAPHY + PASSPORT VISIBILITY
-   Stable font: Inter everywhere.
+   Stable global application font.
    ========================================================= */
 
 :root {
-  --font-kaggle: "Inter", Arial, Helvetica, sans-serif;
-  --font-heading: "Inter", Arial, Helvetica, sans-serif;
-  --font-body: "Inter", Arial, Helvetica, sans-serif;
+  --font-kaggle: var(--font-roboto-slab);
+  --font-heading: var(--font-roboto-slab);
+  --font-body: var(--font-roboto-slab);
 
   --oso-heading-color: #454648;
   --oso-soft-heading-color: #5f6368;
@@ -1539,13 +1541,13 @@ select {
 
 /* =========================================================
    FINAL OMNI / KAGGLE-LIKE TYPOGRAPHY + PASSPORT VISIBILITY
-   Stable font: Inter everywhere.
+   Stable global application font.
    ========================================================= */
 
 :root {
-  --font-kaggle: "Inter", Arial, Helvetica, sans-serif;
-  --font-heading: "Inter", Arial, Helvetica, sans-serif;
-  --font-body: "Inter", Arial, Helvetica, sans-serif;
+  --font-kaggle: var(--font-roboto-slab);
+  --font-heading: var(--font-roboto-slab);
+  --font-body: var(--font-roboto-slab);
 
   --oso-heading-color: #666666;
   --oso-soft-heading-color: #5f6368;
@@ -1721,3 +1723,175 @@ select {
     0 8px 18px rgba(37, 99, 235, 0.3),
     0 0 0 1px rgba(37, 99, 235, 0.25);
 }
+
+
+/* OSO ROBOTO SLAB GLOBAL FONT - START */
+html,
+body,
+button,
+input,
+textarea,
+select,
+option {
+  font-family:
+    var(--font-roboto-slab) !important;
+  font-optical-sizing: auto;
+}
+
+code,
+pre,
+kbd,
+samp {
+  font-family:
+    var(--font-mono, "Cascadia Code", Consolas, monospace) !important;
+}
+/* OSO ROBOTO SLAB GLOBAL FONT - END */
+
+
+
+/* OSO GLOBAL ARIAL TYPOGRAPHY - START */
+
+:root {
+  --font-roboto-slab:
+    Arial,
+    Helvetica,
+    sans-serif;
+  --font-display:
+    Arial,
+    Helvetica,
+    sans-serif;
+  --font-body:
+    Arial,
+    Helvetica,
+    sans-serif;
+}
+
+html,
+body,
+button,
+input,
+textarea,
+select,
+option,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a,
+span,
+strong,
+small,
+label,
+blockquote,
+li {
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif !important;
+}
+
+/* OSO GLOBAL ARIAL TYPOGRAPHY - END */
+
+/* OSO STANDARD PUBLIC SECTION EYEBROW - START */
+
+/*
+  Public-site eyebrow standard:
+  centred text only, without icons, sparkles or decorative lines.
+*/
+#main-content
+section:not(#home)
+[class*="eyebrow"],
+#main-content
+section:not(#home)
+[class*="Eyebrow"] {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin:
+    0
+    0
+    clamp(0.68rem, 1vw, 0.88rem) !important;
+  padding: 0 !important;
+  color: #1d4ed8 !important;
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif !important;
+  font-size:
+    clamp(1rem, 1.12vw, 1.125rem) !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.12em !important;
+  line-height: 1.2 !important;
+  text-align: center !important;
+  text-transform: uppercase !important;
+  white-space: normal !important;
+}
+
+#main-content
+section:not(#home)
+[class*="eyebrow"]
+svg,
+#main-content
+section:not(#home)
+[class*="Eyebrow"]
+svg {
+  display: none !important;
+}
+
+#main-content
+section:not(#home)
+[class*="eyebrow"]::before,
+#main-content
+section:not(#home)
+[class*="eyebrow"]::after,
+#main-content
+section:not(#home)
+[class*="Eyebrow"]::before,
+#main-content
+section:not(#home)
+[class*="Eyebrow"]::after {
+  content: none !important;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: none !important;
+  -webkit-mask: none !important;
+  mask: none !important;
+}
+
+/* Dark-section eyebrow colour */
+#main-content
+section[class*="dark"]
+[class*="eyebrow"],
+#main-content
+section[class*="dark"]
+[class*="Eyebrow"],
+#main-content
+section[style*="background"]
+[class*="eyebrow"],
+#main-content
+section[style*="background"]
+[class*="Eyebrow"] {
+  color: #ffffff !important;
+}
+
+@media (max-width: 640px) {
+  #main-content
+  section:not(#home)
+  [class*="eyebrow"],
+  #main-content
+  section:not(#home)
+  [class*="Eyebrow"] {
+    font-size:
+      clamp(0.96rem, 4.2vw, 1.05rem) !important;
+    letter-spacing: 0.1em !important;
+  }
+}
+
+/* OSO STANDARD PUBLIC SECTION EYEBROW - END */

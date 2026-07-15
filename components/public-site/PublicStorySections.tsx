@@ -198,6 +198,7 @@ export function AssociationsSection() {
           <article className="mt-14 grid overflow-hidden border border-slate-200 bg-white shadow-[0_26px_75px_rgba(15,23,42,0.09)] lg:grid-cols-[0.65fr_1.35fr]">
             <div className="flex min-h-[220px] items-center justify-center bg-[#f7f9fc] p-8 sm:p-10">
               <Image
+      loading="eager"
                 src="/sims-logo.png"
                 alt="Silicon Microsystems"
                 width={853}

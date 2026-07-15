@@ -1,0 +1,1931 @@
+.heroSection {
+  position: relative;
+  isolation: isolate;
+  min-height: calc(100svh - 5.5rem);
+  overflow: hidden;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+  background: #ffffff;
+  color: #081a3a;
+}
+
+.posterCanvas {
+  position: absolute;
+  inset: 0;
+  z-index: -4;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.posterSlide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: none;
+  transition: opacity 220ms ease-out;
+  will-change: opacity;
+}
+
+.posterSlide[data-active="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+.posterImage {
+  object-fit: cover;
+  object-position: center;
+  user-select: none;
+}
+
+.readabilityLayer {
+  position: absolute;
+  inset: 0;
+  z-index: -3;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 1) 0%,
+      rgba(255, 255, 255, 0.985) 23%,
+      rgba(255, 255, 255, 0.92) 38%,
+      rgba(255, 255, 255, 0.54) 51%,
+      rgba(255, 255, 255, 0.08) 69%,
+      transparent 84%
+    ),
+    radial-gradient(
+      circle at 22% 48%,
+      rgba(255, 255, 255, 0.97),
+      rgba(255, 255, 255, 0.62) 34%,
+      transparent 63%
+    );
+}
+
+.heroInner {
+  width: min(100%, 1600px);
+  min-height: calc(100svh - 5.5rem);
+  margin-inline: auto;
+  padding:
+    clamp(3.25rem, 6vh, 5.75rem)
+    clamp(1.25rem, 4.2vw, 4.5rem);
+  display: flex;
+  align-items: center;
+}
+
+.heroContent {
+  width: min(47vw, 42rem);
+  min-width: 34rem;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  color: #081a3a;
+  
+}
+
+.eyebrow {
+  width: fit-content;
+  margin: 0 0 0.9rem;
+  color: #5b21b6;
+  font-size: 0.76rem;
+  font-weight: 950;
+  letter-spacing: 0.15em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.heroContent h1 {
+  margin: 0;
+  max-width: 12ch;
+  color: #081a3a;
+  font-size: calc(clamp(3rem, 5.25vw, 5.85rem) - 2px);
+  font-weight: 950;
+  letter-spacing: -0.075em;
+  line-height: 0.92;
+  text-wrap: balance;
+}
+
+.tagline {
+  margin: clamp(1.35rem, 2.4vh, 1.75rem) 0 0;
+  width: fit-content;
+  background:
+    linear-gradient(
+      90deg,
+      #2563eb,
+      #6d28d9 48%,
+      #ea580c
+    );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-size: clamp(1.1rem, 1.65vw, 1.55rem);
+  font-weight: 950;
+  letter-spacing: -0.03em;
+}
+
+.heroNarrative {
+  display: grid;
+  gap: clamp(0.7rem, 1.35vh, 1rem);
+  margin-top: clamp(1.25rem, 2.4vh, 1.75rem);
+}
+
+.heroNarrative p {
+  margin: 0;
+  max-width: 100%;
+  color: #334766;
+  font-size: clamp(0.95rem, 1.08vw, 1.08rem);
+  font-weight: 610;
+  line-height: 1.68;
+  text-align: justify;
+  text-align-last: left;
+  text-justify: inter-word;
+  text-wrap: pretty;
+  hyphens: auto;
+}
+
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 0.75rem;
+  width: 100%;
+  margin-top: clamp(1.35rem, 2.7vh, 2rem);
+}
+
+.primaryAction,
+.secondaryAction {
+  display: inline-flex;
+  min-height: 3.35rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  border-radius: 0.95rem;
+  padding: 0.88rem 1.35rem;
+  font-size: 0.87rem;
+  font-weight: 900;
+  line-height: 1;
+  text-decoration: none;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease;
+}
+
+.primaryAction {
+  border: 1px solid #5b21b6;
+  background: linear-gradient(135deg, #6d28d9, #4f46e5);
+  color: #ffffff;
+  box-shadow: 0 14px 30px rgba(91, 33, 182, 0.23);
+}
+
+.secondaryAction {
+  border: 1px solid rgba(74, 85, 120, 0.24);
+  background: rgba(255, 255, 255, 0.94);
+  color: #102146;
+  box-shadow: 0 12px 28px rgba(15, 35, 72, 0.08);
+  backdrop-filter: blur(12px);
+}
+
+.primaryAction svg,
+.secondaryAction svg {
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 auto;
+}
+
+.carouselDock {
+  position: absolute;
+  right: clamp(1rem, 3vw, 3rem);
+  bottom: 1.4rem;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid rgba(100, 116, 139, 0.16);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 12px 30px rgba(15, 35, 72, 0.09);
+  backdrop-filter: blur(14px);
+}
+
+.slideDots {
+  display: flex;
+  align-items: center;
+  gap: 0.42rem;
+}
+
+.slideDot {
+  width: 0.52rem;
+  height: 0.52rem;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: #94a3b8;
+  cursor: pointer;
+  transition:
+    width 180ms ease,
+    background-color 180ms ease,
+    transform 180ms ease;
+}
+
+.slideDot[data-active="true"] {
+  width: 1.5rem;
+  background: linear-gradient(90deg, #2563eb, #7c3aed);
+}
+
+.pauseButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 2rem;
+  border: 0;
+  border-left: 1px solid rgba(100, 116, 139, 0.18);
+  background: transparent;
+  padding: 0 0.2rem 0 0.7rem;
+  color: #334155;
+  cursor: pointer;
+  font-size: 0.68rem;
+  font-weight: 850;
+}
+
+.pauseButton svg {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+.progressTrack {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 4;
+  height: 3px;
+  overflow: hidden;
+  background: rgba(148, 163, 184, 0.18);
+}
+
+.progressFill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform: scaleX(0);
+  transform-origin: left center;
+  background:
+    linear-gradient(
+      90deg,
+      #2563eb,
+      #7c3aed 58%,
+      #f97316
+    );
+  animation: heroPosterProgress 5600ms linear forwards;
+}
+
+.progressFill[data-paused="true"] {
+  animation-play-state: paused;
+}
+
+.semanticPosterDescription {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Compact dark credibility band */
+
+.credibilitySection {
+  position: relative;
+  overflow: hidden;
+  padding: 1.2rem 0 1.3rem;
+  background:
+    radial-gradient(
+      circle at 18% 0%,
+      rgba(37, 99, 235, 0.18),
+      transparent 24rem
+    ),
+    radial-gradient(
+      circle at 86% 100%,
+      rgba(124, 58, 237, 0.2),
+      transparent 27rem
+    ),
+    #07142f;
+  color: #ffffff;
+}
+
+.credibilitySection::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.18;
+  background-image:
+    linear-gradient(
+      rgba(255, 255, 255, 0.075) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.075) 1px,
+      transparent 1px
+    );
+  background-size: 52px 52px;
+  mask-image:
+    linear-gradient(
+      90deg,
+      transparent,
+      #000 12%,
+      #000 88%,
+      transparent
+    );
+}
+
+.credibilityInner {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 1500px);
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 3vw, 2.5rem);
+}
+
+.capabilityRail {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+.capabilityCard {
+  --capability-accent: #f59e0b;
+  --capability-soft: rgba(245, 158, 11, 0.12);
+
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.7rem;
+  align-items: center;
+  min-height: 5.5rem;
+  padding: 0.8rem 0.9rem;
+  overflow: hidden;
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--capability-accent) 36%,
+      transparent
+    );
+  border-radius: 1rem;
+  background:
+    linear-gradient(
+      145deg,
+      var(--capability-soft),
+      rgba(255, 255, 255, 0.035)
+    );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.075),
+    0 12px 28px rgba(0, 0, 0, 0.16);
+}
+
+.capabilityCard::after {
+  content: "";
+  position: absolute;
+  right: -1.4rem;
+  top: -1.4rem;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  background: var(--capability-accent);
+  opacity: 0.1;
+  filter: blur(14px);
+}
+
+.capabilityCard[data-tone="green"] {
+  --capability-accent: #22c55e;
+  --capability-soft: rgba(34, 197, 94, 0.12);
+}
+
+.capabilityCard[data-tone="blue"] {
+  --capability-accent: #38bdf8;
+  --capability-soft: rgba(56, 189, 248, 0.12);
+}
+
+.capabilityCard[data-tone="violet"] {
+  --capability-accent: #a78bfa;
+  --capability-soft: rgba(167, 139, 250, 0.13);
+}
+
+.capabilityCard[data-tone="orange"] {
+  --capability-accent: #fb923c;
+  --capability-soft: rgba(251, 146, 60, 0.12);
+}
+
+.capabilityIcon {
+  display: grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  place-items: center;
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--capability-accent) 45%,
+      transparent
+    );
+  border-radius: 0.8rem;
+  background:
+    color-mix(
+      in srgb,
+      var(--capability-accent) 13%,
+      transparent
+    );
+  color: var(--capability-accent);
+  box-shadow:
+    0 0 18px
+      color-mix(
+        in srgb,
+        var(--capability-accent) 20%,
+        transparent
+      );
+}
+
+.capabilityIcon svg {
+  width: 1.35rem;
+  height: 1.35rem;
+}
+
+.capabilityCard h2 {
+  margin: 0;
+  color: #f8fafc;
+  font-size: clamp(0.76rem, 0.9vw, 0.92rem);
+  font-weight: 850;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+  text-wrap: balance;
+}
+
+.credibilityDivider {
+  height: 1px;
+  margin: 0.95rem 0 0.85rem;
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(148, 163, 184, 0.28) 12%,
+      rgba(148, 163, 184, 0.28) 88%,
+      transparent
+    );
+}
+
+.statsStrip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: stretch;
+  overflow: hidden;
+  border: 1px solid rgba(125, 147, 185, 0.18);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.045);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.statItem {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 4.7rem;
+  padding: 0.6rem 0.9rem;
+  text-align: center;
+}
+
+.statItem + .statItem {
+  border-left: 1px solid rgba(125, 147, 185, 0.16);
+}
+
+.statItem strong {
+  background:
+    linear-gradient(
+      90deg,
+      #fde047,
+      #4ade80 45%,
+      #a78bfa
+    );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-size: clamp(1.65rem, 2.2vw, 2.25rem);
+  font-weight: 950;
+  letter-spacing: -0.055em;
+  line-height: 1;
+}
+
+.statItem span {
+  margin-top: 0.3rem;
+  color: #cbd5e1;
+  font-size: 0.68rem;
+  font-weight: 850;
+  letter-spacing: 0.05em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+@keyframes heroPosterProgress {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .primaryAction:hover,
+  .secondaryAction:hover {
+    transform: translateY(-2px);
+  }
+
+  .primaryAction:hover {
+    box-shadow: 0 18px 38px rgba(91, 33, 182, 0.3);
+  }
+
+  .secondaryAction:hover {
+    border-color: rgba(79, 70, 229, 0.34);
+    box-shadow: 0 16px 34px rgba(15, 35, 72, 0.12);
+  }
+
+  .capabilityCard {
+    transition:
+      transform 180ms ease,
+      border-color 180ms ease,
+      background-color 180ms ease;
+  }
+
+  .capabilityCard:hover {
+    transform: translateY(-3px);
+    border-color:
+      color-mix(
+        in srgb,
+        var(--capability-accent) 62%,
+        transparent
+      );
+  }
+}
+
+@media (max-width: 1180px) {
+  .heroContent {
+    width: min(55vw, 39rem);
+    min-width: 30rem;
+  }
+
+  .heroContent h1 {
+    font-size: calc(clamp(3rem, 5.3vw, 5rem) - 2px);
+  }
+
+  .capabilityRail {
+    grid-template-columns: repeat(5, minmax(12rem, 1fr));
+    overflow-x: auto;
+    padding-bottom: 0.3rem;
+    scroll-snap-type: x proximity;
+    scrollbar-width: thin;
+  }
+
+  .capabilityCard {
+    scroll-snap-align: start;
+  }
+}
+
+@media (max-width: 900px) {
+  .heroSection {
+    min-height: calc(100svh - 5.2rem);
+  }
+
+  .posterImage {
+    object-fit: cover;
+    object-position: 58% center;
+  }
+
+  .readabilityLayer {
+    background:
+      linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.99) 0%,
+        rgba(255, 255, 255, 0.96) 48%,
+        rgba(255, 255, 255, 0.68) 73%,
+        rgba(255, 255, 255, 0.2) 100%
+      );
+  }
+
+  .heroInner {
+    min-height: calc(100svh - 5.2rem);
+    padding-top: 3rem;
+    padding-bottom: 4.4rem;
+  }
+
+  .heroContent {
+    width: min(76vw, 38rem);
+    min-width: 0;
+  }
+
+  .heroContent h1 {
+    font-size: calc(clamp(2.85rem, 8vw, 4.75rem) - 2px);
+  }
+
+  .carouselDock {
+    right: 1rem;
+    bottom: 1rem;
+  }
+
+  .capabilityRail {
+    grid-template-columns: repeat(5, minmax(12.5rem, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .heroSection {
+    min-height: auto;
+  }
+
+  .posterCanvas {
+    opacity: 0.5;
+  }
+
+  .posterImage {
+    object-fit: cover;
+    object-position: 66% center;
+  }
+
+  .readabilityLayer {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.96) 0%,
+        rgba(255, 255, 255, 0.93) 74%,
+        rgba(255, 255, 255, 0.82) 100%
+      );
+  }
+
+  .heroInner {
+    min-height: calc(100svh - 5rem);
+    align-items: center;
+    padding:
+      2.6rem
+      1rem
+      5.3rem;
+  }
+
+  .heroContent {
+    width: 100%;
+  }
+
+  .heroContent h1 {
+    max-width: 11ch;
+    font-size: calc(clamp(2.75rem, 13vw, 4rem) - 2px);
+    line-height: 0.95;
+  }
+
+  .tagline {
+    font-size: 1.08rem;
+  }
+
+  .heroNarrative p {
+    font-size: 0.93rem;
+    line-height: 1.58;
+    text-align: left;
+  }
+
+  .heroActions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .primaryAction,
+  .secondaryAction {
+    width: 100%;
+  }
+
+  .carouselDock {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+  }
+
+  .credibilitySection {
+    padding: 1rem 0 1.1rem;
+  }
+
+  .capabilityRail {
+    grid-template-columns: repeat(5, minmax(12rem, 78vw));
+    gap: 0.6rem;
+  }
+
+  .capabilityCard {
+    min-height: 5rem;
+  }
+
+  .statsStrip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .statItem {
+    min-height: 4.4rem;
+  }
+
+  .statItem + .statItem {
+    border-left: 0;
+  }
+
+  .statItem:nth-child(even) {
+    border-left: 1px solid rgba(125, 147, 185, 0.16);
+  }
+
+  .statItem:nth-child(n + 3) {
+    border-top: 1px solid rgba(125, 147, 185, 0.16);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .posterSlide,
+  .primaryAction,
+  .secondaryAction,
+  .capabilityCard,
+  .slideDot {
+    transition: none !important;
+  }
+
+  .posterSlide {
+    transform: none !important;
+  }
+
+  .progressFill {
+    animation: none !important;
+    transform: scaleX(1);
+  }
+}
+
+
+/* HERO TWO-LINE VISIBILITY REFINEMENT - START */
+
+/*
+  Preserve two deliberate title lines on desktop.
+  The title can extend slightly beyond the body-copy width
+  without changing the size of the typography.
+*/
+.heroPosterTitle {
+  width: min(50vw, 49rem) !important;
+  max-width: none !important;
+  margin: 0 !important;
+}
+
+.heroTitleLine {
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  white-space: nowrap;
+}
+
+/*
+  Balanced breathing space:
+  headline ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¾Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¾ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ tagline ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¾Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¾ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ narrative.
+*/
+.tagline {
+  margin:
+    clamp(1.65rem, 2.8vh, 2.05rem)
+    0
+    0 !important;
+}
+
+.heroNarrative {
+  margin-top:
+    clamp(1.55rem, 2.7vh, 2rem) !important;
+}
+
+/*
+  Reduce the strong white wash over the image.
+  This keeps the content readable while allowing the
+  poster artwork to remain visible through the left half.
+*/
+.readabilityLayer {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.88) 0%,
+      rgba(255, 255, 255, 0.78) 20%,
+      rgba(255, 255, 255, 0.58) 34%,
+      rgba(255, 255, 255, 0.32) 47%,
+      rgba(255, 255, 255, 0.11) 61%,
+      transparent 76%
+    ) !important;
+}
+
+/*
+  Keep images crisp and fully visible.
+  No animated scaling, translation or delayed rendering.
+*/
+.posterCanvas {
+  opacity: 1 !important;
+}
+
+.posterSlide,
+.posterSlide[data-active="true"] {
+  inset: 0 !important;
+  transform: none !important;
+  transition:
+    opacity 220ms ease-out !important;
+  will-change: opacity !important;
+}
+
+.posterImage {
+  opacity: 1 !important;
+  object-position: center center !important;
+  filter:
+    contrast(1.08)
+    saturate(1.06) !important;
+}
+
+/*
+  Slight white text halo protects readability without
+  obscuring the poster artwork.
+*/
+.heroContent h1,
+.tagline,
+.heroNarrative p {
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.9),
+    0 0 18px rgba(255, 255, 255, 0.72);
+}
+
+@media (max-width: 1180px) {
+  .heroPosterTitle {
+    width: min(58vw, 42rem) !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .heroPosterTitle {
+    width: min(78vw, 39rem) !important;
+  }
+
+  .readabilityLayer {
+    background:
+      linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.9) 0%,
+        rgba(255, 255, 255, 0.78) 38%,
+        rgba(255, 255, 255, 0.44) 62%,
+        rgba(255, 255, 255, 0.12) 84%,
+        transparent 100%
+      ) !important;
+  }
+
+  .posterImage {
+    object-position: 54% center !important;
+  }
+}
+
+@media (max-width: 640px) {
+  /*
+    Very narrow phones may require natural wrapping to
+    prevent horizontal overflow.
+  */
+  .heroPosterTitle {
+    width: 100% !important;
+  }
+
+  .heroTitleLine {
+    width: auto;
+    white-space: normal;
+  }
+
+  .tagline {
+    margin-top: 1.4rem !important;
+  }
+
+  .heroNarrative {
+    margin-top: 1.35rem !important;
+  }
+
+  .posterCanvas {
+    opacity: 0.82 !important;
+  }
+
+  .posterImage {
+    object-position: 61% center !important;
+    filter:
+      contrast(1.06)
+      saturate(1.04) !important;
+  }
+
+  .readabilityLayer {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.87) 0%,
+        rgba(255, 255, 255, 0.78) 68%,
+        rgba(255, 255, 255, 0.58) 100%
+      ) !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .posterSlide,
+  .posterSlide[data-active="true"] {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+/* HERO TWO-LINE VISIBILITY REFINEMENT - END */
+
+/* HERO TAGLINE AND POSTER VISIBILITY FIX - START */
+
+/*
+  Restore the tagline's full gradient colour.
+  The previous white glow made transparent gradient text appear faded.
+*/
+.tagline {
+  opacity: 1 !important;
+
+  background:
+    linear-gradient(
+      90deg,
+      #075ee8 0%,
+      #4338ca 30%,
+      #7c2bd9 58%,
+      #d83b68 78%,
+      #e95420 100%
+    ) !important;
+
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+
+  text-shadow: none !important;
+  filter: none !important;
+}
+
+/*
+  Keep the headline and body readable without washing out
+  the tagline or the illustration.
+*/
+.heroContent h1 {
+  opacity: 1 !important;
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.72),
+    0 0 10px rgba(255, 255, 255, 0.34) !important;
+}
+
+.heroNarrative p {
+  opacity: 1 !important;
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.74),
+    0 0 8px rgba(255, 255, 255, 0.3) !important;
+}
+
+/*
+  The previous overlay was too opaque.
+  Keep a restrained readability layer only behind the text area.
+*/
+.readabilityLayer {
+  opacity: 1 !important;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.72) 0%,
+      rgba(255, 255, 255, 0.62) 18%,
+      rgba(255, 255, 255, 0.46) 31%,
+      rgba(255, 255, 255, 0.25) 42%,
+      rgba(255, 255, 255, 0.08) 52%,
+      transparent 64%
+    ) !important;
+}
+
+/*
+  Keep every Hero poster fully visible and improve detail contrast.
+*/
+.posterCanvas {
+  opacity: 1 !important;
+  background: #ffffff !important;
+}
+
+.posterSlide {
+  inset: 0 !important;
+  transform: none !important;
+  filter: none !important;
+}
+
+.posterSlide[data-active="true"] {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+.posterSlide:not([data-active="true"]) {
+  opacity: 0 !important;
+}
+
+.posterImage {
+  opacity: 1 !important;
+  transform: none !important;
+
+  filter:
+    brightness(0.98)
+    contrast(1.16)
+    saturate(1.1) !important;
+
+  object-position: center center !important;
+}
+
+/*
+  Prevent an old global experience layer from dimming
+  the complete Hero section.
+*/
+.heroSection {
+  opacity: 1 !important;
+  filter: none !important;
+  transform: none !important;
+}
+
+/* Tablet */
+@media (max-width: 900px) {
+  .readabilityLayer {
+    background:
+      linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.76) 0%,
+        rgba(255, 255, 255, 0.61) 34%,
+        rgba(255, 255, 255, 0.32) 52%,
+        rgba(255, 255, 255, 0.08) 70%,
+        transparent 88%
+      ) !important;
+  }
+
+  .posterImage {
+    object-position: 55% center !important;
+
+    filter:
+      brightness(0.98)
+      contrast(1.14)
+      saturate(1.08) !important;
+  }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .posterCanvas {
+    opacity: 1 !important;
+  }
+
+  .readabilityLayer {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.78) 0%,
+        rgba(255, 255, 255, 0.68) 58%,
+        rgba(255, 255, 255, 0.46) 100%
+      ) !important;
+  }
+
+  .posterImage {
+    object-position: 61% center !important;
+
+    filter:
+      brightness(0.97)
+      contrast(1.14)
+      saturate(1.08) !important;
+  }
+
+  .tagline {
+    text-shadow: none !important;
+  }
+}
+
+/* HERO TAGLINE AND POSTER VISIBILITY FIX - END */
+/* ===== HERO CAPABILITY CARDS REFINEMENT ===== */
+
+.capabilityGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+  align-items: stretch;
+}
+
+.capabilityCard {
+  position: relative;
+  min-height: 210px;
+  border-radius: 24px;
+  padding: 28px 22px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+  background:
+    linear-gradient(180deg, rgba(16, 28, 67, 0.92) 0%, rgba(13, 22, 56, 0.96) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 18px 48px rgba(0, 0, 0, 0.24);
+  overflow: hidden;
+}
+
+.capabilityIconWrap {
+  width: 62px;
+  height: 62px;
+  border-radius: 18px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 18px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid currentColor;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+}
+
+.capabilityIcon {
+  width: 28px;
+  height: 28px;
+}
+
+.capabilityTitle {
+  margin: 0;
+  font-size: clamp(1.05rem, 1vw + 0.7rem, 1.55rem);
+  line-height: 1.16;
+  font-weight: 800;
+  color: #f8fbff;
+  text-align: center;
+  max-width: 13ch;
+}
+
+.capabilityTitlePlaceholder {
+  width: 100%;
+  min-height: 78px;
+}
+
+/* tones */
+.toneGold {
+  color: #f5a524;
+  border-color: rgba(245, 165, 36, 0.55);
+}
+
+.toneGreen {
+  color: #15d67d;
+  border-color: rgba(21, 214, 125, 0.55);
+}
+
+.toneBlue {
+  color: #36b5ff;
+  border-color: rgba(54, 181, 255, 0.55);
+}
+
+.toneViolet {
+  color: #b277ff;
+  border-color: rgba(178, 119, 255, 0.55);
+}
+
+.toneOrange {
+  color: #ff9a3d;
+  border-color: rgba(255, 154, 61, 0.55);
+}
+
+.tonePink {
+  color: #ff6bc7;
+  border-color: rgba(255, 107, 199, 0.55);
+}
+
+.toneCyan {
+  color: #42d9ff;
+  border-color: rgba(66, 217, 255, 0.55);
+}
+
+.toneAmber {
+  color: #ffd54a;
+  border-color: rgba(255, 213, 74, 0.55);
+}
+
+@media (max-width: 1200px) {
+  .capabilityGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .capabilityGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .capabilityCard {
+    min-height: 180px;
+    padding: 24px 18px 20px;
+  }
+
+  .capabilityTitlePlaceholder {
+    min-height: 56px;
+  }
+}
+
+/* CAPABILITY FOUR BY TWO GRID - START */
+
+/*
+  Eight cards arranged as four cards in each row.
+*/
+.capabilityRail {
+  display: grid !important;
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr)) !important;
+  gap: clamp(0.8rem, 1.5vw, 1.15rem) !important;
+  align-items: stretch !important;
+  overflow: visible !important;
+  padding: 0 !important;
+}
+
+/*
+  Compact vertical card structure.
+  Icon remains centred above the card title.
+*/
+.capabilityCard {
+  --capability-accent: #a78bfa;
+  --capability-soft: rgba(167, 139, 250, 0.12);
+
+  display: flex !important;
+  min-width: 0 !important;
+  min-height: clamp(9rem, 12vw, 11.5rem) !important;
+  height: 100% !important;
+
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  gap: clamp(0.8rem, 1.4vw, 1.1rem) !important;
+
+  padding:
+    clamp(1.1rem, 2vw, 1.6rem)
+    clamp(0.85rem, 1.5vw, 1.25rem) !important;
+
+  overflow: hidden !important;
+  text-align: center !important;
+
+  border:
+    1px solid
+    color-mix(
+      in srgb,
+      var(--capability-accent) 38%,
+      transparent
+    ) !important;
+
+  border-radius: 1.25rem !important;
+
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      color-mix(
+        in srgb,
+        var(--capability-accent) 13%,
+        transparent
+      ),
+      transparent 62%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(28, 39, 79, 0.94),
+      rgba(13, 23, 58, 0.98)
+    ) !important;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    0 14px 30px rgba(0, 0, 0, 0.18) !important;
+}
+
+/*
+  Centrally positioned icon.
+*/
+.capabilityIcon {
+  display: grid !important;
+  width: clamp(2.8rem, 3.6vw, 3.35rem) !important;
+  height: clamp(2.8rem, 3.6vw, 3.35rem) !important;
+
+  flex: 0 0 auto !important;
+  place-items: center !important;
+
+  margin: 0 auto !important;
+
+  border:
+    1px solid
+    color-mix(
+      in srgb,
+      var(--capability-accent) 58%,
+      transparent
+    ) !important;
+
+  border-radius: 0.9rem !important;
+
+  background:
+    color-mix(
+      in srgb,
+      var(--capability-accent) 12%,
+      transparent
+    ) !important;
+
+  color: var(--capability-accent) !important;
+
+  box-shadow:
+    0 0 20px
+    color-mix(
+      in srgb,
+      var(--capability-accent) 17%,
+      transparent
+    ) !important;
+}
+
+.capabilityIcon svg {
+  width: clamp(1.25rem, 1.7vw, 1.55rem) !important;
+  height: clamp(1.25rem, 1.7vw, 1.55rem) !important;
+}
+
+/*
+  Override the global section heading size.
+  Prevents text overflow and oversized capability names.
+*/
+.capabilityCard h2 {
+  width: 100% !important;
+  max-width: 18ch !important;
+
+  margin: 0 auto !important;
+
+  color: #f8fafc !important;
+
+  font-size:
+    clamp(1rem, 1.25vw, 1.35rem) !important;
+
+  font-weight: 850 !important;
+  letter-spacing: -0.025em !important;
+  line-height: 1.2 !important;
+
+  text-align: center !important;
+  text-wrap: balance !important;
+  overflow-wrap: anywhere !important;
+}
+
+/* Individual card accents */
+
+.capabilityCard[data-tone="violet"] {
+  --capability-accent: #a78bfa;
+  --capability-soft: rgba(167, 139, 250, 0.12);
+}
+
+.capabilityCard[data-tone="indigo"] {
+  --capability-accent: #818cf8;
+  --capability-soft: rgba(129, 140, 248, 0.12);
+}
+
+.capabilityCard[data-tone="blue"] {
+  --capability-accent: #38bdf8;
+  --capability-soft: rgba(56, 189, 248, 0.12);
+}
+
+.capabilityCard[data-tone="green"] {
+  --capability-accent: #22c55e;
+  --capability-soft: rgba(34, 197, 94, 0.12);
+}
+
+.capabilityCard[data-tone="yellow"] {
+  --capability-accent: #facc15;
+  --capability-soft: rgba(250, 204, 21, 0.12);
+}
+
+.capabilityCard[data-tone="orange"] {
+  --capability-accent: #fb923c;
+  --capability-soft: rgba(251, 146, 60, 0.12);
+}
+
+.capabilityCard[data-tone="red"] {
+  --capability-accent: #f87171;
+  --capability-soft: rgba(248, 113, 113, 0.12);
+}
+
+.capabilityCard[data-tone="amber"] {
+  --capability-accent: #f59e0b;
+  --capability-soft: rgba(245, 158, 11, 0.12);
+}
+
+/*
+  Keep the capability/statistics section compact.
+*/
+.credibilitySection {
+  padding:
+    clamp(1.1rem, 2vw, 1.6rem)
+    0
+    clamp(1.15rem, 2vw, 1.7rem) !important;
+}
+
+.credibilityDivider {
+  margin:
+    clamp(0.9rem, 1.6vw, 1.2rem)
+    0
+    clamp(0.8rem, 1.4vw, 1rem) !important;
+}
+
+/* Tablet: two cards in each row. */
+@media (max-width: 980px) {
+  .capabilityRail {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .capabilityCard {
+    min-height: 9rem !important;
+  }
+}
+
+/* Mobile: still maintain a balanced two-column grid. */
+@media (max-width: 620px) {
+  .capabilityRail {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr)) !important;
+
+    gap: 0.65rem !important;
+  }
+
+  .capabilityCard {
+    min-height: 8.6rem !important;
+    padding: 0.9rem 0.65rem !important;
+  }
+
+  .capabilityCard h2 {
+    max-width: 15ch !important;
+    font-size:
+      clamp(0.8rem, 3.5vw, 1rem) !important;
+  }
+
+  .capabilityIcon {
+    width: 2.55rem !important;
+    height: 2.55rem !important;
+  }
+
+  .capabilityIcon svg {
+    width: 1.2rem !important;
+    height: 1.2rem !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .capabilityCard {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+/* CAPABILITY FOUR BY TWO GRID - END */
+
+/* OSO HERO DEFINITIVE COPY EDGE - START */
+
+.heroSection .heroInner .heroContent {
+  --copy-width: min(45rem, 46vw);
+  flex: 0 0 var(--copy-width) !important;
+  width: var(--copy-width) !important;
+  min-width: var(--copy-width) !important;
+  max-width: var(--copy-width) !important;
+  inline-size: var(--copy-width) !important;
+  max-inline-size: var(--copy-width) !important;
+  align-items: stretch !important;
+}
+
+.heroSection .heroInner .heroContent .heroPosterTitle,
+.heroSection .heroInner .heroContent .heroNarrative,
+.heroSection .heroInner .heroContent .heroActions {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.heroSection .heroInner .heroContent .heroPosterTitle {
+  margin: 0 !important;
+}
+
+.heroSection .heroInner .heroContent .heroTitleLine {
+  display: block !important;
+  width: max-content !important;
+  max-width: 100% !important;
+  white-space: nowrap !important;
+}
+
+.heroSection .heroInner .heroContent .tagline {
+  width: fit-content !important;
+  max-width: 100% !important;
+  margin: clamp(0.7rem, 1.1vh, 0.95rem) 0 0 !important;
+}
+
+.heroSection .heroInner .heroContent .heroNarrative {
+  display: grid !important;
+  margin-top: clamp(1.35rem, 2.2vh, 1.75rem) !important;
+  gap: clamp(0.72rem, 1.2vh, 0.95rem) !important;
+}
+
+.heroSection .heroInner .heroContent .heroNarrative p {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  text-align: justify !important;
+  text-align-last: left !important;
+  text-justify: inter-word !important;
+  hyphens: none !important;
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+}
+
+.heroSection .heroInner .heroContent .heroActions {
+  justify-content: flex-start !important;
+  margin-top: clamp(1.25rem, 2vh, 1.65rem) !important;
+}
+
+@media (max-width: 1180px) {
+  .heroSection .heroInner .heroContent {
+    --copy-width: min(41rem, 57vw);
+  }
+}
+
+@media (max-width: 900px) {
+  .heroSection .heroInner .heroContent {
+    --copy-width: min(39rem, 78vw);
+  }
+}
+
+@media (max-width: 640px) {
+  .heroSection .heroInner .heroContent {
+    --copy-width: 100%;
+    min-width: 0 !important;
+  }
+
+  .heroSection .heroInner .heroContent .heroTitleLine {
+    width: auto !important;
+    white-space: normal !important;
+  }
+
+  .heroSection .heroInner .heroContent .heroNarrative p {
+    text-align: left !important;
+  }
+}
+
+/* OSO HERO DEFINITIVE COPY EDGE - END */
+
+/* FEATURES SECTION AND DETACHED STATS - START */
+
+.credibilitySection {
+  position: relative !important;
+  overflow: hidden !important;
+  padding:
+    clamp(2.8rem, 5vw, 4.5rem)
+    0
+    clamp(3rem, 5vw, 4.6rem) !important;
+  background:
+    radial-gradient(
+      circle at 16% 0%,
+      rgba(37, 99, 235, 0.17),
+      transparent 25rem
+    ),
+    radial-gradient(
+      circle at 88% 100%,
+      rgba(99, 102, 241, 0.2),
+      transparent 28rem
+    ),
+    #0b1b3b !important;
+  color: #f8fafc !important;
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif !important;
+}
+
+.credibilityInner {
+  width: min(100%, 1500px) !important;
+  margin-inline: auto !important;
+  padding-inline:
+    clamp(1rem, 3vw, 2.75rem) !important;
+}
+
+.capabilityHeader {
+  display: flex !important;
+  width: 100% !important;
+  justify-content: center !important;
+  margin: 0 !important;
+  text-align: center !important;
+}
+
+.capabilitySectionTitle {
+  width: 100% !important;
+  margin: 0 !important;
+  color: #f8fafc !important;
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif !important;
+  font-size:
+    clamp(2.35rem, 4vw, 3.65rem) !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.045em !important;
+  line-height: 1.04 !important;
+  text-align: center !important;
+  text-wrap: balance !important;
+}
+
+.capabilityRail {
+  margin-top:
+    clamp(1.8rem, 3vw, 2.6rem) !important;
+}
+
+.capabilityTitle {
+  width: 100% !important;
+  max-width: 18ch !important;
+  margin: 0 auto !important;
+  color: #f8fafc !important;
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif !important;
+  font-size:
+    clamp(1rem, 1.25vw, 1.35rem) !important;
+  font-weight: 750 !important;
+  letter-spacing: -0.025em !important;
+  line-height: 1.2 !important;
+  text-align: center !important;
+  text-wrap: balance !important;
+  overflow-wrap: anywhere !important;
+}
+
+.credibilityDivider {
+  display: none !important;
+}
+
+.detachedStatsSection {
+  position: relative;
+  overflow: hidden;
+  padding:
+    clamp(1rem, 2vw, 1.5rem)
+    0;
+  background: #ffffff;
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+}
+
+.detachedStatsInner {
+  width: min(100%, 1500px);
+  margin-inline: auto;
+  padding-inline:
+    clamp(1rem, 3vw, 2.75rem);
+}
+
+@media (max-width: 620px) {
+  .credibilitySection {
+    padding:
+      2.5rem
+      0
+      3rem !important;
+  }
+
+  .capabilitySectionTitle {
+    font-size:
+      clamp(2rem, 9vw, 2.75rem) !important;
+  }
+
+  .capabilityRail {
+    margin-top: 1.5rem !important;
+  }
+
+  .capabilityTitle {
+    font-size:
+      clamp(0.82rem, 3.5vw, 1rem) !important;
+  }
+}
+
+/* FEATURES SECTION AND DETACHED STATS - END */
+
+/* DETACHED HOMEPAGE STATS BETWEEN SECTIONS - START */
+
+.detachedStatsSection {
+  position: relative;
+  overflow: hidden;
+  padding:
+    clamp(1rem, 2vw, 1.45rem)
+    0;
+  background: #ffffff;
+}
+
+.detachedStatsInner {
+  width: min(100%, 1500px);
+  margin-inline: auto;
+  padding-inline:
+    clamp(1rem, 3vw, 3rem);
+}
+
+.detachedStatsSection .statsStrip {
+  border-color:
+    rgba(96, 165, 250, 0.2) !important;
+  border-radius: 0.9rem !important;
+  background:
+    linear-gradient(
+      105deg,
+      #0b1b3b,
+      #142b50 58%,
+      #1d285d
+    ) !important;
+  box-shadow:
+    0 16px 36px rgba(11, 27, 59, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+.detachedStatsSection .statItem {
+  min-height:
+    clamp(4.7rem, 6vw, 5.6rem) !important;
+}
+
+.detachedStatsSection .statItem span {
+  color: #e2e8f0 !important;
+}
+
+@media (max-width: 640px) {
+  .detachedStatsSection {
+    padding:
+      0.85rem
+      0
+      1rem;
+  }
+}
+
+/* DETACHED HOMEPAGE STATS BETWEEN SECTIONS - END */
+
+/* FEATURES LIGHT-DARK-BLUE THEME - START */
+
+.credibilitySection {
+  position: relative !important;
+  overflow: hidden !important;
+  padding:
+    clamp(2.9rem, 5vw, 4.5rem)
+    0
+    clamp(3.1rem, 5vw, 4.7rem) !important;
+  background: #17375f !important;
+  color: #ffffff !important;
+}
+
+.credibilitySection::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+  opacity: 0.22 !important;
+  background-image:
+    linear-gradient(
+      rgba(255, 255, 255, 0.055) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.055) 1px,
+      transparent 1px
+    ) !important;
+  background-size: 48px 48px !important;
+  mask-image:
+    linear-gradient(
+      90deg,
+      transparent,
+      #000 10%,
+      #000 90%,
+      transparent
+    ) !important;
+}
+
+.credibilityInner {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+.credibilitySection .capabilitySectionTitle,
+.credibilitySection .aboutTitle {
+  width: 100% !important;
+  margin: 0 !important;
+  color: #ffffff !important;
+  text-align: center !important;
+}
+
+.capabilityRail {
+  margin-top:
+    clamp(1.9rem, 3vw, 2.7rem) !important;
+}
+
+.capabilityCard {
+  background:
+    linear-gradient(
+      145deg,
+      rgba(7, 25, 55, 0.48),
+      rgba(9, 33, 68, 0.34)
+    ) !important;
+  border-color:
+    color-mix(
+      in srgb,
+      var(--capability-accent) 46%,
+      rgba(255, 255, 255, 0.13)
+    ) !important;
+  box-shadow:
+    0 15px 32px rgba(5, 18, 41, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+}
+
+.capabilityCard::after {
+  opacity: 0.08 !important;
+}
+
+.capabilityTitle,
+.capabilityCard h2,
+.capabilityCard h3 {
+  color: #ffffff !important;
+}
+
+.capabilityIcon {
+  background:
+    color-mix(
+      in srgb,
+      var(--capability-accent) 15%,
+      rgba(7, 25, 55, 0.46)
+    ) !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .capabilityCard:hover {
+    background:
+      linear-gradient(
+        145deg,
+        rgba(8, 31, 65, 0.62),
+        rgba(12, 43, 83, 0.44)
+      ) !important;
+    box-shadow:
+      0 22px 44px rgba(5, 18, 41, 0.26),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .credibilitySection {
+    padding:
+      2.55rem
+      0
+      3rem !important;
+  }
+}
+
+/* FEATURES LIGHT-DARK-BLUE THEME - END */
+
+/* DETACHED HOMEPAGE STATS DARK BALANCED SPACING - START */
+
+.detachedStatsSection {
+  position: relative !important;
+  overflow: hidden !important;
+  padding:
+    clamp(2.5rem, 4vw, 3.5rem)
+    0 !important;
+  background: #ffffff !important;
+}
+
+.detachedStatsInner {
+  width: min(100%, 1500px) !important;
+  margin-inline: auto !important;
+  padding-inline:
+    clamp(1rem, 3vw, 3rem) !important;
+}
+
+.detachedStatsSection .statsStrip {
+  overflow: hidden !important;
+  border:
+    1px solid rgba(96, 165, 250, 0.18) !important;
+  border-radius: 1rem !important;
+  background:
+    linear-gradient(
+      105deg,
+      #071a36,
+      #0d2a50 54%,
+      #17275b
+    ) !important;
+  box-shadow:
+    0 18px 38px rgba(7, 26, 54, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+.detachedStatsSection .statItem {
+  min-height:
+    clamp(5rem, 6vw, 5.8rem) !important;
+  background: transparent !important;
+}
+
+.detachedStatsSection .statItem strong {
+  color: #ffffff !important;
+}
+
+.detachedStatsSection .statItem span {
+  color: #dbeafe !important;
+}
+
+@media (max-width: 640px) {
+  .detachedStatsSection {
+    padding:
+      2rem
+      0 !important;
+  }
+}
+
+/* DETACHED HOMEPAGE STATS DARK BALANCED SPACING - END */

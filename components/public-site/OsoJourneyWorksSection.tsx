@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
@@ -14,7 +14,6 @@ import {
   Lightbulb,
   Presentation,
   Rocket,
-  Sparkles,
   Target,
   Trophy,
   type LucideIcon,
@@ -109,17 +108,16 @@ const journeyStages: JourneyStage[] = [
 ];
 
 const journeyMilestones = [
-  { label: "Start your journey", tone: "red", icon: GraduationCap },
-  { label: "Explore & Learn", tone: "orange", icon: BookOpenCheck },
-  { label: "Practice & Improve", tone: "yellow", icon: Target },
-  { label: "Compete & Collaborate", tone: "green", icon: Handshake },
-  { label: "Showcase & Inspire", tone: "cyan", icon: Lightbulb },
-  { label: "Excel & Achieve", tone: "purple", icon: Trophy },
-  { label: "Advance & Succeed", tone: "pink", icon: Rocket },
+  { label: "Start your journey" },
+  { label: "Explore & Learn" },
+  { label: "Institutions & Mentors" },
+  { label: "Compete & Collaborate"},
+  { label: "Showcase & Inspire" },
+  { label: "Excel & Achieve" },
+  { label: "Advance & Succeed" },
 ] satisfies Array<{
   label: string;
-  tone: StageTone;
-  icon: LucideIcon;
+ 
 }>;
 
 export default function OsoJourneyWorksSection() {
@@ -134,6 +132,7 @@ export default function OsoJourneyWorksSection() {
     >
       <div className={styles.generatedBackgroundLayer} aria-hidden="true">
         <Image
+      loading="eager"
           src="/illustrations/oso/oso-journey-background.png"
           alt=""
           fill
@@ -153,13 +152,7 @@ export default function OsoJourneyWorksSection() {
             <span className={styles.headingCircuit} aria-hidden="true" />
 
             <h2 id="oso-journey-title" className={styles.title}>
-              HOW{" "}
-              <span className={styles.osoLetters} aria-label="OSO">
-                <span data-letter="o">O</span>
-                <span data-letter="s">S</span>
-                <span data-letter="o2">O</span>
-              </span>{" "}
-              WORKS
+              HOW OSO WORKS
             </h2>
 
             <span
@@ -261,15 +254,15 @@ export default function OsoJourneyWorksSection() {
 
           <div className={styles.milestoneStrip} aria-label="OSO broader journey">
             {journeyMilestones.map((milestone, index) => {
-              const Icon = milestone.icon;
+              // const Icon = milestone.icon;
 
               return (
                 <span
                   key={milestone.label}
                   className={styles.milestone}
-                  data-tone={milestone.tone}
+                  // data-tone={milestone.tone}
                 >
-                  <Icon aria-hidden="true" />
+                  {/* <Icon aria-hidden="true" /> */}
                   <span>{milestone.label}</span>
                   {index < journeyMilestones.length - 1 ? (
                     <ArrowRight aria-hidden="true" />
@@ -280,11 +273,9 @@ export default function OsoJourneyWorksSection() {
           </div>
 
           <div className={styles.bottomBadge}>
-            <Sparkles aria-hidden="true" />
             <strong>ONE PLATFORM.</strong>
             <span data-highlight="gold">ENDLESS OPPORTUNITIES.</span>
             <span data-highlight="green">LIMITLESS GROWTH.</span>
-            <Sparkles aria-hidden="true" />
           </div>
         </div>
       </div>

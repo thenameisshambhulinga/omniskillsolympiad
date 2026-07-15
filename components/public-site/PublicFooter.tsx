@@ -1,4 +1,4 @@
-﻿import Image from "next/image";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
 
@@ -16,6 +16,7 @@ export default function PublicFooter() {
               className="inline-flex rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-blue-700 focus-visible:ring-offset-2"
             >
               <Image
+      loading="eager"
                 src="/brand/omni-logo-new.jpeg"
                 alt="OMNI Skills Olympiad"
                 width={2635}
@@ -25,7 +26,7 @@ export default function PublicFooter() {
             </a>
 
             <p className="mt-6 max-w-xl text-base font-medium leading-8 text-slate-600">
-              A multidisciplinary engineering skill ecosystem for practical learning, competency development, competition, evaluation, innovation, and recognition.
+              A national multidisciplinary skills ecosystem for practical learning, competition, innovation, progression, and recognition across diverse domains.
             </p>
 
             <div className="mt-7 flex flex-wrap gap-3">
@@ -126,7 +127,7 @@ export default function PublicFooter() {
 
         <div className="mt-12 flex flex-col gap-5 border-t border-slate-200 pt-7 text-sm font-semibold text-slate-500 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <p>Â© {new Date().getFullYear()} OMNI Skills Olympiad. All rights reserved.</p>
+            <p>© {new Date().getFullYear()} OMNI Skills Olympiad. All rights reserved.</p>
             <p className="mt-1">{contactInformation.poweredBy}</p>
           </div>
 

@@ -1,0 +1,388 @@
+.experienceShell {
+  --oso-pointer-x: 50vw;
+  --oso-pointer-y: 40vh;
+  --oso-scroll-progress: 0;
+  --oso-scroll-shift: 0px;
+
+  position: relative;
+  isolation: isolate;
+  overflow-x: clip;
+}
+
+.experienceAnchor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.edgeCircuitField,
+.pointerAura,
+.ambientOrb,
+.storyRail {
+  pointer-events: none;
+}
+
+.edgeCircuitField {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  opacity: 0.12;
+  background-image:
+    radial-gradient(
+      circle,
+      rgba(37, 99, 235, 0.5) 1px,
+      transparent 1.7px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(99, 102, 241, 0.22) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      rgba(14, 165, 233, 0.18) 1px,
+      transparent 1px
+    );
+  background-size: 22px 22px, 74px 74px, 74px 74px;
+  -webkit-mask-image:
+    linear-gradient(
+      90deg,
+      #000 0%,
+      rgba(0, 0, 0, 0.72) 5%,
+      transparent 16%,
+      transparent 84%,
+      rgba(0, 0, 0, 0.72) 95%,
+      #000 100%
+    );
+  mask-image:
+    linear-gradient(
+      90deg,
+      #000 0%,
+      rgba(0, 0, 0, 0.72) 5%,
+      transparent 16%,
+      transparent 84%,
+      rgba(0, 0, 0, 0.72) 95%,
+      #000 100%
+    );
+  mix-blend-mode: soft-light;
+}
+
+.pointerAura {
+  position: fixed;
+  left: var(--oso-pointer-x);
+  top: var(--oso-pointer-y);
+  z-index: 91;
+  width: min(34rem, 52vw);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      circle,
+      rgba(99, 102, 241, 0.12) 0%,
+      rgba(14, 165, 233, 0.055) 34%,
+      transparent 70%
+    );
+  opacity: 0.72;
+  transform: translate3d(-50%, -50%, 0);
+  filter: blur(12px);
+  mix-blend-mode: soft-light;
+  will-change: left, top;
+}
+
+.ambientOrb {
+  position: fixed;
+  z-index: 89;
+  width: 18rem;
+  height: 18rem;
+  border-radius: 50%;
+  opacity: 0.1;
+  filter: blur(52px);
+  mix-blend-mode: soft-light;
+  will-change: transform;
+}
+
+.ambientOrb[data-orb="one"] {
+  left: -8rem;
+  top: 18vh;
+  background: #0ea5e9;
+  animation: osoOrbDriftOne 18s ease-in-out infinite;
+}
+
+.ambientOrb[data-orb="two"] {
+  right: -9rem;
+  top: 52vh;
+  background: #8b5cf6;
+  animation: osoOrbDriftTwo 22s ease-in-out infinite;
+}
+
+.ambientOrb[data-orb="three"] {
+  left: 44vw;
+  bottom: -13rem;
+  background: #f97316;
+  animation: osoOrbDriftThree 25s ease-in-out infinite;
+}
+
+.experienceShell
+  > :global(section[data-oso-enhanced="true"]) {
+  position: relative;
+  z-index: 2;
+  scroll-margin-top: 7rem;
+  transform-origin: center top;
+  transition:
+    opacity 760ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 760ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 760ms ease,
+    box-shadow 500ms ease;
+}
+
+.experienceShell[data-oso-ready="true"]
+  > :global(
+    section[data-oso-enhanced="true"]:not(
+      [data-oso-seen="true"]
+    )
+  ) {
+  opacity: 0.88;
+  transform:
+    translate3d(
+      var(--oso-reveal-x, 0),
+      26px,
+      0
+    )
+    scale(0.996);
+  filter: saturate(0.94) blur(1.1px);
+}
+
+.experienceShell
+  > :global(
+    section[data-oso-enhanced="true"][data-oso-seen="true"]
+  ) {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+  filter: none;
+}
+
+.experienceShell
+  > :global(
+    section[data-oso-enhanced="true"][data-oso-current="true"]
+  ) {
+  box-shadow:
+    inset 0 1px 0
+      rgb(
+        var(--oso-section-accent-rgb, 37 99 235) /
+          0.16
+      ),
+    inset 0 -1px 0
+      rgb(
+        var(--oso-section-accent-rgb, 37 99 235) /
+          0.1
+      );
+}
+
+.experienceShell
+  :global(a:focus-visible),
+.experienceShell
+  :global(button:focus-visible),
+.experienceShell
+  :global(summary:focus-visible) {
+  outline: 3px solid rgba(14, 165, 233, 0.92) !important;
+  outline-offset: 4px !important;
+  border-radius: 0.75rem;
+}
+
+.experienceShell
+  :global(a[href="/login"]),
+.experienceShell
+  :global(a[href="/skill-championships"]) {
+  isolation: isolate;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.storyRail {
+  position: fixed;
+  right: max(
+    1.2rem,
+    calc((100vw - 1420px) / 2)
+  );
+  top: 8.5rem;
+  bottom: 3.5rem;
+  z-index: 120;
+  display: grid;
+  width: 2.5rem;
+  grid-template-rows: auto 1fr auto;
+  justify-items: center;
+  opacity: 0.8;
+}
+
+.storyRailTrack {
+  position: absolute;
+  left: 50%;
+  top: 2.2rem;
+  bottom: 2.2rem;
+  width: 2px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(100, 116, 139, 0.18);
+  transform: translateX(-50%);
+}
+
+.storyRailProgress {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background:
+    linear-gradient(
+      180deg,
+      #0ea5e9,
+      #6366f1 42%,
+      #a855f7 70%,
+      #f97316
+    );
+  transform:
+    scaleY(var(--oso-scroll-progress));
+  transform-origin: center top;
+  box-shadow:
+    0 0 14px rgba(99, 102, 241, 0.5);
+  will-change: transform;
+}
+
+.storyRailDots {
+  position: absolute;
+  left: 50%;
+  top: 2.2rem;
+  bottom: 2.2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transform: translateX(-50%);
+}
+
+.storyRailDot {
+  display: block;
+  width: 0.42rem;
+  height: 0.42rem;
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  border-radius: 50%;
+  background: #94a3b8;
+  box-shadow:
+    0 0 0 1px rgba(71, 85, 105, 0.25);
+  transition:
+    transform 220ms ease,
+    background-color 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.storyRailDot[data-active="true"] {
+  background: #6366f1;
+  transform: scale(1.7);
+  box-shadow:
+    0 0 0 4px rgba(99, 102, 241, 0.14),
+    0 0 18px rgba(99, 102, 241, 0.42);
+}
+
+.storyRailStart,
+.storyRailEnd {
+  color: rgba(51, 65, 85, 0.62);
+  font-size: 0.5rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  writing-mode: vertical-rl;
+}
+
+.storyRailStart {
+  align-self: start;
+}
+
+.storyRailEnd {
+  align-self: end;
+}
+
+@keyframes osoOrbDriftOne {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(0.92);
+  }
+
+  50% {
+    transform: translate3d(3rem, 2rem, 0) scale(1.08);
+  }
+}
+
+@keyframes osoOrbDriftTwo {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate3d(-3.5rem, -2rem, 0) scale(0.88);
+  }
+}
+
+@keyframes osoOrbDriftThree {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(0.9);
+  }
+
+  50% {
+    transform: translate3d(2rem, -3.5rem, 0) scale(1.08);
+  }
+}
+
+@media (max-width: 1480px) {
+  .storyRail {
+    display: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .edgeCircuitField,
+  .pointerAura,
+  .ambientOrb {
+    display: none;
+  }
+
+  .experienceShell[data-oso-ready="true"]
+    > :global(
+      section[data-oso-enhanced="true"]:not(
+        [data-oso-seen="true"]
+      )
+    ) {
+    opacity: 0.93;
+    transform: translate3d(0, 16px, 0);
+    filter: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .edgeCircuitField,
+  .pointerAura,
+  .ambientOrb,
+  .storyRail {
+    display: none !important;
+  }
+
+  .experienceShell
+    > :global(section[data-oso-enhanced="true"]) {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .edgeCircuitField,
+  .pointerAura,
+  .ambientOrb,
+  .storyRail {
+    display: none;
+  }
+
+  .experienceShell
+    > :global(section[data-oso-enhanced="true"]) {
+    box-shadow: none !important;
+  }
+}

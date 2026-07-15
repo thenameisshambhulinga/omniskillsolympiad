@@ -1,24 +1,19 @@
-﻿import {
-  Award,
-  BookOpenCheck,
-  Lightbulb,
-  Rocket,
-  Sparkles,
-  Target,
-  Trophy,
-  Wrench,
-} from "lucide-react";
+import Image from "next/image";
 
-import styles from "@/components/public-site/about-why-oso.module.css";
+import styles from "@/components/public-site/why-oso-clean.module.css";
 
-const learnerBenefits = [
-  { title: "Apply what they learn", icon: BookOpenCheck },
-  { title: "Build practical skills", icon: Wrench },
-  { title: "Solve real-world challenges", icon: Target },
-  { title: "Learn through hands-on experiences", icon: Lightbulb },
-  { title: "Showcase their talent", icon: Trophy },
-  { title: "Gain recognition", icon: Award },
-  { title: "Prepare for future opportunities", icon: Rocket },
+type Outcome = {
+  text: string;
+};
+
+const OUTCOMES: readonly Outcome[] = [
+  { text: "Gain recognition" },
+  { text: "Apply what they learn" },
+  { text: "Showcase their talent" },
+  { text: "Build practical skills" },
+  { text: "Solve real-world challenges" },
+  { text: "Prepare for future opportunities" },
+  { text: "Learn through hands-on experiences" },
 ] as const;
 
 export default function WhyOsoSection() {
@@ -28,72 +23,54 @@ export default function WhyOsoSection() {
       className={styles.whySection}
       aria-labelledby="why-oso-title"
     >
-      <div className={styles.whyTexture} aria-hidden="true" />
+      <div className={styles.ambientGrid} aria-hidden="true" />
 
       <div className={styles.sectionContainer}>
         <header className={styles.whyHeader}>
-          <span className={styles.sectionEyebrow}>
-            <Sparkles aria-hidden="true" />
-            Why OSO?
-          </span>
+          <p className={styles.sectionEyebrow}>Why OSO?</p>
 
           <h2 id="why-oso-title" className={styles.whyTitle}>
-            Because <span>Skills Shape the Future</span>
+            <span>Turning Knowledge into Skills.</span>
+            <span>Skills into Opportunities.</span>
           </h2>
-
-          <p>
-            Turning Knowledge into Skills. Skills into Opportunities.
-          </p>
         </header>
 
-        <div className={styles.whyRefinedLayout}>
-          <div className={styles.whyIllustrationSurface} aria-hidden="true">
-            <div className={styles.whyIllustrationGlow} />
-            <div
-              className={styles.progressionArtwork}
-              role="img"
-              aria-label="Education, experience, skills, and opportunities progression pathway"
+        <div className={styles.whyLayout}>
+          <div className={styles.whyImageColumn}>
+            <Image
+              src="/illustrations/oso/why-oso-image.png"
+              alt="Skills developing into practical capability and future opportunities"
+              width={1448}
+              height={1086}
+              loading="eager"
+              sizes="(max-width: 900px) 100vw, 46vw"
+              className={styles.whyMainImage}
             />
           </div>
 
-          <article className={styles.refinedBenefitsPanel}>
-            <div className={styles.benefitsPanelHeader}>
-              <span>
-                <Target aria-hidden="true" />
-              </span>
+          <div className={styles.outcomesArea}>
+            <h3>
+              OMNI Skills Olympiad provides a platform where learners can:
+            </h3>
 
-              <h3>
-                OMNI Skills Olympiad provides a platform where learners can:
-              </h3>
-            </div>
+            <ul className={styles.outcomeList}>
+              {OUTCOMES.map((outcome) => (
+                <li
+                  key={outcome.text}
+                  className={styles.outcomeItem}
+                >
+                  <span
+                    className={styles.outcomeBullet}
+                    aria-hidden="true"
+                  />
 
-            <div className={styles.refinedBenefitsGrid}>
-              {learnerBenefits.map((benefit) => {
-                const Icon = benefit.icon;
-
-                return (
-                  <div
-                    key={benefit.title}
-                    className={styles.refinedBenefitItem}
-                  >
-                    <span>
-                      <Icon aria-hidden="true" />
-                    </span>
-
-                    <strong>{benefit.title}</strong>
-                  </div>
-                );
-              })}
-            </div>
-          </article>
-        </div>
-
-        <div className={styles.whyClosing}>
-          <Sparkles aria-hidden="true" />
-          <strong>
-            Because learning becomes meaningful when knowledge is put into action.
-          </strong>
-          <Sparkles aria-hidden="true" />
+                  <span className={styles.outcomeText}>
+                    {outcome.text}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
     </section>

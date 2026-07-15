@@ -41,10 +41,10 @@ export type AssociatedOrganization = {
 
 export const publicNavigation: readonly PublicNavigationItem[] = [
   { label: "Home", href: "#home" },
-  { label: "Who we are", href: "#who-we-are" },
+  { label: "About OSO", href: "#about" },
   { label: "Why OSO", href: "#why-oso" },
-  { label: "Ecosystem", href: "#ecosystem" },
   { label: "Journey", href: "#journey" },
+  { label: "Ecosystem", href: "#ecosystem" },
   { label: "Associations", href: "#associations" },
   { label: "Contact", href: "#contact" },
 ] as const;

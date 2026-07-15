@@ -1,10 +1,9 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
+import styles from "@/components/public-site/public-hero-showcase.module.css";
 
-import styles from "@/components/public-site/next-gen-public-home.module.css";
-
-type HomepageHeroStatsValue = {
+type Stats = {
   activeStudents: number;
   colleges: number;
   competitions: number;
@@ -12,109 +11,79 @@ type HomepageHeroStatsValue = {
   source?: "database" | "fallback";
 };
 
-const fallbackStats: HomepageHeroStatsValue = {
-  activeStudents: 25000,
-  colleges: 150,
-  competitions: 30,
+const FALLBACK: Stats = {
+  activeStudents: 7_001,
+  colleges: 7_001,
+  competitions: 7_038,
   ecosystems: 1,
   source: "fallback",
 };
 
-function readNumber(value: unknown, fallback: number): number {
+function number(value: unknown, fallback: number) {
   return typeof value === "number" && Number.isFinite(value) && value >= 0
-    ? value
+    ? Math.floor(value)
     : fallback;
 }
 
-function normalizeStats(payload: unknown): HomepageHeroStatsValue {
-  if (!payload || typeof payload !== "object") {
-    return fallbackStats;
-  }
-
-  const record = payload as Record<string, unknown>;
+function normalize(payload: unknown): Stats {
+  if (!payload || typeof payload !== "object") return FALLBACK;
+  const value = payload as Record<string, unknown>;
 
   return {
-    activeStudents: readNumber(record.activeStudents, fallbackStats.activeStudents),
-    colleges: readNumber(record.colleges, fallbackStats.colleges),
-    competitions: readNumber(record.competitions, fallbackStats.competitions),
-    ecosystems: readNumber(record.ecosystems, fallbackStats.ecosystems),
-    source: record.source === "database" ? "database" : "fallback",
+    activeStudents: number(value.activeStudents, FALLBACK.activeStudents),
+    colleges: number(value.colleges, FALLBACK.colleges),
+    competitions: number(value.competitions, FALLBACK.competitions),
+    ecosystems: number(value.ecosystems, FALLBACK.ecosystems),
+    source: value.source === "database" ? "database" : "fallback",
   };
 }
 
-function formatCount(value: number, allowPlus = true): string {
-  if (value >= 100000) {
-    return `${Math.round(value / 100000)}L${allowPlus ? "+" : ""}`;
-  }
-
-  if (value >= 1000) {
-    return `${Math.round(value / 1000)}K${allowPlus ? "+" : ""}`;
-  }
-
-  return `${value}${allowPlus && value > 1 ? "+" : ""}`;
+function format(value: number, plus = true) {
+  const rendered = new Intl.NumberFormat("en-IN").format(value);
+  return plus ? `${rendered}+` : rendered;
 }
 
 export default function HomepageHeroStats() {
-  const [stats, setStats] = useState<HomepageHeroStatsValue>(fallbackStats);
+  const [stats, setStats] = useState<Stats>(FALLBACK);
 
   useEffect(() => {
-    let isActive = true;
+    let mounted = true;
     const controller = new AbortController();
 
     void fetch("/api/public/homepage-stats", {
       cache: "no-store",
       signal: controller.signal,
     })
-      .then(async (response) => {
-        if (!response.ok) {
-          return fallbackStats;
-        }
-
-        return response.json() as Promise<unknown>;
-      })
-      .then((payload) => {
-        if (isActive) {
-          setStats(normalizeStats(payload));
-        }
-      })
-      .catch(() => {
-        if (isActive) {
-          setStats(fallbackStats);
-        }
-      });
+      .then(async (response) =>
+        response.ok ? (response.json() as Promise<unknown>) : FALLBACK,
+      )
+      .then((payload) => mounted && setStats(normalize(payload)))
+      .catch(() => mounted && setStats(FALLBACK));
 
     return () => {
-      isActive = false;
+      mounted = false;
       controller.abort();
     };
   }, []);
 
-  const statItems = [
-    {
-      value: formatCount(stats.activeStudents),
-      label: "Active Students",
-    },
-    {
-      value: formatCount(stats.colleges),
-      label: "Colleges",
-    },
-    {
-      value: formatCount(stats.competitions),
-      label: "Competitions",
-    },
-    {
-      value: String(stats.ecosystems),
-      label: "Unified Ecosystem",
-    },
-  ];
+  const items = [
+    [format(stats.activeStudents), "Active Students"],
+    [format(stats.colleges), "Institutions"],
+    [format(stats.competitions), "Competitions"],
+    [format(stats.ecosystems, false), "Unified Ecosystem"],
+  ] as const;
 
   return (
-    <div className={styles.imageOnlyHeroStats} aria-label="OSO platform statistics">
-      {statItems.map((item) => (
-        <span key={item.label} className={styles.imageOnlyHeroStat}>
-          <strong>{item.value}</strong>
-          <small>{item.label}</small>
-        </span>
+    <div
+      className={styles.statsStrip}
+      aria-label="OSO platform statistics"
+      data-source={stats.source ?? "fallback"}
+    >
+      {items.map(([value, label]) => (
+        <article key={label} className={styles.statItem}>
+          <strong>{value}</strong>
+          <span>{label}</span>
+        </article>
       ))}
     </div>
   );

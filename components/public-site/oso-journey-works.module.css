@@ -1,4 +1,4 @@
-﻿.section {
+.section {
   position: relative;
   isolation: isolate;
   overflow: hidden;
@@ -386,7 +386,7 @@
 }
 
 .stageCard:not(:last-child)::after {
-  content: "➜";
+  content: "âžœ";
   position: absolute;
   z-index: 4;
   top: clamp(4.92rem, 7vw, 5.9rem);
@@ -764,3 +764,244 @@
     transition: none !important;
   }
 }
+
+/* OSO JOURNEY CLEAN SUBTITLE - START */
+
+/*
+  Clean, premium header hierarchy:
+  remove the old black brush ribbon while preserving visual emphasis.
+*/
+
+.header {
+  gap: 0.45rem !important;
+}
+
+.title {
+  font-size: clamp(1.9rem, 3.25vw, 2.75rem) !important;
+  line-height: 1 !important;
+  letter-spacing: 0.055em !important;
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.95),
+    0 10px 25px rgba(15, 23, 42, 0.08) !important;
+}
+
+.brushTitle {
+  position: relative !important;
+  isolation: isolate;
+  display: grid !important;
+  min-height: clamp(2.35rem, 3.35vw, 3rem) !important;
+  margin: 0.18rem 0 0 !important;
+  place-items: center !important;
+}
+
+/*
+  Soft, borderless glowâ€”not a strip or banner.
+*/
+.brushTitle::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 48%;
+  z-index: -1;
+  width: min(82vw, 38rem);
+  height: clamp(2.4rem, 4vw, 3.2rem);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      ellipse at center,
+      rgba(255, 255, 255, 0.96) 0%,
+      rgba(255, 255, 255, 0.72) 43%,
+      rgba(239, 246, 255, 0.32) 66%,
+      transparent 82%
+    );
+  filter: blur(7px);
+}
+
+.brushTitle span {
+  position: relative !important;
+  z-index: 2 !important;
+  display: inline-block !important;
+
+  min-width: 0 !important;
+  max-width: calc(100vw - 2rem);
+  padding: 0.08rem 0.85rem 0.62rem !important;
+
+  background:
+    linear-gradient(
+      96deg,
+      #0b1f3d 0%,
+      #1d4ed8 38%,
+      #6d28d9 70%,
+      #be185d 100%
+    ) !important;
+
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+
+  font-family:
+    "Segoe Script",
+    "Brush Script MT",
+    "Trebuchet MS",
+    cursive !important;
+
+  font-size: clamp(1.25rem, 2.65vw, 2.25rem) !important;
+  font-style: italic !important;
+  font-weight: 900 !important;
+  line-height: 1.08 !important;
+  letter-spacing: -0.055em !important;
+  white-space: nowrap;
+
+  text-shadow: none !important;
+  transform: rotate(-0.45deg) !important;
+  filter:
+    drop-shadow(
+      0 6px 12px rgba(30, 64, 175, 0.11)
+    );
+}
+
+/*
+  Permanently remove the black clipped ribbon.
+*/
+.brushTitle span::before {
+  content: none !important;
+  display: none !important;
+  background: transparent !important;
+  clip-path: none !important;
+  filter: none !important;
+  box-shadow: none !important;
+}
+
+/*
+  Refined spectrum underline.
+*/
+.brushTitle span::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 8% !important;
+  right: 8% !important;
+  bottom: 0.18rem !important;
+  z-index: 1 !important;
+
+  display: block !important;
+  height: 0.18rem !important;
+  border-radius: 999px !important;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      #f97316 10%,
+      #eab308 25%,
+      #22c55e 42%,
+      #06b6d4 58%,
+      #6366f1 73%,
+      #a855f7 87%,
+      transparent
+    ) !important;
+
+  box-shadow:
+    0 3px 12px rgba(99, 102, 241, 0.2) !important;
+}
+
+.description {
+  max-width: 42rem !important;
+  margin: 0.08rem auto 0 !important;
+  color: #42526a !important;
+  font-size: clamp(0.88rem, 1.05vw, 1rem) !important;
+  font-weight: 800 !important;
+  line-height: 1.48 !important;
+  text-wrap: balance;
+}
+
+/*
+  Keep decorative circuitry balanced around the cleaner heading.
+*/
+.titleRow {
+  width: min(100%, 54rem) !important;
+}
+
+.headingCircuit {
+  opacity: 0.58 !important;
+}
+
+/* Tablet and mobile */
+@media (max-width: 620px) {
+  .title {
+    font-size: clamp(1.55rem, 7.5vw, 2rem) !important;
+    letter-spacing: 0.035em !important;
+  }
+
+  .brushTitle {
+    min-height: 2.15rem !important;
+  }
+
+  .brushTitle::before {
+    width: calc(100vw - 1.25rem);
+    height: 2.4rem;
+  }
+
+  .brushTitle span {
+    max-width: calc(100vw - 1rem);
+    padding: 0.05rem 0.25rem 0.5rem !important;
+    font-size: clamp(0.98rem, 4.7vw, 1.38rem) !important;
+    letter-spacing: -0.045em !important;
+  }
+
+  .brushTitle span::after {
+    left: 5% !important;
+    right: 5% !important;
+    height: 0.15rem !important;
+  }
+
+  .description {
+    max-width: 31rem !important;
+    font-size: 0.82rem !important;
+  }
+
+  .headingCircuit {
+    display: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brushTitle span {
+    transform: none !important;
+  }
+}
+
+/* OSO JOURNEY CLEAN SUBTITLE - END */
+
+/* JOURNEY STRIPS FINAL REFINEMENT - START */
+
+.milestoneStrip {
+  font-size:
+    clamp(1.02rem, 1.2vw, 1.14rem) !important;
+}
+
+.milestone,
+.milestone > span {
+  font-size:
+    clamp(1.02rem, 1.2vw, 1.14rem) !important;
+}
+
+.bottomBadge {
+  border-radius: 0 !important;
+  font-size:
+    clamp(1.05rem, 1.25vw, 1.18rem) !important;
+}
+
+.bottomBadge strong,
+.bottomBadge span {
+  font-size:
+    clamp(1.05rem, 1.25vw, 1.18rem) !important;
+}
+
+.bottomBadge svg {
+  display: none !important;
+}
+
+/* JOURNEY STRIPS FINAL REFINEMENT - END */

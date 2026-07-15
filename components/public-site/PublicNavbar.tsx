@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -117,8 +117,8 @@ export default function PublicNavbar() {
         Skip to main content
       </a>
 
-      <header className="sticky top-0 z-[140] border-b border-slate-200/80 bg-white/90 shadow-[0_10px_34px_rgba(15,23,42,0.045)] backdrop-blur-2xl">
-        <div className="mx-auto flex min-h-[74px] w-full max-w-[1660px] items-center gap-3 px-4 sm:px-6 lg:px-8">
+      <header className="sticky top-0 z-[140] border-b border-slate-200/80 bg-white shadow-[0_10px_34px_rgba(15,23,42,0.045)]">
+        <div className="mx-auto flex min-h-[82px] w-full max-w-[1660px] items-center gap-3 px-4 sm:min-h-[88px] sm:px-6 lg:px-8">
           <a
             href="#home"
             aria-label="OMNI Skills Olympiad public website home"
@@ -131,7 +131,7 @@ export default function PublicNavbar() {
               height={512}
               priority
               sizes="(max-width: 640px) 150px, 210px"
-              className="h-auto w-[150px] object-contain sm:w-[190px] lg:w-[210px]"
+              className="h-auto w-[158px] object-contain sm:w-[202px] lg:w-[222px]"
             />
           </a>
 
@@ -217,6 +217,7 @@ export default function PublicNavbar() {
                   className="min-w-0 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-blue-700"
                 >
                   <Image
+      loading="eager"
                     src="/brand/omni-logo-new.jpeg"
                     alt="OMNI Skills Olympiad"
                     width={2635}
