@@ -1,13 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
+
 import styles from "@/components/public-site/public-hero-showcase.module.css";
 
 type Stats = {
   activeStudents: number;
   colleges: number;
   competitions: number;
-  ecosystems: number;
+  domains: number;
   source?: "database" | "fallback";
 };
 
@@ -15,25 +16,34 @@ const FALLBACK: Stats = {
   activeStudents: 7_001,
   colleges: 7_001,
   competitions: 7_038,
-  ecosystems: 1,
+  domains: 36,
   source: "fallback",
 };
 
-function number(value: unknown, fallback: number) {
+function safeNumber(value: unknown, fallback: number) {
   return typeof value === "number" && Number.isFinite(value) && value >= 0
     ? Math.floor(value)
     : fallback;
 }
 
 function normalize(payload: unknown): Stats {
-  if (!payload || typeof payload !== "object") return FALLBACK;
+  if (!payload || typeof payload !== "object") {
+    return FALLBACK;
+  }
+
   const value = payload as Record<string, unknown>;
 
   return {
-    activeStudents: number(value.activeStudents, FALLBACK.activeStudents),
-    colleges: number(value.colleges, FALLBACK.colleges),
-    competitions: number(value.competitions, FALLBACK.competitions),
-    ecosystems: number(value.ecosystems, FALLBACK.ecosystems),
+    activeStudents: safeNumber(
+      value.activeStudents,
+      FALLBACK.activeStudents,
+    ),
+    colleges: safeNumber(value.colleges, FALLBACK.colleges),
+    competitions: safeNumber(
+      value.competitions,
+      FALLBACK.competitions,
+    ),
+    domains: safeNumber(value.domains, FALLBACK.domains),
     source: value.source === "database" ? "database" : "fallback",
   };
 }
@@ -57,8 +67,16 @@ export default function HomepageHeroStats() {
       .then(async (response) =>
         response.ok ? (response.json() as Promise<unknown>) : FALLBACK,
       )
-      .then((payload) => mounted && setStats(normalize(payload)))
-      .catch(() => mounted && setStats(FALLBACK));
+      .then((payload) => {
+        if (mounted) {
+          setStats(normalize(payload));
+        }
+      })
+      .catch(() => {
+        if (mounted) {
+          setStats(FALLBACK);
+        }
+      });
 
     return () => {
       mounted = false;
@@ -70,7 +88,7 @@ export default function HomepageHeroStats() {
     [format(stats.activeStudents), "Active Students"],
     [format(stats.colleges), "Institutions"],
     [format(stats.competitions), "Competitions"],
-    [format(stats.ecosystems, false), "Unified Ecosystem"],
+    [format(stats.domains, false), "Domains"],
   ] as const;
 
   return (

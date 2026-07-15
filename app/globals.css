@@ -1795,18 +1795,32 @@ li {
 
 /* OSO GLOBAL ARIAL TYPOGRAPHY - END */
 
-/* OSO STANDARD PUBLIC SECTION EYEBROW - START */
+/* OSO FINAL GLOBAL PUBLIC-SITE STANDARD - START */
 
-/*
-  Public-site eyebrow standard:
-  centred text only, without icons, sparkles or decorative lines.
-*/
-#main-content
-section:not(#home)
-[class*="eyebrow"],
-#main-content
-section:not(#home)
-[class*="Eyebrow"] {
+:root {
+  --oso-opportunity-gradient:
+    linear-gradient(
+      90deg,
+      #bfdbfe 0%,
+      #93c5fd 48%,
+      #c4b5fd 100%
+    );
+}
+
+#main-content,
+#main-content button,
+#main-content input,
+#main-content textarea,
+#main-content select,
+#main-content option {
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif !important;
+}
+
+#main-content section:not(#home) [class*="eyebrow"],
+#main-content section:not(#home) [class*="Eyebrow"] {
   display: block !important;
   width: 100% !important;
   max-width: 100% !important;
@@ -1830,29 +1844,12 @@ section:not(#home)
   white-space: normal !important;
 }
 
-#main-content
-section:not(#home)
-[class*="eyebrow"]
-svg,
-#main-content
-section:not(#home)
-[class*="Eyebrow"]
-svg {
-  display: none !important;
-}
-
-#main-content
-section:not(#home)
-[class*="eyebrow"]::before,
-#main-content
-section:not(#home)
-[class*="eyebrow"]::after,
-#main-content
-section:not(#home)
-[class*="Eyebrow"]::before,
-#main-content
-section:not(#home)
-[class*="Eyebrow"]::after {
+#main-content section:not(#home) [class*="eyebrow"]::before,
+#main-content section:not(#home) [class*="eyebrow"]::after,
+#main-content section:not(#home) [class*="Eyebrow"]::before,
+#main-content section:not(#home) [class*="Eyebrow"]::after,
+#main-content section:not(#home) [class*="eyebrow"] svg,
+#main-content section:not(#home) [class*="Eyebrow"] svg {
   content: none !important;
   display: none !important;
   width: 0 !important;
@@ -1865,33 +1862,35 @@ section:not(#home)
   mask: none !important;
 }
 
-/* Dark-section eyebrow colour */
-#main-content
-section[class*="dark"]
-[class*="eyebrow"],
-#main-content
-section[class*="dark"]
-[class*="Eyebrow"],
-#main-content
-section[style*="background"]
-[class*="eyebrow"],
-#main-content
-section[style*="background"]
-[class*="Eyebrow"] {
+#main-content section[data-theme="dark"] [class*="eyebrow"],
+#main-content section[data-theme="dark"] [class*="Eyebrow"] {
   color: #ffffff !important;
 }
 
+#main-content #why-oso [class*="eyebrow"],
+#main-content #why-oso [class*="Eyebrow"],
+#main-content #outcomes [class*="eyebrow"],
+#main-content #outcomes [class*="Eyebrow"] {
+  background: var(--oso-opportunity-gradient) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+}
+
+#main-content section:not(#home) header > h2,
+#main-content section:not(#home) header > div > h2 {
+  margin-inline: auto !important;
+  text-align: center !important;
+}
+
 @media (max-width: 640px) {
-  #main-content
-  section:not(#home)
-  [class*="eyebrow"],
-  #main-content
-  section:not(#home)
-  [class*="Eyebrow"] {
+  #main-content section:not(#home) [class*="eyebrow"],
+  #main-content section:not(#home) [class*="Eyebrow"] {
     font-size:
       clamp(0.96rem, 4.2vw, 1.05rem) !important;
     letter-spacing: 0.1em !important;
   }
 }
 
-/* OSO STANDARD PUBLIC SECTION EYEBROW - END */
+/* OSO FINAL GLOBAL PUBLIC-SITE STANDARD - END */

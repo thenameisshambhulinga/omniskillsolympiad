@@ -1,5 +1,9 @@
 import { NextResponse } from "next/server";
-import { getHomepageStats } from "@/lib/homepage-stats";
+
+import {
+  getHomepageStats,
+  homepageDomainCount,
+} from "@/lib/homepage-stats";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -18,6 +22,7 @@ function toPublicStats(value: unknown) {
     value && typeof value === "object"
       ? (value as Record<string, unknown>)
       : {};
+
   const databaseBacked = raw.source === "database";
 
   return {
@@ -33,6 +38,10 @@ function toPublicStats(value: unknown) {
       7_038,
       BASELINE + (databaseBacked ? safeCount(raw.competitions) : 0),
     ),
+    domains: Math.max(
+      homepageDomainCount,
+      safeCount(raw.domains),
+    ),
     ecosystems: 1,
     source: databaseBacked ? "database" : "fallback",
   } as const;
@@ -42,12 +51,16 @@ export async function GET() {
   try {
     return NextResponse.json(toPublicStats(await getHomepageStats()), {
       status: 200,
-      headers: { "Cache-Control": "no-store, max-age=0" },
+      headers: {
+        "Cache-Control": "no-store, max-age=0",
+      },
     });
   } catch {
     return NextResponse.json(toPublicStats(null), {
       status: 200,
-      headers: { "Cache-Control": "no-store, max-age=0" },
+      headers: {
+        "Cache-Control": "no-store, max-age=0",
+      },
     });
   }
 }

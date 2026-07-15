@@ -44,7 +44,6 @@ export const publicNavigation: readonly PublicNavigationItem[] = [
   { label: "About OSO", href: "#about" },
   { label: "Why OSO", href: "#why-oso" },
   { label: "Journey", href: "#journey" },
-  { label: "Ecosystem", href: "#ecosystem" },
   { label: "Associations", href: "#associations" },
   { label: "Contact", href: "#contact" },
 ] as const;
@@ -102,7 +101,7 @@ export const identityContent = {
   introduction:
     "OMNI Skills Olympiad is a national engineering ecosystem built around practical capability, technical excellence, and innovation across disciplines.",
   supporting:
-    "It is a long-term progression pathway—not a standalone exam—uniting discipline-specific programmes under one shared competency model.",
+    "It is a long-term progression pathwayâ€”not a standalone examâ€”uniting discipline-specific programmes under one shared competency model.",
   vision:
     "To build a trusted ecosystem where participants develop practical competencies aligned with industry and future technologies.",
   mission:
@@ -230,7 +229,7 @@ export const journeyStages: readonly JourneyStage[] = [
     eyebrow: "Assess",
     title: "Attempt protected tests",
     description:
-      "Complete published one-attempt assessments under the platform’s existing attempt and security rules.",
+      "Complete published one-attempt assessments under the platformâ€™s existing attempt and security rules.",
     outcome: "Verified performance evidence for qualification decisions.",
   },
   {
@@ -304,7 +303,7 @@ export const audienceGroups: readonly AudienceGroup[] = [
       "Industry participation strengthens technical relevance, practical evaluation, talent visibility, mentorship, and innovation-oriented collaboration.",
     benefits: [
       "Early talent identification",
-      "Industry–academia collaboration",
+      "Industryâ€“academia collaboration",
       "Technical guidance, evaluation, and mentorship",
       "Recruitment, innovation, and product-development pathways",
     ],
@@ -331,7 +330,7 @@ export const associatedOrganizations: readonly AssociatedOrganization[] = [
     name: "Federation of Karnataka Chambers of Commerce and Industry",
     relationship: "Associated organization",
     description:
-      "Represents a broad industry network and supports competitiveness, entrepreneurship, skill development, and industry–academia collaboration.",
+      "Represents a broad industry network and supports competitiveness, entrepreneurship, skill development, and industryâ€“academia collaboration.",
   },
   {
     shortName: "IEEE",
@@ -365,7 +364,7 @@ export const associatedOrganizations: readonly AssociatedOrganization[] = [
     shortName: "SiMS",
     name: "Silicon Microsystems",
     relationship:
-      "Founding Technical Partner of OSO · Knowledge Partner for Skill-on-Circuit",
+      "Founding Technical Partner of OSO Â· Knowledge Partner for Skill-on-Circuit",
     description:
       "Contributes competition architecture, electronics curriculum development, practical challenges, laboratory standards, faculty development, mentoring, technical evaluation, and industry-oriented learning initiatives.",
     featured: true,
@@ -383,7 +382,7 @@ export const contactInformation = {
   websiteHref: "https://www.omniskillsolympiad.net",
   addressLines: [
     "VTU Regional Centre, 1st Main Road, RHCS Layout",
-    "Annapoorneshwari Nagar, Nagarbhavi, Bengaluru – 560091",
+    "Annapoorneshwari Nagar, Nagarbhavi, Bengaluru â€“ 560091",
     "Karnataka, India",
   ],
 } as const;

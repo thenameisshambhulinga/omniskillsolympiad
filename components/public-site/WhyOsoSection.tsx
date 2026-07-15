@@ -2,24 +2,21 @@ import Image from "next/image";
 
 import styles from "@/components/public-site/why-oso-clean.module.css";
 
-type Outcome = {
-  text: string;
-};
-
-const OUTCOMES: readonly Outcome[] = [
-  { text: "Gain recognition" },
-  { text: "Apply what they learn" },
-  { text: "Showcase their talent" },
-  { text: "Build practical skills" },
-  { text: "Solve real-world challenges" },
-  { text: "Prepare for future opportunities" },
-  { text: "Learn through hands-on experiences" },
+const OUTCOMES = [
+  "Gain recognition",
+  "Apply what they learn",
+  "Showcase their talent",
+  "Build practical skills",
+  "Solve real-world challenges",
+  "Prepare for future opportunities",
+  "Learn through hands-on experiences",
 ] as const;
 
 export default function WhyOsoSection() {
   return (
     <section
       id="why-oso"
+      data-theme="dark"
       className={styles.whySection}
       aria-labelledby="why-oso-title"
     >
@@ -55,18 +52,9 @@ export default function WhyOsoSection() {
 
             <ul className={styles.outcomeList}>
               {OUTCOMES.map((outcome) => (
-                <li
-                  key={outcome.text}
-                  className={styles.outcomeItem}
-                >
-                  <span
-                    className={styles.outcomeBullet}
-                    aria-hidden="true"
-                  />
-
-                  <span className={styles.outcomeText}>
-                    {outcome.text}
-                  </span>
+                <li key={outcome} className={styles.outcomeItem}>
+                  <span className={styles.outcomeBullet} aria-hidden="true" />
+                  <span className={styles.outcomeText}>{outcome}</span>
                 </li>
               ))}
             </ul>

@@ -29,7 +29,6 @@ export default function Footer() {
         {/* RIGHT */}
 
         <div className="text-gray-400">
-          <p>Powered by Silicon Microsystems</p>
 
           <p className="mt-2 text-sm">© 2026 All Rights Reserved</p>
         </div>

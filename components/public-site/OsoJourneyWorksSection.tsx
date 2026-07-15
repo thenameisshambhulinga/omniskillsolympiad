@@ -9,11 +9,8 @@ import {
   Cpu,
   FileCheck2,
   Flag,
-  GraduationCap,
-  Handshake,
   Lightbulb,
   Presentation,
-  Rocket,
   Target,
   Trophy,
   type LucideIcon,
@@ -41,7 +38,7 @@ type JourneyStage = {
   icon: LucideIcon;
 };
 
-const journeyStages: JourneyStage[] = [
+const JOURNEY_STAGES: readonly JourneyStage[] = [
   {
     step: "01",
     title: "Registration",
@@ -59,66 +56,70 @@ const journeyStages: JourneyStage[] = [
   {
     step: "03",
     title: "Learning Resources",
-    description: "Access curated learning materials, tutorials and industry insights.",
+    description:
+      "Access curated learning materials, tutorials and industry insights.",
     tone: "yellow",
     icon: BookOpenCheck,
   },
   {
     step: "04",
     title: "Skill Challenges",
-    description: "Take on skill-based challenges to test and improve your abilities.",
+    description:
+      "Take on skill-based challenges to test and improve your abilities.",
     tone: "green",
     icon: Target,
   },
   {
     step: "05",
     title: "Practical Competitions",
-    description: "Apply your skills in real-world problem solving and hands-on competitions.",
+    description:
+      "Apply your skills in real-world problem solving and hands-on competitions.",
     tone: "cyan",
     icon: Cpu,
   },
   {
     step: "06",
     title: "Innovation Showcase",
-    description: "Present your projects and innovative ideas to the expert panel and community.",
+    description:
+      "Present your projects and innovative ideas to the expert panel and community.",
     tone: "blue",
     icon: Lightbulb,
   },
   {
     step: "07",
     title: "Evaluation",
-    description: "Judged on skill, creativity, technical knowledge and impact.",
+    description:
+      "Judged on skill, creativity, technical knowledge and impact.",
     tone: "indigo",
     icon: FileCheck2,
   },
   {
     step: "08",
     title: "Recognition & Awards",
-    description: "Top performers are recognized and awarded for their excellence.",
+    description:
+      "Top performers are recognized and awarded for their excellence.",
     tone: "purple",
     icon: Trophy,
   },
   {
     step: "09",
     title: "National Progression",
-    description: "Winners advance to national-level events and bigger opportunities.",
+    description:
+      "Winners advance to national-level events and bigger opportunities.",
     tone: "pink",
     icon: Flag,
   },
-];
+] as const;
 
-const journeyMilestones = [
-  { label: "Start your journey" },
-  { label: "Explore & Learn" },
-  { label: "Institutions & Mentors" },
-  { label: "Compete & Collaborate"},
-  { label: "Showcase & Inspire" },
-  { label: "Excel & Achieve" },
-  { label: "Advance & Succeed" },
-] satisfies Array<{
-  label: string;
- 
-}>;
+const JOURNEY_MILESTONES = [
+  "Start your journey",
+  "Explore & Learn",
+  "Institutions & Mentors",
+  "Compete & Collaborate",
+  "Showcase & Inspire",
+  "Excel & Achieve",
+  "Advance & Succeed",
+] as const;
 
 export default function OsoJourneyWorksSection() {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -132,10 +133,10 @@ export default function OsoJourneyWorksSection() {
     >
       <div className={styles.generatedBackgroundLayer} aria-hidden="true">
         <Image
-      loading="eager"
           src="/illustrations/oso/oso-journey-background.png"
           alt=""
           fill
+          loading="eager"
           sizes="100vw"
           draggable={false}
           className={styles.generatedBackgroundImage}
@@ -166,14 +167,13 @@ export default function OsoJourneyWorksSection() {
           </p>
 
           <p className={styles.description}>
-            Every stage is designed to help participants improve, regardless of
-            their starting level.
+            Every stage is designed to help participants improve, regardless of their starting level.
           </p>
         </header>
 
         <div className={styles.board}>
           <div className={styles.desktopFlow} aria-label="How OSO works stages">
-            {journeyStages.map((stage, index) => {
+            {JOURNEY_STAGES.map((stage, index) => {
               const Icon = stage.icon;
               const active = index === activeIndex;
               const reached = index <= activeIndex;
@@ -212,7 +212,7 @@ export default function OsoJourneyWorksSection() {
           </div>
 
           <div className={styles.mobileFlow} aria-label="How OSO works stages">
-            {journeyStages.map((stage, index) => {
+            {JOURNEY_STAGES.map((stage, index) => {
               const Icon = stage.icon;
               const active = index === activeIndex;
               const reached = index <= activeIndex;
@@ -253,23 +253,14 @@ export default function OsoJourneyWorksSection() {
           </div>
 
           <div className={styles.milestoneStrip} aria-label="OSO broader journey">
-            {journeyMilestones.map((milestone, index) => {
-              // const Icon = milestone.icon;
-
-              return (
-                <span
-                  key={milestone.label}
-                  className={styles.milestone}
-                  // data-tone={milestone.tone}
-                >
-                  {/* <Icon aria-hidden="true" /> */}
-                  <span>{milestone.label}</span>
-                  {index < journeyMilestones.length - 1 ? (
-                    <ArrowRight aria-hidden="true" />
-                  ) : null}
-                </span>
-              );
-            })}
+            {JOURNEY_MILESTONES.map((milestone, index) => (
+              <span key={milestone} className={styles.milestone}>
+                <span>{milestone}</span>
+                {index < JOURNEY_MILESTONES.length - 1 ? (
+                  <ArrowRight aria-hidden="true" />
+                ) : null}
+              </span>
+            ))}
           </div>
 
           <div className={styles.bottomBadge}>

@@ -1,12 +1,6 @@
-import {
-  ArrowUpRight,
-  HelpCircle,
-  MessageCircleQuestion,
-} from "lucide-react";
-
 import styles from "@/components/public-site/phase-three-storytelling.module.css";
 
-const faqs = [
+const FAQS = [
   {
     question: "Who can participate in OSO?",
     answer:
@@ -63,36 +57,31 @@ export default function OsoFaqSection() {
   return (
     <section
       id="faq"
+      data-theme="light"
       className={styles.faqSection}
       aria-labelledby="faq-title"
     >
+      <div className={styles.faqBackdrop} aria-hidden="true" />
+
       <div className={styles.storyContainer}>
         <header className={styles.faqHeader}>
-          <div>
-            <p className={styles.eyebrow}>Frequently asked questions</p>
-            <h2 id="faq-title">Questions before you begin?</h2>
-          </div>
-
-          <div className={styles.faqIntro}>
-            <MessageCircleQuestion aria-hidden="true" />
-            <p>
-              Start with the essentials. Program-specific rules remain available
-              in each official championship announcement.
-            </p>
-          </div>
+          <p className={styles.eyebrow}>Frequently asked questions</p>
+          <h2 id="faq-title">Questions before you begin?</h2>
         </header>
 
         <div className={styles.faqGrid}>
-          {faqs.map((faq, index) => (
-            <details key={faq.question} className={styles.faqItem}>
+          {FAQS.map((faqItem, index) => (
+            <details key={faqItem.question} className={styles.faqItem}>
               <summary>
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <strong>{faq.question}</strong>
-                <HelpCircle aria-hidden="true" />
+                <span className={styles.faqIndex}>
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <strong>{faqItem.question}</strong>
+                <span className={styles.faqToggle} aria-hidden="true" />
               </summary>
+
               <div className={styles.faqAnswer}>
-                <p>{faq.answer}</p>
-                <ArrowUpRight aria-hidden="true" />
+                <p>{faqItem.answer}</p>
               </div>
             </details>
           ))}

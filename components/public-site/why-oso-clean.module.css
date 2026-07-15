@@ -225,3 +225,43 @@
     text-align: left;
   }
 }
+
+/* WHY OSO FINAL COLOR AND IMAGE TREATMENT - START */
+
+.whySection .sectionEyebrow {
+  background: var(--oso-opportunity-gradient) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+  text-align: center !important;
+}
+
+.whySection .whyTitle span:last-child {
+  background: var(--oso-opportunity-gradient) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+}
+
+.whySection .whyImageColumn {
+  position: relative !important;
+  z-index: 2 !important;
+  isolation: isolate !important;
+}
+
+.whySection .whyMainImage {
+  position: relative !important;
+  z-index: 3 !important;
+  display: block !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+  filter:
+    brightness(1.18)
+    contrast(1.06)
+    saturate(1.12)
+    drop-shadow(0 20px 34px rgba(2, 12, 31, 0.26)) !important;
+}
+
+/* WHY OSO FINAL COLOR AND IMAGE TREATMENT - END */

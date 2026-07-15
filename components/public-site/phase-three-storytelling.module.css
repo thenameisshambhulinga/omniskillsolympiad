@@ -1130,225 +1130,45 @@
 
 /* PARTICIPANTS HEADER COMPACT ALIGNMENT - END */
 
-/* PARTICIPANTS FINAL WHITE THEME - START */
+/* PARTICIPANTS FINAL AUTHORITATIVE LAYOUT - START */
 
 .participantsSection {
-  position: relative !important;
-  isolation: isolate !important;
-  overflow: hidden !important;
   padding:
     clamp(3.25rem, 5vw, 4.75rem)
     0
     clamp(3.5rem, 5.5vw, 5rem) !important;
   background: #ffffff !important;
-  color: #0b1b3b !important;
 }
 
-.sectionAmbient {
-  opacity: 0.22 !important;
-  background:
-    radial-gradient(
-      circle at 8% 14%,
-      rgba(59, 130, 246, 0.11),
-      transparent 21rem
-    ),
-    radial-gradient(
-      circle at 92% 74%,
-      rgba(249, 115, 22, 0.08),
-      transparent 20rem
-    ),
-    linear-gradient(
-      rgba(100, 116, 139, 0.045) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      rgba(100, 116, 139, 0.045) 1px,
-      transparent 1px
-    ) !important;
-  background-size:
-    auto,
-    auto,
-    54px 54px,
-    54px 54px !important;
-}
-
-.storyContainer {
-  width: min(100%, 1500px) !important;
-  padding-inline:
-    clamp(1rem, 3vw, 3rem) !important;
-}
-
-.participantsHeader {
-  display: grid !important;
-  grid-template-columns: 1fr !important;
-  justify-items: center !important;
-  gap: 0 !important;
-  text-align: center !important;
-}
-
-.participantsHeader .eyebrow {
-  display: block !important;
-  margin: 0 !important;
-  color: #1d4ed8 !important;
-  font-size:
-    clamp(1rem, 1.1vw, 1.08rem) !important;
-  font-weight: 800 !important;
-  letter-spacing: 0.12em !important;
-  line-height: 1.2 !important;
-  text-align: center !important;
-  text-transform: uppercase !important;
-}
-
-.participantsHeader .eyebrow::before,
-.participantsHeader .eyebrow::after,
-.participantsHeader .eyebrow svg {
-  display: none !important;
-  content: none !important;
-}
-
-.participantsHeader h2 {
-  margin:
-    clamp(0.65rem, 1vw, 0.85rem)
-    0
-    0 !important;
-  max-width: 100% !important;
-  color: #0b1b3b !important;
-  font-size:
-    clamp(2.35rem, 4vw, 3.65rem) !important;
-  font-weight: 800 !important;
-  letter-spacing: -0.045em !important;
-  line-height: 1.04 !important;
-  text-align: center !important;
-  text-wrap: balance !important;
-}
-
-.participantsIntro {
-  display: none !important;
-}
-
-.entryJourney {
-  margin-top:
-    clamp(2rem, 3.5vw, 2.8rem) !important;
-}
-
-.entryStop {
-  min-height: 8.4rem !important;
-}
-
-.entryStop h3 {
-  font-size:
-    clamp(1rem, 1.12vw, 1.12rem) !important;
-}
-
-.entryStop p {
-  font-size:
-    clamp(0.82rem, 0.92vw, 0.94rem) !important;
-  line-height: 1.5 !important;
-  text-align: justify !important;
-  text-align-last: left !important;
-  text-justify: inter-word !important;
-}
-
-.participantsStatement {
-  border-radius: 0 !important;
-}
-
-@media (max-width: 900px) {
-  .entryJourney {
-    margin-top: 1.8rem !important;
-  }
-}
-
-@media (max-width: 640px) {
-  .participantsSection {
-    padding:
-      2.75rem
-      0
-      3.25rem !important;
-  }
-
-  .participantsHeader h2 {
-    font-size:
-      clamp(2.05rem, 9vw, 2.75rem) !important;
-  }
-
-  .entryStop p {
-    text-align: left !important;
-  }
-
-  .participantsStatement {
-    align-items: flex-start !important;
-    flex-direction: column !important;
-  }
-}
-
-/* PARTICIPANTS FINAL WHITE THEME - END */
-
-/* PARTICIPANTS CLEAN CONTENT CARDS - START */
-
-.participantsSection {
-  position: relative !important;
-  isolation: isolate !important;
-  overflow: hidden !important;
-  padding:
-    clamp(3.25rem, 5vw, 4.75rem)
-    0
-    clamp(3.5rem, 5.5vw, 5rem) !important;
-  background: #ffffff !important;
-  color: #0b1b3b !important;
-}
-
-.storyContainer {
+.participantsSection .storyContainer {
   width: min(100%, 1500px) !important;
   margin-inline: auto !important;
   padding-inline:
     clamp(1rem, 3vw, 3rem) !important;
 }
 
-.participantsHeader {
+.participantsSection .participantsHeader {
   display: grid !important;
   width: 100% !important;
   grid-template-columns: 1fr !important;
   justify-items: center !important;
+  align-items: center !important;
   gap: 0 !important;
   margin: 0 !important;
   text-align: center !important;
 }
 
-.participantsHeader .eyebrow {
-  display: block !important;
+.participantsSection .participantsHeader .eyebrow {
   width: 100% !important;
-  max-width: 100% !important;
   margin:
     0
     0
     clamp(0.68rem, 1vw, 0.88rem) !important;
-  padding: 0 !important;
   color: #1d4ed8 !important;
-  font-size:
-    clamp(1rem, 1.12vw, 1.125rem) !important;
-  font-weight: 800 !important;
-  letter-spacing: 0.12em !important;
-  line-height: 1.2 !important;
   text-align: center !important;
-  text-transform: uppercase !important;
 }
 
-.participantsHeader .eyebrow::before,
-.participantsHeader .eyebrow::after,
-.participantsHeader .eyebrow svg {
-  content: none !important;
-  display: none !important;
-  width: 0 !important;
-  height: 0 !important;
-  margin: 0 !important;
-  background: none !important;
-  -webkit-mask: none !important;
-  mask: none !important;
-}
-
-.participantsHeader h2 {
+.participantsSection .participantsHeader h2 {
   width: 100% !important;
   max-width: 100% !important;
   margin: 0 !important;
@@ -1362,32 +1182,22 @@
   text-wrap: balance !important;
 }
 
-.participantsIntro,
-.entryPath,
-.entryNumber,
-.entryIcon,
-.entryStop > svg {
-  display: none !important;
-}
-
-.entryJourney {
-  position: relative !important;
+.participantsSection .entryJourney {
   display: grid !important;
   grid-template-columns:
     repeat(4, minmax(0, 1fr)) !important;
   align-items: stretch !important;
-  gap: clamp(0.85rem, 1.5vw, 1.25rem) !important;
+  gap:
+    clamp(0.85rem, 1.5vw, 1.25rem) !important;
   margin-top:
     clamp(2rem, 3.5vw, 2.8rem) !important;
 }
 
-.entryStop {
-  position: relative !important;
+.participantsSection .entryStop {
   display: flex !important;
   width: 100% !important;
   min-width: 0 !important;
-  min-height: 0 !important;
-  height: auto !important;
+  min-height: 9.3rem !important;
   align-items: center !important;
   justify-content: center !important;
   padding:
@@ -1405,109 +1215,783 @@
     0 12px 28px rgba(15, 35, 72, 0.07),
     inset 0 1px 0 rgba(255, 255, 255, 0.94) !important;
   text-align: center !important;
+  transform: none !important;
 }
 
-.entryStop::before,
-.entryStop::after {
+.participantsSection .entryStop::before,
+.participantsSection .entryStop::after {
   content: none !important;
   display: none !important;
 }
 
-.entryContent {
+.participantsSection .entryContent {
   display: grid !important;
   width: 100% !important;
-  gap: 0.45rem !important;
-  align-content: center !important;
   justify-items: center !important;
+  align-content: center !important;
+  gap: 0.5rem !important;
+  text-align: center !important;
 }
 
-.entryContent h3,
-.entryStop h3 {
+.participantsSection .entryContent h3 {
   width: 100% !important;
-  margin: 0 !important;
+  max-width: 20ch !important;
+  margin: 0 auto !important;
   color: #102146 !important;
   font-size:
     clamp(1rem, 1.12vw, 1.15rem) !important;
   font-weight: 750 !important;
-  letter-spacing: -0.025em !important;
   line-height: 1.22 !important;
   text-align: center !important;
   text-wrap: balance !important;
 }
 
-.entryContent p,
-.entryStop p {
+.participantsSection .entryContent p {
   width: 100% !important;
-  margin: 0 !important;
+  max-width: 28ch !important;
+  margin: 0 auto !important;
   color: #5b6982 !important;
   font-size:
-    clamp(0.88rem, 0.96vw, 0.98rem) !important;
+    clamp(0.9rem, 0.98vw, 1rem) !important;
   font-weight: 500 !important;
-  line-height: 1.48 !important;
+  line-height: 1.5 !important;
   text-align: center !important;
-  text-wrap: pretty !important;
+  text-align-last: center !important;
+  text-wrap: balance !important;
 }
 
-.participantsStatement {
-  display: flex !important;
-  width: 100% !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  gap: 1rem !important;
-  margin-top:
-    clamp(1rem, 1.8vw, 1.4rem) !important;
-  padding:
-    clamp(1rem, 1.5vw, 1.25rem)
-    clamp(1.1rem, 2vw, 1.6rem) !important;
+.participantsSection .participantsStatement {
   border-radius: 0 !important;
-  background: #0b1b3b !important;
-  color: #ffffff !important;
-}
-
-.participantsStatement span,
-.participantsStatement strong {
-  color: #ffffff !important;
 }
 
 @media (max-width: 1020px) {
-  .entryJourney {
+  .participantsSection .entryJourney {
     grid-template-columns:
       repeat(2, minmax(0, 1fr)) !important;
   }
 }
 
 @media (max-width: 640px) {
-  .participantsSection {
-    padding:
-      2.75rem
-      0
-      3.25rem !important;
-  }
-
-  .participantsHeader h2 {
+  .participantsSection .participantsHeader h2 {
     font-size:
       clamp(2.05rem, 9vw, 2.75rem) !important;
   }
 
-  .participantsHeader .eyebrow {
-    font-size:
-      clamp(0.96rem, 4.2vw, 1.05rem) !important;
-  }
-
-  .entryJourney {
+  .participantsSection .entryJourney {
     grid-template-columns: 1fr !important;
-    gap: 0.75rem !important;
-    margin-top: 1.65rem !important;
   }
 
-  .entryStop {
-    padding: 1rem !important;
-  }
-
-  .participantsStatement {
-    align-items: flex-start !important;
-    flex-direction: column !important;
+  .participantsSection .entryContent p {
+    max-width: 32ch !important;
   }
 }
 
-/* PARTICIPANTS CLEAN CONTENT CARDS - END */
+/* PARTICIPANTS FINAL AUTHORITATIVE LAYOUT - END */
+
+/* FAQ PREMIUM PROFESSIONAL SYSTEM - START */
+
+.faqSection {
+  position: relative !important;
+  isolation: isolate !important;
+  overflow: hidden !important;
+  padding:
+    clamp(3.5rem, 5.5vw, 5.25rem)
+    0
+    clamp(3.75rem, 6vw, 5.75rem) !important;
+  background:
+    radial-gradient(
+      circle at 10% 8%,
+      rgba(37, 99, 235, 0.08),
+      transparent 24rem
+    ),
+    radial-gradient(
+      circle at 90% 88%,
+      rgba(124, 58, 237, 0.08),
+      transparent 25rem
+    ),
+    #ffffff !important;
+}
+
+.faqBackdrop {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+  opacity: 0.22 !important;
+  background-image:
+    linear-gradient(
+      rgba(99, 102, 241, 0.055) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(99, 102, 241, 0.055) 1px,
+      transparent 1px
+    ) !important;
+  background-size: 52px 52px !important;
+  mask-image:
+    linear-gradient(
+      90deg,
+      transparent,
+      #000 10%,
+      #000 90%,
+      transparent
+    ) !important;
+}
+
+.faqSection .storyContainer {
+  position: relative !important;
+  z-index: 1 !important;
+  width: min(100%, 1380px) !important;
+  margin-inline: auto !important;
+  padding-inline:
+    clamp(1rem, 3vw, 3rem) !important;
+}
+
+.faqSection .faqHeader {
+  display: grid !important;
+  width: 100% !important;
+  grid-template-columns: 1fr !important;
+  justify-items: center !important;
+  gap: 0 !important;
+  text-align: center !important;
+}
+
+.faqSection .faqHeader .eyebrow {
+  width: 100% !important;
+  margin:
+    0
+    0
+    clamp(0.68rem, 1vw, 0.88rem) !important;
+  color: #1d4ed8 !important;
+  text-align: center !important;
+}
+
+.faqSection .faqHeader h2 {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  color: #0b1b3b !important;
+  font-size:
+    clamp(2.35rem, 4vw, 3.65rem) !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.045em !important;
+  line-height: 1.04 !important;
+  text-align: center !important;
+  text-wrap: balance !important;
+}
+
+.faqSection .faqIntro {
+  display: none !important;
+}
+
+.faqSection .faqGrid {
+  display: grid !important;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr)) !important;
+  align-items: start !important;
+  gap:
+    clamp(0.8rem, 1.35vw, 1.1rem) !important;
+  margin-top:
+    clamp(2rem, 3.5vw, 2.8rem) !important;
+}
+
+.faqSection .faqItem {
+  position: relative !important;
+  overflow: hidden !important;
+  border:
+    1px solid rgba(148, 163, 184, 0.26) !important;
+  border-radius: 1rem !important;
+  background:
+    linear-gradient(
+      155deg,
+      rgba(255, 255, 255, 0.99),
+      rgba(248, 250, 255, 0.96)
+    ) !important;
+  box-shadow:
+    0 14px 34px rgba(15, 35, 72, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.96) !important;
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease !important;
+}
+
+.faqSection .faqItem::before {
+  content: "" !important;
+  position: absolute !important;
+  inset:
+    0
+    auto
+    0
+    0 !important;
+  display: block !important;
+  width: 0.24rem !important;
+  background:
+    linear-gradient(
+      180deg,
+      #2563eb,
+      #7c3aed
+    ) !important;
+}
+
+.faqSection .faqItem:hover,
+.faqSection .faqItem[open] {
+  transform: translateY(-2px) !important;
+  border-color:
+    rgba(99, 102, 241, 0.36) !important;
+  box-shadow:
+    0 20px 44px rgba(15, 35, 72, 0.11),
+    inset 0 1px 0 rgba(255, 255, 255, 0.98) !important;
+}
+
+.faqSection .faqItem summary {
+  display: grid !important;
+  grid-template-columns:
+    auto
+    minmax(0, 1fr)
+    auto !important;
+  align-items: center !important;
+  gap: 0.85rem !important;
+  min-height: 5rem !important;
+  padding:
+    1rem
+    1.1rem
+    1rem
+    1.25rem !important;
+  cursor: pointer !important;
+  list-style: none !important;
+}
+
+.faqSection .faqItem summary::-webkit-details-marker {
+  display: none !important;
+}
+
+.faqSection .faqIndex {
+  color: #6366f1 !important;
+  font-size: 0.72rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.12em !important;
+}
+
+.faqSection .faqItem summary strong {
+  color: #102146 !important;
+  font-size:
+    clamp(0.95rem, 1vw, 1.05rem) !important;
+  font-weight: 750 !important;
+  line-height: 1.35 !important;
+}
+
+.faqSection .faqToggle {
+  position: relative !important;
+  display: block !important;
+  width: 1.8rem !important;
+  height: 1.8rem !important;
+  border:
+    1px solid rgba(99, 102, 241, 0.28) !important;
+  border-radius: 50% !important;
+  background:
+    rgba(238, 242, 255, 0.92) !important;
+}
+
+.faqSection .faqToggle::before,
+.faqSection .faqToggle::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  display: block !important;
+  width: 0.72rem !important;
+  height: 2px !important;
+  border-radius: 999px !important;
+  background: #4f46e5 !important;
+  transform:
+    translate(-50%, -50%) !important;
+  transition: transform 180ms ease !important;
+}
+
+.faqSection .faqToggle::after {
+  transform:
+    translate(-50%, -50%)
+    rotate(90deg) !important;
+}
+
+.faqSection .faqItem[open] .faqToggle::after {
+  transform:
+    translate(-50%, -50%)
+    rotate(0deg) !important;
+}
+
+.faqSection .faqAnswer {
+  display: block !important;
+  padding:
+    0
+    1.2rem
+    1.2rem
+    3.3rem !important;
+  border-top:
+    1px solid rgba(148, 163, 184, 0.16) !important;
+}
+
+.faqSection .faqAnswer p {
+  margin: 1rem 0 0 !important;
+  color: #5b6982 !important;
+  font-size:
+    clamp(0.9rem, 0.98vw, 1rem) !important;
+  font-weight: 500 !important;
+  line-height: 1.65 !important;
+  text-align: justify !important;
+  text-align-last: left !important;
+  text-justify: inter-word !important;
+}
+
+@media (max-width: 820px) {
+  .faqSection .faqGrid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .faqSection .faqHeader h2 {
+    font-size:
+      clamp(2.05rem, 9vw, 2.75rem) !important;
+  }
+
+  .faqSection .faqAnswer p {
+    text-align: left !important;
+  }
+}
+
+/* FAQ PREMIUM PROFESSIONAL SYSTEM - END */
+
+/* PARTICIPANTS TRUE CENTER ALIGNMENT - START */
+
+#participants .participantsHeader {
+  display: block !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  text-align: center !important;
+}
+
+#participants .participantsHeadingBlock {
+  display: grid !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  grid-column: 1 / -1 !important;
+  justify-items: center !important;
+  align-items: center !important;
+  gap: 0 !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  text-align: center !important;
+}
+
+#participants .participantsHeadingBlock .eyebrow {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin:
+    0
+    0
+    clamp(0.68rem, 1vw, 0.88rem) !important;
+  padding: 0 !important;
+  color: #1d4ed8 !important;
+  text-align: center !important;
+}
+
+#participants .participantsHeadingBlock .eyebrow::before,
+#participants .participantsHeadingBlock .eyebrow::after,
+#participants .participantsHeadingBlock .eyebrow svg {
+  content: none !important;
+  display: none !important;
+}
+
+#participants .participantsHeadingBlock h2 {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  color: #0b1b3b !important;
+  font-size:
+    clamp(2.35rem, 4vw, 3.65rem) !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.045em !important;
+  line-height: 1.04 !important;
+  text-align: center !important;
+  text-wrap: balance !important;
+}
+
+#participants .participantsStatement {
+  display: flex !important;
+  width: 100% !important;
+  min-height: 4.85rem !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap:
+    clamp(1rem, 2.2vw, 2rem) !important;
+  margin-top:
+    clamp(1rem, 1.8vw, 1.4rem) !important;
+  padding:
+    1rem
+    clamp(1rem, 2vw, 1.6rem) !important;
+  border-radius: 0 !important;
+  background: #0b1b3b !important;
+  color: #ffffff !important;
+  text-align: center !important;
+}
+
+#participants .participantsStatement > span:first-child,
+#participants .participantsStatement > strong {
+  margin: 0 !important;
+  color: #ffffff !important;
+  line-height: 1.25 !important;
+  text-align: center !important;
+}
+
+#participants .participantsStatement > span:first-child {
+  font-size:
+    clamp(0.92rem, 1vw, 1rem) !important;
+  font-weight: 850 !important;
+  letter-spacing: 0.11em !important;
+}
+
+#participants .participantsStatement > strong {
+  font-size:
+    clamp(1rem, 1.15vw, 1.15rem) !important;
+  font-weight: 750 !important;
+}
+
+#participants .participantsStatementDivider {
+  display: block !important;
+  width: 1px !important;
+  height: 1.8rem !important;
+  flex: 0 0 1px !important;
+  margin: 0 !important;
+  background:
+    rgba(255, 255, 255, 0.72) !important;
+  box-shadow:
+    0 0 10px rgba(255, 255, 255, 0.14) !important;
+}
+
+@media (max-width: 640px) {
+  #participants .participantsHeadingBlock h2 {
+    font-size:
+      clamp(2.05rem, 9vw, 2.75rem) !important;
+  }
+
+  #participants .participantsStatement {
+    gap: 0.8rem !important;
+    padding-inline: 0.8rem !important;
+  }
+
+  #participants .participantsStatement > span:first-child {
+    font-size: 0.78rem !important;
+    letter-spacing: 0.08em !important;
+  }
+
+  #participants .participantsStatement > strong {
+    font-size: 0.9rem !important;
+  }
+
+  #participants .participantsStatementDivider {
+    height: 1.5rem !important;
+  }
+}
+
+/* PARTICIPANTS TRUE CENTER ALIGNMENT - END */
+
+/* ROADMAP IMAGE REPLACEMENT - START */
+
+.roadmapImageSection {
+  position: relative;
+  padding:
+    clamp(2rem, 4vw, 3.5rem)
+    0 !important;
+  background: #ffffff !important;
+}
+
+.roadmapImageFrame {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  margin: 0 auto;
+  border-radius: clamp(1rem, 2vw, 1.5rem);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: #ffffff;
+  box-shadow:
+    0 18px 48px rgba(15, 23, 42, 0.08),
+    0 2px 8px rgba(15, 23, 42, 0.05);
+}
+
+.roadmapImage {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.srOnly {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+@media (max-width: 640px) {
+  .roadmapImageSection {
+    padding:
+      1.5rem
+      0 !important;
+  }
+
+  .roadmapImageFrame {
+    border-radius: 1rem;
+  }
+}
+
+/* ROADMAP IMAGE REPLACEMENT - END */
+
+/* PARTICIPANTS CENTERED FINAL STRUCTURE - START */
+
+.participantsSection[id="participants"] {
+  padding:
+    clamp(3.4rem, 5vw, 4.8rem)
+    0
+    clamp(3.6rem, 5.4vw, 5rem) !important;
+}
+
+.participantsSection[id="participants"] .storyContainer {
+  width: min(100%, 1500px) !important;
+  margin-inline: auto !important;
+  padding-inline:
+    clamp(1rem, 3vw, 3rem) !important;
+}
+
+.participantsSection[id="participants"] .participantsHeader {
+  display: block !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  text-align: center !important;
+}
+
+.participantsSection[id="participants"] .participantsHeadingBlock {
+  display: grid !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  justify-items: center !important;
+  align-items: center !important;
+  gap: 0 !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  text-align: center !important;
+}
+
+.participantsSection[id="participants"] .participantsHeadingBlock .eyebrow {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin:
+    0
+    0
+    clamp(0.7rem, 1vw, 0.9rem) !important;
+  padding: 0 !important;
+  color: #1d4ed8 !important;
+  text-align: center !important;
+}
+
+.participantsSection[id="participants"] .participantsHeadingBlock h2 {
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  color: #0b1b3b !important;
+  font-size:
+    clamp(2.45rem, 4vw, 3.7rem) !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.045em !important;
+  line-height: 1.04 !important;
+  text-align: center !important;
+  text-wrap: nowrap !important;
+  white-space: nowrap !important;
+}
+
+.participantsSection[id="participants"] .entryJourney {
+  display: grid !important;
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr)) !important;
+  align-items: stretch !important;
+  gap:
+    clamp(0.85rem, 1.45vw, 1.2rem) !important;
+  margin-top:
+    clamp(2rem, 3.4vw, 2.8rem) !important;
+}
+
+.participantsSection[id="participants"] .entryStop {
+  display: flex !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 9.2rem !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding:
+    clamp(1.1rem, 1.7vw, 1.4rem) !important;
+  text-align: center !important;
+}
+
+.participantsSection[id="participants"] .entryContent {
+  display: grid !important;
+  width: 100% !important;
+  justify-items: center !important;
+  align-content: center !important;
+  gap: 0.5rem !important;
+  text-align: center !important;
+}
+
+.participantsSection[id="participants"] .entryContent h3,
+.participantsSection[id="participants"] .entryContent p {
+  width: 100% !important;
+  margin-inline: auto !important;
+  text-align: center !important;
+  text-align-last: center !important;
+}
+
+.participantsSection[id="participants"] .entryContent h3 {
+  max-width: 20ch !important;
+  text-wrap: balance !important;
+}
+
+.participantsSection[id="participants"] .entryContent p {
+  max-width: 28ch !important;
+  text-wrap: balance !important;
+}
+
+.participantsSection[id="participants"] .participantsStatement {
+  display: grid !important;
+  width: 100% !important;
+  min-height: 4.8rem !important;
+  grid-template-columns:
+    auto
+    1px
+    auto !important;
+  align-items: center !important;
+  justify-content: center !important;
+  column-gap:
+    clamp(1rem, 2.2vw, 2rem) !important;
+  margin-top:
+    clamp(1rem, 1.8vw, 1.4rem) !important;
+  padding:
+    1rem
+    clamp(1rem, 2vw, 1.6rem) !important;
+  border-radius: 0 !important;
+  background: #0b1b3b !important;
+  color: #ffffff !important;
+  text-align: center !important;
+}
+
+.participantsSection[id="participants"] .participantsStatement > span:first-child,
+.participantsSection[id="participants"] .participantsStatement > strong {
+  margin: 0 !important;
+  color: #ffffff !important;
+  line-height: 1.25 !important;
+  text-align: center !important;
+}
+
+.participantsSection[id="participants"] .participantsStatementDivider {
+  display: block !important;
+  width: 1px !important;
+  height: 1.7rem !important;
+  margin: 0 !important;
+  background:
+    rgba(255, 255, 255, 0.76) !important;
+  box-shadow:
+    0 0 10px rgba(255, 255, 255, 0.14) !important;
+}
+
+@media (max-width: 1020px) {
+  .participantsSection[id="participants"] .entryJourney {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .participantsSection[id="participants"] .participantsHeadingBlock h2 {
+    white-space: normal !important;
+    text-wrap: balance !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .participantsSection[id="participants"] .participantsHeadingBlock h2 {
+    font-size:
+      clamp(2.05rem, 9vw, 2.75rem) !important;
+  }
+
+  .participantsSection[id="participants"] .entryJourney {
+    grid-template-columns: 1fr !important;
+  }
+
+  .participantsSection[id="participants"] .participantsStatement {
+    grid-template-columns:
+      minmax(0, 1fr)
+      1px
+      minmax(0, 1fr) !important;
+    column-gap: 0.75rem !important;
+  }
+
+  .participantsSection[id="participants"] .participantsStatement > span:first-child {
+    font-size: 0.78rem !important;
+    letter-spacing: 0.08em !important;
+  }
+
+  .participantsSection[id="participants"] .participantsStatement > strong {
+    font-size: 0.9rem !important;
+  }
+}
+
+/* PARTICIPANTS CENTERED FINAL STRUCTURE - END */
+
+/* ROADMAP IMAGE PREMIUM SCALE - START */
+.roadmapImageSection {
+  padding:
+    clamp(1.25rem, 2.4vw, 2rem)
+    0 !important;
+  background: #ffffff !important;
+}
+
+.roadmapImageSection .storyContainer {
+  width: min(100%, 1460px) !important;
+  max-width: 1460px !important;
+  margin-inline: auto !important;
+  padding-inline:
+    clamp(0.55rem, 1.15vw, 1.15rem) !important;
+}
+
+.roadmapImageSection .roadmapImageFrame {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 auto !important;
+  border:
+    1px solid rgba(15, 23, 42, 0.08) !important;
+  border-radius:
+    clamp(1.05rem, 1.8vw, 1.45rem) !important;
+  background: #ffffff !important;
+  box-shadow:
+    0 22px 54px rgba(15, 23, 42, 0.1),
+    0 4px 14px rgba(15, 23, 42, 0.06) !important;
+}
+
+.roadmapImageSection .roadmapImage {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  transform: scale(1.012) !important;
+  transform-origin: center !important;
+}
+/* ROADMAP IMAGE PREMIUM SCALE - END */

@@ -48,7 +48,7 @@ export default function HomePage() {
     "@type": "Organization",
     name: contactInformation.organization,
     url: publicUrl,
-    email: contactInformation.email,
+    email: "omniskillsolympiad@gmail.com",
     telephone: "+918123719555",
     description:
       "A national multidisciplinary skills ecosystem for practical learning, competition, innovation, progression, and recognition across diverse domains.",

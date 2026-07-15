@@ -1,38 +1,61 @@
-import styles from "@/components/public-site/phase-two-sections.module.css";
+import Image from "next/image";
 
-const outcomeGroups = [
+import styles from "@/components/public-site/what-will-you-gain-visual.module.css";
+
+type OutcomeCard = {
+  title: string;
+  image: string;
+  tone: "blue" | "gold" | "violet" | "orange";
+  outcomes: readonly string[];
+};
+
+const OUTCOME_CARDS: readonly OutcomeCard[] = [
   {
-    label: "Practical capability",
+    title: "Practical Capability",
+    image: "/illustrations/oso/wt-4.png",
+    tone: "blue",
     outcomes: [
       "Practical Skills",
       "Problem-Solving Ability",
       "Creativity & Innovation",
       "Confidence in Applying Knowledge",
+      "Real-World Challenges",
     ],
   },
   {
-    label: "Proof and recognition",
+    title: "Recognition & Credentials",
+    image: "/illustrations/oso/wt-1.png",
+    tone: "gold",
     outcomes: [
-      "Industry Exposure",
       "National Recognition",
       "Professional Certifications",
       "Project Portfolio",
+      "Verified Proof of Skills",
     ],
   },
   {
-    label: "People and collaboration",
+    title: "People & Collaboration",
+    image: "/illustrations/oso/wt-2.png",
+    tone: "violet",
     outcomes: [
+      "Industry Exposure",
+      "Expert Mentorship",
+      "Technology Awareness",
       "Networking Opportunities",
       "Leadership Skills",
       "Teamwork Experience",
+      "Communication & Collaboration",
     ],
   },
   {
-    label: "Future readiness",
+    title: "Future Readiness",
+    image: "/illustrations/oso/wt-3.png",
+    tone: "orange",
     outcomes: [
       "Entrepreneurial Mindset",
       "Internship Opportunities",
       "Career Readiness",
+      "Lifelong Learning Mindset",
     ],
   },
 ] as const;
@@ -41,35 +64,48 @@ export default function WhatWillYouGainSection() {
   return (
     <section
       id="outcomes"
-      className={styles.outcomesSection}
+      data-theme="dark"
+      className={styles.section}
       aria-labelledby="outcomes-title"
     >
-      <div className={styles.outcomesGridTexture} aria-hidden="true" />
-      <span className={styles.outcomesGlowOne} aria-hidden="true" />
-      <span className={styles.outcomesGlowTwo} aria-hidden="true" />
+      <div className={styles.gridTexture} aria-hidden="true" />
+      <span className={styles.glowLeft} aria-hidden="true" />
+      <span className={styles.glowRight} aria-hidden="true" />
 
-      <div className={styles.sectionShell}>
-        <header className={styles.outcomesHeader}>
-          <p className={styles.darkEyebrow}>
-            What will you gain?
-          </p>
+      <div className={styles.shell}>
+        <header className={styles.header}>
+          <p className={styles.eyebrow}>What will you gain?</p>
 
-          <h2 id="outcomes-title" className={styles.darkTitle}>
-            Participating in OSO helps you build much more than academic
-            knowledge.
+          <h2 id="outcomes-title" className={styles.title}>
+            <span>Participating in OSO helps you build</span>
+            <span>much more than academic knowledge.</span>
           </h2>
         </header>
 
-        <div className={styles.outcomeGroups}>
-          {outcomeGroups.map((group) => (
+        <div className={styles.cardGrid}>
+          {OUTCOME_CARDS.map((card) => (
             <article
-              key={group.label}
-              className={styles.outcomeGroup}
+              key={card.title}
+              className={styles.card}
+              data-tone={card.tone}
             >
-              <h3>{group.label}</h3>
+              <div className={styles.visual}>
+                <Image
+                  src={card.image}
+                  alt=""
+                  width={1024}
+                  height={1024}
+                  loading="eager"
+                  sizes="(max-width: 720px) 88vw, (max-width: 1180px) 44vw, 22vw"
+                  className={styles.visualImage}
+                  aria-hidden="true"
+                />
+              </div>
+
+              <h3>{card.title}</h3>
 
               <ul>
-                {group.outcomes.map((outcome) => (
+                {card.outcomes.map((outcome) => (
                   <li key={outcome}>{outcome}</li>
                 ))}
               </ul>
