@@ -25,6 +25,11 @@ type AdapterUserWithRole = AdapterUser & {
   isOnboarded: boolean;
 };
 
+type OAuthAccountIdentifier = Pick<
+  AdapterAccount,
+  "provider" | "providerAccountId"
+>;
+
 function normalizeEmail(value: string) {
   return value.trim().toLowerCase();
 }
@@ -281,7 +286,7 @@ const customPrismaAdapter: Adapter = {
   async unlinkAccount({
     provider,
     providerAccountId,
-  }): Promise<AdapterAccount | undefined> {
+  }: OAuthAccountIdentifier): Promise<AdapterAccount | undefined> {
     const existingAccount = await prisma.account.findUnique({
       where: {
         provider_providerAccountId: {

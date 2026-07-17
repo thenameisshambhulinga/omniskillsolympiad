@@ -36,7 +36,11 @@ function parseApplicationUrl(value: string) {
     throw new Error("NEXTAUTH_URL must contain only the application origin.");
   }
 
-  if (process.env.NODE_ENV === "production" && parsed.protocol !== "https:") {
+  const isProductionRuntime =
+    process.env.NODE_ENV === "production" &&
+    process.env.NEXT_PHASE !== "phase-production-build";
+
+  if (isProductionRuntime && parsed.protocol !== "https:") {
     throw new Error("NEXTAUTH_URL must use HTTPS in production.");
   }
 
