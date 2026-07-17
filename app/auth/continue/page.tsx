@@ -2,19 +2,49 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
 import { authOptions } from "@/lib/auth";
+import {
+  buildAuthContinueHref,
+  buildLoginHref,
+  extractRequestedDestination,
+} from "@/lib/navigation/auth-destination";
 import { getPostLoginRedirect } from "@/lib/post-login-redirect";
 import { prisma } from "@/lib/prisma";
 import { isDatabaseConnectivityError } from "@/lib/server/database-guard";
+import { getTrustedRequestOrigins } from "@/lib/server/request-origins";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 export const runtime = "nodejs";
 
-export default async function AuthContinuePage() {
+type AuthContinuePageProps = {
+  searchParams?: Promise<{
+    destination?: string;
+    callbackUrl?: string;
+  }>;
+};
+
+export default async function AuthContinuePage({
+  searchParams,
+}: AuthContinuePageProps) {
+  const resolvedSearchParams = (await searchParams) ?? {};
+  const trustedOrigins = await getTrustedRequestOrigins();
+
+  const requestedDestination = extractRequestedDestination(
+    resolvedSearchParams.destination ??
+      resolvedSearchParams.callbackUrl,
+    {
+      allowedOrigins: trustedOrigins,
+    },
+  );
+
+  const continueHref = buildAuthContinueHref(
+    requestedDestination,
+  );
+
   const session = await getServerSession(authOptions);
 
   if (!session?.user?.email) {
-    redirect("/login?callbackUrl=/auth/continue");
+    redirect(buildLoginHref(requestedDestination));
   }
 
   let user: {
@@ -34,16 +64,29 @@ export default async function AuthContinuePage() {
     });
   } catch (error) {
     if (isDatabaseConnectivityError(error)) {
-      redirect("/database-unavailable?from=/auth/continue");
+      const params = new URLSearchParams({
+        from: continueHref,
+      });
+
+      redirect(`/database-unavailable?${params.toString()}`);
     }
 
     throw error;
   }
 
   if (!user) {
-    // /login now detects the stale JWT, clears it safely, and then renders.
-    redirect("/login?reason=stale-session");
+    redirect(
+      buildLoginHref(
+        requestedDestination,
+        "stale-session",
+      ),
+    );
   }
 
-  redirect(getPostLoginRedirect(user));
+  redirect(
+    getPostLoginRedirect(
+      user,
+      requestedDestination,
+    ),
+  );
 }

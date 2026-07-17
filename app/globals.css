@@ -1894,3 +1894,373 @@ li {
 }
 
 /* OSO FINAL GLOBAL PUBLIC-SITE STANDARD - END */
+/* OSO GLOBAL TYPOGRAPHY STANDARD V2 - START */
+:root {
+  --oso-type-page-title: clamp(2.5rem, 4.6vw, 3.625rem);
+  --oso-type-section-title: clamp(2.15rem, 3.8vw, 3.4375rem);
+  --oso-type-subsection-title: clamp(1.55rem, 2.4vw, 2.25rem);
+  --oso-type-card-title: clamp(1.125rem, 1.45vw, 1.375rem);
+  --oso-type-lead: clamp(1rem, 1.18vw, 1.125rem);
+  --oso-type-body: clamp(0.9375rem, 1vw, 1rem);
+  --oso-type-label: clamp(0.75rem, 0.82vw, 0.8125rem);
+  --oso-type-button: 0.875rem;
+  --oso-leading-title: 1.08;
+  --oso-leading-copy: 1.75;
+}
+
+/* Page-level titles outside the home hero. */
+#main-content h1:not(#home h1):not([data-oso-type-exempt]) {
+  font-size: var(--oso-type-page-title) !important;
+  font-weight: 900 !important;
+  line-height: var(--oso-leading-title) !important;
+  letter-spacing: -0.04em !important;
+}
+
+/* Canonical section headings. Direct-child selectors avoid inflating card titles. */
+#main-content section > h2:not([data-oso-type-exempt]),
+#main-content section > header > h2:not([data-oso-type-exempt]),
+#main-content section > header > div > h2:not([data-oso-type-exempt]),
+#main-content .oso-section-title:not([data-oso-type-exempt]) {
+  font-size: var(--oso-type-section-title) !important;
+  font-weight: 900 !important;
+  line-height: var(--oso-leading-title) !important;
+  letter-spacing: -0.038em !important;
+}
+
+/* Secondary headings used for major panels and empty states. */
+#main-content .oso-subsection-title:not([data-oso-type-exempt]),
+#main-content article > header > h2:not([data-oso-type-exempt]),
+#main-content [data-oso-panel] > h2:not([data-oso-type-exempt]) {
+  font-size: var(--oso-type-subsection-title) !important;
+  font-weight: 850 !important;
+  line-height: 1.16 !important;
+  letter-spacing: -0.03em !important;
+}
+
+/* Card titles remain compact across dashboards, leaderboards and assessment pages. */
+#main-content h3:not([data-oso-type-exempt]),
+#main-content .oso-card-title:not([data-oso-type-exempt]) {
+  font-size: var(--oso-type-card-title) !important;
+  font-weight: 800 !important;
+  line-height: 1.3 !important;
+  letter-spacing: -0.022em !important;
+}
+
+/* Lead copy immediately associated with page and section titles. */
+#main-content h1 + p:not([data-oso-type-exempt]),
+#main-content section > h2 + p:not([data-oso-type-exempt]),
+#main-content section > header > h2 + p:not([data-oso-type-exempt]),
+#main-content section > header > div > h2 + p:not([data-oso-type-exempt]),
+#main-content .oso-lead:not([data-oso-type-exempt]) {
+  font-size: var(--oso-type-lead) !important;
+  line-height: var(--oso-leading-copy) !important;
+}
+
+/* Shared body and label utilities for current and future pages. */
+#main-content .oso-body-copy:not([data-oso-type-exempt]) {
+  font-size: var(--oso-type-body) !important;
+  line-height: var(--oso-leading-copy) !important;
+}
+
+#main-content .oso-eyebrow:not([data-oso-type-exempt]),
+#main-content .oso-label:not([data-oso-type-exempt]) {
+  font-size: var(--oso-type-label) !important;
+  font-weight: 800 !important;
+  line-height: 1.25 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+}
+
+#main-content .oso-button-label:not([data-oso-type-exempt]) {
+  font-size: var(--oso-type-button) !important;
+  font-weight: 800 !important;
+  line-height: 1.2 !important;
+  letter-spacing: 0.08em !important;
+}
+
+/* Preserve white/dark-surface text colors while normalizing size. */
+#main-content :is(h1, h2, h3).text-white,
+#main-content [data-theme="dark"] :is(h1, h2, h3) {
+  color: #ffffff !important;
+}
+
+@media (max-width: 1024px) {
+  :root {
+    --oso-type-page-title: clamp(2.25rem, 6vw, 3rem);
+    --oso-type-section-title: clamp(2rem, 5.2vw, 2.875rem);
+    --oso-type-subsection-title: clamp(1.45rem, 3.5vw, 2rem);
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --oso-type-page-title: clamp(2rem, 10vw, 2.5rem);
+    --oso-type-section-title: clamp(1.875rem, 9vw, 2.375rem);
+    --oso-type-subsection-title: clamp(1.35rem, 6vw, 1.75rem);
+    --oso-type-card-title: clamp(1.0625rem, 4.8vw, 1.25rem);
+    --oso-type-lead: clamp(0.975rem, 4vw, 1.0625rem);
+    --oso-type-body: 0.9375rem;
+    --oso-type-label: 0.75rem;
+  }
+
+  #main-content h1:not(#home h1):not([data-oso-type-exempt]),
+  #main-content section > h2:not([data-oso-type-exempt]),
+  #main-content section > header > h2:not([data-oso-type-exempt]),
+  #main-content section > header > div > h2:not([data-oso-type-exempt]) {
+    overflow-wrap: anywhere;
+  }
+}
+/* OSO GLOBAL TYPOGRAPHY STANDARD V2 - END */
+
+/* OSO ROUTE-AWARE APPLICATION VISUAL SYSTEM - START */
+
+:root {
+  --oso-app-page-title: clamp(2rem, 1.65rem + 1.45vw, 3.35rem);
+  --oso-app-section-title: clamp(1.55rem, 1.32rem + 0.88vw, 2.35rem);
+  --oso-app-card-title: clamp(1rem, 0.96rem + 0.16vw, 1.18rem);
+  --oso-app-body: clamp(0.94rem, 0.9rem + 0.12vw, 1.04rem);
+  --oso-app-small: clamp(0.78rem, 0.76rem + 0.08vw, 0.88rem);
+  --oso-app-control: 2.625rem;
+  --oso-app-radius: 1.125rem;
+  --oso-app-gap: clamp(0.9rem, 0.72rem + 0.55vw, 1.5rem);
+  --oso-app-shadow: 0 12px 34px rgba(15, 23, 42, 0.065);
+}
+
+body.oso-application-route #main-content {
+  font-size: var(--oso-app-body);
+  line-height: 1.65;
+}
+
+body.oso-application-route #main-content h1 {
+  font-size: var(--oso-app-page-title) !important;
+  line-height: 1.08 !important;
+  letter-spacing: -0.035em !important;
+}
+
+body.oso-application-route #main-content h2 {
+  font-size: var(--oso-app-section-title) !important;
+  line-height: 1.15 !important;
+  letter-spacing: -0.025em !important;
+}
+
+body.oso-application-route #main-content h3,
+body.oso-application-route #main-content h4 {
+  font-size: var(--oso-app-card-title) !important;
+  line-height: 1.35 !important;
+  letter-spacing: -0.012em !important;
+}
+
+body.oso-application-route #main-content :where(p, li) {
+  line-height: 1.68;
+}
+
+body.oso-application-route #main-content :where(.grid) {
+  gap: var(--oso-app-gap);
+}
+
+body.oso-application-route #main-content :where(
+  [class*="card"],
+  [class*="Card"],
+  [class*="panel"],
+  [class*="Panel"],
+  [class*="tile"],
+  [class*="Tile"]
+) {
+  border-radius: var(--oso-app-radius) !important;
+  box-shadow: var(--oso-app-shadow);
+}
+
+body.oso-application-route #main-content :where(button, [role="button"], a[class*="button"], a[class*="Button"]) {
+  font-size: 0.9rem;
+  line-height: 1.25;
+}
+
+body.oso-application-route #main-content :where(button, [role="button"]):not([aria-label]) {
+  min-height: var(--oso-app-control);
+}
+
+body.oso-application-route #main-content :where(button, a)[aria-label]:has(> svg:only-child) {
+  width: var(--oso-app-control) !important;
+  height: var(--oso-app-control) !important;
+  min-width: var(--oso-app-control) !important;
+  min-height: var(--oso-app-control) !important;
+  padding: 0.625rem !important;
+}
+
+body.oso-application-route #main-content :where(button, a)[aria-label]:has(> svg:only-child) > svg {
+  width: 1.1rem !important;
+  height: 1.1rem !important;
+}
+
+body.oso-application-route #main-content :where([class*="badge"], [class*="Badge"], [class*="eyebrow"], [class*="Eyebrow"]) {
+  font-size: var(--oso-app-small) !important;
+  letter-spacing: 0.055em !important;
+}
+
+body.oso-application-route #main-content :where(table) {
+  font-size: 0.9rem;
+}
+
+body.oso-application-route #main-content :where(th) {
+  font-size: 0.78rem;
+  letter-spacing: 0.045em;
+}
+
+body.oso-application-route #main-content :where(input, textarea, select) {
+  font-size: 0.95rem;
+}
+
+body.oso-application-route footer h2 {
+  font-size: 0.78rem !important;
+  line-height: 1.25 !important;
+  letter-spacing: 0.1em !important;
+}
+
+body.oso-application-route footer :where(a, p, button) {
+  font-size: 0.9rem;
+}
+
+@media (max-width: 767px) {
+  body.oso-application-route #main-content {
+    --oso-app-control: 2.5rem;
+    --oso-app-gap: 0.875rem;
+  }
+
+  body.oso-application-route #main-content :where([class*="card"], [class*="Card"], [class*="panel"], [class*="Panel"]) {
+    border-radius: 1rem !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.oso-application-route #main-content *,
+  body.oso-application-route #main-content *::before,
+  body.oso-application-route #main-content *::after {
+    scroll-behavior: auto !important;
+  }
+}
+
+/* OSO ROUTE-AWARE APPLICATION VISUAL SYSTEM - END */
+
+/* OSO ADMIN + PLATFORM DENSITY SYSTEM V3 - START */
+:root {
+  --oso-app-page-title: clamp(1.75rem, 1.55rem + 0.9vw, 2.55rem);
+  --oso-app-section-title: clamp(1.3rem, 1.18rem + 0.5vw, 1.8rem);
+  --oso-app-card-title: clamp(0.98rem, 0.95rem + 0.1vw, 1.08rem);
+  --oso-app-body: clamp(0.9rem, 0.88rem + 0.06vw, 0.97rem);
+  --oso-app-small: clamp(0.72rem, 0.7rem + 0.06vw, 0.8rem);
+  --oso-app-control: 2.35rem;
+  --oso-app-radius: 0.875rem;
+  --oso-app-gap: clamp(0.7rem, 0.6rem + 0.3vw, 1rem);
+  --oso-app-shadow: 0 7px 22px rgba(15, 23, 42, 0.05);
+}
+
+body.oso-application-route #main-content {
+  line-height: 1.58;
+}
+
+body.oso-application-route #main-content h1 {
+  max-width: 24ch;
+}
+
+body.oso-application-route #main-content :where(p, li) {
+  line-height: 1.58;
+}
+
+body.oso-application-route #main-content :where(button, [role="button"], a[class*="button"], a[class*="Button"]) {
+  min-height: 2.35rem;
+  font-size: 0.84rem !important;
+  letter-spacing: 0.01em !important;
+}
+
+body.oso-application-route #main-content :where(button, a)[class*="px-6"] {
+  padding-inline: 1rem !important;
+}
+
+body.oso-application-route #main-content :where(button, a)[class*="py-4"] {
+  padding-block: 0.65rem !important;
+}
+
+body.oso-application-route #main-content :where([class~="p-8"], [class~="p-10"], [class~="p-12"]) {
+  padding: clamp(1rem, 0.85rem + 0.5vw, 1.4rem) !important;
+}
+
+body.oso-application-route #main-content :where([class~="p-6"], [class~="p-7"]) {
+  padding: clamp(0.9rem, 0.8rem + 0.35vw, 1.2rem) !important;
+}
+
+body.oso-application-route #main-content :where([class~="gap-8"], [class~="gap-10"], [class~="gap-12"]) {
+  gap: clamp(0.9rem, 0.75rem + 0.4vw, 1.25rem) !important;
+}
+
+body.oso-application-route #main-content :where(svg[class*="h-8"], svg[class*="h-9"], svg[class*="h-10"], svg[class*="w-8"], svg[class*="w-9"], svg[class*="w-10"]) {
+  width: 1.35rem !important;
+  height: 1.35rem !important;
+}
+
+body.oso-application-route header:has(a[aria-label="Go to Omni Skills Olympiad home"]) > div:first-child {
+  min-height: 4rem !important;
+}
+
+body.oso-application-route header:has(a[aria-label="Go to Omni Skills Olympiad home"]) a[aria-label="Go to Omni Skills Olympiad home"] > div {
+  width: 12.5rem !important;
+  height: 2.75rem !important;
+}
+
+body.oso-application-route header:has(a[aria-label="Go to Omni Skills Olympiad home"]) img {
+  height: 2.2rem !important;
+}
+
+body.oso-application-route header:has(a[aria-label="Go to Omni Skills Olympiad home"]) :where(a, button) {
+  min-height: 2.35rem !important;
+  font-size: 0.78rem !important;
+}
+
+body.oso-application-route header:has(a[aria-label="Go to Omni Skills Olympiad home"]) input {
+  font-size: 0.85rem !important;
+}
+
+body[data-oso-visual-scope="admin"] #main-content .oso-admin-shell {
+  min-height: auto;
+}
+
+body[data-oso-visual-scope="admin"] #main-content .oso-admin-shell :where([class~="rounded-[2rem]"], [class~="rounded-[2.25rem]"], [class~="rounded-[2.5rem]"]) {
+  border-radius: 1rem !important;
+}
+
+body[data-oso-visual-scope="admin"] #main-content .oso-admin-shell :where([class~="text-5xl"], [class~="text-6xl"], [class~="text-7xl"]) {
+  font-size: var(--oso-app-page-title) !important;
+  line-height: 1.08 !important;
+}
+
+body[data-oso-visual-scope="admin"] #main-content .oso-admin-shell :where([class~="text-3xl"], [class~="text-4xl"]) {
+  font-size: var(--oso-app-section-title) !important;
+}
+
+body[data-oso-visual-scope="admin"] #main-content .oso-admin-shell :where([class~="min-h-14"], [class~="h-14"]) {
+  min-height: 2.6rem !important;
+  height: 2.6rem !important;
+}
+
+footer a[aria-label][class*="rounded-full"]:has(svg),
+footer button[aria-label][class*="rounded-full"]:has(svg) {
+  width: 2.5rem !important;
+  height: 2.5rem !important;
+  min-width: 2.5rem !important;
+  min-height: 2.5rem !important;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08) !important;
+}
+
+footer a[aria-label][class*="rounded-full"]:has(svg) svg,
+footer button[aria-label][class*="rounded-full"]:has(svg) svg {
+  width: 1rem !important;
+  height: 1rem !important;
+}
+
+@media (max-width: 640px) {
+  :root {
+    --oso-app-page-title: clamp(1.65rem, 8vw, 2.15rem);
+    --oso-app-section-title: clamp(1.25rem, 6vw, 1.6rem);
+    --oso-app-control: 2.3rem;
+  }
+}
+/* OSO ADMIN + PLATFORM DENSITY SYSTEM V3 - END */

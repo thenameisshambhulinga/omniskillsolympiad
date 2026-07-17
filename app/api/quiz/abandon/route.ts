@@ -5,11 +5,21 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { normalizeQuizAnswers, scoreQuizAnswers } from "@/lib/quiz/quiz-score-engine";
 import { normalizeTabSwitchCount } from "@/lib/quiz/quiz-policy";
+import { normalizeQuizAnswerArray, normalizeQuizId } from "@/lib/quiz/quiz-request";
+import { guardMutationRequest } from "@/lib/server/route-hardening";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 export async function POST(request: Request) {
+  const guarded = guardMutationRequest(request, {
+    key: "quiz-abandon",
+    limit: 30,
+    maxBytes: 256 * 1024,
+  });
+
+  if (guarded) return guarded;
+
   const session = await getServerSession(authOptions);
 
   const userEmail =
@@ -32,7 +42,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: "Invalid JSON body." }, { status: 400 });
   }
 
-  const quizId = typeof body.quizId === "string" ? body.quizId.trim() : "";
+  const quizId = normalizeQuizId(body.quizId);
 
   if (!quizId) {
     return NextResponse.json({ ok: false, error: "quizId is required." }, { status: 400 });
@@ -86,7 +96,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: "Quiz not found." }, { status: 404 });
   }
 
-  const normalizedAnswers = normalizeQuizAnswers(Array.isArray(body.answers) ? body.answers : []);
+  const normalizedAnswers = normalizeQuizAnswers(
+    normalizeQuizAnswerArray(body.answers),
+  );
   const tabSwitchCount = normalizeTabSwitchCount(body.tabSwitchCount);
 
   const result = scoreQuizAnswers({

@@ -112,52 +112,7 @@
     0 18px 48px rgba(0, 0, 0, 0.22) !important;
 }
 
-/*
-  Fix the Who Can Participate header:
-  no oversized top void and both columns share one visual centre.
-*/
-.foundationShell [id="participants"] header {
-  display: grid !important;
-  grid-template-columns:
-    minmax(0, 0.92fr)
-    minmax(24rem, 1.08fr) !important;
-  align-items: center !important;
-  gap: clamp(2rem, 5vw, 5.5rem) !important;
-}
 
-.foundationShell [id="participants"] header > div {
-  min-width: 0;
-  align-self: center !important;
-}
-
-.foundationShell [id="participants"] header > div:first-child {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.foundationShell [id="participants"] header > div:last-child {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 0.65rem !important;
-  padding-top: 0 !important;
-}
-
-.foundationShell [id="participants"] header h2 {
-  margin-bottom: 0 !important;
-  max-width: 16ch;
-}
-
-.foundationShell [id="participants"] header p {
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
-  line-height: 1.55 !important;
-}
-
-.foundationShell [id="participants"] header + div {
-  margin-top: var(--oso-foundation-header-gap) !important;
-}
 
 /*
   Normalize heading-to-content distance in the new storytelling sections.
@@ -331,20 +286,7 @@
     font-size: clamp(2.1rem, 5vw, 2.55rem) !important;
   }
 
-  .foundationShell [id="participants"] header {
-    grid-template-columns: 1fr !important;
-    align-items: start !important;
-    gap: 1.25rem !important;
-  }
 
-  .foundationShell [id="participants"] header > div {
-    width: 100%;
-    align-self: stretch !important;
-  }
-
-  .foundationShell [id="participants"] header h2 {
-    max-width: 100%;
-  }
 }
 
 @media (max-width: 640px) {
@@ -361,13 +303,7 @@
     line-height: 1.04;
   }
 
-  .foundationShell [id="participants"] header {
-    gap: 1rem !important;
-  }
 
-  .foundationShell [id="participants"] header p {
-    line-height: 1.5 !important;
-  }
 
   .foundationShell a[href="/login"] {
     min-height: 2.85rem;

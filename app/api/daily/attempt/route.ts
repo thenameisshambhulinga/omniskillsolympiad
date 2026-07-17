@@ -1,4 +1,9 @@
 import { calculateOmniScore } from "@/lib/engineering-system";
+import {
+  basisPointsToPercentage,
+  percentageToBasisPoints,
+  weightedAverageBasisPoints,
+} from "@/lib/math/exact-metrics";
 import { prisma } from "@/lib/prisma";
 import { publicDailyChallengeWhere } from "@/lib/daily-challenge/public-challenge-visibility";
 import {
@@ -119,6 +124,10 @@ export async function POST(request: Request) {
         id: true,
         completed: true,
         expiresAt: true,
+        score: true,
+        total: true,
+        percentage: true,
+        suspicious: true,
       },
     });
 
@@ -131,11 +140,16 @@ export async function POST(request: Request) {
     }
 
     if (existingAttempt.completed) {
-      return apiError(
-        "Challenge already submitted.",
-        409,
-        "ALREADY_SUBMITTED",
-      );
+      return apiOk({
+        idempotentReplay: true,
+        score: existingAttempt.score,
+        total: existingAttempt.total,
+        percentage: existingAttempt.percentage,
+        earnedPoints: existingAttempt.suspicious
+          ? 0
+          : existingAttempt.score * POINTS_PER_CORRECT_ANSWER,
+        suspicious: existingAttempt.suspicious,
+      });
     }
 
     if (!existingAttempt.expiresAt) {
@@ -199,9 +213,12 @@ export async function POST(request: Request) {
       const previousConsistency = currentProgress?.consistencyScore ?? 100;
       const previousTotalPoints = currentProgress?.totalPoints ?? 0;
       const completedDays = previousCompletedDays + 1;
-      const averageAccuracy =
-        (previousAccuracy * previousCompletedDays + scoreResult.percentage) /
-        completedDays;
+      const averageAccuracyBasisPoints = weightedAverageBasisPoints({
+        previousAverageBasisPoints: percentageToBasisPoints(previousAccuracy),
+        previousCount: previousCompletedDays,
+        nextBasisPoints: scoreResult.percentageBasisPoints,
+      });
+      const averageAccuracy = basisPointsToPercentage(averageAccuracyBasisPoints);
       const consistencyScore = suspicious
         ? Math.max(0, previousConsistency - 3)
         : Math.min(100, previousConsistency + 0.5);
@@ -267,6 +284,7 @@ export async function POST(request: Request) {
       score: scoreResult.score,
       total: scoreResult.total,
       percentage: scoreResult.percentage,
+      percentageBasisPoints: scoreResult.percentageBasisPoints,
       earnedPoints,
       suspicious,
       meta: {

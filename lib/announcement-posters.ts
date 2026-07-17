@@ -45,7 +45,7 @@ export async function getPublishedAnnouncementPosters(): Promise<PublicAnnouncem
         OR: [{ expiresAt: null }, { expiresAt: { gte: now } }],
       },
       orderBy: [{ isHero: "desc" }, { priority: "desc" }, { createdAt: "desc" }],
-      take: 10,
+      take: 24,
     });
 
     cachedPosters = posters.map((poster) => ({

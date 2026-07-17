@@ -5,6 +5,12 @@ import { NextResponse } from "next/server";
 
 import { requireAdmin } from "@/lib/admin-auth";
 import { prisma } from "@/lib/prisma";
+import {
+  enforceJsonContentType,
+  enforceRateLimit,
+  readJsonObjectWithLimit,
+  rejectCrossSiteMutation,
+} from "@/lib/security/request-guard";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -211,10 +217,14 @@ function serializePoster(poster: {
   };
 }
 
-export async function GET() {
+export async function GET(request: Request) {
   await requireAdmin();
 
+  const limited = enforceRateLimit(request, "admin-posters-read", 120, 60_000);
+  if (limited) return limited;
+
   const posters = await prisma.announcementPoster.findMany({
+    take: 100,
     orderBy: [
       {
         isHero: "desc",
@@ -245,23 +255,19 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  const originRejected = rejectCrossSiteMutation(request);
+  if (originRejected) return originRejected;
+
+  const contentTypeRejected = enforceJsonContentType(request);
+  if (contentTypeRejected) return contentTypeRejected;
+
+  const limited = enforceRateLimit(request, "admin-posters-create", 30, 60_000);
+  if (limited) return limited;
+
   const admin = await requireAdmin();
-
-  let body: Record<string, unknown>;
-
-  try {
-    body = (await request.json()) as Record<string, unknown>;
-  } catch {
-    return NextResponse.json(
-      {
-        ok: false,
-        error: "Invalid JSON body.",
-      },
-      {
-        status: 400,
-      },
-    );
-  }
+  const parsed = await readJsonObjectWithLimit(request, 64 * 1024);
+  if (parsed.response) return parsed.response;
+  const body = parsed.data;
 
   const validation = validatePosterPayload(body);
 

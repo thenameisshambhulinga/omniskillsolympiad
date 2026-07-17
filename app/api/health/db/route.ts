@@ -1,31 +1,35 @@
 import { NextResponse } from "next/server";
 
 import { prisma } from "@/lib/prisma";
-import { classifyInfrastructureError } from "@/lib/server/connectivity-errors";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
+export const revalidate = 0;
+
+const NO_STORE_HEADERS = {
+  "Cache-Control": "no-store, max-age=0",
+  "Content-Type": "application/json; charset=utf-8",
+} as const;
 
 export async function GET() {
-  const startedAt = Date.now();
+  let ready = false;
 
   try {
     await prisma.$queryRaw`SELECT 1`;
-
-    return NextResponse.json({
-      success: true,
-      database: "online",
-      latencyMs: Date.now() - startedAt,
-    });
-  } catch (error) {
-    return NextResponse.json(
-      {
-        success: false,
-        database: "offline",
-        code: classifyInfrastructureError(error),
-        error: "Database is not reachable from the app server.",
-      },
-      { status: 503, headers: { "Cache-Control": "no-store" } },
-    );
+    ready = true;
+  } catch {
+    ready = false;
   }
+
+  return NextResponse.json(
+    {
+      ok: ready,
+      status: ready ? "ready" : "unavailable",
+      timestamp: new Date().toISOString(),
+    },
+    {
+      status: ready ? 200 : 503,
+      headers: NO_STORE_HEADERS,
+    },
+  );
 }

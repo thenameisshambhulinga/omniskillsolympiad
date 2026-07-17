@@ -46,7 +46,6 @@ export function shouldHideSiteChrome(pathname: string | null | undefined) {
   const normalizedPathname = normalizePathname(pathname);
 
   const chromeHiddenRoutes = [
-    "/admin",
     "/login",
     "/onboarding",
     "/access-restricted",

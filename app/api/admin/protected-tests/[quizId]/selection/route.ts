@@ -7,6 +7,8 @@ import {
   buildSelectionRows,
   normalizeSelectionSettings,
 } from "@/lib/quiz/selection-policy";
+import { readJsonObjectWithLimit } from "@/lib/security/request-guard";
+import { guardMutationRequest } from "@/lib/server/route-hardening";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -37,26 +39,18 @@ async function getSelectionSnapshot(quizId: string) {
     return null;
   }
 
-  const settings = {
+  const settings = normalizeSelectionSettings({
     minimumPercentage: quiz.selectionMinimumPercentage,
     maxTabSwitches: quiz.selectionMaxTabSwitches,
     requireNonSuspicious: quiz.selectionRequireNonSuspicious,
     shortlistLimit: quiz.selectionShortlistLimit,
-  };
+  });
 
   const attempts = await prisma.quizAttempt.findMany({
     where: {
       quizId,
       completed: true,
     },
-    orderBy: [
-      {
-        percentage: "desc",
-      },
-      {
-        submittedAt: "asc",
-      },
-    ],
     select: {
       id: true,
       score: true,
@@ -64,6 +58,7 @@ async function getSelectionSnapshot(quizId: string) {
       percentage: true,
       suspicious: true,
       tabSwitchCount: true,
+      startedAt: true,
       submittedAt: true,
       user: {
         select: {
@@ -101,6 +96,9 @@ export async function GET(_request: Request, context: RouteContext) {
       },
       {
         status: 404,
+        headers: {
+          "Cache-Control": "no-store",
+        },
       },
     );
   }
@@ -119,25 +117,20 @@ export async function GET(_request: Request, context: RouteContext) {
 }
 
 export async function PATCH(request: Request, context: RouteContext) {
+  const guarded = guardMutationRequest(request, {
+    key: "admin-protected-test-selection-settings",
+    limit: 30,
+    maxBytes: 32 * 1024,
+  });
+  if (guarded) return guarded;
+
   await requireAdmin();
 
   const { quizId } = await context.params;
 
-  let body: Record<string, unknown>;
-
-  try {
-    body = (await request.json()) as Record<string, unknown>;
-  } catch {
-    return NextResponse.json(
-      {
-        ok: false,
-        error: "Invalid JSON body.",
-      },
-      {
-        status: 400,
-      },
-    );
-  }
+  const parsed = await readJsonObjectWithLimit(request, 32 * 1024);
+  if (parsed.response) return parsed.response;
+  const body = parsed.data;
 
   const settings = normalizeSelectionSettings({
     minimumPercentage: body.minimumPercentage,
@@ -161,13 +154,27 @@ export async function PATCH(request: Request, context: RouteContext) {
 
   const snapshot = await getSelectionSnapshot(quizId);
 
-  return NextResponse.json({
-    ok: true,
-    ...snapshot,
-  });
+  return NextResponse.json(
+    {
+      ok: true,
+      ...snapshot,
+    },
+    {
+      headers: {
+        "Cache-Control": "no-store",
+      },
+    },
+  );
 }
 
-export async function POST(_request: Request, context: RouteContext) {
+export async function POST(request: Request, context: RouteContext) {
+  const guarded = guardMutationRequest(request, {
+    key: "admin-protected-test-selection-evaluate",
+    limit: 12,
+    maxBytes: 0,
+  });
+  if (guarded) return guarded;
+
   await requireAdmin();
 
   const { quizId } = await context.params;
@@ -181,6 +188,9 @@ export async function POST(_request: Request, context: RouteContext) {
       },
       {
         status: 404,
+        headers: {
+          "Cache-Control": "no-store",
+        },
       },
     );
   }
@@ -204,9 +214,16 @@ export async function POST(_request: Request, context: RouteContext) {
 
   const refreshed = await getSelectionSnapshot(quizId);
 
-  return NextResponse.json({
-    ok: true,
-    evaluatedAt: evaluatedAt.toISOString(),
-    ...refreshed,
-  });
+  return NextResponse.json(
+    {
+      ok: true,
+      evaluatedAt: evaluatedAt.toISOString(),
+      ...refreshed,
+    },
+    {
+      headers: {
+        "Cache-Control": "no-store",
+      },
+    },
+  );
 }

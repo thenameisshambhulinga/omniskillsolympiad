@@ -1,3 +1,9 @@
+import {
+  basisPointsToPercentage,
+  clampInteger,
+  percentageToBasisPoints,
+} from "@/lib/math/exact-metrics";
+
 interface RankingInput {
   accuracy: number;
   consistency: number;
@@ -13,12 +19,19 @@ export function calculateRankingScore({
   violations,
   difficultyMultiplier = 1,
 }: RankingInput) {
-  const score =
-    accuracy * 0.4 +
-    consistency * 0.25 +
-    difficultyMultiplier * 20 +
-    streak * 0.1 -
-    violations * 2;
+  const accuracyBp = percentageToBasisPoints(accuracy);
+  const consistencyBp = percentageToBasisPoints(consistency);
+  const difficultyBp = clampInteger(difficultyMultiplier * 2_000, 0, 10_000, 2_000);
+  const streakBp = clampInteger(streak * 10, 0, 2_000, 0);
+  const violationPenaltyBp = clampInteger(violations * 200, 0, 10_000, 0);
 
-  return Math.max(0, Number(score.toFixed(2)));
+  const scoreBp = Math.max(
+    0,
+    Math.round((accuracyBp * 40 + consistencyBp * 25) / 100) +
+      difficultyBp +
+      streakBp -
+      violationPenaltyBp,
+  );
+
+  return basisPointsToPercentage(Math.min(10_000, scoreBp));
 }

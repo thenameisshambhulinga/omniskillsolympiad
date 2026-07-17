@@ -10,7 +10,7 @@ export default function AdminShell({ children }: { children: ReactNode }) {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#f8f9fa] text-slate-950">
+    <div className="oso-admin-shell relative min-h-screen overflow-hidden bg-[#f8f9fa] text-slate-950">
       <div aria-hidden="true" className="pointer-events-none fixed inset-0">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_10%_5%,rgba(37,99,235,0.10),transparent_30%),radial-gradient(circle_at_85%_10%,rgba(14,165,233,0.10),transparent_28%),radial-gradient(circle_at_48%_92%,rgba(250,204,21,0.10),transparent_32%)]" />
 
@@ -23,7 +23,7 @@ export default function AdminShell({ children }: { children: ReactNode }) {
       </div>
 
       <div className="relative z-10 flex min-h-screen">
-        <aside className="hidden w-72 shrink-0 p-4 xl:w-80 lg:block">
+        <aside className="hidden w-64 shrink-0 p-3 xl:w-72 lg:block">
           <AdminSidebar />
         </aside>
 
@@ -45,7 +45,7 @@ export default function AdminShell({ children }: { children: ReactNode }) {
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: -340, opacity: 0 }}
                 transition={{ type: "spring", stiffness: 260, damping: 28 }}
-                className="fixed inset-y-0 left-0 z-50 w-[min(22rem,calc(100vw-2rem))] p-3 lg:hidden"
+                className="fixed inset-y-0 left-0 z-50 w-[min(20rem,calc(100vw-1rem))] p-2 lg:hidden"
               >
                 <AdminSidebar onNavigate={() => setMobileSidebarOpen(false)} />
               </motion.aside>
@@ -56,7 +56,7 @@ export default function AdminShell({ children }: { children: ReactNode }) {
         <div className="flex min-w-0 flex-1 flex-col">
           <AdminHeader onOpenSidebar={() => setMobileSidebarOpen(true)} />
 
-          <main className="relative z-10 flex-1 px-4 pb-10 pt-4 sm:px-6 lg:px-8">
+          <main className="relative z-10 flex-1 px-3 pb-8 pt-3 sm:px-4 lg:px-5">
             {children}
           </main>
         </div>

@@ -4,23 +4,13 @@ import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
+  ArrowLeft,
   ArrowRight,
-  BadgeCheck,
-  BarChart3,
   CalendarDays,
-  Cpu,
   Eye,
-  Flame,
-  Layers3,
-  LockKeyhole,
-  Rocket,
   ShieldCheck,
   Sparkles,
-  Target,
-  Trophy,
-  Users,
   X,
-  Zap,
 } from "lucide-react";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 
@@ -29,229 +19,128 @@ import { cn } from "@/lib/utils";
 
 type LoginClientProps = {
   posters: PosterAnnouncement[];
+  callbackUrl: string;
 };
 
-const ecosystemCards = [
-  {
-    title: "Daily Missions",
-    text: "Solve protected engineering challenges every day.",
-    icon: <Target className="h-5 w-5" />,
-    tone: "cyan",
-  },
-  {
-    title: "Skill Passport",
-    text: "Build a verified profile of your strengths.",
-    icon: <BadgeCheck className="h-5 w-5" />,
-    tone: "emerald",
-  },
-  {
-    title: "OMNI Levels",
-    text: "Progress from campus league to global pathway.",
-    icon: <Layers3 className="h-5 w-5" />,
-    tone: "purple",
-  },
-];
-
-const ecosystemPills = [
-  "Campus League",
-  "District League",
-  "State League",
-  "National League",
-  "Global Pathway",
-];
-
-const loginSteps = ["Explore", "Authenticate", "Compete"];
-
-export default function LoginClient({ posters }: LoginClientProps) {
+export default function LoginClient({ posters, callbackUrl }: LoginClientProps) {
   const publishedPosters = useMemo(() => {
-    return posters.filter((poster) => poster.imageUrl && poster.title);
+    return posters.filter((poster) => poster.imageUrl && poster.title).slice(0, 24);
   }, [posters]);
 
   const [activePosterIndex, setActivePosterIndex] = useState(0);
-  const [selectedPoster, setSelectedPoster] =
-    useState<PosterAnnouncement | null>(null);
+  const [selectedPosterIndex, setSelectedPosterIndex] = useState<number | null>(null);
 
   useEffect(() => {
-    if (publishedPosters.length <= 1) {
+    if (publishedPosters.length <= 1 || selectedPosterIndex !== null) {
       return;
     }
 
     const timer = window.setInterval(() => {
-      setActivePosterIndex(
-        (current) => (current + 1) % publishedPosters.length,
-      );
-    }, 5200);
+      setActivePosterIndex((current) => (current + 1) % publishedPosters.length);
+    }, 6000);
 
     return () => window.clearInterval(timer);
-  }, [publishedPosters.length]);
+  }, [publishedPosters.length, selectedPosterIndex]);
 
-  const activePoster =
-    publishedPosters[activePosterIndex] ?? publishedPosters[0];
+  const activePoster = publishedPosters[activePosterIndex] ?? null;
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#05091f] px-4 py-6 text-white sm:px-6 lg:px-8">
+    <main className="relative min-h-screen bg-[linear-gradient(135deg,#edf4ff_0%,#f8fbff_44%,#f7f1ff_100%)] p-3 text-slate-950 sm:p-4 lg:h-[100dvh] lg:overflow-hidden lg:p-5">
       <LoginBackground />
 
-      <div className="relative z-10 mx-auto grid min-h-[calc(100vh-3rem)] w-full max-w-[1680px] items-center gap-6 xl:grid-cols-[1.1fr_0.9fr]">
-        <section className="relative min-h-[calc(100vh-5rem)] overflow-hidden rounded-[2.5rem] border border-white/10 bg-[#071331]/88 p-6 shadow-[0_38px_140px_rgba(0,0,0,0.46)] backdrop-blur-2xl sm:p-8 lg:p-10">
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_15%_12%,rgba(34,211,238,0.16),transparent_32%),radial-gradient(circle_at_82%_20%,rgba(168,85,247,0.16),transparent_30%),linear-gradient(135deg,rgba(255,255,255,0.04),transparent_38%)]" />
-          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.025)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.025)_1px,transparent_1px)] bg-[size:72px_72px] opacity-35 [mask-image:radial-gradient(circle_at_center,black,transparent_76%)]" />
+      <div className="relative z-10 mx-auto grid w-full max-w-[1500px] gap-4 lg:h-full lg:grid-cols-[0.92fr_1.08fr] xl:gap-5">
+        <section className="relative flex min-h-[420px] flex-col overflow-hidden rounded-[1.8rem] border border-slate-200/90 bg-white/96 p-6 shadow-[0_24px_70px_rgba(15,23,42,0.08)] backdrop-blur-xl sm:p-8 lg:min-h-0 lg:justify-center lg:p-10 xl:p-12">
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_15%_15%,rgba(59,130,246,0.08),transparent_30%),radial-gradient(circle_at_88%_84%,rgba(168,85,247,0.08),transparent_28%)]" />
 
-          <div className="relative z-10 flex min-h-full flex-col gap-7">
+          <div className="relative z-10 mx-auto w-full max-w-[560px]">
             <BrandMark />
 
+            <div className="mt-7 inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-1.5 text-[10px] font-black uppercase tracking-[0.14em] text-blue-700 sm:text-[11px]">
+              <Sparkles className="h-3.5 w-3.5" />
+              Omni Skills Olympiad
+            </div>
+
+            <h1 className="mt-6 max-w-[11ch] text-[2.5rem] font-black leading-[1.02] tracking-tight text-slate-900 sm:text-[3rem] lg:text-[3.55rem] xl:text-[4rem]">
+              Build skills. Prove capability. Compete globally.
+            </h1>
+
+            <p className="mt-5 max-w-[50ch] text-sm font-medium leading-6 text-slate-600 sm:text-[15px] sm:leading-7 lg:text-base lg:leading-7">
+              Access live announcements and continue securely into the OSO competition workspace with your verified Google account.
+            </p>
+
+            <div className="mt-8 flex flex-wrap gap-2.5">
+              {[
+                "Live announcements",
+                "Verified access",
+                "Competition workspace",
+              ].map((item) => (
+                <span
+                  key={item}
+                  className="rounded-full border border-slate-200 bg-slate-50 px-3.5 py-2 text-[11px] font-black uppercase tracking-[0.1em] text-slate-600"
+                >
+                  {item}
+                </span>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="grid min-h-[680px] gap-4 lg:min-h-0 lg:grid-rows-[minmax(0,1.2fr)_minmax(0,0.8fr)] xl:gap-5">
+          <div className="min-h-0 rounded-[1.8rem] border border-slate-200 bg-white/96 p-4 shadow-[0_24px_70px_rgba(15,23,42,0.08)] backdrop-blur-xl sm:p-5">
             {activePoster ? (
-              <LivePosterHero
+              <PosterBoardCard
                 poster={activePoster}
                 posters={publishedPosters}
                 activeIndex={activePosterIndex}
                 onSelect={setActivePosterIndex}
-                onOpen={setSelectedPoster}
+                onOpen={(index) => setSelectedPosterIndex(index)}
               />
             ) : (
               <EmptyPosterHero />
             )}
-
-            <div className="grid flex-1 gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
-              <div>
-                <div className="inline-flex items-center gap-2 rounded-full border border-cyan-300/25 bg-cyan-400/10 px-4 py-2 text-xs font-black uppercase tracking-[0.16em] text-cyan-100">
-                  <Rocket className="h-4 w-4" />
-                  Engineering Skill Ecosystem
-                </div>
-
-                <h1 className="mt-6 max-w-2xl text-5xl font-black leading-tight tracking-tight text-white sm:text-6xl">
-                  Build. Solve.
-                  <span className="block bg-gradient-to-r from-cyan-200 via-blue-300 to-purple-300 bg-clip-text text-transparent">
-                    Rise through OMNI.
-                  </span>
-                </h1>
-
-                <p className="mt-5 max-w-xl text-base font-semibold leading-8 text-white/62">
-                  Join daily missions, grow your Skill Passport, climb OMNI
-                  levels, and compete through campus, district, state, national,
-                  and global pathways.
-                </p>
-
-                <div className="mt-6 flex flex-wrap gap-2">
-                  {ecosystemPills.map((pill) => (
-                    <span
-                      key={pill}
-                      className="rounded-full border border-white/10 bg-white/[0.06] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.1em] text-white/64"
-                    >
-                      {pill}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="mt-7 grid gap-3 sm:grid-cols-3">
-                  <MiniEcosystemCard
-                    icon={<Trophy className="h-5 w-5" />}
-                    title="Competitions"
-                    text="Engineering olympiads and skill battles."
-                    tone="yellow"
-                  />
-                  <MiniEcosystemCard
-                    icon={<BarChart3 className="h-5 w-5" />}
-                    title="Leaderboards"
-                    text="Rank, recognition, and growth signals."
-                    tone="cyan"
-                  />
-                  <MiniEcosystemCard
-                    icon={<Flame className="h-5 w-5" />}
-                    title="Streaks"
-                    text="Protected consistency tracking."
-                    tone="purple"
-                  />
-                </div>
-              </div>
-
-              <div className="relative hidden min-h-[430px] lg:block">
-                <HologramCore />
-
-                {ecosystemCards.map((mission, index) => (
-                  <FloatingEcosystemCard
-                    key={mission.title}
-                    mission={mission}
-                    index={index}
-                  />
-                ))}
-              </div>
-            </div>
           </div>
-        </section>
 
-        <section className="relative overflow-hidden rounded-[2.75rem] border border-white bg-white p-6 text-slate-950 shadow-[0_38px_140px_rgba(76,29,149,0.22),0_0_60px_rgba(59,130,246,0.15)] sm:p-8 lg:p-10 xl:min-h-[calc(100vh-5rem)]">
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_16%_12%,rgba(59,130,246,0.11),transparent_30%),radial-gradient(circle_at_84%_20%,rgba(168,85,247,0.12),transparent_32%),linear-gradient(135deg,rgba(255,255,255,0.9),rgba(248,250,252,0.78))]" />
-          <div className="pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full bg-purple-200/45 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-24 left-10 h-72 w-72 rounded-full bg-cyan-200/45 blur-3xl" />
-
-          <div className="relative z-10 flex min-h-full flex-col justify-center">
-            <div className="inline-flex w-fit items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-xs font-black uppercase tracking-[0.12em] text-blue-700">
-              <ShieldCheck className="h-4 w-4" />
-              Secure Access
+          <div className="flex min-h-0 flex-col justify-center rounded-[1.8rem] border border-slate-200 bg-white/96 p-6 shadow-[0_24px_70px_rgba(76,29,149,0.08)] backdrop-blur-xl sm:p-7 lg:p-8">
+            <div className="inline-flex w-fit items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-1.5 text-[10px] font-black uppercase tracking-[0.14em] text-blue-700 sm:text-[11px]">
+              <ShieldCheck className="h-3.5 w-3.5" />
+              Secure access
             </div>
 
-            <h2 className="mt-8 max-w-2xl text-5xl font-black leading-tight tracking-tight text-slate-950 sm:text-6xl">
+            <h2 className="mt-4 text-[1.9rem] font-black leading-tight tracking-tight text-slate-900 sm:text-[2.15rem] lg:text-[2.35rem]">
               Continue to Omni Skills Olympiad
             </h2>
 
-            <p className="mt-6 max-w-2xl text-base font-semibold leading-8 text-slate-600">
-              Explore published announcements, authenticate with Google, and
-              enter your engineering competition workspace.
+            <p className="mt-3 max-w-3xl text-sm font-medium leading-6 text-slate-600 sm:text-[15px] sm:leading-7">
+              Sign in with Google to enter your verified competition workspace.
             </p>
-
-            <LoginStepTrack />
 
             <button
               type="button"
-              onClick={() =>
-                signIn("google", {
-                  callbackUrl: getSafeLoginCallbackUrl(),
-                })
-              }
-              className="group/google relative mt-9 inline-flex min-h-16 w-full items-center justify-center gap-3 overflow-hidden rounded-[1.35rem] border border-slate-200 bg-white px-6 py-4 text-sm font-black uppercase tracking-[0.12em] text-slate-950 shadow-[0_18px_54px_rgba(15,23,42,0.10)] outline-none transition hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-[0_22px_70px_rgba(37,99,235,0.16)] focus-visible:ring-4 focus-visible:ring-blue-100"
+              onClick={() => signIn("google", { callbackUrl })}
+              className="group/google relative mt-6 inline-flex min-h-14 w-full items-center justify-center gap-3 overflow-hidden rounded-[1rem] border border-slate-200 bg-white px-5 py-3 text-sm font-black uppercase tracking-[0.08em] text-slate-950 shadow-[0_12px_34px_rgba(15,23,42,0.08)] outline-none transition hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-[0_18px_42px_rgba(37,99,235,0.14)] focus-visible:ring-4 focus-visible:ring-blue-100"
             >
-              <span className="absolute inset-0 rounded-[1.35rem] bg-[linear-gradient(90deg,#4285F4,#34A853,#FBBC05,#EA4335,#4285F4)] opacity-0 transition duration-500 group-hover/google:opacity-12" />
-              <span className="absolute inset-[1px] rounded-[1.25rem] bg-white" />
+              <span className="absolute inset-0 rounded-[1rem] bg-[linear-gradient(90deg,#4285F4,#34A853,#FBBC05,#EA4335,#4285F4)] opacity-0 transition duration-500 group-hover/google:opacity-10" />
+              <span className="absolute inset-[1px] rounded-[0.95rem] bg-white" />
 
               <GoogleIcon />
-
               <span className="relative z-10">Continue with Google</span>
               <ArrowRight className="relative z-10 h-4 w-4 transition group-hover/google:translate-x-1" />
             </button>
 
-            <div className="mt-7 grid gap-3">
-              <AccessBenefit
-                icon={<LockKeyhole className="h-5 w-5" />}
-                title="Secure Authentication"
-                text="Protected by Google’s advanced security."
-                tone="blue"
-              />
-              <AccessBenefit
-                icon={<Zap className="h-5 w-5" />}
-                title="One-click Sign In"
-                text="Fast, simple, and seamless access."
-                tone="cyan"
-              />
-              <AccessBenefit
-                icon={<BadgeCheck className="h-5 w-5" />}
-                title="Verified Student Access"
-                text="Exclusive workspace for verified participants."
-                tone="purple"
-              />
+            <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-xs font-semibold text-slate-500">
+              <span>Protected sign-in</span>
+              <span>One-click access</span>
+              <span>Verified workspace</span>
             </div>
-
-            <p className="mt-8 flex items-center justify-center gap-2 text-sm font-semibold text-slate-500">
-              <ShieldCheck className="h-4 w-4 text-slate-400" />
-              Your data is safe and will never be shared.
-            </p>
           </div>
         </section>
       </div>
 
-      <PosterPreviewModal
-        poster={selectedPoster}
-        onClose={() => setSelectedPoster(null)}
+      <PosterGalleryModal
+        posters={publishedPosters}
+        activeIndex={selectedPosterIndex}
+        onSelect={setSelectedPosterIndex}
+        onClose={() => setSelectedPosterIndex(null)}
       />
     </main>
   );
@@ -260,16 +149,18 @@ export default function LoginClient({ posters }: LoginClientProps) {
 function BrandMark() {
   return (
     <div className="flex justify-start">
-      <img
-        src="/brand/Login-logo.png"
-        alt="Omni Skills Olympiad"
-        className="h-24 w-auto object-contain sm:h-70 lg:h-70"
-      />
+      <div className="rounded-[1.15rem] border border-slate-200 bg-white px-4 py-3 shadow-sm">
+        <img
+          src="/brand/omni-logo-new.jpeg"
+          alt="Omni Skills Olympiad"
+          className="h-12 w-auto object-contain sm:h-14 lg:h-16"
+        />
+      </div>
     </div>
   );
 }
 
-function LivePosterHero({
+function PosterBoardCard({
   poster,
   posters,
   activeIndex,
@@ -280,111 +171,116 @@ function LivePosterHero({
   posters: PosterAnnouncement[];
   activeIndex: number;
   onSelect: (index: number) => void;
-  onOpen: (poster: PosterAnnouncement) => void;
+  onOpen: (index: number) => void;
 }) {
+  const total = posters.length;
+
   return (
-    <section className="relative overflow-hidden rounded-[2rem] border border-cyan-300/20 bg-white/[0.06] p-4 shadow-[0_24px_90px_rgba(0,0,0,0.32)] backdrop-blur-2xl">
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <div className="inline-flex items-center gap-2 rounded-full border border-cyan-300/25 bg-cyan-300/10 px-4 py-2 text-xs font-black uppercase tracking-[0.14em] text-cyan-100">
-          <Sparkles className="h-4 w-4" />
-          Live Poster Board
+    <div className="flex h-full min-h-0 flex-col rounded-[1.45rem] border border-slate-200 bg-slate-50/85 p-3 sm:p-4">
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+        <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-1.5 text-[10px] font-black uppercase tracking-[0.14em] text-blue-700 sm:text-[11px]">
+          <Eye className="h-3.5 w-3.5" />
+          Live poster board
         </div>
 
-        <div className="flex items-center gap-2">
-          {posters.map((item, index) => (
-            <button
-              key={item.id}
-              type="button"
-              aria-label={`Show poster ${index + 1}`}
-              onClick={() => onSelect(index)}
-              className={
-                index === activeIndex
-                  ? "h-2.5 w-8 rounded-full bg-cyan-300 shadow-[0_0_18px_rgba(34,211,238,0.6)]"
-                  : "h-2.5 w-2.5 rounded-full bg-white/20 transition hover:bg-white/50"
-              }
-            />
-          ))}
+        <div className="flex items-center gap-2 text-sm font-black text-slate-600">
+          <button
+            type="button"
+            aria-label="Show previous poster"
+            onClick={() => onSelect((activeIndex - 1 + total) % total)}
+            className="grid h-10 w-10 place-items-center rounded-full border border-slate-200 bg-white text-blue-700 transition hover:border-blue-300 hover:bg-blue-50"
+          >
+            <ArrowLeft className="h-4 w-4" />
+          </button>
+          <span className="min-w-[3rem] text-center text-xs uppercase tracking-[0.12em] text-slate-500">
+            {activeIndex + 1}/{total}
+          </span>
+          <button
+            type="button"
+            aria-label="Show next poster"
+            onClick={() => onSelect((activeIndex + 1) % total)}
+            className="grid h-10 w-10 place-items-center rounded-full border border-slate-200 bg-white text-blue-700 transition hover:border-blue-300 hover:bg-blue-50"
+          >
+            <ArrowRight className="h-4 w-4" />
+          </button>
         </div>
       </div>
 
       <button
         type="button"
-        onClick={() => onOpen(poster)}
-        className="group/poster relative block min-h-[21rem] w-full overflow-hidden rounded-[1.5rem] border border-white/10 bg-black/30 text-left outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
+        onClick={() => onOpen(activeIndex)}
+        className="group/poster flex min-h-0 flex-1 flex-col overflow-hidden rounded-[1.25rem] border border-slate-200 bg-white text-left outline-none focus-visible:ring-2 focus-visible:ring-blue-300"
       >
         <AnimatePresence mode="wait">
           <motion.article
             key={poster.id}
-            initial={{ opacity: 0, scale: 1.03, filter: "blur(8px)" }}
-            animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-            exit={{ opacity: 0, scale: 0.98, filter: "blur(8px)" }}
-            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute inset-0"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.28 }}
+            className="flex h-full min-h-0 flex-col"
           >
-            <img
-              src={poster.mobileImageUrl || poster.imageUrl}
-              alt={poster.title}
-              className="h-full w-full object-cover transition duration-700 group-hover/poster:scale-105"
-            />
-
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-black/15" />
-
-            <div className="absolute right-5 top-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/35 px-3 py-2 text-[10px] font-black uppercase tracking-[0.12em] text-white/80 backdrop-blur-xl">
-              <Eye className="h-3.5 w-3.5" />
-              Open Poster
+            <div className="relative flex min-h-[190px] flex-1 items-center justify-center overflow-hidden bg-[linear-gradient(180deg,#f8fbff_0%,#eef3ff_100%)] p-3 sm:min-h-[230px] lg:min-h-0">
+              <img
+                src={poster.mobileImageUrl || poster.imageUrl}
+                alt={poster.title}
+                className="max-h-full w-full object-contain transition duration-500 group-hover/poster:scale-[1.01]"
+              />
             </div>
 
-            <div className="absolute inset-x-0 bottom-0 p-5">
-              <div className="mb-3 flex flex-wrap gap-2">
+            <div className="shrink-0 border-t border-slate-200 bg-white p-4">
+              <div className="mb-2 flex flex-wrap gap-2">
                 <PosterBadge>{safeText(poster.status, "Live")}</PosterBadge>
-                <PosterBadge>
-                  {safeText(poster.category, "Announcement")}
-                </PosterBadge>
+                <PosterBadge>{safeText(poster.category, "Announcement")}</PosterBadge>
               </div>
 
-              <h2 className="max-w-3xl text-3xl font-black text-white sm:text-4xl">
-                {poster.title}
-              </h2>
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div className="min-w-0 flex-1">
+                  <h3 className="text-lg font-black leading-tight text-slate-900 sm:text-xl">
+                    {poster.title}
+                  </h3>
+                  <p className="mt-1.5 line-clamp-2 max-w-3xl text-sm font-medium leading-6 text-slate-600">
+                    {safeText(
+                      poster.subtitle,
+                      "Open this poster to view the complete announcement.",
+                    )}
+                  </p>
+                </div>
 
-              <p className="mt-2 max-w-2xl text-sm font-semibold leading-6 text-white/66">
-                {safeText(
-                  poster.subtitle,
-                  "Open this poster to view the complete announcement.",
-                )}
-              </p>
+                <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-[11px] font-black uppercase tracking-[0.12em] text-slate-700">
+                  <Eye className="h-4 w-4" />
+                  Open poster
+                </div>
+              </div>
             </div>
           </motion.article>
         </AnimatePresence>
       </button>
-    </section>
+    </div>
   );
 }
 
 function EmptyPosterHero() {
   return (
-    <section className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.055] p-5 shadow-[0_24px_90px_rgba(0,0,0,0.32)] backdrop-blur-2xl">
-      <div className="grid gap-5 sm:grid-cols-[100px_1fr_auto] sm:items-center">
-        <div className="grid h-20 w-20 place-items-center rounded-[1.5rem] border border-purple-300/25 bg-purple-400/10 text-purple-100 shadow-[0_0_44px_rgba(168,85,247,0.18)]">
-          <CalendarDays className="h-9 w-9" />
+    <section className="flex h-full flex-col justify-center rounded-[1.45rem] border border-slate-200 bg-slate-50 p-5 shadow-[0_16px_48px_rgba(15,23,42,0.05)]">
+      <div className="grid gap-5 sm:grid-cols-[88px_1fr_auto] sm:items-center">
+        <div className="grid h-20 w-20 place-items-center rounded-[1.2rem] border border-purple-200 bg-purple-50 text-purple-700">
+          <CalendarDays className="h-8 w-8" />
         </div>
 
         <div>
-          <p className="text-xs font-black uppercase tracking-[0.14em] text-cyan-200">
-            Live Poster Board
-          </p>
-          <h2 className="mt-2 text-2xl font-black text-white">
-            No Live Posters Yet
-          </h2>
-          <p className="mt-2 max-w-2xl text-sm font-semibold leading-6 text-white/56">
-            Click here to Know the Event
+          <p className="text-[11px] font-black uppercase tracking-[0.14em] text-slate-500">Live poster board</p>
+          <h2 className="mt-2 text-2xl font-black text-slate-950">No live posters yet</h2>
+          <p className="mt-2 max-w-2xl text-sm font-medium leading-6 text-slate-600">
+            Published announcements will appear here as soon as they go live.
           </p>
         </div>
 
         <Link
           href="/admin/announcements"
-          className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-cyan-400 to-purple-500 px-5 py-3 text-xs font-black uppercase tracking-[0.1em] text-white shadow-[0_16px_44px_rgba(34,211,238,0.18)] transition hover:-translate-y-0.5"
+          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-slate-950 px-5 py-3 text-xs font-black uppercase tracking-[0.1em] text-white transition hover:-translate-y-0.5 hover:bg-blue-700"
         >
-          Announcement Center
+          Announcement center
           <ArrowRight className="h-4 w-4" />
         </Link>
       </div>
@@ -392,90 +288,168 @@ function EmptyPosterHero() {
   );
 }
 
-function PosterPreviewModal({
-  poster,
+function PosterGalleryModal({
+  posters,
+  activeIndex,
+  onSelect,
   onClose,
 }: {
-  poster: PosterAnnouncement | null;
+  posters: PosterAnnouncement[];
+  activeIndex: number | null;
+  onSelect: (index: number | null) => void;
   onClose: () => void;
 }) {
+  useEffect(() => {
+    if (activeIndex === null) {
+      return;
+    }
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onClose();
+        return;
+      }
+
+      if (event.key === "ArrowRight") {
+        onSelect(((activeIndex ?? 0) + 1) % posters.length);
+      }
+
+      if (event.key === "ArrowLeft") {
+        onSelect(((activeIndex ?? 0) - 1 + posters.length) % posters.length);
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [activeIndex, onClose, onSelect, posters.length]);
+
+  const poster = activeIndex === null ? null : posters[activeIndex] ?? null;
+
   return (
     <AnimatePresence>
       {poster ? (
         <motion.div
-          key="poster-preview-modal"
-          className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-950/82 p-4 backdrop-blur-xl"
+          key="poster-gallery-modal"
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-950/78 p-4 backdrop-blur-md"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
+          onClick={onClose}
           role="dialog"
           aria-modal="true"
         >
           <motion.section
-            initial={{ opacity: 0, y: 30, scale: 0.96 }}
+            initial={{ opacity: 0, y: 24, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.96 }}
-            transition={{ duration: 0.25 }}
-            className="relative max-h-[92vh] w-full max-w-6xl overflow-hidden rounded-[2rem] border border-white/15 bg-white shadow-[0_34px_120px_rgba(0,0,0,0.45)]"
+            exit={{ opacity: 0, y: 16, scale: 0.97 }}
+            transition={{ duration: 0.22 }}
+            onClick={(event) => event.stopPropagation()}
+            className="relative flex max-h-[92vh] w-full max-w-6xl flex-col overflow-hidden rounded-[1.8rem] border border-white/15 bg-white shadow-[0_34px_120px_rgba(0,0,0,0.4)]"
           >
             <button
               type="button"
               onClick={onClose}
-              className="absolute right-4 top-4 z-20 grid h-11 w-11 place-items-center rounded-full border border-white/20 bg-black/45 text-white backdrop-blur-xl transition hover:scale-105 hover:bg-black/65"
+              className="absolute right-4 top-4 z-20 grid h-11 w-11 place-items-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm transition hover:scale-105 hover:border-blue-300"
               aria-label="Close poster preview"
             >
               <X className="h-5 w-5" />
             </button>
 
-            <div className="grid max-h-[92vh] overflow-y-auto lg:grid-cols-[1.08fr_0.92fr]">
-              <div className="min-h-[420px] bg-slate-950">
+            <div className="grid max-h-[92vh] min-h-0 flex-1 overflow-hidden lg:grid-cols-[1.06fr_0.94fr]">
+              <div className="flex min-h-[420px] items-center justify-center bg-[linear-gradient(180deg,#f8fbff_0%,#eef3ff_100%)] p-5">
                 <img
                   src={poster.mobileImageUrl || poster.imageUrl}
                   alt={poster.title}
-                  className="h-full min-h-[420px] w-full object-contain"
+                  className="max-h-[76vh] w-full object-contain"
                 />
               </div>
 
-              <div className="bg-white p-6 text-slate-950 sm:p-8">
-                <div className="flex flex-wrap gap-2">
-                  <span className="rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-[10px] font-black uppercase tracking-[0.1em] text-blue-700">
-                    {safeText(poster.status, "Live")}
-                  </span>
-                  <span className="rounded-full border border-purple-200 bg-purple-50 px-3 py-1 text-[10px] font-black uppercase tracking-[0.1em] text-purple-700">
-                    {safeText(poster.category, "Announcement")}
-                  </span>
+              <div className="flex min-h-0 flex-col bg-white p-6 text-slate-950 sm:p-8">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div className="flex flex-wrap gap-2">
+                    <span className="rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-[10px] font-black uppercase tracking-[0.1em] text-blue-700">
+                      {safeText(poster.status, "Live")}
+                    </span>
+                    <span className="rounded-full border border-purple-200 bg-purple-50 px-3 py-1 text-[10px] font-black uppercase tracking-[0.1em] text-purple-700">
+                      {safeText(poster.category, "Announcement")}
+                    </span>
+                  </div>
+
+                  <div className="text-xs font-black uppercase tracking-[0.14em] text-slate-500">
+                    Poster {(activeIndex ?? 0) + 1} of {posters.length}
+                  </div>
                 </div>
 
-                <h2 className="mt-5 text-4xl font-black leading-tight text-slate-950">
+                <h2 className="mt-5 text-3xl font-black leading-tight text-slate-950 sm:text-[2rem]">
                   {poster.title}
                 </h2>
 
-                <p className="mt-4 text-base font-semibold leading-8 text-slate-600">
+                <p className="mt-4 text-sm font-medium leading-7 text-slate-600 sm:text-[15px]">
                   {safeText(
                     poster.subtitle,
-                    "This poster has been published by the admin announcement center.",
+                    "This poster has been published by the OSO announcement center.",
                   )}
                 </p>
 
-                <div className="mt-7 rounded-[1.5rem] border border-slate-200 bg-slate-50 p-5">
-                  <p className="text-xs font-black uppercase tracking-[0.12em] text-slate-500">
-                    OSO Ecosystem
-                  </p>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {ecosystemPills.map((pill) => (
-                      <span
-                        key={pill}
-                        className="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.08em] text-slate-600"
-                      >
-                        {pill}
-                      </span>
-                    ))}
+                <div className="mt-6 flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => onSelect(((activeIndex ?? 0) - 1 + posters.length) % posters.length)}
+                    className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-black uppercase tracking-[0.1em] text-slate-700 transition hover:border-blue-300 hover:text-blue-700"
+                  >
+                    <ArrowLeft className="h-4 w-4" />
+                    Previous
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => onSelect(((activeIndex ?? 0) + 1) % posters.length)}
+                    className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-black uppercase tracking-[0.1em] text-slate-700 transition hover:border-blue-300 hover:text-blue-700"
+                  >
+                    Next
+                    <ArrowRight className="h-4 w-4" />
+                  </button>
+                </div>
+
+                <div className="mt-6 rounded-[1.3rem] border border-slate-200 bg-slate-50 p-4">
+                  <p className="text-[11px] font-black uppercase tracking-[0.14em] text-slate-500">Browse announcements</p>
+                  <div className="mt-4 grid max-h-[220px] grid-cols-4 gap-3 overflow-y-auto pr-1 sm:grid-cols-5">
+                    {posters.map((item, index) => {
+                      const active = index === activeIndex;
+
+                      return (
+                        <button
+                          key={item.id}
+                          type="button"
+                          onClick={() => onSelect(index)}
+                          className={cn(
+                            "overflow-hidden rounded-xl border bg-white p-1 transition",
+                            active
+                              ? "border-blue-400 ring-2 ring-blue-100"
+                              : "border-slate-200 hover:border-blue-200",
+                          )}
+                          aria-label={`Show poster ${index + 1}`}
+                        >
+                          <img
+                            src={item.mobileImageUrl || item.imageUrl}
+                            alt={item.title}
+                            className="h-20 w-full rounded-lg object-cover"
+                          />
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
 
                 <Link
                   href={poster.ctaHref || "/"}
-                  className="mt-7 inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-slate-950 px-6 py-3 text-sm font-black uppercase tracking-[0.08em] text-white transition hover:-translate-y-0.5 hover:bg-blue-700"
+                  className="mt-6 inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-slate-950 px-6 py-3 text-sm font-black uppercase tracking-[0.08em] text-white transition hover:-translate-y-0.5 hover:bg-blue-700"
                 >
                   {safeText(poster.ctaLabel, "Continue")}
                   <ArrowRight className="h-4 w-4" />
@@ -489,290 +463,35 @@ function PosterPreviewModal({
   );
 }
 
-function MiniEcosystemCard({
-  icon,
-  title,
-  text,
-  tone,
-}: {
-  icon: ReactNode;
-  title: string;
-  text: string;
-  tone: "yellow" | "cyan" | "purple";
-}) {
-  const toneClass =
-    tone === "yellow"
-      ? "text-yellow-200 border-yellow-300/20 bg-yellow-300/8"
-      : tone === "cyan"
-        ? "text-cyan-200 border-cyan-300/20 bg-cyan-300/8"
-        : "text-purple-200 border-purple-300/20 bg-purple-300/8";
-
-  return (
-    <div
-      className={cn(
-        "rounded-[1.35rem] border p-4 shadow-[0_18px_54px_rgba(0,0,0,0.18)] backdrop-blur-xl",
-        toneClass,
-      )}
-    >
-      <div>{icon}</div>
-      <h3 className="mt-3 text-sm font-black text-white">{title}</h3>
-      <p className="mt-2 text-xs font-semibold leading-5 text-white/54">
-        {text}
-      </p>
-    </div>
-  );
-}
-
-function HologramCore() {
-  return (
-    <div className="absolute inset-0 flex items-center justify-center">
-      <motion.div
-        aria-hidden="true"
-        animate={{ rotate: 360 }}
-        transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
-        className="absolute h-[25rem] w-[25rem] rounded-full border border-cyan-300/10"
-      />
-
-      <motion.div
-        aria-hidden="true"
-        animate={{ rotate: -360 }}
-        transition={{ duration: 24, repeat: Infinity, ease: "linear" }}
-        className="absolute h-[19rem] w-[19rem] rounded-full border border-purple-300/14"
-      />
-
-      <div className="relative flex flex-col items-center">
-        <motion.div
-          animate={{ y: [-10, 10, -10], opacity: [0.88, 1, 0.88] }}
-          transition={{ duration: 4.8, repeat: Infinity, ease: "easeInOut" }}
-          className="relative h-64 w-28"
-        >
-          <div className="absolute inset-x-0 top-0 mx-auto h-64 w-28 bg-gradient-to-b from-cyan-200 via-blue-400 to-purple-500 opacity-90 shadow-[0_0_90px_rgba(34,211,238,0.45)] [clip-path:polygon(50%_0%,92%_38%,72%_100%,28%_100%,8%_38%)]" />
-          <div className="absolute inset-x-0 top-3 mx-auto h-56 w-16 bg-white/25 blur-sm [clip-path:polygon(50%_0%,92%_38%,72%_100%,28%_100%,8%_38%)]" />
-        </motion.div>
-
-        <div className="-mt-4 h-8 w-72 rounded-full bg-cyan-300/25 blur-xl" />
-        <div className="-mt-5 h-16 w-80 rounded-[50%] border border-cyan-300/30 bg-cyan-400/10 shadow-[0_0_70px_rgba(34,211,238,0.24)]" />
-      </div>
-    </div>
-  );
-}
-
-function FloatingEcosystemCard({
-  mission,
-  index,
-}: {
-  mission: {
-    title: string;
-    text: string;
-    icon: ReactNode;
-    tone: string;
-  };
-  index: number;
-}) {
-  const positions = ["right-10 top-16", "right-0 top-48", "right-16 bottom-16"];
-
-  const toneClass =
-    mission.tone === "cyan"
-      ? "border-cyan-300/20 bg-cyan-300/8 text-cyan-200"
-      : mission.tone === "emerald"
-        ? "border-emerald-300/20 bg-emerald-300/8 text-emerald-200"
-        : "border-purple-300/20 bg-purple-300/8 text-purple-200";
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, x: 28, y: 12 }}
-      animate={{ opacity: 1, x: 0, y: [0, -8, 0] }}
-      transition={{
-        opacity: { duration: 0.5, delay: 0.2 + index * 0.12 },
-        x: { duration: 0.5, delay: 0.2 + index * 0.12 },
-        y: {
-          duration: 4 + index * 0.4,
-          repeat: Infinity,
-          ease: "easeInOut",
-        },
-      }}
-      className={cn(
-        "absolute w-64 rounded-2xl border p-4 shadow-[0_20px_70px_rgba(0,0,0,0.26)] backdrop-blur-2xl",
-        positions[index],
-        toneClass,
-      )}
-    >
-      <div className="flex items-start gap-3">
-        <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-white/10 bg-white/8">
-          {mission.icon}
-        </div>
-
-        <div>
-          <p className="text-sm font-black text-white">{mission.title}</p>
-          <p className="mt-1 text-xs font-semibold leading-5 text-white/50">
-            {mission.text}
-          </p>
-        </div>
-      </div>
-    </motion.div>
-  );
-}
-
 function PosterBadge({ children }: { children: ReactNode }) {
   return (
-    <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-white/75">
+    <span className="rounded-full border border-slate-200 bg-slate-100 px-3 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-slate-600">
       {children}
     </span>
   );
 }
 
-function LoginStepTrack() {
-  return (
-    <div className="relative mt-9">
-      <div className="absolute left-8 right-8 top-5 h-px bg-gradient-to-r from-blue-400 via-slate-200 to-slate-200" />
-
-      <div className="relative flex items-start justify-between">
-        {loginSteps.map((step, index) => {
-          const active = index === 0;
-
-          return (
-            <div key={step} className="flex flex-col items-center gap-3">
-              <div
-                className={cn(
-                  "relative grid h-10 w-10 place-items-center rounded-full border bg-white shadow-sm",
-                  active
-                    ? "border-blue-300 text-blue-700 shadow-[0_0_30px_rgba(59,130,246,0.22)]"
-                    : "border-slate-200 text-slate-400",
-                )}
-              >
-                <span
-                  className={cn(
-                    "h-3 w-3 rounded-full",
-                    active ? "bg-blue-600" : "bg-slate-300",
-                  )}
-                />
-
-                {active ? (
-                  <span className="absolute inset-0 rounded-full border border-blue-300/50 animate-ping" />
-                ) : null}
-              </div>
-
-              <span
-                className={cn(
-                  "text-center text-[10px] font-black uppercase tracking-[0.1em]",
-                  active ? "text-blue-700" : "text-slate-400",
-                )}
-              >
-                {step}
-              </span>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-function AccessBenefit({
-  icon,
-  title,
-  text,
-  tone,
-}: {
-  icon: ReactNode;
-  title: string;
-  text: string;
-  tone: "blue" | "cyan" | "purple";
-}) {
-  const toneClass =
-    tone === "blue"
-      ? "border-blue-100 bg-blue-50 text-blue-700"
-      : tone === "cyan"
-        ? "border-cyan-100 bg-cyan-50 text-cyan-700"
-        : "border-purple-100 bg-purple-50 text-purple-700";
-
-  return (
-    <div className="flex items-center gap-4 rounded-[1.35rem] border border-slate-100 bg-slate-50/80 px-4 py-4 shadow-sm">
-      <div
-        className={cn(
-          "grid h-12 w-12 shrink-0 place-items-center rounded-2xl border",
-          toneClass,
-        )}
-      >
-        {icon}
-      </div>
-
-      <div>
-        <p className="text-sm font-black text-slate-950">{title}</p>
-        <p className="mt-1 text-xs font-semibold text-slate-500">{text}</p>
-      </div>
-    </div>
-  );
-}
-
 function GoogleIcon() {
   return (
-    <svg
-      aria-hidden="true"
-      className="relative z-10 h-5 w-5"
-      viewBox="0 0 48 48"
-    >
-      <path
-        fill="#FFC107"
-        d="M43.611 20.083H42V20H24v8h11.303C33.652 32.657 29.223 36 24 36c-6.627 0-12-5.373-12-12S17.373 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"
-      />
-      <path
-        fill="#FF3D00"
-        d="m6.306 14.691 6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 16.318 4 9.656 8.337 6.306 14.691z"
-      />
-      <path
-        fill="#4CAF50"
-        d="M24 44c5.166 0 9.86-1.977 13.409-5.197l-6.19-5.238C29.211 35.091 26.715 36 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"
-      />
-      <path
-        fill="#1976D2"
-        d="M43.611 20.083H42V20H24v8h11.303a12.04 12.04 0 0 1-4.087 5.571l.003-.002 6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"
-      />
+    <svg aria-hidden="true" className="relative z-10 h-5 w-5" viewBox="0 0 48 48">
+      <path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303C33.652 32.657 29.223 36 24 36c-6.627 0-12-5.373-12-12S17.373 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z" />
+      <path fill="#FF3D00" d="m6.306 14.691 6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 16.318 4 9.656 8.337 6.306 14.691z" />
+      <path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.197l-6.19-5.238C29.211 35.091 26.715 36 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z" />
+      <path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303a12.04 12.04 0 0 1-4.087 5.571l.003-.002 6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z" />
     </svg>
   );
 }
 
 function LoginBackground() {
   return (
-    <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_8%_8%,rgba(34,211,238,0.18),transparent_32%),radial-gradient(circle_at_93%_22%,rgba(168,85,247,0.22),transparent_32%),radial-gradient(circle_at_50%_100%,rgba(59,130,246,0.14),transparent_38%)]" />
-      <div className="absolute inset-x-0 bottom-0 h-40 bg-[linear-gradient(90deg,rgba(34,197,94,0.32),rgba(250,204,21,0.24),rgba(236,72,153,0.28),rgba(59,130,246,0.32))] blur-3xl" />
-      <div className="absolute -right-28 bottom-12 h-96 w-96 rounded-full bg-purple-500/20 blur-3xl" />
-      <div className="absolute -left-28 top-16 h-96 w-96 rounded-full bg-cyan-500/14 blur-3xl" />
+    <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_8%_8%,rgba(59,130,246,0.10),transparent_28%),radial-gradient(circle_at_93%_22%,rgba(168,85,247,0.12),transparent_30%),radial-gradient(circle_at_50%_100%,rgba(59,130,246,0.08),transparent_36%)]" />
+      <div className="absolute -right-24 bottom-8 h-80 w-80 rounded-full bg-purple-300/20 blur-3xl" />
+      <div className="absolute -left-20 top-16 h-80 w-80 rounded-full bg-cyan-300/18 blur-3xl" />
     </div>
   );
 }
 
 function safeText(value: string | null | undefined, fallback: string) {
   return value && value.trim().length > 0 ? value : fallback;
-}
-function getSafeLoginCallbackUrl() {
-  if (typeof window === "undefined") {
-    return "/auth/continue";
-  }
-
-  const params = new URLSearchParams(window.location.search);
-  const callbackUrl = params.get("callbackUrl");
-
-  if (!callbackUrl) {
-    return "/auth/continue";
-  }
-
-  try {
-    const parsedUrl = new URL(callbackUrl, window.location.origin);
-
-    if (parsedUrl.origin !== window.location.origin) {
-      return "/auth/continue";
-    }
-
-    const protectedAdminRoutes = ["/admin/announcements"];
-
-    if (protectedAdminRoutes.includes(parsedUrl.pathname)) {
-      return "/auth/continue";
-    }
-
-    return `${parsedUrl.pathname}${parsedUrl.search}${parsedUrl.hash}`;
-  } catch {
-    return "/auth/continue";
-  }
 }

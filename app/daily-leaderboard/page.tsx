@@ -113,7 +113,6 @@ async function getProcessedRankings() {
       user: {
         select: {
           id: true,
-          email: true,
           fullName: true,
           image: true,
           college: true,
@@ -191,7 +190,7 @@ function TopRankCard({
           </h2>
 
           <p className="mt-2 line-clamp-1 text-sm font-semibold text-white/52">
-            {entry.user.email}
+            {getPublicIdentity(entry.user)}
           </p>
         </div>
 
@@ -323,7 +322,7 @@ function LeaderboardTable({ rankings }: { rankings: ProcessedRanking[] }) {
                       </p>
 
                       <p className="mt-1 text-sm font-semibold text-white/42">
-                        {entry.user.email}
+                        {getPublicIdentity(entry.user)}
                       </p>
                     </div>
                   </td>
@@ -444,6 +443,17 @@ function getRankTone(rank: number) {
     glow: "bg-purple-300/[0.16]",
     rankBadge: "bg-gradient-to-r from-purple-300 to-cyan-300",
   };
+}
+
+function getPublicIdentity(user: {
+  omniId: string | null;
+  college: string | null;
+  branch: string | null;
+}) {
+  if (user.omniId) return `OSO ID: ${user.omniId}`;
+
+  const academicIdentity = [user.college, user.branch].filter(Boolean).join(" · ");
+  return academicIdentity || "Verified participant";
 }
 
 function sanitizeNumber(value: number) {

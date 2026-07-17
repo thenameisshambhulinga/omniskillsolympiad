@@ -1,57 +1,39 @@
+import { NextResponse } from "next/server";
+
 import { prisma } from "@/lib/prisma";
 import { getRuntimeEnvReport } from "@/lib/server/runtime-env";
-import { runtimeError, runtimeSuccess } from "@/lib/server/runtime-response";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-export async function GET() {
-  const startedAt = Date.now();
-  const env = getRuntimeEnvReport();
+const NO_STORE_HEADERS = {
+  "Cache-Control": "no-store, max-age=0",
+  "Content-Type": "application/json; charset=utf-8",
+} as const;
 
-  let database = {
-    ready: false,
-    latencyMs: null as number | null,
-  };
+export async function GET() {
+  const env = getRuntimeEnvReport();
+  let databaseReady = false;
 
   try {
-    const dbStart = Date.now();
-
     await prisma.$queryRaw`SELECT 1`;
-
-    database = {
-      ready: true,
-      latencyMs: Date.now() - dbStart,
-    };
+    databaseReady = true;
   } catch {
-    database = {
-      ready: false,
-      latencyMs: null,
-    };
+    databaseReady = false;
   }
 
-  const report = {
-    service: "silicon-skillathon-runtime",
-    ready: env.ready && database.ready,
-    timestamp: new Date().toISOString(),
-    latencyMs: Date.now() - startedAt,
-    environment: {
-      ready: env.ready,
-      required: env.required,
-      optional: env.optional,
-      missingRequired: env.missingRequired,
+  const ready = env.ready && databaseReady;
+
+  return NextResponse.json(
+    {
+      ok: ready,
+      status: ready ? "ready" : "unavailable",
+      timestamp: new Date().toISOString(),
     },
-    database,
-  };
-
-  if (!report.ready) {
-    return runtimeError("Runtime health check failed", {
-      status: 503,
-      code: "RUNTIME_NOT_READY",
-      meta: report,
-    });
-  }
-
-  return runtimeSuccess(report);
+    {
+      status: ready ? 200 : 503,
+      headers: NO_STORE_HEADERS,
+    },
+  );
 }

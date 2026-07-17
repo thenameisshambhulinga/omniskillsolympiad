@@ -1,26 +1,11 @@
-import { NextResponse } from "next/server";
+import { jsonError } from "@/lib/server/route-hardening";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 function disabledRouteResponse() {
-  return NextResponse.json(
-    {
-      success: false,
-      error:
-        "This duplicate route is disabled. Use /api/admin/create-daily-challenge.",
-      code: "ROUTE_DISABLED",
-    },
-    {
-      status: 410,
-    },
-  );
+  return jsonError("This duplicate route is disabled. Use /api/admin/create-daily-challenge.", 410, { code: "ROUTE_DISABLED" });
 }
 
-export async function GET() {
-  return disabledRouteResponse();
-}
-
-export async function POST() {
-  return disabledRouteResponse();
-}
+export async function GET() { return disabledRouteResponse(); }
+export async function POST() { return disabledRouteResponse(); }

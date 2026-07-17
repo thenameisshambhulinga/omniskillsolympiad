@@ -1,132 +1,74 @@
-import { NextResponse } from "next/server";
+import { Prisma } from "@prisma/client";
 
-import { requireAdmin } from "@/lib/admin-auth";
 import { prisma } from "@/lib/prisma";
+import { readJsonObjectWithLimit } from "@/lib/security/request-guard";
+import { requireApiAdmin } from "@/lib/server/api-auth";
+import { guardMutationRequest, jsonError, jsonOk } from "@/lib/server/route-hardening";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
-type RouteContext = {
-  params: Promise<{
-    quizId: string;
-  }>;
-};
+type RouteContext = { params: Promise<{ quizId: string }> };
 
-export async function PATCH(request: Request, context: RouteContext) {
-  await requireAdmin();
-
-  const { quizId } = await context.params;
-
-  let body: {
-    isActive?: unknown;
-  };
-
-  try {
-    body = (await request.json()) as typeof body;
-  } catch {
-    return NextResponse.json(
-      {
-        ok: false,
-        error: "Invalid JSON body.",
-      },
-      {
-        status: 400,
-      },
-    );
-  }
-
-  if (typeof body.isActive !== "boolean") {
-    return NextResponse.json(
-      {
-        ok: false,
-        error: "isActive must be boolean.",
-      },
-      {
-        status: 400,
-      },
-    );
-  }
-
-  const quiz = await prisma.quiz.update({
-    where: {
-      id: quizId,
-    },
-    data: {
-      isActive: body.isActive,
-    },
-    select: {
-      id: true,
-      title: true,
-      isActive: true,
-    },
-  });
-
-  return NextResponse.json({
-    ok: true,
-    quiz,
-  });
+function cleanId(value: string) {
+  return value.trim().slice(0, 128);
 }
 
-export async function DELETE(_request: Request, context: RouteContext) {
-  await requireAdmin();
+export async function PATCH(request: Request, context: RouteContext) {
+  const guarded = guardMutationRequest(request, { key: "admin-protected-test-update", limit: 40, maxBytes: 16 * 1024 });
+  if (guarded) return guarded;
 
-  const { quizId } = await context.params;
+  const auth = await requireApiAdmin();
+  if (auth.response) return auth.response;
+
+  const quizId = cleanId((await context.params).quizId);
+  if (!quizId) return jsonError("Quiz ID is required.", 400);
+
+  const parsed = await readJsonObjectWithLimit(request, 16 * 1024);
+  if (parsed.response) return parsed.response;
+  if (typeof parsed.data.isActive !== "boolean") return jsonError("isActive must be boolean.", 400);
+
+  try {
+    const quiz = await prisma.quiz.update({
+      where: { id: quizId },
+      data: { isActive: parsed.data.isActive },
+      select: { id: true, title: true, isActive: true },
+    });
+    return jsonOk({ quiz, updatedBy: auth.user.email });
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") return jsonError("Quiz not found.", 404);
+    console.error("[ADMIN_PROTECTED_TEST_UPDATE]", error);
+    return jsonError("Unable to update protected test.", 500);
+  }
+}
+
+export async function DELETE(request: Request, context: RouteContext) {
+  const guarded = guardMutationRequest(request, { key: "admin-protected-test-delete", limit: 12, maxBytes: 0 });
+  if (guarded) return guarded;
+
+  const auth = await requireApiAdmin();
+  if (auth.response) return auth.response;
+
+  const quizId = cleanId((await context.params).quizId);
+  if (!quizId) return jsonError("Quiz ID is required.", 400);
 
   const quiz = await prisma.quiz.findUnique({
-    where: {
-      id: quizId,
-    },
-    select: {
-      id: true,
-      _count: {
-        select: {
-          attempts: true,
-          submissions: true,
-        },
-      },
-    },
+    where: { id: quizId },
+    select: { id: true, _count: { select: { attempts: true, submissions: true } } },
   });
-
-  if (!quiz) {
-    return NextResponse.json(
-      {
-        ok: false,
-        error: "Quiz not found.",
-      },
-      {
-        status: 404,
-      },
-    );
-  }
-
+  if (!quiz) return jsonError("Quiz not found.", 404);
   if (quiz._count.attempts > 0 || quiz._count.submissions > 0) {
-    return NextResponse.json(
-      {
-        ok: false,
-        error:
-          "Cannot delete this test because attempts/submissions already exist. Deactivate it instead.",
-      },
-      {
-        status: 409,
-      },
-    );
+    return jsonError("Cannot delete this test because attempts or submissions exist. Deactivate it instead.", 409);
   }
 
-  await prisma.$transaction(async (tx) => {
-    await tx.question.deleteMany({
-      where: {
-        quizId,
-      },
+  try {
+    await prisma.$transaction(async (tx) => {
+      await tx.question.deleteMany({ where: { quizId } });
+      await tx.quiz.delete({ where: { id: quizId } });
     });
-
-    await tx.quiz.delete({
-      where: {
-        id: quizId,
-      },
-    });
-  });
-
-  return NextResponse.json({
-    ok: true,
-  });
+    return jsonOk({ deleted: true, deletedBy: auth.user.email });
+  } catch (error) {
+    console.error("[ADMIN_PROTECTED_TEST_DELETE]", error);
+    return jsonError("Unable to delete protected test.", 500);
+  }
 }

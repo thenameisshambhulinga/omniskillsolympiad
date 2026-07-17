@@ -4,38 +4,21 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { hasQuizExpired, normalizeTabSwitchCount } from "@/lib/quiz/quiz-policy";
+import { normalizeQuizAnswerMap, normalizeQuizId } from "@/lib/quiz/quiz-request";
+import { guardMutationRequest } from "@/lib/server/route-hardening";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
-function normalizeAnswersMap(value: unknown) {
-  if (!value || typeof value !== "object" || Array.isArray(value)) {
-    return {};
-  }
-
-  const answers: Record<string, string> = {};
-
-  Object.entries(value as Record<string, unknown>).forEach(
-    ([questionId, answer]) => {
-      if (typeof questionId !== "string" || typeof answer !== "string") {
-        return;
-      }
-
-      const cleanQuestionId = questionId.trim();
-      const cleanAnswer = answer.trim();
-
-      if (!cleanQuestionId || !cleanAnswer) {
-        return;
-      }
-
-      answers[cleanQuestionId] = cleanAnswer;
-    },
-  );
-
-  return answers;
-}
-
 export async function POST(request: Request) {
+  const guarded = guardMutationRequest(request, {
+    key: "quiz-autosave",
+    limit: 120,
+    maxBytes: 256 * 1024,
+  });
+
+  if (guarded) return guarded;
+
   const session = await getServerSession(authOptions);
 
   const userEmail =
@@ -57,7 +40,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
   }
 
-  const quizId = typeof body.quizId === "string" ? body.quizId.trim() : "";
+  const quizId = normalizeQuizId(body.quizId);
 
   if (!quizId) {
     return NextResponse.json({ error: "quizId is required." }, { status: 400 });
@@ -115,7 +98,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const answers = normalizeAnswersMap(body.answers);
+  const answers = normalizeQuizAnswerMap(body.answers);
   const tabSwitchCount = normalizeTabSwitchCount(body.tabSwitchCount);
 
   await prisma.quizAttempt.update({

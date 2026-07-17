@@ -1,3 +1,9 @@
+import {
+  basisPointsToPercentage,
+  clampInteger,
+  ratioToBasisPoints,
+} from "@/lib/math/exact-metrics";
+
 export type QuizScoringQuestion = {
   id: string;
   optionA?: string;
@@ -17,6 +23,7 @@ export type QuizScoreResult = {
   score: number;
   total: number;
   percentage: number;
+  percentageBasisPoints: number;
   answeredCount: number;
   unansweredCount: number;
   duplicateAnswerCount: number;
@@ -28,28 +35,11 @@ export function normalizeQuizAnswers(answers: unknown[]) {
   const normalized: SubmittedQuizAnswer[] = [];
 
   for (const rawAnswer of answers) {
-    if (!rawAnswer || typeof rawAnswer !== "object" || Array.isArray(rawAnswer)) {
-      continue;
-    }
-
+    if (!rawAnswer || typeof rawAnswer !== "object" || Array.isArray(rawAnswer)) continue;
     const candidate = rawAnswer as Record<string, unknown>;
-
-    const questionId =
-      typeof candidate.questionId === "string" ? candidate.questionId.trim() : "";
-
-    const selectedAnswer =
-      typeof candidate.selectedAnswer === "string"
-        ? candidate.selectedAnswer.trim()
-        : "";
-
-    if (!questionId || !selectedAnswer) {
-      continue;
-    }
-
-    normalized.push({
-      questionId,
-      selectedAnswer,
-    });
+    const questionId = typeof candidate.questionId === "string" ? candidate.questionId.trim() : "";
+    const selectedAnswer = typeof candidate.selectedAnswer === "string" ? candidate.selectedAnswer.trim() : "";
+    if (questionId && selectedAnswer) normalized.push({ questionId, selectedAnswer });
   }
 
   return normalized;
@@ -91,14 +81,12 @@ export function scoreQuizAnswers({
     }
 
     const officialQuestion = questionMap.get(questionId);
-
     if (!officialQuestion) {
       unknownQuestionCount += 1;
       continue;
     }
 
     scoredQuestionIds.add(questionId);
-
     const validOptions = [
       officialQuestion.optionA,
       officialQuestion.optionB,
@@ -114,25 +102,20 @@ export function scoreQuizAnswers({
     }
 
     answeredCount += 1;
-
     if (selectedAnswer === normalizeAnswer(officialQuestion.correctAnswer)) {
       score += normalizePoints(officialQuestion.points);
     }
   }
 
-  const total = questions.reduce(
-    (sum, question) => sum + normalizePoints(question.points),
-    0,
-  );
-
+  const total = questions.reduce((sum, question) => sum + normalizePoints(question.points), 0);
   const safeScore = Math.min(score, total);
-  const percentage =
-    total === 0 ? 0 : Number(((safeScore / total) * 100).toFixed(2));
+  const percentageBasisPoints = ratioToBasisPoints(safeScore, total);
 
   return {
     score: safeScore,
     total,
-    percentage,
+    percentage: basisPointsToPercentage(percentageBasisPoints),
+    percentageBasisPoints,
     answeredCount,
     unansweredCount: Math.max(0, questions.length - answeredCount),
     duplicateAnswerCount,
@@ -142,12 +125,8 @@ export function scoreQuizAnswers({
 }
 
 function isSubmittedQuizAnswer(value: unknown): value is SubmittedQuizAnswer {
-  if (!value || typeof value !== "object" || Array.isArray(value)) {
-    return false;
-  }
-
+  if (!value || typeof value !== "object" || Array.isArray(value)) return false;
   const candidate = value as Record<string, unknown>;
-
   return (
     typeof candidate.questionId === "string" &&
     typeof candidate.selectedAnswer === "string"
@@ -155,13 +134,9 @@ function isSubmittedQuizAnswer(value: unknown): value is SubmittedQuizAnswer {
 }
 
 function normalizeAnswer(value: string) {
-  return value.trim().replace(/\s+/g, " ").toLowerCase();
+  return value.trim().replace(/\s+/g, " ").toLocaleLowerCase("en-US");
 }
 
 function normalizePoints(value: number) {
-  if (!Number.isFinite(value)) {
-    return 1;
-  }
-
-  return Math.max(1, Math.min(100, Math.round(value)));
+  return clampInteger(value, 1, 100, 1);
 }

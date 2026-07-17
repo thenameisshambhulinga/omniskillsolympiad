@@ -12,22 +12,21 @@ import {
   normalizeQuizAnswers,
   scoreQuizAnswers,
 } from "@/lib/quiz/quiz-score-engine";
-import {
-  enforceRateLimit,
-  rejectCrossSiteMutation,
-} from "@/lib/security/request-guard";
+import { normalizeQuizAnswerArray, normalizeQuizId } from "@/lib/quiz/quiz-request";
+import { guardMutationRequest } from "@/lib/server/route-hardening";
+import { readJsonObject } from "@/lib/server/api-response";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 export async function POST(request: Request) {
-  const originRejected = rejectCrossSiteMutation(request);
+  const guarded = guardMutationRequest(request, {
+    key: "quiz-submit",
+    limit: 30,
+    maxBytes: 256 * 1024,
+  });
 
-  if (originRejected) return originRejected;
-
-  const limited = enforceRateLimit(request, "quiz-submit", 30, 60_000);
-
-  if (limited) return limited;
+  if (guarded) return guarded;
 
   const session = await getServerSession(authOptions);
   const userEmail =
@@ -37,21 +36,17 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  let body: {
-    quizId?: unknown;
-    answers?: unknown;
-    tabSwitchCount?: unknown;
-  };
+  const parsed = await readJsonObject(request);
 
-  try {
-    body = (await request.json()) as typeof body;
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
+  if (parsed.response) {
+    return parsed.response;
   }
 
-  const quizId = typeof body.quizId === "string" ? body.quizId.trim() : "";
-  const answers = Array.isArray(body.answers) ? body.answers : [];
-  const normalizedAnswers = normalizeQuizAnswers(answers);
+  const body = parsed.data;
+  const quizId = normalizeQuizId(body.quizId);
+  const normalizedAnswers = normalizeQuizAnswers(
+    normalizeQuizAnswerArray(body.answers),
+  );
   const tabSwitchCount = normalizeTabSwitchCount(body.tabSwitchCount);
   const now = new Date();
 
@@ -79,6 +74,10 @@ export async function POST(request: Request) {
       id: true,
       completed: true,
       expiresAt: true,
+      score: true,
+      total: true,
+      percentage: true,
+      suspicious: true,
     },
   });
 
@@ -96,12 +95,16 @@ export async function POST(request: Request) {
   if (attempt.completed) {
     return NextResponse.json(
       {
-        error: "Test already submitted.",
+        success: true,
+        idempotentReplay: true,
+        score: attempt.score,
+        total: attempt.total,
+        percentage: attempt.percentage,
+        earnedPoints: attempt.suspicious ? 0 : Math.max(0, Math.min(100, Math.round(attempt.percentage))),
+        suspicious: attempt.suspicious,
         redirectTo: `/quiz/selection-result/${quizId}`,
       },
-      {
-        status: 409,
-      },
+      { headers: { "Cache-Control": "no-store" } },
     );
   }
 
@@ -142,7 +145,7 @@ export async function POST(request: Request) {
 
   const earnedPoints = suspicious
     ? 0
-    : Math.max(0, Math.min(100, Math.round(result.percentage)));
+    : Math.max(0, Math.min(100, Math.round(result.percentageBasisPoints / 100)));
 
   try {
     await prisma.$transaction(async (tx) => {
@@ -226,6 +229,7 @@ export async function POST(request: Request) {
       score: result.score,
       total: result.total,
       percentage: result.percentage,
+      percentageBasisPoints: result.percentageBasisPoints,
       earnedPoints,
       expired,
       suspicious,

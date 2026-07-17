@@ -1,3 +1,8 @@
+import {
+  basisPointsToPercentage,
+  ratioToBasisPoints,
+} from "@/lib/math/exact-metrics";
+
 export type DailyScoringQuestion = {
   id: string;
   correctAnswer: string;
@@ -16,6 +21,7 @@ export type DailyScoreResult = {
   score: number;
   total: number;
   percentage: number;
+  percentageBasisPoints: number;
   answeredCount: number;
   unansweredCount: number;
   duplicateAnswerCount: number;
@@ -69,7 +75,6 @@ export function scoreDailyAnswers({
 
     const selected = normalizeAnswer(selectedAnswer);
     const correct = normalizeAnswer(officialQuestion.correctAnswer);
-
     const officialOptions = [
       officialQuestion.optionA,
       officialQuestion.optionB,
@@ -83,21 +88,18 @@ export function scoreDailyAnswers({
     }
 
     answeredCount += 1;
-
-    if (selected === correct) {
-      score += 1;
-    }
+    if (selected === correct) score += 1;
   }
 
   const total = questions.length;
   const safeScore = Math.min(score, total);
-  const percentage =
-    total === 0 ? 0 : Number(((safeScore / total) * 100).toFixed(2));
+  const percentageBasisPoints = ratioToBasisPoints(safeScore, total);
 
   return {
     score: safeScore,
     total,
-    percentage,
+    percentage: basisPointsToPercentage(percentageBasisPoints),
+    percentageBasisPoints,
     answeredCount,
     unansweredCount: Math.max(0, total - answeredCount),
     duplicateAnswerCount,
@@ -107,12 +109,8 @@ export function scoreDailyAnswers({
 }
 
 function isSubmittedDailyAnswer(value: unknown): value is SubmittedDailyAnswer {
-  if (!value || typeof value !== "object" || Array.isArray(value)) {
-    return false;
-  }
-
+  if (!value || typeof value !== "object" || Array.isArray(value)) return false;
   const candidate = value as Record<string, unknown>;
-
   return (
     typeof candidate.questionId === "string" &&
     typeof candidate.selectedAnswer === "string"
@@ -120,5 +118,5 @@ function isSubmittedDailyAnswer(value: unknown): value is SubmittedDailyAnswer {
 }
 
 function normalizeAnswer(value: string) {
-  return value.trim().replace(/\s+/g, " ").toLowerCase();
+  return value.trim().replace(/\s+/g, " ").toLocaleLowerCase("en-US");
 }

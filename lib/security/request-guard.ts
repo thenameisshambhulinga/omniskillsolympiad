@@ -1,3 +1,5 @@
+import { randomUUID } from "node:crypto";
+
 import { NextResponse } from "next/server";
 
 type Bucket = {
@@ -5,12 +7,17 @@ type Bucket = {
   resetAt: number;
 };
 
+type JsonReadResult =
+  | { data: Record<string, unknown>; response: null }
+  | { data: null; response: NextResponse };
+
 const globalRateLimit = globalThis as typeof globalThis & {
   __osoRateLimit?: Map<string, Bucket>;
   __osoRateLimitSweep?: number;
 };
 
 const MAX_BUCKETS = 10_000;
+const DEFAULT_JSON_LIMIT = 64 * 1024;
 
 function getBuckets() {
   if (!globalRateLimit.__osoRateLimit) {
@@ -32,17 +39,27 @@ function pruneExpiredBuckets(buckets: Map<string, Bucket>, now: number) {
   }
 
   for (const [key, bucket] of buckets.entries()) {
-    if (bucket.resetAt <= now) {
-      buckets.delete(key);
-    }
+    if (bucket.resetAt <= now) buckets.delete(key);
+  }
+
+  if (buckets.size > MAX_BUCKETS) {
+    const overflow = buckets.size - MAX_BUCKETS;
+    for (const key of [...buckets.keys()].slice(0, overflow)) buckets.delete(key);
   }
 }
 
-function noStore(data: unknown, init?: ResponseInit) {
+export function getRequestId(request?: Request) {
+  const incoming = request?.headers.get("x-request-id")?.trim();
+  return incoming && incoming.length <= 128 ? incoming : randomUUID();
+}
+
+function noStore(data: unknown, init?: ResponseInit, requestId?: string) {
   return NextResponse.json(data, {
     ...init,
     headers: {
-      "Cache-Control": "no-store",
+      "Cache-Control": "no-store, max-age=0",
+      "X-Content-Type-Options": "nosniff",
+      ...(requestId ? { "X-Request-Id": requestId } : {}),
       ...(init?.headers ?? {}),
     },
   });
@@ -50,10 +67,7 @@ function noStore(data: unknown, init?: ResponseInit) {
 
 export function getClientIp(request: Request) {
   const forwardedFor = request.headers.get("x-forwarded-for");
-
-  if (forwardedFor) {
-    return forwardedFor.split(",")[0]?.trim() || "unknown";
-  }
+  if (forwardedFor) return forwardedFor.split(",")[0]?.trim() || "unknown";
 
   return (
     request.headers.get("x-real-ip") ||
@@ -69,22 +83,19 @@ function getAllowedOrigins(request: Request) {
 
   if (host) {
     allowed.add(`https://${host}`);
-
-    if (process.env.NODE_ENV !== "production") {
-      allowed.add(`http://${host}`);
-    }
+    if (process.env.NODE_ENV !== "production") allowed.add(`http://${host}`);
   }
 
-  const appUrl =
-    process.env.NEXT_PUBLIC_APP_URL ||
-    process.env.NEXTAUTH_URL ||
-    process.env.AUTH_URL;
-
-  if (appUrl) {
+  for (const candidate of [
+    process.env.NEXT_PUBLIC_APP_URL,
+    process.env.NEXTAUTH_URL,
+    process.env.AUTH_URL,
+  ]) {
+    if (!candidate) continue;
     try {
-      allowed.add(new URL(appUrl).origin);
+      allowed.add(new URL(candidate).origin);
     } catch {
-      // Optional env only. Hosting audit validates malformed URLs.
+      // Environment validation reports malformed URLs separately.
     }
   }
 
@@ -93,84 +104,125 @@ function getAllowedOrigins(request: Request) {
 
 export function rejectCrossSiteMutation(request: Request) {
   const method = request.method.toUpperCase();
+  if (["GET", "HEAD", "OPTIONS"].includes(method)) return null;
 
-  if (method === "GET" || method === "HEAD" || method === "OPTIONS") {
-    return null;
-  }
-
+  const requestId = getRequestId(request);
   const secFetchSite = request.headers.get("sec-fetch-site");
-
   if (secFetchSite === "cross-site") {
     return noStore(
-      {
-        ok: false,
-        success: false,
-        error: "Cross-site request blocked.",
-      },
-      {
-        status: 403,
-      },
+      { ok: false, success: false, error: "Cross-site request blocked.", code: "CROSS_SITE_BLOCKED", requestId },
+      { status: 403 },
+      requestId,
     );
   }
 
   const origin = request.headers.get("origin");
-
   if (!origin) {
+    if (process.env.NODE_ENV === "production") {
+      return noStore(
+        { ok: false, success: false, error: "Request origin is required.", code: "ORIGIN_REQUIRED", requestId },
+        { status: 403 },
+        requestId,
+      );
+    }
     return null;
   }
 
   if (!getAllowedOrigins(request).has(origin)) {
     return noStore(
-      {
-        ok: false,
-        success: false,
-        error: "Invalid request origin.",
-      },
-      {
-        status: 403,
-      },
+      { ok: false, success: false, error: "Invalid request origin.", code: "INVALID_ORIGIN", requestId },
+      { status: 403 },
+      requestId,
     );
   }
 
   return null;
 }
 
+export function enforceJsonContentType(request: Request) {
+  const contentType = request.headers.get("content-type")?.toLowerCase() ?? "";
+  if (contentType.startsWith("application/json")) return null;
+
+  const requestId = getRequestId(request);
+  return noStore(
+    { ok: false, success: false, error: "Content-Type must be application/json.", code: "UNSUPPORTED_MEDIA_TYPE", requestId },
+    { status: 415 },
+    requestId,
+  );
+}
+
 export function enforceContentLength(request: Request, maxBytes: number) {
   const contentLength = request.headers.get("content-length");
-
-  if (!contentLength) {
-    return null;
-  }
+  if (!contentLength) return null;
 
   const parsed = Number(contentLength);
-
+  const requestId = getRequestId(request);
   if (!Number.isFinite(parsed) || parsed < 0) {
     return noStore(
-      {
-        ok: false,
-        success: false,
-        error: "Invalid Content-Length header.",
-      },
-      {
-        status: 400,
-      },
+      { ok: false, success: false, error: "Invalid Content-Length header.", code: "INVALID_CONTENT_LENGTH", requestId },
+      { status: 400 },
+      requestId,
     );
   }
 
   if (parsed > maxBytes) {
     return noStore(
-      {
-        ok: false,
-        success: false,
-        error: "Request payload is too large.",
-      },
-      {
-        status: 413,
-      },
+      { ok: false, success: false, error: "Request payload is too large.", code: "PAYLOAD_TOO_LARGE", requestId },
+      { status: 413 },
+      requestId,
     );
   }
 
   return null;
+}
+
+export async function readJsonObjectWithLimit(
+  request: Request,
+  maxBytes = DEFAULT_JSON_LIMIT,
+): Promise<JsonReadResult> {
+  const requestId = getRequestId(request);
+  const declared = enforceContentLength(request, maxBytes);
+  if (declared) return { data: null, response: declared };
+
+  let bytes: ArrayBuffer;
+  try {
+    bytes = await request.arrayBuffer();
+  } catch {
+    return {
+      data: null,
+      response: noStore(
+        { ok: false, success: false, error: "Unable to read request body.", code: "BODY_READ_FAILED", requestId },
+        { status: 400 },
+        requestId,
+      ),
+    };
+  }
+
+  if (bytes.byteLength > maxBytes) {
+    return {
+      data: null,
+      response: noStore(
+        { ok: false, success: false, error: "Request payload is too large.", code: "PAYLOAD_TOO_LARGE", requestId },
+        { status: 413 },
+        requestId,
+      ),
+    };
+  }
+
+  try {
+    const parsed: unknown = JSON.parse(new TextDecoder().decode(bytes));
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) throw new Error("invalid object");
+    return { data: parsed as Record<string, unknown>, response: null };
+  } catch {
+    return {
+      data: null,
+      response: noStore(
+        { ok: false, success: false, error: "Invalid JSON body.", code: "INVALID_JSON", requestId },
+        { status: 400 },
+        requestId,
+      ),
+    };
+  }
 }
 
 export function enforceRateLimit(
@@ -178,48 +230,35 @@ export function enforceRateLimit(
   key: string,
   limit: number,
   windowMs: number,
+  subject?: string,
 ) {
   const buckets = getBuckets();
   const now = Date.now();
-
   pruneExpiredBuckets(buckets, now);
 
-  const ip = getClientIp(request);
-  const bucketKey = `${key}:${ip}`;
+  const identity = subject?.trim() || getClientIp(request);
+  const bucketKey = `${key}:${identity}`;
   const bucket = buckets.get(bucketKey);
 
   if (!bucket || bucket.resetAt <= now) {
-    buckets.set(bucketKey, {
-      count: 1,
-      resetAt: now + windowMs,
-    });
-
+    buckets.set(bucketKey, { count: 1, resetAt: now + windowMs });
     return null;
   }
 
   bucket.count += 1;
-
   if (bucket.count > limit) {
     const retryAfter = Math.max(1, Math.ceil((bucket.resetAt - now) / 1000));
-
+    const requestId = getRequestId(request);
     return noStore(
-      {
-        ok: false,
-        success: false,
-        error: "Too many requests. Try again shortly.",
-      },
-      {
-        status: 429,
-        headers: {
-          "Retry-After": String(retryAfter),
-        },
-      },
+      { ok: false, success: false, error: "Too many requests. Try again shortly.", code: "RATE_LIMITED", requestId },
+      { status: 429, headers: { "Retry-After": String(retryAfter), "X-RateLimit-Limit": String(limit), "X-RateLimit-Reset": String(Math.ceil(bucket.resetAt / 1000)) } },
+      requestId,
     );
   }
 
   return null;
 }
 
-export function noStoreJson(data: unknown, init?: ResponseInit) {
-  return noStore(data, init);
+export function noStoreJson(data: unknown, init?: ResponseInit, requestId?: string) {
+  return noStore(data, init, requestId);
 }

@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import {
   buildSelectionEquation,
   buildSelectionRows,
+  normalizeSelectionSettings,
 } from "@/lib/quiz/selection-policy";
 
 import SelectionControlClient from "./SelectionControlClient";
@@ -42,26 +43,18 @@ export default async function ProtectedTestSelectionPage({ params }: PageProps) 
     notFound();
   }
 
-  const settings = {
+  const settings = normalizeSelectionSettings({
     minimumPercentage: quiz.selectionMinimumPercentage,
     maxTabSwitches: quiz.selectionMaxTabSwitches,
     requireNonSuspicious: quiz.selectionRequireNonSuspicious,
     shortlistLimit: quiz.selectionShortlistLimit,
-  };
+  });
 
   const attempts = await prisma.quizAttempt.findMany({
     where: {
       quizId,
       completed: true,
     },
-    orderBy: [
-      {
-        percentage: "desc",
-      },
-      {
-        submittedAt: "asc",
-      },
-    ],
     select: {
       id: true,
       score: true,
@@ -69,6 +62,7 @@ export default async function ProtectedTestSelectionPage({ params }: PageProps) 
       percentage: true,
       suspicious: true,
       tabSwitchCount: true,
+      startedAt: true,
       submittedAt: true,
       user: {
         select: {

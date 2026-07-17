@@ -1,9 +1,13 @@
-﻿import { withAuth } from "next-auth/middleware";
+import { withAuth } from "next-auth/middleware";
 
 export const proxy = withAuth(
   function proxy() {},
 
   {
+    pages: {
+      signIn: "/login",
+    },
+
     callbacks: {
       authorized: ({ token, req }) => {
         const pathname = req.nextUrl.pathname;

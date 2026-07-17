@@ -1,16 +1,8 @@
-import { NextResponse } from "next/server";
+import { jsonError } from "@/lib/server/route-hardening";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
+
 export async function POST() {
-  return NextResponse.json(
-    {
-      success: false,
-      error:
-        "This route is inactive. Use the active daily question creation route.",
-    },
-    {
-      status: 410,
-    },
-  );
+  return jsonError("This route is inactive. Use /api/admin/create-daily-question.", 410, { code: "ROUTE_DISABLED" });
 }

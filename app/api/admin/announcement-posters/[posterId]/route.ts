@@ -3,6 +3,12 @@ import { NextResponse } from "next/server";
 
 import { requireAdmin } from "@/lib/admin-auth";
 import { prisma } from "@/lib/prisma";
+import {
+  enforceJsonContentType,
+  enforceRateLimit,
+  readJsonObjectWithLimit,
+  rejectCrossSiteMutation,
+} from "@/lib/security/request-guard";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -204,24 +210,20 @@ function serializePoster(poster: {
 }
 
 export async function PATCH(request: Request, context: RouteContext) {
+  const originRejected = rejectCrossSiteMutation(request);
+  if (originRejected) return originRejected;
+
+  const contentTypeRejected = enforceJsonContentType(request);
+  if (contentTypeRejected) return contentTypeRejected;
+
+  const limited = enforceRateLimit(request, "admin-posters-update", 60, 60_000);
+  if (limited) return limited;
+
   const admin = await requireAdmin();
   const { posterId } = await context.params;
-
-  let body: Record<string, unknown>;
-
-  try {
-    body = (await request.json()) as Record<string, unknown>;
-  } catch {
-    return NextResponse.json(
-      {
-        ok: false,
-        error: "Invalid JSON body.",
-      },
-      {
-        status: 400,
-      },
-    );
-  }
+  const parsed = await readJsonObjectWithLimit(request, 64 * 1024);
+  if (parsed.response) return parsed.response;
+  const body = parsed.data;
 
   const existingPoster = await prisma.announcementPoster.findUnique({
     where: {
@@ -298,7 +300,13 @@ export async function PATCH(request: Request, context: RouteContext) {
   );
 }
 
-export async function DELETE(_request: Request, context: RouteContext) {
+export async function DELETE(request: Request, context: RouteContext) {
+  const originRejected = rejectCrossSiteMutation(request);
+  if (originRejected) return originRejected;
+
+  const limited = enforceRateLimit(request, "admin-posters-delete", 30, 60_000);
+  if (limited) return limited;
+
   const admin = await requireAdmin();
   const { posterId } = await context.params;
 

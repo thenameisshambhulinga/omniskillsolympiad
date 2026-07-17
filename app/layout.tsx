@@ -4,6 +4,7 @@ import "./globals.css";
 
 import ConditionalSiteFooter from "@/components/layout/ConditionalSiteFooter";
 import ConditionalSiteNavbar from "@/components/layout/ConditionalSiteNavbar";
+import RouteVisualScope from "@/components/layout/RouteVisualScope";
 import SelectionAnnouncementTicker from "@/components/quiz/SelectionAnnouncementTicker";
 
 export const metadata: Metadata = {
@@ -12,6 +13,11 @@ export const metadata: Metadata = {
   ),
   title: "Omni Skills Olympiad",
   description: "India's National Multidisciplinary Skills Ecosystem",
+  icons: {
+    icon: "/icon.png",
+    shortcut: "/favicon.ico",
+    apple: "/icon.png",
+  },
   openGraph: {
     title: "Omni Skills Olympiad",
     description: "Learn. Build. Compete. Get Ranked.",
@@ -33,9 +39,14 @@ export default function RootLayout({
   return (
     <html lang="en" data-scroll-behavior="smooth">
       <body className="min-h-screen bg-[#f8f9fa] antialiased">
+        <RouteVisualScope />
         <ConditionalSiteNavbar />
 
-        <main id="main-content" tabIndex={-1} className="relative min-h-screen overflow-x-clip outline-none">
+        <main
+          id="main-content"
+          tabIndex={-1}
+          className="relative min-h-screen overflow-x-clip outline-none"
+        >
           <SelectionAnnouncementTicker />
           {children}
         </main>

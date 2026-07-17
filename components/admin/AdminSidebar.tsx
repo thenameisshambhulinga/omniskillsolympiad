@@ -84,17 +84,17 @@ export default function AdminSidebar({
   const pathname = usePathname();
 
   return (
-    <div className="relative flex h-full flex-col overflow-hidden rounded-[2.25rem] border border-slate-200/90 bg-white/78 p-4 shadow-[0_24px_70px_rgba(15,23,42,0.08)] backdrop-blur-2xl">
+    <div className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200/90 bg-white/82 p-3 shadow-[0_14px_40px_rgba(15,23,42,0.065)] backdrop-blur-2xl">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(37,99,235,0.09),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(250,204,21,0.10),transparent_34%)]"
       />
 
       <div className="relative z-10 flex h-full flex-col">
-        <div className="rounded-[1.75rem] border border-blue-200 bg-blue-50/70 p-4 shadow-[0_12px_34px_rgba(37,99,235,0.08)]">
+        <div className="rounded-xl border border-blue-200 bg-blue-50/70 p-3 shadow-[0_12px_34px_rgba(37,99,235,0.08)]">
           <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-blue-200 bg-white text-blue-700 shadow-sm">
-              <Crown className="h-6 w-6" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-blue-200 bg-white text-blue-700 shadow-sm">
+              <Crown className="h-5 w-5" />
             </div>
 
             <div>
@@ -111,7 +111,7 @@ export default function AdminSidebar({
           </div>
         </div>
 
-        <nav aria-label="Admin navigation" className="mt-6 space-y-2">
+        <nav aria-label="Admin navigation" className="mt-4 space-y-1.5">
           {navItems.map((item, index) => {
             const isActive = isNavActive(pathname, item);
             const Icon = item.icon;
@@ -133,8 +133,8 @@ export default function AdminSidebar({
                   aria-current={isActive ? "page" : undefined}
                   className={
                     isActive
-                      ? "group relative flex items-start gap-3 overflow-hidden rounded-2xl border border-blue-200 bg-blue-600 px-4 py-3 text-white shadow-[0_14px_30px_rgba(37,99,235,0.22)] transition focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
-                      : "group relative flex items-start gap-3 overflow-hidden rounded-2xl border border-transparent px-4 py-3 text-slate-600 transition hover:border-slate-200 hover:bg-white hover:text-slate-950 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
+                      ? "group relative flex items-start gap-3 overflow-hidden rounded-xl border border-blue-200 bg-blue-600 px-3 py-2.5 text-white shadow-[0_14px_30px_rgba(37,99,235,0.22)] transition focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
+                      : "group relative flex items-start gap-3 overflow-hidden rounded-xl border border-transparent px-3 py-2.5 text-slate-600 transition hover:border-slate-200 hover:bg-white hover:text-slate-950 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
                   }
                 >
                   {isActive ? (
@@ -147,15 +147,15 @@ export default function AdminSidebar({
                   <span
                     className={
                       isActive
-                        ? "relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/20 bg-white/15 text-white"
-                        : "relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-500 transition group-hover:border-blue-200 group-hover:text-blue-700"
+                        ? "relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/20 bg-white/15 text-white"
+                        : "relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 transition group-hover:border-blue-200 group-hover:text-blue-700"
                     }
                   >
-                    <Icon className="h-5 w-5" />
+                    <Icon className="h-4 w-4" />
                   </span>
 
                   <span className="relative z-10 min-w-0">
-                    <span className="block text-sm font-black">
+                    <span className="block text-[13px] font-black">
                       {item.label}
                     </span>
                     <span
@@ -178,7 +178,7 @@ export default function AdminSidebar({
           </div>
         </nav>
 
-        <div className="mt-auto rounded-[1.5rem] border border-yellow-200 bg-yellow-50/80 p-4">
+        <div className="mt-auto rounded-xl border border-yellow-200 bg-yellow-50/80 p-3">
           <div className="flex items-center gap-3">
             <div className="rounded-2xl border border-yellow-200 bg-white p-2.5 text-yellow-700">
               <BarChart3 className="h-5 w-5" />

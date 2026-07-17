@@ -48,7 +48,7 @@ next-env.d.ts
 .next
 node_modules
 
-# Historical local recovery snapshots — never runtime source
+# Historical local recovery snapshots â€” never runtime source
 /.hardening-backup/
 .env.*.local
 node_modules/
@@ -56,3 +56,53 @@ node_modules/
 .dist/
 .hardening-backup/
 analysis-context/
+
+# OSO LAUNCH SAFETY - START
+
+# Local and deployment secrets
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.local
+!.env.example
+!.env*.example
+!.env.sample
+!.env*.sample
+!.env.template
+!.env*.template
+
+# Next.js and generated output
+.next/
+.turbo/
+.cache/
+coverage/
+out/
+dist/
+build/
+*.tsbuildinfo
+
+# Logs and temporary artifacts
+*.log
+*.tmp
+*.temp
+*.rej
+*.orig
+.DS_Store
+Thumbs.db
+
+# Repository-local patch and backup artifacts
+.oso-patch-backups/
+.oso-*-backups/
+.safe-targeted-fix-backups/
+.safe-*-backups/
+oso-patch-backups/
+oso-safe-backups/
+
+# Source archives created for transfer or review
+/*.zip
+/*.rar
+/*.7z
+
+# OSO LAUNCH SAFETY - END
