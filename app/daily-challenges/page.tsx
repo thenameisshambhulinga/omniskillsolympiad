@@ -1,40 +1,25 @@
-import { getServerSession } from "next-auth";
-
 import DailyChallengeMissionBrowser, {
   type DailyChallengeMission,
   type DailyChallengeStatus,
 } from "@/components/daily-challenges/DailyChallengeMissionBrowser";
-import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import {
   publicDailyChallengeWhere,
   studentDailyChallengeOrderBy,
 } from "@/lib/daily-challenge/public-challenge-visibility";
 import { withDatabaseResult } from "@/lib/server/database-guard";
+import { requireOnboardedPageUser } from "@/lib/server/page-auth";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 export const runtime = "nodejs";
 
 export default async function DailyChallengesPage() {
-  const session = await getServerSession(authOptions);
-  const userEmail =
-    typeof session?.user?.email === "string" ? session.user.email.trim() : "";
+  const user = await requireOnboardedPageUser("/daily-challenges");
 
   const challengeResult = await withDatabaseResult({
     label: "DailyChallengesPage.getPublishedChallengesWithAttemptState",
     action: async () => {
-      const user = userEmail
-        ? await prisma.user.findUnique({
-            where: {
-              email: userEmail,
-            },
-            select: {
-              id: true,
-            },
-          })
-        : null;
-
       const challenges = await prisma.dailyChallenge.findMany({
         where: publicDailyChallengeWhere,
         orderBy: studentDailyChallengeOrderBy,
@@ -44,26 +29,24 @@ export default async function DailyChallengesPage() {
           title: true,
           description: true,
           createdAt: true,
-          attempts: user
-            ? {
-                where: {
-                  userId: user.id,
-                },
-                orderBy: {
-                  createdAt: "desc",
-                },
-                take: 1,
-                select: {
-                  completed: true,
-                  score: true,
-                  total: true,
-                  percentage: true,
-                  submittedAt: true,
-                  expiresAt: true,
-                  createdAt: true,
-                },
-              }
-            : false,
+          attempts: {
+            where: {
+              userId: user.id,
+            },
+            orderBy: {
+              createdAt: "desc",
+            },
+            take: 1,
+            select: {
+              completed: true,
+              score: true,
+              total: true,
+              percentage: true,
+              submittedAt: true,
+              expiresAt: true,
+              createdAt: true,
+            },
+          },
           _count: {
             select: {
               questions: true,

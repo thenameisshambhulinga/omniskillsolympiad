@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { requireOnboardedPageUser } from "@/lib/server/page-auth";
 import { prisma } from "@/lib/prisma";
 import {
   publicDailyChallengeWhere,
@@ -9,6 +10,8 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 export const runtime = "nodejs";
 export default async function DailyQuizzesPage() {
+  await requireOnboardedPageUser("/daily-quizzes");
+
   const challenges = await prisma.dailyChallenge.findMany({
     where: publicDailyChallengeWhere,
     select: {

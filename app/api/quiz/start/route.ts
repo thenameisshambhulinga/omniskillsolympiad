@@ -1,8 +1,5 @@
 import { Prisma } from "@prisma/client";
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-
-import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import {
   getQuizDurationMs,
@@ -11,6 +8,7 @@ import {
   isProtectedTestReady,
   PROTECTED_TEST_DURATION_MINUTES,
 } from "@/lib/quiz/quiz-policy";
+import { requireApiOnboardedUser } from "@/lib/server/api-auth";
 import { guardMutationRequest } from "@/lib/server/route-hardening";
 
 export const dynamic = "force-dynamic";
@@ -40,13 +38,13 @@ export async function POST(request: Request) {
 
   if (guarded) return guarded;
 
-  const session = await getServerSession(authOptions);
-  const userEmail =
-    typeof session?.user?.email === "string" ? session.user.email.trim() : "";
+  const auth = await requireApiOnboardedUser();
 
-  if (!userEmail) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (auth.response) {
+    return auth.response;
   }
+
+  const { user } = auth;
 
   let body: { quizId?: unknown };
 
@@ -64,14 +62,6 @@ export async function POST(request: Request) {
 
   const now = new Date();
 
-  const user = await prisma.user.findUnique({
-    where: { email: userEmail },
-    select: { id: true },
-  });
-
-  if (!user) {
-    return NextResponse.json({ error: "User not found." }, { status: 404 });
-  }
 
   const quiz = await prisma.quiz.findUnique({
     where: { id: quizId },

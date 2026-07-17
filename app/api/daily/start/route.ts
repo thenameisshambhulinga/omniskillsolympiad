@@ -2,7 +2,7 @@ import { Prisma } from "@prisma/client";
 
 import { prisma } from "@/lib/prisma";
 import { publicDailyChallengeWhere } from "@/lib/daily-challenge/public-challenge-visibility";
-import { requireApiUser } from "@/lib/server/api-auth";
+import { requireApiOnboardedUser } from "@/lib/server/api-auth";
 import {
   apiError,
   apiOk,
@@ -25,7 +25,7 @@ export async function POST(request: Request) {
   if (guarded) return guarded;
 
   try {
-    const auth = await requireApiUser();
+    const auth = await requireApiOnboardedUser();
 
     if (auth.response) {
       return auth.response;

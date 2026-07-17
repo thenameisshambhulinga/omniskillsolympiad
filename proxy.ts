@@ -29,6 +29,10 @@ export const proxy = withAuth(
           return Boolean(token);
         }
 
+        if (pathname.startsWith("/daily-quizzes")) {
+          return Boolean(token);
+        }
+
         if (pathname.startsWith("/quiz")) {
           return Boolean(token);
         }
@@ -45,6 +49,7 @@ export const config = {
     "/dashboard/:path*",
     "/profile/:path*",
     "/daily-challenges/:path*",
+    "/daily-quizzes/:path*",
     "/quiz/:path*",
   ],
 };

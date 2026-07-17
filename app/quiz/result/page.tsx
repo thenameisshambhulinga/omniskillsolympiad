@@ -1,7 +1,5 @@
 import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth";
-
-import { authOptions } from "@/lib/auth";
+import { requireOnboardedPageUser } from "@/lib/server/page-auth";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -13,11 +11,7 @@ type QuizResultPageProps = {
 };
 
 export default async function QuizResultPage({ searchParams }: QuizResultPageProps) {
-  const session = await getServerSession(authOptions);
-
-  if (!session?.user?.email) {
-    redirect("/login");
-  }
+  await requireOnboardedPageUser("/quiz/result");
 
   const params = await searchParams;
   const quizId = typeof params?.quizId === "string" ? params.quizId.trim() : "";

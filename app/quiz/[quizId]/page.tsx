@@ -1,8 +1,6 @@
 import { notFound, redirect } from "next/navigation";
-import { getServerSession } from "next-auth";
-
 import ProtectedQuizClient from "@/components/quiz/ProtectedQuizClient";
-import { authOptions } from "@/lib/auth";
+import { requireOnboardedPageUser } from "@/lib/server/page-auth";
 import { prisma } from "@/lib/prisma";
 import {
   MAX_PROTECTED_TEST_QUESTIONS,
@@ -20,30 +18,13 @@ type QuizByIdPageProps = {
 };
 
 export default async function QuizByIdPage({ params }: QuizByIdPageProps) {
-  const session = await getServerSession(authOptions);
-
-  if (!session?.user?.email) {
-    redirect("/login");
-  }
-
+  const user = await requireOnboardedPageUser("/quiz");
   const { quizId } = await params;
 
   if (!quizId) {
     notFound();
   }
 
-  const user = await prisma.user.findUnique({
-    where: {
-      email: session.user.email,
-    },
-    select: {
-      id: true,
-    },
-  });
-
-  if (!user) {
-    redirect("/login");
-  }
 
   const existingAttempt = await prisma.quizAttempt.findUnique({
     where: {

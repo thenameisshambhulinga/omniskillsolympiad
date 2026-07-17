@@ -1,19 +1,12 @@
-import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth";
-
 import StudentProtectedTestsPanel from "@/components/quiz/StudentProtectedTestsPanel";
-import { authOptions } from "@/lib/auth";
+import { requireOnboardedPageUser } from "@/lib/server/page-auth";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 export const runtime = "nodejs";
 
 export default async function QuizLibraryPage() {
-  const session = await getServerSession(authOptions);
-
-  if (!session?.user?.email) {
-    redirect("/login");
-  }
+  await requireOnboardedPageUser("/quiz");
 
   return (
     <main className="min-h-screen bg-[#f8fbff] px-4 py-10 text-slate-950 sm:px-6 lg:px-8">

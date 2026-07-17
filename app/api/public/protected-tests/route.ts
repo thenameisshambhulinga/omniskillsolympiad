@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-
-import { authOptions } from "@/lib/auth";
+import { requireApiOnboardedUser } from "@/lib/server/api-auth";
 import { prisma } from "@/lib/prisma";
 import { classifyInfrastructureError } from "@/lib/server/connectivity-errors";
 import { logInfrastructureWarning } from "@/lib/server/rate-limited-log";
@@ -16,18 +14,13 @@ export const runtime = "nodejs";
 export async function GET() {
   try {
 
-      const session = await getServerSession(authOptions);
+      const auth = await requireApiOnboardedUser();
 
-      const user = session?.user?.email
-        ? await prisma.user.findUnique({
-            where: {
-              email: session.user.email,
-            },
-            select: {
-              id: true,
-            },
-          })
-        : null;
+      if (auth.response) {
+        return auth.response;
+      }
+
+      const { user } = auth;
 
       const quizzes = await prisma.quiz.findMany({
         where: {
@@ -57,8 +50,7 @@ export async function GET() {
 
       const quizIds = quizzes.map((quiz) => quiz.id);
 
-      const attempts = user
-        ? await prisma.quizAttempt.findMany({
+      const attempts = await prisma.quizAttempt.findMany({
             where: {
               userId: user.id,
               quizId: {
@@ -73,8 +65,7 @@ export async function GET() {
               selectionRank: true,
               selectionEvaluatedAt: true,
             },
-          })
-        : [];
+          });
 
       const attemptMap = new Map(
         attempts

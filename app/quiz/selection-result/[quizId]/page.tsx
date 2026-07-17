@@ -1,9 +1,8 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth";
 import { ArrowLeft, Clock3, Medal, PartyPopper, ShieldCheck } from "lucide-react";
 
-import { authOptions } from "@/lib/auth";
+import { requireOnboardedPageUser } from "@/lib/server/page-auth";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -17,28 +16,8 @@ type PageProps = {
 };
 
 export default async function SelectionResultPage({ params }: PageProps) {
-  const session = await getServerSession(authOptions);
-
-  if (!session?.user?.email) {
-    redirect("/login");
-  }
-
+  const user = await requireOnboardedPageUser("/quiz");
   const { quizId } = await params;
-
-  const user = await prisma.user.findUnique({
-    where: {
-      email: session.user.email,
-    },
-    select: {
-      id: true,
-      email: true,
-      fullName: true,
-    },
-  });
-
-  if (!user) {
-    redirect("/login");
-  }
 
   const attempt = await prisma.quizAttempt.findUnique({
     where: {

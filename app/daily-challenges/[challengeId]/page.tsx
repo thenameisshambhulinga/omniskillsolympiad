@@ -6,6 +6,7 @@ import OfflineState from "@/components/system/OfflineState";
 import { prisma } from "@/lib/prisma";
 import { publicDailyChallengeWhere } from "@/lib/daily-challenge/public-challenge-visibility";
 import { withDatabaseResult } from "@/lib/server/database-guard";
+import { requireOnboardedPageUser } from "@/lib/server/page-auth";
 
 type ChallengePageProps = {
   params: Promise<{
@@ -18,6 +19,7 @@ export const revalidate = 0;
 export const runtime = "nodejs";
 
 export default async function ChallengePage({ params }: ChallengePageProps) {
+  await requireOnboardedPageUser("/daily-challenges");
   const { challengeId } = await params;
 
   const challengeResult = await withDatabaseResult({
