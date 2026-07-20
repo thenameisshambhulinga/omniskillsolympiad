@@ -13,10 +13,10 @@ type Stats = {
 };
 
 const FALLBACK: Stats = {
-  activeStudents: 7_001,
-  colleges: 7_001,
-  competitions: 7_038,
-  domains: 36,
+  activeStudents: 0,
+  colleges: 0,
+  competitions: 0,
+  domains: 12,
   source: "fallback",
 };
 

@@ -1,11 +1,8 @@
 import { UserRole } from "@prisma/client";
 
-import { skillSchools } from "@/data/omni-ecosystem";
 import { prisma } from "@/lib/prisma";
 
-export const homepageDomainCount = new Set(
-  skillSchools.flatMap((school) => school.domains),
-).size;
+export const homepageDomainCount = 12;
 
 export type HomepageStats = {
   activeStudents: number;
@@ -17,9 +14,9 @@ export type HomepageStats = {
 };
 
 export const fallbackHomepageStats: HomepageStats = {
-  activeStudents: 25_000,
-  colleges: 150,
-  competitions: 30,
+  activeStudents: 0,
+  colleges: 0,
+  competitions: 0,
   domains: homepageDomainCount,
   ecosystems: 1,
   source: "fallback",
@@ -71,28 +68,13 @@ export async function getHomepageStats(): Promise<HomepageStats> {
       (record) => record.college?.trim(),
     ).length;
 
-    const competitionCount = quizzes + dailyChallenges;
-    const databaseBacked =
-      activeStudents > 0 ||
-      collegeCount > 0 ||
-      competitionCount > 0;
-
     return {
-      activeStudents:
-        activeStudents > 0
-          ? activeStudents
-          : fallbackHomepageStats.activeStudents,
-      colleges:
-        collegeCount > 0
-          ? collegeCount
-          : fallbackHomepageStats.colleges,
-      competitions:
-        competitionCount > 0
-          ? competitionCount
-          : fallbackHomepageStats.competitions,
+      activeStudents,
+      colleges: collegeCount,
+      competitions: quizzes + dailyChallenges,
       domains: homepageDomainCount,
       ecosystems: 1,
-      source: databaseBacked ? "database" : "fallback",
+      source: "database",
     };
   } catch {
     return fallbackHomepageStats;

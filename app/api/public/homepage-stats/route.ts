@@ -9,8 +9,6 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 export const runtime = "nodejs";
 
-const BASELINE = 7_000;
-
 function safeCount(value: unknown): number {
   return typeof value === "number" && Number.isFinite(value) && value >= 0
     ? Math.floor(value)
@@ -23,27 +21,13 @@ function toPublicStats(value: unknown) {
       ? (value as Record<string, unknown>)
       : {};
 
-  const databaseBacked = raw.source === "database";
-
   return {
-    activeStudents: Math.max(
-      7_001,
-      BASELINE + (databaseBacked ? safeCount(raw.activeStudents) : 0),
-    ),
-    colleges: Math.max(
-      7_001,
-      BASELINE + (databaseBacked ? safeCount(raw.colleges) : 0),
-    ),
-    competitions: Math.max(
-      7_038,
-      BASELINE + (databaseBacked ? safeCount(raw.competitions) : 0),
-    ),
-    domains: Math.max(
-      homepageDomainCount,
-      safeCount(raw.domains),
-    ),
+    activeStudents: safeCount(raw.activeStudents),
+    colleges: safeCount(raw.colleges),
+    competitions: safeCount(raw.competitions),
+    domains: homepageDomainCount,
     ecosystems: 1,
-    source: databaseBacked ? "database" : "fallback",
+    source: raw.source === "database" ? "database" : "fallback",
   } as const;
 }
 
